@@ -6,7 +6,7 @@
 npm run dev        # Local dev server at http://localhost:5173/tools/
 npm run build      # Build to dist/ (base: /tools/)
 npm run preview    # Preview built site locally
-npm test           # Run Vitest (21 tests, 4 composables)
+npm test           # Run Vitest (42 tests, 6 composables)
 ```
 
 ## Architecture
@@ -31,12 +31,14 @@ src/
 │   ├── useDpiChecker.ts         # calculatePrintDimensions() + getFormatStatus()
 │   ├── useRedirectChecker.ts    # checkRedirect() — async, allorigins.win proxy
 │   ├── usePromoCode.ts          # validatePromoCode() — 5-rule checklist
+│   ├── useWordCounter.ts        # analyzeText() — words, chars, sentences, paragraphs, reading time
+│   ├── useColorPalette.ts       # initPalette() + generatePalette() + toggleLock() — HSL color gen
 │   ├── usePdfXConverter.ts      # convertToPdfX() — POST to VITE_PDFX_API_URL (backend not yet deployed)
-│   └── __tests__/               # Vitest tests for the 4 pure composables
+│   └── __tests__/               # Vitest tests for the 6 pure composables
 ├── i18n/
 │   ├── fr.ts                    # Source of truth; exports `type Messages`
 │   └── en.ts                    # Imports `type Messages` from fr.ts for type safety
-├── router/index.ts              # Hash history, 6 routes (pdf-x commented out — coming soon)
+├── router/index.ts              # Hash history, 8 routes (pdf-x commented out — coming soon)
 ├── views/                       # One view per tool + HomeView
 └── main.ts                      # App bootstrap: createI18n with localStorage locale detection
 ```
@@ -52,21 +54,19 @@ Color tints: `--gi-tint-green-*`, `--gi-tint-red-*`, `--gi-tint-yellow-*` (bg + 
 ## Adding a New Tool
 
 1. Add composable to `src/composables/` + tests in `__tests__/`
-2. Add translations to `src/i18n/fr.ts` (in `nav`, `home.tools`, and tool-specific section) + `src/i18n/en.ts`
-3. Create view in `src/views/`
+2. Add translations to `src/i18n/fr.ts` (in `nav`, `home.tools`, and tool-specific section) + `src/i18n/en.ts` — `nav.back` already exists, don't re-add
+3. Create view in `src/views/` — include `<router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>` at top
 4. Add route in `src/router/index.ts`
 5. Add nav link in `src/components/AppHeader.vue`
-6. Add card in `src/views/HomeView.vue`
+6. Add entry to `allTools` array in `src/views/HomeView.vue` with `category` (`print`/`digital`/`design`) and `isNew` flag
 
 ## PDF/X Tool (coming soon)
 
 The `usePdfXConverter.ts` and `PdfXView.vue` are implemented but hidden. The backend (Node.js + Ghostscript + Docker) is in `backend/`. To re-enable:
 1. Deploy `backend/` to a Docker host (e.g. Hugging Face Spaces — free, no credit card)
 2. Set `VITE_PDFX_API_URL` as a GitHub Actions secret in repo settings
-3. Uncomment the 3 lines marked `// coming soon` in:
-   - `src/router/index.ts`
-   - `src/views/HomeView.vue`
-   - `src/components/AppHeader.vue`
+3. Uncomment the route in `src/router/index.ts` and the nav link in `src/components/AppHeader.vue`
+4. Add PDF/X entry to `allTools` in `src/views/HomeView.vue` with `category: 'print'`
 
 ## Deployment
 
