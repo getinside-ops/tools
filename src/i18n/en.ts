@@ -9,6 +9,8 @@ const en: Messages = {
     redirectChecker: 'Redirect Checker',
     promoCode: 'Promo Code',
     pdfX: 'PDF → PDF/X',
+    wordCounter: 'Word Counter',
+    back: '← Back to tools',
   },
   footer: {
     discover: 'Discover getinside',
@@ -25,6 +27,7 @@ const en: Messages = {
       redirectChecker: { title: 'Redirect Checker', desc: 'Find the final URL behind a redirect chain.' },
       promoCode: { title: 'Promo Code Validator', desc: 'Check your promo code quality before publishing.' },
       pdfX: { title: 'PDF to PDF/X Converter', desc: 'Convert your PDF to print-compliant PDF/X-1a format.' },
+      wordCounter: { title: 'Word & Character Counter', desc: 'Count words, characters, sentences and estimate reading time.' },
     },
   },
   paperWeight: {
@@ -104,6 +107,20 @@ const en: Messages = {
     errorSize: 'File too large (max 30 MB).',
     errorType: 'Please upload a PDF file.',
     errorServer: 'Conversion failed. Try again or check the file.',
+  },
+  wordCounter: {
+    title: 'Word & Character Counter',
+    desc: 'Analyze your text: words, characters, sentences, paragraphs and estimated reading time.',
+    placeholder: 'Paste or type your text here…',
+    stats: {
+      words: 'Words',
+      charsWithSpaces: 'Characters (with spaces)',
+      charsWithoutSpaces: 'Characters (no spaces)',
+      sentences: 'Sentences',
+      paragraphs: 'Paragraphs',
+      readingTime: 'Estimated reading time',
+    },
+    minutes: 'min',
   },
 }
 

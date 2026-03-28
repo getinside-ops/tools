@@ -7,6 +7,8 @@ const fr = {
     redirectChecker: 'Redirect Checker',
     promoCode: 'Code promo',
     pdfX: 'PDF → PDF/X',
+    wordCounter: 'Compteur de mots',
+    back: '← Retour aux outils',
   },
   footer: {
     discover: 'Découvrir getinside',
@@ -23,6 +25,7 @@ const fr = {
       redirectChecker: { title: 'Redirect Checker', desc: "Découvrez l'URL finale derrière une chaîne de redirections." },
       promoCode: { title: 'Validateur de code promo', desc: 'Vérifiez la qualité de votre code promotionnel avant diffusion.' },
       pdfX: { title: 'Convertisseur PDF → PDF/X', desc: "Convertissez votre PDF en PDF/X-1a conforme aux normes d'impression." },
+      wordCounter: { title: 'Compteur de mots', desc: 'Comptez les mots, caractères, phrases et estimez le temps de lecture.' },
     },
   },
   paperWeight: {
@@ -102,6 +105,20 @@ const fr = {
     errorSize: 'Fichier trop lourd (max 30 Mo).',
     errorType: 'Veuillez charger un fichier PDF.',
     errorServer: 'La conversion a échoué. Réessayez ou vérifiez le fichier.',
+  },
+  wordCounter: {
+    title: 'Compteur de mots',
+    desc: 'Analysez votre texte : mots, caractères, phrases, paragraphes et temps de lecture estimé.',
+    placeholder: 'Collez ou saisissez votre texte ici…',
+    stats: {
+      words: 'Mots',
+      charsWithSpaces: 'Caractères (espaces inclus)',
+      charsWithoutSpaces: 'Caractères (sans espaces)',
+      sentences: 'Phrases',
+      paragraphs: 'Paragraphes',
+      readingTime: 'Temps de lecture estimé',
+    },
+    minutes: 'min',
   },
 }
 
