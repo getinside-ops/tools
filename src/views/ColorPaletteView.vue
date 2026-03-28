@@ -52,9 +52,13 @@ function lock(index: number) {
 }
 
 async function copy(hex: string, index: number) {
-  await navigator.clipboard.writeText(hex)
-  copiedIndex.value = index
-  setTimeout(() => { copiedIndex.value = null }, 2000)
+  try {
+    await navigator.clipboard.writeText(hex)
+    copiedIndex.value = index
+    setTimeout(() => { copiedIndex.value = null }, 2000)
+  } catch {
+    // clipboard unavailable — silently ignore
+  }
 }
 
 function handleKeydown(e: KeyboardEvent) {
