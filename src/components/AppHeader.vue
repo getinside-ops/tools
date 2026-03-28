@@ -2,7 +2,7 @@
   <header class="gi-header">
     <div class="gi-header-inner">
       <a href="https://www.getinside.fr/" target="_blank" class="gi-logo" aria-label="getinside">
-        <img src="/tools/logo-getinside.svg" alt="getinside" class="gi-logo-img" />
+        <img :src="`${base}logo-getinside.svg`" alt="getinside" class="gi-logo-img" />
         <span class="gi-logo-badge">tools</span>
       </a>
       <nav class="gi-nav">
@@ -25,6 +25,7 @@
 import { useI18n } from 'vue-i18n'
 
 const { t, locale } = useI18n()
+const base = import.meta.env.BASE_URL
 
 function toggleLocale() {
   locale.value = locale.value === 'fr' ? 'en' : 'fr'
