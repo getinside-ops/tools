@@ -2,7 +2,7 @@
   <header class="gi-header">
     <div class="gi-header-inner">
       <a href="https://www.getinside.fr/" target="_blank" class="gi-logo" aria-label="getinside">
-        <span class="gi-logo-text">get<span class="gi-logo-accent">inside</span></span>
+        <img src="/tools/logo-getinside.svg" alt="getinside" class="gi-logo-img" />
         <span class="gi-logo-badge">tools</span>
       </a>
       <nav class="gi-nav">
@@ -56,13 +56,11 @@ function toggleLocale() {
   text-decoration: none;
   flex-shrink: 0;
 }
-.gi-logo-text {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--gi-text);
-  letter-spacing: -0.02em;
+.gi-logo-img {
+  height: 22px;
+  width: auto;
+  display: block;
 }
-.gi-logo-accent { color: var(--gi-brand); }
 .gi-logo-badge {
   font-size: 0.7rem;
   font-weight: 600;
