@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
     <div class="gi-tool-header">
       <h1>{{ t('paperWeight.title') }}</h1>
       <p>{{ t('paperWeight.desc') }}</p>
@@ -75,6 +76,19 @@ const result = computed(() => {
 </script>
 
 <style scoped>
+.gi-back-link {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0.3rem 0.75rem;
+  border: 1.5px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  font-size: 0.85rem;
+  color: var(--gi-text-muted);
+  text-decoration: none;
+  transition: border-color 0.12s, color 0.12s;
+}
+.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
 .gi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .gi-formula { margin-top: 0.75rem; font-size: 0.85rem; color: var(--gi-text-muted); font-family: monospace; }
 </style>

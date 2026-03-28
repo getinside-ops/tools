@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
     <div class="gi-tool-header">
       <h1>{{ t('redirectChecker.title') }}</h1>
       <p>{{ t('redirectChecker.desc') }}</p>
@@ -69,6 +70,19 @@ async function check() {
 </script>
 
 <style scoped>
+.gi-back-link {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0.3rem 0.75rem;
+  border: 1.5px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  font-size: 0.85rem;
+  color: var(--gi-text-muted);
+  text-decoration: none;
+  transition: border-color 0.12s, color 0.12s;
+}
+.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
 .gi-redirect-row { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.5rem; }
 .gi-redirect-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gi-text-muted); }
 .gi-arrow { font-size: 1.2rem; color: var(--gi-brand); margin: 0.25rem 0; }

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
     <div class="gi-tool-header">
       <h1>{{ t('promoCode.title') }}</h1>
       <p>{{ t('promoCode.desc') }}</p>
@@ -61,6 +62,19 @@ function camelRule(rule: string) { return ruleMap[rule] ?? rule }
 </script>
 
 <style scoped>
+.gi-back-link {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0.3rem 0.75rem;
+  border: 1.5px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  font-size: 0.85rem;
+  color: var(--gi-text-muted);
+  text-decoration: none;
+  transition: border-color 0.12s, color 0.12s;
+}
+.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
 .gi-code-input { font-family: 'Menlo', 'Monaco', monospace; font-size: 1.1rem; letter-spacing: 0.1em; }
 .gi-score-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
 .gi-score-label { font-weight: 600; font-size: 0.9rem; }
