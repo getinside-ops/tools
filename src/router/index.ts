@@ -11,6 +11,7 @@ const router = createRouter({
     { path: '/redirect-checker', component: () => import('../views/RedirectCheckerView.vue') },
     { path: '/promo-code', component: () => import('../views/PromoCodeView.vue') },
     { path: '/word-counter', component: () => import('../views/WordCounterView.vue') },
+    { path: '/color-palette', component: () => import('../views/ColorPaletteView.vue') },
     // { path: '/pdf-x', component: () => import('../views/PdfXView.vue') }, // coming soon
   ],
 })

@@ -8,6 +8,7 @@ const fr = {
     promoCode: 'Code promo',
     pdfX: 'PDF → PDF/X',
     wordCounter: 'Compteur de mots',
+    colorPalette: 'Palette de couleurs',
     back: '← Retour aux outils',
   },
   footer: {
@@ -26,6 +27,7 @@ const fr = {
       promoCode: { title: 'Validateur de code promo', desc: 'Vérifiez la qualité de votre code promotionnel avant diffusion.' },
       pdfX: { title: 'Convertisseur PDF → PDF/X', desc: "Convertissez votre PDF en PDF/X-1a conforme aux normes d'impression." },
       wordCounter: { title: 'Compteur de mots', desc: 'Comptez les mots, caractères, phrases et estimez le temps de lecture.' },
+      colorPalette: { title: 'Générateur de palette', desc: 'Générez des palettes de couleurs harmonieuses. Appuyez sur espace pour une nouvelle palette.' },
     },
   },
   paperWeight: {
@@ -119,6 +121,15 @@ const fr = {
       readingTime: 'Temps de lecture estimé',
     },
     minutes: 'min',
+  },
+  colorPalette: {
+    title: 'Générateur de palette de couleurs',
+    desc: 'Générez des palettes harmonieuses. Appuyez sur espace ou cliquez sur Générer pour une nouvelle palette. Cliquez sur une couleur pour la verrouiller.',
+    generate: 'Générer',
+    pressSpace: 'ou appuyez sur espace',
+    lock: 'Verrouiller',
+    unlock: 'Déverrouiller',
+    copied: 'Copié !',
   },
 }
 

@@ -10,6 +10,7 @@ const en: Messages = {
     promoCode: 'Promo Code',
     pdfX: 'PDF → PDF/X',
     wordCounter: 'Word Counter',
+    colorPalette: 'Color Palette',
     back: '← Back to tools',
   },
   footer: {
@@ -28,6 +29,7 @@ const en: Messages = {
       promoCode: { title: 'Promo Code Validator', desc: 'Check your promo code quality before publishing.' },
       pdfX: { title: 'PDF to PDF/X Converter', desc: 'Convert your PDF to print-compliant PDF/X-1a format.' },
       wordCounter: { title: 'Word & Character Counter', desc: 'Count words, characters, sentences and estimate reading time.' },
+      colorPalette: { title: 'Color Palette Generator', desc: 'Generate harmonious color palettes. Press space for a new palette.' },
     },
   },
   paperWeight: {
@@ -121,6 +123,15 @@ const en: Messages = {
       readingTime: 'Estimated reading time',
     },
     minutes: 'min',
+  },
+  colorPalette: {
+    title: 'Color Palette Generator',
+    desc: 'Generate harmonious palettes. Press space or click Generate for a new palette. Click a color to lock it.',
+    generate: 'Generate',
+    pressSpace: 'or press space',
+    lock: 'Lock',
+    unlock: 'Unlock',
+    copied: 'Copied!',
   },
 }
 
