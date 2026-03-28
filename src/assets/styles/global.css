@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --gi-brand: #0aaa8e;
+  --gi-brand-dark: #08937b;
+  --gi-mint: #6AE7C8;
+  --gi-yellow: #FCF758;
+  --gi-violet: #C990FC;
+  --gi-bg: #F7F6F3;
+  --gi-bg-soft: #EEECEA;
+  --gi-surface: #FFFFFF;
+  --gi-border: #E0DDD9;
+  --gi-text: #1a1a1a;
+  --gi-text-muted: #6b7280;
+  --gi-tint-green-bg: #f0fdf4;
+  --gi-tint-green-text: #059669;
+  --gi-tint-green-border: #ccf3df;
+  --gi-tint-yellow-bg: rgba(252, 247, 88, 0.18);
+  --gi-tint-yellow-text: #d97706;
+  --gi-tint-red-bg: #fff5f5;
+  --gi-tint-red-text: #dc2626;
+  --gi-tint-red-border: #fecdd3;
+  --gi-radius: 8px;
+  --gi-radius-lg: 12px;
+  --gi-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--gi-text);
+  background: var(--gi-bg);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { min-height: 100vh; background: var(--gi-bg); }
+
+.gi-main { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+.gi-field { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+.gi-label { font-size: 0.875rem; font-weight: 500; color: var(--gi-text); }
+.gi-label .gi-optional { color: var(--gi-text-muted); font-weight: 400; font-size: 0.8rem; }
+.gi-input, .gi-select {
+  padding: 0.55rem 0.75rem;
+  border: 1.5px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: var(--gi-surface);
+  color: var(--gi-text);
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.gi-input:focus, .gi-select:focus { outline: none; border-color: var(--gi-brand); }
+
+.gi-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.55rem 1.2rem; background: var(--gi-brand); color: #fff;
+  border: none; border-radius: var(--gi-radius); font-size: 0.95rem;
+  font-weight: 500; cursor: pointer; transition: background 0.15s;
+  text-decoration: none;
+}
+.gi-btn:hover { background: var(--gi-brand-dark); }
+.gi-btn-ghost { background: transparent; color: var(--gi-brand); border: 1.5px solid var(--gi-brand); }
+.gi-btn-ghost:hover { background: rgba(10, 170, 142, 0.06); }
+
+.gi-result {
+  background: var(--gi-surface); border: 1.5px solid var(--gi-mint);
+  border-radius: var(--gi-radius-lg); padding: 1.25rem 1.5rem; margin-top: 1.5rem;
+}
+.gi-result-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gi-brand); margin-bottom: 0.4rem; }
+.gi-result-value { font-size: 1.6rem; font-weight: 700; color: var(--gi-text); }
+.gi-result-secondary { font-size: 0.9rem; color: var(--gi-text-muted); margin-top: 0.25rem; }
+
+.gi-tool-header { margin-bottom: 2rem; }
+.gi-tool-header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.4rem; }
+.gi-tool-header p { color: var(--gi-text-muted); font-size: 0.95rem; }
+
+.gi-status { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; font-weight: 500; padding: 0.25rem 0.6rem; border-radius: 999px; }
+.gi-status-ok { background: var(--gi-tint-green-bg); color: var(--gi-tint-green-text); border: 1px solid var(--gi-tint-green-border); }
+.gi-status-warning { background: var(--gi-tint-yellow-bg); color: var(--gi-tint-yellow-text); }
+.gi-status-error { background: var(--gi-tint-red-bg); color: var(--gi-tint-red-text); border: 1px solid var(--gi-tint-red-border); }
+
+.gi-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.gi-table th, .gi-table td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--gi-border); }
+.gi-table th { font-weight: 600; color: var(--gi-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.gi-code { font-family: 'Menlo', 'Monaco', monospace; font-size: 0.85rem; background: var(--gi-bg-soft); padding: 0.75rem 1rem; border-radius: var(--gi-radius); color: var(--gi-text); word-break: break-all; }
