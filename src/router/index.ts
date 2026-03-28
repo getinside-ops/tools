@@ -10,7 +10,7 @@ const router = createRouter({
     { path: '/dpi-checker', component: () => import('../views/DpiCheckerView.vue') },
     { path: '/redirect-checker', component: () => import('../views/RedirectCheckerView.vue') },
     { path: '/promo-code', component: () => import('../views/PromoCodeView.vue') },
-    { path: '/pdf-x', component: () => import('../views/PdfXView.vue') },
+    // { path: '/pdf-x', component: () => import('../views/PdfXView.vue') }, // coming soon
   ],
 })
 

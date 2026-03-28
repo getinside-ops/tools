@@ -32,7 +32,7 @@ const tools = [
   { route: '/dpi-checker',  icon: '🖨️', titleKey: 'home.tools.dpiChecker.title',  descKey: 'home.tools.dpiChecker.desc' },
   { route: '/redirect-checker', icon: '↪️', titleKey: 'home.tools.redirectChecker.title', descKey: 'home.tools.redirectChecker.desc' },
   { route: '/promo-code',   icon: '🏷️', titleKey: 'home.tools.promoCode.title',   descKey: 'home.tools.promoCode.desc' },
-  { route: '/pdf-x',        icon: '🖨️', titleKey: 'home.tools.pdfX.title',        descKey: 'home.tools.pdfX.desc' },
+  // { route: '/pdf-x', icon: '🖨️', titleKey: 'home.tools.pdfX.title', descKey: 'home.tools.pdfX.desc' }, // coming soon
 ]
 </script>
 
