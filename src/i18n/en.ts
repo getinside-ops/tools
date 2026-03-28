@@ -12,6 +12,7 @@ const en: Messages = {
     wordCounter: 'Word Counter',
     colorPalette: 'Color Palette',
     back: '← Back to tools',
+    search: 'Search tools…',
   },
   footer: {
     discover: 'Discover getinside',
@@ -21,6 +22,14 @@ const en: Messages = {
   home: {
     title: 'getinside Tools',
     subtitle: 'Free, simple tools for your print & digital campaigns.',
+    featured: 'Featured tools',
+    new: 'New',
+    categories: {
+      all: 'All',
+      print: 'Print',
+      digital: 'Digital',
+      design: 'Design',
+    },
     tools: {
       paperWeight: { title: 'Paper Weight Calculator', desc: 'Estimate the total weight of your flyer order.' },
       utmBuilder: { title: 'UTM URL Builder', desc: 'Build UTM-tagged URLs to track your campaigns in GA4.' },

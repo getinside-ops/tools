@@ -10,6 +10,7 @@ const fr = {
     wordCounter: 'Compteur de mots',
     colorPalette: 'Palette de couleurs',
     back: '← Retour aux outils',
+    search: 'Rechercher un outil…',
   },
   footer: {
     discover: 'Découvrir getinside',
@@ -19,6 +20,14 @@ const fr = {
   home: {
     title: 'Outils getinside',
     subtitle: 'Des outils simples et gratuits pour vos campagnes print & digital.',
+    featured: 'Outils mis en avant',
+    new: 'Nouveau',
+    categories: {
+      all: 'Tous',
+      print: 'Print',
+      digital: 'Digital',
+      design: 'Design',
+    },
     tools: {
       paperWeight: { title: 'Calculateur poids papier', desc: 'Estimez le poids total de votre commande de flyers.' },
       utmBuilder: { title: "Créateur d'URL UTM", desc: 'Construisez des URLs avec paramètres UTM pour tracker vos campagnes.' },
