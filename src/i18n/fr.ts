@@ -1,5 +1,3 @@
-import { createI18n } from 'vue-i18n'
-
 const fr = {
   nav: {
     home: 'Accueil',
