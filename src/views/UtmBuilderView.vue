@@ -56,7 +56,7 @@
       </button>
     </div>
     <div v-if="urlError" class="gi-result" style="border-color: var(--gi-tint-red-border)">
-      <p style="color: var(--gi-tint-red-text)">URL invalide</p>
+      <p style="color: var(--gi-tint-red-text)">{{ t('utmBuilder.invalidUrl') }}</p>
     </div>
   </div>
 </template>

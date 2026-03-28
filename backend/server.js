@@ -55,10 +55,12 @@ app.post('/convert', upload.single('file'), async (req, res) => {
     })
 
     const output = await readFile(outputPath)
-    const originalName = req.file.originalname.replace(/\.pdf$/i, '') || 'converted'
+    const safeBaseName = req.file.originalname
+      .replace(/\.pdf$/i, '')
+      .replace(/[^a-zA-Z0-9_\-. ]/g, '_') || 'converted'
 
     res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader('Content-Disposition', `attachment; filename="${originalName}-pdfx.pdf"`)
+    res.setHeader('Content-Disposition', `attachment; filename="${safeBaseName}-pdfx.pdf"`)
     res.send(output)
   } catch (err) {
     console.error('Ghostscript error:', err)

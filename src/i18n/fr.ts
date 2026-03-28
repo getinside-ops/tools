@@ -50,6 +50,7 @@ const fr = {
     result: 'URL générée',
     copy: 'Copier',
     copied: 'Copié !',
+    invalidUrl: 'URL invalide',
   },
   dpiChecker: {
     title: 'DPI Checker',

@@ -84,6 +84,7 @@ async function convert() {
 
   try {
     const blob = await convertToPdfX(selectedFile.value)
+    if (downloadUrl.value) URL.revokeObjectURL(downloadUrl.value)
     downloadUrl.value = URL.createObjectURL(blob)
     downloadName.value = selectedFile.value.name.replace(/\.pdf$/i, '-pdfx.pdf')
   } catch (err: unknown) {

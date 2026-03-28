@@ -52,6 +52,7 @@ const en: Messages = {
     result: 'Generated URL',
     copy: 'Copy',
     copied: 'Copied!',
+    invalidUrl: 'Invalid URL',
   },
   dpiChecker: {
     title: 'DPI Checker',
