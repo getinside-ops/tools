@@ -1,13 +1,15 @@
 const FRAME_SRC = '/tools/apple-iphone-15-black-portrait.png'
 
 // Screen rect measured from the frame PNG (pixel coordinates).
-const SCREEN = { x: 120, y: 265, w: 1179, h: 2411 }
+type ScreenRect = { x: number; y: number; w: number; h: number }
+
+const SCREEN: ScreenRect = { x: 120, y: 265, w: 1179, h: 2411 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
     img.onload = () => resolve(img)
-    img.onerror = reject
+    img.onerror = () => reject(new Error(`Failed to load image: ${src}`))
     img.src = src
   })
 }
@@ -35,7 +37,8 @@ export async function generateMockup(userImage: HTMLImageElement): Promise<HTMLC
   const canvas = document.createElement('canvas')
   canvas.width = frame.naturalWidth
   canvas.height = frame.naturalHeight
-  const ctx = canvas.getContext('2d')!
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('Could not acquire 2D canvas context')
 
   // Draw user image cover-cropped into the screen area
   const { sx, sy, sw, sh } = coverCrop(
