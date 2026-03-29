@@ -33,6 +33,7 @@ src/
 │   ├── usePromoCode.ts          # validatePromoCode() — 5-rule checklist
 │   ├── useWordCounter.ts        # analyzeText() — words, chars, sentences, paragraphs, reading time
 │   ├── useColorPalette.ts       # initPalette() + generatePalette() + toggleLock() — HSL color gen
+│   ├── useMockupGenerator.ts    # generateMockup(img) → canvas — NOT unit-testable (canvas stub in jsdom); manual browser test only
 │   ├── usePdfXConverter.ts      # convertToPdfX() — POST to VITE_PDFX_API_URL (backend not yet deployed)
 │   └── __tests__/               # Vitest tests for the 6 pure composables
 ├── i18n/
@@ -59,6 +60,14 @@ Color tints: `--gi-tint-green-*`, `--gi-tint-red-*`, `--gi-tint-yellow-*` (bg + 
 4. Add route in `src/router/index.ts`
 5. Add nav link in `src/components/AppHeader.vue`
 6. Add entry to `allTools` array in `src/views/HomeView.vue` with `category` (`print`/`digital`/`design`) and `isNew` flag
+
+## Canvas Device Mockup Pattern (useMockupGenerator.ts)
+
+Screen rect for `public/apple-iphone-15-black-portrait.png` (1419×2796): `{ x: 120, y: 120, w: 1179, h: 2556 }` — symmetric 120px borders, full display including behind notch.
+
+Compositing order: clip to `ctx.roundRect(SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, 130)` → draw user image → `ctx.restore()` → draw frame on top. Corner radius ~130px; adjust if bleed reappears.
+
+`public/` assets: use `` `${import.meta.env.BASE_URL}filename.png` `` (not hardcoded `/tools/`).
 
 ## PDF/X Tool (coming soon)
 
