@@ -40,6 +40,13 @@ export async function generateMockup(userImage: HTMLImageElement): Promise<HTMLC
   const ctx = canvas.getContext('2d')
   if (!ctx) throw new Error('Could not acquire 2D canvas context')
 
+  // Clip to rounded screen rect so user image doesn't bleed past corners
+  const CORNER_RADIUS = 130
+  ctx.save()
+  ctx.beginPath()
+  ctx.roundRect(SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, CORNER_RADIUS)
+  ctx.clip()
+
   // Draw user image cover-cropped into the screen area
   const { sx, sy, sw, sh } = coverCrop(
     userImage.naturalWidth,
@@ -48,6 +55,8 @@ export async function generateMockup(userImage: HTMLImageElement): Promise<HTMLC
     SCREEN.h
   )
   ctx.drawImage(userImage, sx, sy, sw, sh, SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h)
+
+  ctx.restore()
 
   // Draw transparent frame on top — bezel covers everything outside screen
   ctx.drawImage(frame, 0, 0)
