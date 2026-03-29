@@ -11,6 +11,7 @@ const en: Messages = {
     pdfX: 'PDF → PDF/X',
     wordCounter: 'Word Counter',
     colorPalette: 'Color Palette',
+    mockupGenerator: 'Mockup',
     back: '← Back to tools',
     search: 'Search tools…',
   },
@@ -39,6 +40,7 @@ const en: Messages = {
       pdfX: { title: 'PDF to PDF/X Converter', desc: 'Convert your PDF to print-compliant PDF/X-1a format.' },
       wordCounter: { title: 'Word & Character Counter', desc: 'Count words, characters, sentences and estimate reading time.' },
       colorPalette: { title: 'Color Palette Generator', desc: 'Generate harmonious color palettes. Press space for a new palette.' },
+      mockupGenerator: { title: 'iPhone Mockup', desc: 'Drop your screenshot into an iPhone 15 frame.' },
     },
   },
   paperWeight: {
@@ -140,6 +142,14 @@ const en: Messages = {
     pressSpace: 'or press space',
     lock: 'Lock',
     unlock: 'Unlock',
+    copied: 'Copied!',
+  },
+  mockupGenerator: {
+    title: 'iPhone 15 Mockup',
+    desc: 'Drop your screenshot into an iPhone 15 frame and export it in one click.',
+    dropZone: 'Drop your screenshot here or click to upload',
+    download: 'Download PNG',
+    copy: 'Copy to clipboard',
     copied: 'Copied!',
   },
 }

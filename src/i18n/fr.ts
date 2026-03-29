@@ -9,6 +9,7 @@ const fr = {
     pdfX: 'PDF → PDF/X',
     wordCounter: 'Compteur de mots',
     colorPalette: 'Palette de couleurs',
+    mockupGenerator: 'Mockup',
     back: '← Retour aux outils',
     search: 'Rechercher un outil…',
   },
@@ -37,6 +38,7 @@ const fr = {
       pdfX: { title: 'Convertisseur PDF → PDF/X', desc: "Convertissez votre PDF en PDF/X-1a conforme aux normes d'impression." },
       wordCounter: { title: 'Compteur de mots', desc: 'Comptez les mots, caractères, phrases et estimez le temps de lecture.' },
       colorPalette: { title: 'Générateur de palette', desc: 'Générez des palettes de couleurs harmonieuses. Appuyez sur espace pour une nouvelle palette.' },
+      mockupGenerator: { title: 'Mockup iPhone', desc: 'Intégrez votre capture dans un mockup iPhone 15.' },
     },
   },
   paperWeight: {
@@ -138,6 +140,14 @@ const fr = {
     pressSpace: 'ou appuyez sur espace',
     lock: 'Verrouiller',
     unlock: 'Déverrouiller',
+    copied: 'Copié !',
+  },
+  mockupGenerator: {
+    title: 'Mockup iPhone 15',
+    desc: "Intégrez votre capture d'écran dans un mockup iPhone 15 en un clic.",
+    dropZone: 'Déposez votre capture ici ou cliquez pour importer',
+    download: 'Télécharger en PNG',
+    copy: 'Copier dans le presse-papiers',
     copied: 'Copié !',
   },
 }
