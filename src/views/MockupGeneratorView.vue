@@ -99,7 +99,7 @@ function download() {
     a.href = URL.createObjectURL(blob)
     a.download = 'mockup-iphone15.png'
     a.click()
-    URL.revokeObjectURL(a.href)
+    setTimeout(() => URL.revokeObjectURL(a.href), 100)
   })
 }
 
