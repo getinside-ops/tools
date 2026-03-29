@@ -12,6 +12,7 @@ const router = createRouter({
     { path: '/promo-code', component: () => import('../views/PromoCodeView.vue') },
     { path: '/word-counter', component: () => import('../views/WordCounterView.vue') },
     { path: '/color-palette', component: () => import('../views/ColorPaletteView.vue') },
+    { path: '/mockup', component: () => import('../views/MockupGeneratorView.vue') },
     // { path: '/pdf-x', component: () => import('../views/PdfXView.vue') }, // coming soon
   ],
 })

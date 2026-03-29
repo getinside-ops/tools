@@ -86,6 +86,7 @@ const allTools = [
   { route: '/promo-code',       icon: '🏷️', titleKey: 'home.tools.promoCode.title',       descKey: 'home.tools.promoCode.desc',       category: 'digital', isNew: false },
   { route: '/word-counter',     icon: '📝', titleKey: 'home.tools.wordCounter.title',     descKey: 'home.tools.wordCounter.desc',     category: 'digital', isNew: true  },
   { route: '/color-palette',    icon: '🎨', titleKey: 'home.tools.colorPalette.title',    descKey: 'home.tools.colorPalette.desc',    category: 'design',  isNew: true  },
+  { route: '/mockup',           icon: '📱', titleKey: 'home.tools.mockupGenerator.title',   descKey: 'home.tools.mockupGenerator.desc',   category: 'design',  isNew: true  },
 ]
 
 const featuredRoutes = ['/utm-builder', '/dpi-checker', '/color-palette']

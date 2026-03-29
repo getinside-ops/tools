@@ -14,6 +14,7 @@
         <router-link to="/promo-code">{{ t('nav.promoCode') }}</router-link>
         <router-link to="/word-counter">{{ t('nav.wordCounter') }}</router-link>
         <router-link to="/color-palette">{{ t('nav.colorPalette') }}</router-link>
+        <router-link to="/mockup">{{ t('nav.mockupGenerator') }}</router-link>
         <!-- <router-link to="/pdf-x">{{ t('nav.pdfX') }}</router-link> coming soon -->
       </nav>
       <button class="gi-lang-toggle" @click="toggleLocale">
