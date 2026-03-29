@@ -63,7 +63,16 @@ async function loadFromFile(file: File) {
   const url = URL.createObjectURL(file)
   const img = new Image()
   img.onload = async () => {
-    canvas.value = await generateMockup(img)
+    try {
+      canvas.value = await generateMockup(img)
+      if (fileInputRef.value) fileInputRef.value.value = ''
+    } catch (err) {
+      console.error('Mockup generation failed:', err)
+    } finally {
+      URL.revokeObjectURL(url)
+    }
+  }
+  img.onerror = () => {
     URL.revokeObjectURL(url)
   }
   img.src = url
@@ -151,8 +160,8 @@ async function copyToClipboard() {
   border-color: var(--gi-brand);
   background: color-mix(in srgb, var(--gi-brand) 5%, transparent);
 }
-.gi-drop-icon { font-size: 2rem; }
-.gi-drop-label { font-size: 0.95rem; color: var(--gi-text-muted); text-align: center; }
+.gi-drop-icon { font-size: 2rem; pointer-events: none; }
+.gi-drop-label { font-size: 0.95rem; color: var(--gi-text-muted); text-align: center; pointer-events: none; }
 .gi-drop-input {
   position: absolute;
   inset: 0;

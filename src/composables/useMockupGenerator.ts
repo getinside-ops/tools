@@ -1,4 +1,4 @@
-const FRAME_SRC = '/tools/apple-iphone-15-black-portrait.png'
+const FRAME_SRC = `${import.meta.env.BASE_URL}apple-iphone-15-black-portrait.png`
 
 // Screen rect measured from the frame PNG (pixel coordinates).
 type ScreenRect = { x: number; y: number; w: number; h: number }
