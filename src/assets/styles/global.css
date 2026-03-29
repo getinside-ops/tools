@@ -1,5 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+@font-face {
+  font-family: 'Garnett';
+  src: url('../fonts/Garnett-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Garnett';
+  src: url('../fonts/Garnett-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --gi-brand: #0aaa8e;
   --gi-brand-dark: #08937b;
@@ -31,7 +46,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { min-height: 100vh; background: var(--gi-bg); }
+body { min-height: 100vh; background: var(--gi-bg); overflow-x: hidden; }
 
 .gi-main { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
@@ -84,3 +99,6 @@ body { min-height: 100vh; background: var(--gi-bg); }
 .gi-table th { font-weight: 600; color: var(--gi-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
 .gi-code { font-family: 'Menlo', 'Monaco', monospace; font-size: 0.85rem; background: var(--gi-bg-soft); padding: 0.75rem 1rem; border-radius: var(--gi-radius); color: var(--gi-text); word-break: break-all; }
+
+.gi-back-link { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; color: var(--gi-text-muted); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.12s; }
+.gi-back-link:hover { color: var(--gi-brand); }

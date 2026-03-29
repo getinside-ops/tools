@@ -1,190 +1,340 @@
 <template>
-  <div>
+  <div class="home-wrap">
     <!-- Hero -->
-    <div class="gi-home-hero">
-      <h1>{{ t('home.title') }}</h1>
-      <p>{{ t('home.subtitle') }}</p>
-    </div>
-
-    <!-- Featured strip -->
-    <section class="gi-featured-section">
-      <div class="gi-section-label">{{ t('home.featured') }}</div>
-      <div class="gi-featured-grid">
-        <router-link
-          v-for="tool in featuredTools"
-          :key="tool.route"
-          :to="tool.route"
-          class="gi-tool-card gi-tool-card--featured"
-        >
-          <span class="gi-tool-icon">{{ tool.icon }}</span>
-          <div>
-            <strong>{{ t(tool.titleKey) }}</strong>
-            <p>{{ t(tool.descKey) }}</p>
-          </div>
-        </router-link>
+    <section class="home-hero">
+      <div class="home-hero-inner">
+        <div class="home-hero-visual">
+          <img :src="`${base}gi-keyvisual.svg`" alt="" class="home-hero-img" aria-hidden="true" />
+        </div>
+        <div class="home-hero-content">
+          <h1>{{ t('home.title') }}</h1>
+          <p class="home-hero-tagline">{{ t('home.subtitle') }}</p>
+          <p class="home-hero-body">{{ t('home.heroText') }}</p>
+          <a href="#browse" class="gi-btn home-hero-cta">{{ t('home.exploreTools') }}</a>
+        </div>
       </div>
     </section>
 
-    <!-- Search + Category tabs -->
-    <div class="gi-browse-header">
+    <!-- Browse -->
+    <section class="home-browse" id="browse">
+      <div class="home-browse-intro">
+        <h2>{{ t('home.browse.title') }}</h2>
+        <p>{{ t('home.browse.subtitle') }}</p>
+      </div>
+
       <input
         v-model="searchQuery"
         type="search"
-        class="gi-input gi-search-input"
+        class="gi-input home-search"
         :placeholder="t('nav.search')"
       />
-      <div v-if="!searchQuery.trim()" class="gi-category-tabs">
+
+      <div class="home-tab-bar">
         <button
           v-for="cat in categories"
           :key="cat"
-          class="gi-tab"
-          :class="{ 'gi-tab--active': activeCategory === cat }"
-          @click="activeCategory = cat"
+          class="home-tab"
+          :class="{ active: activeCategory === cat }"
+          @click="setCategory(cat)"
         >
           {{ t(`home.categories.${cat}`) }}
         </button>
       </div>
-    </div>
 
-    <!-- Tool grid -->
-    <div class="gi-tools-grid">
-      <router-link
-        v-for="tool in filteredTools"
-        :key="tool.route"
-        :to="tool.route"
-        class="gi-tool-card"
-      >
-        <span class="gi-tool-icon">{{ tool.icon }}</span>
-        <div class="gi-tool-card-body">
-          <div class="gi-tool-card-title-row">
-            <strong>{{ t(tool.titleKey) }}</strong>
-            <span v-if="tool.isNew" class="gi-badge-new">{{ t('home.new') }}</span>
+      <!-- Grouped view: All + no active search -->
+      <template v-if="!searchQuery.trim() && activeCategory === 'all'">
+        <div v-for="grp in contentCategories" :key="grp">
+          <div class="home-cat-header">{{ t(`home.categories.${grp}`) }}</div>
+          <div class="home-grid">
+            <router-link
+              v-for="tool in toolsByCategory[grp]"
+              :key="tool.route"
+              :to="tool.route"
+              class="home-card"
+            >
+              <div class="home-card-top">
+                <div class="home-icon-box">
+                  <component :is="tool.icon" :size="20" />
+                </div>
+                <span v-if="tool.isNew" class="gi-badge-new">{{ t('home.new') }}</span>
+              </div>
+              <strong class="home-card-title">{{ t(tool.titleKey) }}</strong>
+              <p class="home-card-desc">{{ t(tool.descKey) }}</p>
+              <span class="home-card-cta">{{ t('home.tryNow') }}</span>
+            </router-link>
           </div>
-          <p>{{ t(tool.descKey) }}</p>
-          <span class="gi-tool-category-tag">{{ t(`home.categories.${tool.category}`) }}</span>
         </div>
-      </router-link>
-    </div>
+      </template>
+
+      <!-- Filtered / search view: flat grid -->
+      <template v-else>
+        <div class="home-grid home-grid--mt">
+          <router-link
+            v-for="tool in filteredTools"
+            :key="tool.route"
+            :to="tool.route"
+            class="home-card"
+          >
+            <div class="home-card-top">
+              <div class="home-icon-box">
+                <component :is="tool.icon" :size="20" />
+              </div>
+              <span v-if="tool.isNew" class="gi-badge-new">{{ t('home.new') }}</span>
+            </div>
+            <strong class="home-card-title">{{ t(tool.titleKey) }}</strong>
+            <p class="home-card-desc">{{ t(tool.descKey) }}</p>
+            <span class="home-card-cta">{{ t('home.tryNow') }}</span>
+          </router-link>
+        </div>
+      </template>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+const base = import.meta.env.BASE_URL
+import type { Component } from 'vue'
+import {
+  Scale, Link2, Printer, CornerDownRight, Tag, FileText, Palette, Smartphone,
+} from 'lucide-vue-next'
 
 const { t } = useI18n()
 
 const searchQuery = ref('')
 const activeCategory = ref('all')
 const categories = ['all', 'print', 'digital', 'design'] as const
+const contentCategories = ['print', 'digital', 'design'] as const
+type ContentCategory = 'print' | 'digital' | 'design'
 
-const allTools = [
-  { route: '/paper-weight',     icon: '📦', titleKey: 'home.tools.paperWeight.title',     descKey: 'home.tools.paperWeight.desc',     category: 'print',   isNew: false },
-  { route: '/utm-builder',      icon: '🔗', titleKey: 'home.tools.utmBuilder.title',      descKey: 'home.tools.utmBuilder.desc',      category: 'digital', isNew: false },
-  { route: '/dpi-checker',      icon: '🖨️', titleKey: 'home.tools.dpiChecker.title',      descKey: 'home.tools.dpiChecker.desc',      category: 'print',   isNew: false },
-  { route: '/redirect-checker', icon: '↪️', titleKey: 'home.tools.redirectChecker.title', descKey: 'home.tools.redirectChecker.desc', category: 'digital', isNew: false },
-  { route: '/promo-code',       icon: '🏷️', titleKey: 'home.tools.promoCode.title',       descKey: 'home.tools.promoCode.desc',       category: 'digital', isNew: false },
-  { route: '/word-counter',     icon: '📝', titleKey: 'home.tools.wordCounter.title',     descKey: 'home.tools.wordCounter.desc',     category: 'digital', isNew: true  },
-  { route: '/color-palette',    icon: '🎨', titleKey: 'home.tools.colorPalette.title',    descKey: 'home.tools.colorPalette.desc',    category: 'design',  isNew: true  },
-  { route: '/mockup',           icon: '📱', titleKey: 'home.tools.mockupGenerator.title',   descKey: 'home.tools.mockupGenerator.desc',   category: 'design',  isNew: true  },
+interface Tool {
+  route: string
+  icon: Component
+  titleKey: string
+  descKey: string
+  category: ContentCategory
+  isNew: boolean
+}
+
+const allTools: Tool[] = [
+  { route: '/paper-weight',     icon: Scale,           titleKey: 'home.tools.paperWeight.title',     descKey: 'home.tools.paperWeight.desc',     category: 'print',   isNew: false },
+  { route: '/utm-builder',      icon: Link2,           titleKey: 'home.tools.utmBuilder.title',      descKey: 'home.tools.utmBuilder.desc',      category: 'digital', isNew: false },
+  { route: '/dpi-checker',      icon: Printer,         titleKey: 'home.tools.dpiChecker.title',      descKey: 'home.tools.dpiChecker.desc',      category: 'print',   isNew: false },
+  { route: '/redirect-checker', icon: CornerDownRight, titleKey: 'home.tools.redirectChecker.title', descKey: 'home.tools.redirectChecker.desc', category: 'digital', isNew: false },
+  { route: '/promo-code',       icon: Tag,             titleKey: 'home.tools.promoCode.title',       descKey: 'home.tools.promoCode.desc',       category: 'digital', isNew: false },
+  { route: '/word-counter',     icon: FileText,        titleKey: 'home.tools.wordCounter.title',     descKey: 'home.tools.wordCounter.desc',     category: 'digital', isNew: true  },
+  { route: '/color-palette',    icon: Palette,         titleKey: 'home.tools.colorPalette.title',    descKey: 'home.tools.colorPalette.desc',    category: 'design',  isNew: true  },
+  { route: '/mockup',           icon: Smartphone,      titleKey: 'home.tools.mockupGenerator.title', descKey: 'home.tools.mockupGenerator.desc', category: 'design',  isNew: true  },
 ]
 
-const featuredRoutes = ['/utm-builder', '/dpi-checker', '/color-palette']
-const featuredTools = allTools.filter(tool => featuredRoutes.includes(tool.route))
+const toolsByCategory = computed((): Record<ContentCategory, Tool[]> => ({
+  print:   allTools.filter(tool => tool.category === 'print'),
+  digital: allTools.filter(tool => tool.category === 'digital'),
+  design:  allTools.filter(tool => tool.category === 'design'),
+}))
 
 const filteredTools = computed(() => {
   const query = searchQuery.value.toLowerCase().trim()
   if (query) {
     return allTools.filter(tool =>
       t(tool.titleKey).toLowerCase().includes(query) ||
-      t(tool.descKey).toLowerCase().includes(query)
+      t(tool.descKey).toLowerCase().includes(query),
     )
   }
   if (activeCategory.value === 'all') return allTools
   return allTools.filter(tool => tool.category === activeCategory.value)
 })
+
+function setCategory(cat: string) {
+  activeCategory.value = cat
+  searchQuery.value = ''
+}
 </script>
 
 <style scoped>
-.gi-home-hero { margin-bottom: 2.5rem; }
-.gi-home-hero h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-.gi-home-hero p { color: var(--gi-text-muted); font-size: 1.05rem; }
+/* Break out of gi-main's 800px/padding constraint */
+.home-wrap {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  margin-top: -2rem;
+  margin-bottom: -4rem;
+}
 
-/* Featured */
-.gi-featured-section { margin-bottom: 2.5rem; }
-.gi-section-label {
+/* Hero */
+.home-hero {
+  padding: 4rem 1.5rem 3.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.home-hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+.home-hero-visual {
+  flex-shrink: 0;
+  width: 150px;
+}
+.home-hero-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.home-hero-content {
+  flex: 1;
+}
+.home-hero h1 {
+  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+.home-hero-tagline {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--gi-text);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+.home-hero-body {
+  font-size: 0.95rem;
+  color: var(--gi-text-muted);
+  line-height: 1.65;
+  margin-bottom: 2rem;
+}
+.home-hero-cta {
+  font-size: 1rem;
+  padding: 0.7rem 1.5rem;
+}
+@media (max-width: 640px) {
+  .home-hero-inner {
+    flex-direction: column;
+    gap: 1.75rem;
+    text-align: center;
+  }
+  .home-hero-visual { width: 100px; }
+  .home-hero h1 { font-size: 2rem; }
+}
+
+/* Browse section */
+.home-browse {
+  border-top: 1px solid var(--gi-border);
+  padding: 3rem 1.5rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.home-browse-intro {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.home-browse-intro h2 {
+  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+.home-browse-intro p {
+  color: var(--gi-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Search */
+.home-search { margin-bottom: 1.25rem; }
+
+/* Underline tabs */
+.home-tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--gi-border);
+  margin-bottom: 0;
+}
+.home-tab {
+  padding: 0.6rem 1rem;
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gi-text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.12s, border-color 0.12s;
+}
+.home-tab:hover { color: var(--gi-text); }
+.home-tab.active { color: var(--gi-brand); border-bottom-color: var(--gi-brand); }
+
+/* Category section header */
+.home-cat-header {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--gi-brand);
-  margin-bottom: 0.75rem;
-}
-.gi-featured-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1rem;
-}
-.gi-tool-card--featured {
-  border-color: rgba(10,170,142,0.3);
-  background: linear-gradient(135deg, var(--gi-surface) 0%, rgba(106,231,200,0.06) 100%);
-  min-height: 100px;
-}
-
-/* Search + Tabs */
-.gi-browse-header { margin-bottom: 1.25rem; }
-.gi-search-input { margin-bottom: 1rem; }
-.gi-category-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-.gi-tab {
-  padding: 0.35rem 0.85rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: 2rem;
-  background: transparent;
-  font-size: 0.85rem;
   color: var(--gi-text-muted);
-  cursor: pointer;
-  transition: border-color 0.12s, color 0.12s, background 0.12s;
+  margin: 2rem 0 0.75rem;
 }
-.gi-tab:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-.gi-tab--active { background: rgba(10,170,142,0.1); border-color: var(--gi-brand); color: var(--gi-brand); font-weight: 500; }
 
-/* Grid */
-.gi-tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-.gi-tool-card {
+/* Card grid */
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.875rem;
+}
+.home-grid--mt { margin-top: 1.5rem; }
+
+/* Tool card */
+.home-card {
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.25rem;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.125rem;
   background: var(--gi-surface);
-  border: 1.5px solid var(--gi-border);
+  border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  position: relative;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  min-height: 160px;
 }
-.gi-tool-card:hover { border-color: var(--gi-brand); box-shadow: var(--gi-shadow); }
-.gi-tool-icon { font-size: 1.8rem; line-height: 1; flex-shrink: 0; }
-.gi-tool-card-body { flex: 1; min-width: 0; }
-.gi-tool-card-title-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; flex-wrap: wrap; }
-.gi-tool-card strong { font-weight: 600; }
-.gi-tool-card p { font-size: 0.875rem; color: var(--gi-text-muted); line-height: 1.5; margin-bottom: 0.5rem; }
-
-.gi-badge-new {
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  background: var(--gi-mint);
-  color: #1a1a1a;
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
+.home-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-color: rgba(10, 170, 142, 0.4);
 }
-.gi-tool-category-tag {
-  font-size: 0.72rem;
+.home-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.home-icon-box {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  background: var(--gi-tint-green-bg);
+  color: var(--gi-brand);
+  border-radius: var(--gi-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.home-card-desc {
+  font-size: 0.8rem;
   color: var(--gi-text-muted);
-  background: var(--gi-bg-soft);
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
+  line-height: 1.5;
+  flex: 1;
+}
+.home-card-cta {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--gi-brand);
+  margin-top: auto;
 }
 </style>

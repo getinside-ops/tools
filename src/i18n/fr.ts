@@ -19,10 +19,17 @@ const fr = {
     tagline: 'Outils proposés par getinside · Retail Media',
   },
   home: {
-    title: 'Outils getinside',
-    subtitle: 'Des outils simples et gratuits pour vos campagnes print & digital.',
+    title: 'getinside toolbox',
+    subtitle: 'Pas de compte. Pas de serveur. Des outils qui fonctionnent — directement dans ton navigateur.',
+    heroText: "Une collection d'outils utiles, tous exécutés directement dans ton navigateur. Sans installation, sans dépendance — juste un clic.",
     featured: 'Outils mis en avant',
     new: 'Nouveau',
+    exploreTools: 'Explorer les outils →',
+    tryNow: 'Essayer maintenant →',
+    browse: {
+      title: 'Nos outils',
+      subtitle: 'Des outils gratuits pour vos projets print & digital.',
+    },
     categories: {
       all: 'Tous',
       print: 'Print',

@@ -21,10 +21,17 @@ const en: Messages = {
     tagline: 'Tools by getinside · Retail Media',
   },
   home: {
-    title: 'getinside Tools',
-    subtitle: 'Free, simple tools for your print & digital campaigns.',
+    title: 'getinside toolbox',
+    subtitle: 'No logins. No servers. Just tools that work — right in your browser.',
+    heroText: 'A collection of useful tools, all running directly in your browser. No installs, no dependencies, just click and go.',
     featured: 'Featured tools',
     new: 'New',
+    exploreTools: 'Explore tools →',
+    tryNow: 'Try it now →',
+    browse: {
+      title: 'Our tools',
+      subtitle: 'Free tools for your print & digital projects.',
+    },
     categories: {
       all: 'All',
       print: 'Print',
