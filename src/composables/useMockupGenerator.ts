@@ -3,7 +3,7 @@ const FRAME_SRC = `${import.meta.env.BASE_URL}apple-iphone-15-black-portrait.png
 // Screen rect measured from the frame PNG (pixel coordinates).
 type ScreenRect = { x: number; y: number; w: number; h: number }
 
-const SCREEN: ScreenRect = { x: 120, y: 265, w: 1179, h: 2411 }
+const SCREEN: ScreenRect = { x: 120, y: 120, w: 1179, h: 2556 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
