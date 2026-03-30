@@ -52,15 +52,20 @@
       <input v-model="term" class="gi-input" />
     </div>
 
-    <div v-if="generatedUrl" class="gi-result">
+    <div class="gi-result">
       <div class="gi-result-label">{{ t('utmBuilder.result') }}</div>
-      <p class="gi-code">{{ generatedUrl }}</p>
-      <button class="gi-btn" style="margin-top:0.75rem" @click="copy">
-        {{ copied ? t('utmBuilder.copied') : t('utmBuilder.copy') }}
-      </button>
-    </div>
-    <div v-if="urlError" class="gi-result" style="border-color: var(--gi-tint-red-border)">
-      <p style="color: var(--gi-tint-red-text)">{{ t('utmBuilder.invalidUrl') }}</p>
+      <div v-if="urlError" style="color: var(--gi-tint-red-text)">
+        {{ t('utmBuilder.invalidUrl') }}
+      </div>
+      <div v-else-if="!generatedUrl" style="color: var(--gi-text-muted); font-size: 0.9rem">
+        {{ t('utmBuilder.fillRequired') }}
+      </div>
+      <div v-else>
+        <p class="gi-code">{{ generatedUrl }}</p>
+        <button class="gi-btn" style="margin-top:0.75rem" @click="copy">
+          {{ copied ? t('utmBuilder.copied') : t('utmBuilder.copy') }}
+        </button>
+      </div>
     </div>
   </div>
 </template>

@@ -74,6 +74,7 @@ const fr = {
     copy: 'Copier',
     copied: 'Copié !',
     invalidUrl: 'URL invalide',
+    fillRequired: 'Remplissez les champs obligatoires (URL, source et medium)',
   },
   dpiChecker: {
     title: 'DPI Checker',

@@ -76,6 +76,7 @@ const en: Messages = {
     copy: 'Copy',
     copied: 'Copied!',
     invalidUrl: 'Invalid URL',
+    fillRequired: 'Fill in the required fields (URL, source and medium)',
   },
   dpiChecker: {
     title: 'DPI Checker',
