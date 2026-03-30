@@ -421,10 +421,14 @@ const fr = {
   qrDecoder: {
     title: 'Décodeur QR Code',
     desc: 'Extrayez instantanément le contenu d\'un QR code à partir d\'une image.',
-    upload: 'Déposer un QR Code (Faites glisser ici)',
-    result: 'Résultat du décodage',
-    noQr: 'Aucun QR Code détecté dans cette image.',
-    copy: 'Copier le contenu',
+    pasteTitle: 'Collez un QR code ici',
+    pasteHint: 'Appuyez sur Ctrl/Cmd+V ou cliquez pour coller',
+    upload: 'ou importer une image',
+    decoding: 'Décodage en cours…',
+    noQrFound: 'Aucun QR code détecté',
+    resultTitle: 'Contenu décodé',
+    copy: 'Copier',
+    copied: 'Copié !',
   },
   palette: {
     title: 'Extracteur de Palette',

@@ -423,10 +423,14 @@ const en: Messages = {
   qrDecoder: {
     title: 'QR Code Decoder',
     desc: 'Instantly extract the content of any QR code from an image file.',
-    upload: 'Drop a QR Code (Drag & drop here)',
-    result: 'Decoding Result',
-    noQr: 'No QR code detected in this image.',
-    copy: 'Copy Content',
+    pasteTitle: 'Paste a QR code here',
+    pasteHint: 'Press Ctrl/Cmd+V or click to paste',
+    upload: 'or upload an image',
+    decoding: 'Decoding…',
+    noQrFound: 'No QR code detected',
+    resultTitle: 'Decoded content',
+    copy: 'Copy',
+    copied: 'Copied!',
   },
   palette: {
     title: 'Image Palette Extractor',
