@@ -1,22 +1,25 @@
+export interface RedirectHop {
+  url: string
+  status: number
+}
+
 export interface RedirectResult {
   inputUrl: string
   finalUrl: string
+  hops: RedirectHop[]
   redirected: boolean
 }
 
 export async function checkRedirect(inputUrl: string): Promise<RedirectResult> {
   const normalized = inputUrl.startsWith('http') ? inputUrl : `https://${inputUrl}`
-  const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(normalized)}`
-
-  const response = await fetch(proxyUrl)
-  if (!response.ok) throw new Error(`Proxy error: ${response.status}`)
-
-  const data = await response.json() as { status: { url: string } }
-  const finalUrl = data.status?.url ?? normalized
-
+  const apiUrl = import.meta.env.VITE_REDIRECT_API_URL
+  const res = await fetch(`${apiUrl}?url=${encodeURIComponent(normalized)}`)
+  if (!res.ok) throw new Error(`API error: ${res.status}`)
+  const { hops } = await res.json() as { hops: RedirectHop[] }
   return {
     inputUrl: normalized,
-    finalUrl,
-    redirected: finalUrl !== normalized,
+    finalUrl: hops.at(-1)!.url,
+    hops,
+    redirected: hops.length > 1,
   }
 }
