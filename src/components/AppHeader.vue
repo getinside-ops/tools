@@ -12,6 +12,17 @@
         <router-link to="/dpi-checker">{{ t('nav.dpiChecker') }}</router-link>
         <router-link to="/redirect-checker">{{ t('nav.redirectChecker') }}</router-link>
         <router-link to="/promo-code">{{ t('nav.promoCode') }}</router-link>
+        <router-link to="/url-parser">{{ t('nav.urlParser') }}</router-link>
+        <router-link to="/px-to-rem">{{ t('nav.pxToRem') }}</router-link>
+        <router-link to="/type-scale">{{ t('nav.typeScale') }}</router-link>
+        <router-link to="/contrast-checker">{{ t('nav.contrastChecker') }}</router-link>
+        <router-link to="/color-converter">{{ t('nav.colorConverter') }}</router-link>
+        <router-link to="/image-compressor">{{ t('nav.imageCompressor') }}</router-link>
+        <router-link to="/image-cropper">{{ t('nav.imageCropper') }}</router-link>
+        <router-link to="/image-resizer">{{ t('nav.imageResizer') }}</router-link>
+        <router-link to="/image-filters">{{ t('nav.imageFilters') }}</router-link>
+        <router-link to="/placeholder">{{ t('nav.placeholder') }}</router-link>
+        <router-link to="/matte-generator">{{ t('nav.matteGenerator') }}</router-link>
         <!-- <router-link to="/pdf-x">{{ t('nav.pdfX') }}</router-link> coming soon -->
       </nav>
       <button class="gi-lang-toggle" @click="toggleLocale">

@@ -32,6 +32,17 @@ const tools = [
   { route: '/dpi-checker',  icon: '🖨️', titleKey: 'home.tools.dpiChecker.title',  descKey: 'home.tools.dpiChecker.desc' },
   { route: '/redirect-checker', icon: '↪️', titleKey: 'home.tools.redirectChecker.title', descKey: 'home.tools.redirectChecker.desc' },
   { route: '/promo-code',   icon: '🏷️', titleKey: 'home.tools.promoCode.title',   descKey: 'home.tools.promoCode.desc' },
+  { route: '/url-parser',   icon: '🔍', titleKey: 'home.tools.urlParser.title',   descKey: 'home.tools.urlParser.desc' },
+  { route: '/px-to-rem',   icon: '📏', titleKey: 'home.tools.pxToRem.title',   descKey: 'home.tools.pxToRem.desc' },
+  { route: '/type-scale',   icon: '📐', titleKey: 'home.tools.typeScale.title',   descKey: 'home.tools.typeScale.desc' },
+  { route: '/contrast-checker', icon: '🎨', titleKey: 'home.tools.contrastChecker.title', descKey: 'home.tools.contrastChecker.desc' },
+  { route: '/color-converter', icon: '🌈', titleKey: 'home.tools.colorConverter.title', descKey: 'home.tools.colorConverter.desc' },
+  { route: '/image-compressor', icon: '📉', titleKey: 'home.tools.imageCompressor.title', descKey: 'home.tools.imageCompressor.desc' },
+  { route: '/image-cropper', icon: '✂️', titleKey: 'home.tools.imageCropper.title', descKey: 'home.tools.imageCropper.desc' },
+  { route: '/image-resizer', icon: '🖼️', titleKey: 'home.tools.imageResizer.title', descKey: 'home.tools.imageResizer.desc' },
+  { route: '/image-filters', icon: '✨', titleKey: 'home.tools.imageFilters.title', descKey: 'home.tools.imageFilters.desc' },
+  { route: '/placeholder', icon: '🖼️', titleKey: 'home.tools.placeholder.title', descKey: 'home.tools.placeholder.desc' },
+  { route: '/matte-generator', icon: '🔳', titleKey: 'home.tools.matteGenerator.title', descKey: 'home.tools.matteGenerator.desc' },
   // { route: '/pdf-x', icon: '🖨️', titleKey: 'home.tools.pdfX.title', descKey: 'home.tools.pdfX.desc' }, // coming soon
 ]
 </script>
