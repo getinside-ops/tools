@@ -98,6 +98,7 @@ const base = import.meta.env.BASE_URL
 import type { Component } from 'vue'
 import {
   Scale, Link2, Printer, CornerDownRight, Tag, FileText, Palette, Smartphone,
+  Globe, Ruler, Type, Eye, Pipette, FileDown, Crop, Maximize, Sparkles, ImagePlus, Square
 } from 'lucide-vue-next'
 
 const { t } = useI18n()
@@ -118,6 +119,7 @@ interface Tool {
 }
 
 const allTools: Tool[] = [
+  // Existing tools
   { route: '/paper-weight',     icon: Scale,           titleKey: 'home.tools.paperWeight.title',     descKey: 'home.tools.paperWeight.desc',     category: 'print',   isNew: false },
   { route: '/utm-builder',      icon: Link2,           titleKey: 'home.tools.utmBuilder.title',      descKey: 'home.tools.utmBuilder.desc',      category: 'digital', isNew: false },
   { route: '/dpi-checker',      icon: Printer,         titleKey: 'home.tools.dpiChecker.title',      descKey: 'home.tools.dpiChecker.desc',      category: 'print',   isNew: false },
@@ -126,6 +128,19 @@ const allTools: Tool[] = [
   { route: '/word-counter',     icon: FileText,        titleKey: 'home.tools.wordCounter.title',     descKey: 'home.tools.wordCounter.desc',     category: 'digital', isNew: true  },
   { route: '/color-palette',    icon: Palette,         titleKey: 'home.tools.colorPalette.title',    descKey: 'home.tools.colorPalette.desc',    category: 'design',  isNew: true  },
   { route: '/mockup',           icon: Smartphone,      titleKey: 'home.tools.mockupGenerator.title', descKey: 'home.tools.mockupGenerator.desc', category: 'design',  isNew: true  },
+  
+  // New tools from Batch 1 & 2
+  { route: '/url-parser',       icon: Globe,           titleKey: 'home.tools.urlParser.title',       descKey: 'home.tools.urlParser.desc',       category: 'digital', isNew: true  },
+  { route: '/px-to-rem',        icon: Ruler,           titleKey: 'home.tools.pxToRem.title',        descKey: 'home.tools.pxToRem.desc',        category: 'design',  isNew: true  },
+  { route: '/type-scale',       icon: Type,            titleKey: 'home.tools.typeScale.title',       descKey: 'home.tools.typeScale.desc',       category: 'design',  isNew: true  },
+  { route: '/contrast-checker',  icon: Eye,             titleKey: 'home.tools.contrastChecker.title',  descKey: 'home.tools.contrastChecker.desc',  category: 'design',  isNew: true  },
+  { route: '/color-converter',   icon: Pipette,         titleKey: 'home.tools.colorConverter.title',   descKey: 'home.tools.colorConverter.desc',   category: 'design',  isNew: true  },
+  { route: '/image-compressor',  icon: FileDown,        titleKey: 'home.tools.imageCompressor.title',  descKey: 'home.tools.imageCompressor.desc',  category: 'design',  isNew: true  },
+  { route: '/image-cropper',     icon: Crop,            titleKey: 'home.tools.imageCropper.title',     descKey: 'home.tools.imageCropper.desc',     category: 'design',  isNew: true  },
+  { route: '/image-resizer',     icon: Maximize,        titleKey: 'home.tools.imageResizer.title',     descKey: 'home.tools.imageResizer.desc',     category: 'design',  isNew: true  },
+  { route: '/image-filters',     icon: Sparkles,        titleKey: 'home.tools.imageFilters.title',     descKey: 'home.tools.imageFilters.desc',     category: 'design',  isNew: true  },
+  { route: '/placeholder',       icon: ImagePlus,       titleKey: 'home.tools.placeholder.title',      descKey: 'home.tools.placeholder.desc',      category: 'design',  isNew: true  },
+  { route: '/matte-generator',   icon: Square,          titleKey: 'home.tools.matteGenerator.title',   descKey: 'home.tools.matteGenerator.desc',   category: 'design',  isNew: true  },
 ]
 
 const toolsByCategory = computed((): Record<ContentCategory, Tool[]> => ({

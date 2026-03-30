@@ -1,10 +1,15 @@
 <template>
   <header class="gi-header">
     <div class="gi-header-inner">
-      <a href="https://www.getinside.fr/" target="_blank" class="gi-logo" aria-label="getinside">
-        <img :src="`${base}logo-getinside.svg`" alt="getinside" class="gi-logo-img" />
-        <span class="gi-logo-badge">tools</span>
-      </a>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="https://www.getinside.fr/" target="_blank" class="gi-logo" aria-label="getinside">
+          <img :src="`${base}logo-getinside.svg`" alt="getinside" class="gi-logo-img" />
+          <span class="gi-logo-badge">tools</span>
+        </a>
+        <nav class="gi-header-nav">
+          <router-link to="/" class="gi-header-link">{{ t('nav.home') }}</router-link>
+        </nav>
+      </div>
       <button class="gi-lang-toggle" @click="toggleLocale">
         {{ locale === 'fr' ? 'EN' : 'FR' }}
       </button>
@@ -15,7 +20,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 const base = import.meta.env.BASE_URL
 
 function toggleLocale() {
@@ -63,6 +68,27 @@ function toggleLocale() {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+.gi-header-nav {
+  display: flex;
+  gap: 1rem;
+  border-left: 1px solid var(--gi-border);
+  padding-left: 1.5rem;
+}
+
+.gi-header-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gi-text-muted);
+  text-decoration: none;
+  transition: color 0.12s;
+}
+
+.gi-header-link:hover,
+.gi-header-link.router-link-active {
+  color: var(--gi-brand);
+}
+
 .gi-lang-toggle {
   padding: 0.3rem 0.65rem;
   border: 1.5px solid var(--gi-border);
@@ -76,4 +102,8 @@ function toggleLocale() {
   transition: border-color 0.12s, color 0.12s;
 }
 .gi-lang-toggle:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
+
+@media (max-width: 480px) {
+  .gi-header-nav { display: none; }
+}
 </style>
