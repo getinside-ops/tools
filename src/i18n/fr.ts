@@ -28,6 +28,7 @@ const fr = {
     imageConverter: 'Convertisseur d\'Image',
     metadata: 'Métadonnées Image',
     colorblind: 'Simulateur Daltonisme',
+    qrDecoder: 'Décodeur QR Code',
     back: '← Retour aux outils',
     search: 'Rechercher un outil…',
   },
@@ -82,6 +83,7 @@ const fr = {
       imageConverter: { title: 'Convertisseur Universel', desc: 'Changez le format de vos images (SVG, PNG, JPG, WebP).' },
       metadata: { title: 'Détails Image', desc: 'Visualisez les métadonnées et propriétés techniques de vos images.' },
       colorblind: { title: 'Simulation Accessibilité', desc: 'Visualisez vos designs comme une personne daltonienne.' },
+      qrDecoder: { title: 'Lecture QR Code', desc: 'Décodez le contenu d\'un QR Code à partir d\'une capture.' },
     },
   },
   paperWeight: {
@@ -404,6 +406,14 @@ const fr = {
       tritanopia: 'Tritanopie (Pas de bleu)',
       achromatopsia: 'Achromatopsie (Gris)',
     },
+  },
+  qrDecoder: {
+    title: 'Décodeur QR Code',
+    desc: 'Extrayez instantanément le contenu d\'un QR code à partir d\'une image.',
+    upload: 'Déposer un QR Code (Faites glisser ici)',
+    result: 'Résultat du décodage',
+    noQr: 'Aucun QR Code détecté dans cette image.',
+    copy: 'Copier le contenu',
   },
 }
 

@@ -30,6 +30,7 @@ const en: Messages = {
     imageConverter: 'Image Converter',
     metadata: 'Image Details',
     colorblind: 'Colorblind Simulator',
+    qrDecoder: 'QR Code Decoder',
     back: '← Back to tools',
     search: 'Search tools…',
   },
@@ -84,6 +85,7 @@ const en: Messages = {
       imageConverter: { title: 'Universal Converter', desc: 'Convert your images between SVG, PNG, JPG, and WebP.' },
       metadata: { title: 'Image Details', desc: 'View technical properties and metadata for any image file.' },
       colorblind: { title: 'Accessibility Simulation', desc: 'View your designs as a colorblind person would.' },
+      qrDecoder: { title: 'QR Code Reading', desc: 'Decode QR code content from a screenshot or image.' },
     },
   },
   paperWeight: {
@@ -406,6 +408,14 @@ const en: Messages = {
       tritanopia: 'Tritanopia (No blue)',
       achromatopsia: 'Achromatopsia (Gray)',
     },
+  },
+  qrDecoder: {
+    title: 'QR Code Decoder',
+    desc: 'Instantly extract the content of any QR code from an image file.',
+    upload: 'Drop a QR Code (Drag & drop here)',
+    result: 'Decoding Result',
+    noQr: 'No QR code detected in this image.',
+    copy: 'Copy Content',
   },
 }
 
