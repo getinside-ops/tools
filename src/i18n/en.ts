@@ -28,6 +28,7 @@ const en: Messages = {
     barcode: 'EAN Barcode',
     safetyMargin: 'Print Checker',
     imageConverter: 'Image Converter',
+    metadata: 'Image Details',
     back: '← Back to tools',
     search: 'Search tools…',
   },
@@ -80,6 +81,7 @@ const en: Messages = {
       barcode: { title: 'EAN Barcode', desc: 'Generate standard EAN-13 barcodes for your products.' },
       safetyMargin: { title: 'Print Checker', desc: 'Visualize safety margins and bleed on your artwork.' },
       imageConverter: { title: 'Universal Converter', desc: 'Convert your images between SVG, PNG, JPG, and WebP.' },
+      metadata: { title: 'Image Details', desc: 'View technical properties and metadata for any image file.' },
     },
   },
   paperWeight: {
@@ -381,6 +383,15 @@ const en: Messages = {
     quality: 'Quality (Lossy)',
     scale: 'Scale multiplier',
     convert: 'Convert & Download',
+  },
+  metadata: {
+    title: 'Image Metadata Viewer',
+    desc: 'View technical properties and metadata for any image file instantly.',
+    upload: 'Analyze an image (Drag & drop here)',
+    name: 'Filename',
+    size: 'Size',
+    type: 'MIME Type',
+    lastModified: 'Last Modified',
   },
 }
 

@@ -32,6 +32,7 @@ const router = createRouter({
     { path: '/barcode', component: () => import('../views/BarcodeView.vue') },
     { path: '/safety-margin', component: () => import('../views/SafetyMarginView.vue') },
     { path: '/image-converter', component: () => import('../views/ImageConverterView.vue') },
+    { path: '/metadata', component: () => import('../views/MetadataView.vue') },
   ],
 })
 

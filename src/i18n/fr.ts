@@ -26,6 +26,7 @@ const fr = {
     barcode: 'Code-barres EAN',
     safetyMargin: 'Vérification Print',
     imageConverter: 'Convertisseur d\'Image',
+    metadata: 'Métadonnées Image',
     back: '← Retour aux outils',
     search: 'Rechercher un outil…',
   },
@@ -78,6 +79,7 @@ const fr = {
       barcode: { title: 'Code-barres EAN', desc: 'Générez des codes-barres EAN-13 standards pour vos produits.' },
       safetyMargin: { title: 'Vérification Print', desc: 'Visualisez les marges de sécurité et le fond perdu sur vos visuels.' },
       imageConverter: { title: 'Convertisseur Universel', desc: 'Changez le format de vos images (SVG, PNG, JPG, WebP).' },
+      metadata: { title: 'Détails Image', desc: 'Visualisez les métadonnées et propriétés techniques de vos images.' },
     },
   },
   paperWeight: {
@@ -379,6 +381,15 @@ const fr = {
     quality: 'Qualité (Lossy)',
     scale: 'Multiplicateur (Scale)',
     convert: 'Convertir et Télécharger',
+  },
+  metadata: {
+    title: 'Informations de l\'Image (Metadata)',
+    desc: 'Visualisez les propriétés et les métadonnées de n\'importe quelle image instantanément.',
+    upload: 'Analyser une image (Faites glisser ici)',
+    name: 'Nom du fichier',
+    size: 'Taille',
+    type: 'Format MIME',
+    lastModified: 'Dernière modification',
   },
 }
 
