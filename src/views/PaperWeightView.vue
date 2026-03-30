@@ -153,4 +153,41 @@ const result = computed(() => {
 .gi-chip.active { background: var(--gi-brand); border-color: var(--gi-brand); color: white; }
 .gi-chip-input-wrap { flex: 1; min-width: 100px; display: flex; }
 .gi-chip-input { border-radius: 2rem; padding: 0.4rem 0.75rem; height: auto; }
+
+/* Enhanced Result Panel */
+.gi-result {
+  margin-top: 2rem;
+  padding: 2.5rem 1.5rem;
+  background: linear-gradient(145deg, var(--gi-bg-alt), var(--gi-bg));
+  border: 1px solid var(--gi-border);
+  border-radius: calc(var(--gi-radius) * 1.5);
+  text-align: center;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.gi-result::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--gi-brand);
+}
+.gi-result-value {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--gi-text);
+  margin: 0.5rem 0 0.25rem;
+}
+.gi-result-secondary {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--gi-text-muted);
+}
+.gi-formula {
+  margin-top: 1.5rem;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: var(--gi-bg);
+  border-radius: var(--gi-radius);
+  border: 1px dashed var(--gi-border);
+}
 </style>
