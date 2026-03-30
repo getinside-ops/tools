@@ -5,44 +5,92 @@
       <p>{{ t('contrastChecker.desc') }}</p>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-      <div class="gi-field">
-        <label class="gi-label">{{ t('contrastChecker.background') }}</label>
-        <div style="display: flex; gap: 0.5rem">
-          <input v-model="bgHex" type="color" class="gi-input" style="width: 50px; padding: 2px" />
-          <input v-model="bgHex" type="text" class="gi-input" placeholder="#FFFFFF" />
+    <!-- Inputs & Preview Card -->
+    <div class="gi-card gi-grid" style="margin-bottom: 2rem; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+      
+      <!-- Interactive Preview Area -->
+      <div 
+        style="padding: 3rem 2rem; min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: background 0.2s, color 0.2s"
+        :style="{ backgroundColor: bgHex, color: textHex }"
+      >
+        <div style="font-weight: 700; font-size: 2.5rem; letter-spacing: -0.02em; margin-bottom: 0.5rem; text-align: center;">
+          {{ t('contrastChecker.preview') }} (Large)
+        </div>
+        <div style="font-size: 1.125rem; max-width: 500px; text-align: center; font-weight: 400; opacity: 0.9;">
+          {{ t('contrastChecker.sampleText') }}
         </div>
       </div>
-      <div class="gi-field">
-        <label class="gi-label">{{ t('contrastChecker.foreground') }}</label>
-        <div style="display: flex; gap: 0.5rem">
-          <input v-model="fgHex" type="color" class="gi-input" style="width: 50px; padding: 2px" />
-          <input v-model="fgHex" type="text" class="gi-input" placeholder="#000000" />
+
+      <!-- Controls -->
+      <div style="padding: 1.5rem; display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; background: var(--gi-surface);">
+        <div class="gi-input-group" style="flex: 1; min-width: 150px;">
+          <label class="gi-label">{{ t('contrastChecker.textColor') }}</label>
+          <div style="display: flex; gap: 0.5rem">
+            <input v-model="textHex" type="color" class="gi-input" style="width: 50px; padding: 2px" />
+            <input v-model="textHex" type="text" class="gi-input" placeholder="#000000" />
+          </div>
+        </div>
+
+        <button @click="swapColors" class="gi-btn-ghost" title="Swap Colors" style="padding: 0.5rem; border-radius: 50%;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+        </button>
+
+        <div class="gi-input-group" style="flex: 1; min-width: 150px;">
+          <label class="gi-label">{{ t('contrastChecker.bgColor') }}</label>
+          <div style="display: flex; gap: 0.5rem">
+            <input v-model="bgHex" type="color" class="gi-input" style="width: 50px; padding: 2px" />
+            <input v-model="bgHex" type="text" class="gi-input" placeholder="#FFFFFF" />
+          </div>
         </div>
       </div>
     </div>
 
-    <div v-if="result" class="gi-result">
-      <div class="gi-result-label">{{ t('contrastChecker.ratio') }}</div>
-      <div class="gi-result-value">{{ result.ratio.toFixed(2) }}:1</div>
-
-      <div style="margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-        <div v-for="(val, key) in scores" :key="key" class="gi-status" :class="val ? 'gi-status-ok' : 'gi-status-error'">
-          {{ val ? '✓' : '✗' }} {{ t(`contrastChecker.scores.${key}`) }}
+    <!-- Results Data Grid -->
+    <div class="gi-grid">
+      <!-- WCAG 2.1 Block -->
+      <div class="gi-card">
+        <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+          <span>WCAG 2.1</span>
+          <span class="gi-data-value" style="font-size: 1.5rem; font-weight: 700;">{{ wcagRatio.toFixed(2) }}:1</span>
+        </h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div v-for="(level, key) in wcagChecks" :key="key" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--gi-border);">
+            <span style="font-size: 0.95rem;">{{ level.label }}</span>
+            <span :class="level.pass ? 'gi-status-ok' : 'gi-status-error'" class="gi-status" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">
+              {{ level.pass ? t('contrastChecker.pass') : t('contrastChecker.fail') }}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div style="margin-top: 2rem">
-        <div class="gi-result-label">{{ t('contrastChecker.preview') }}</div>
-        <div :style="{ backgroundColor: bgHex, color: fgHex, padding: '2rem', borderRadius: 'var(--gi-radius)', border: '1px solid var(--gi-border)' }">
-          <p style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.5rem">Large Text / Heading</p>
-          <p>{{ t('contrastChecker.sampleText') }}</p>
+      <!-- APCA Block -->
+      <div class="gi-card">
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center;">
+            <span>APCA (WCAG 3.0)</span>
+            <span class="gi-data-value" style="font-size: 1.5rem; font-weight: 700;" :style="{ color: Math.abs(apcaScore) > 60 ? 'var(--gi-tint-green-text)' : 'var(--gi-text)'}">
+              Lc {{ Math.round(apcaScore) }}
+            </span>
+          </h3>
+          <p style="font-size: 0.8rem; color: var(--gi-text-muted); margin-top: 0.25rem;">Advanced Perceptual Contrast Algorithm</p>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; color: var(--gi-text-muted);">
+          <div style="display: flex; justify-content: space-between;">
+            <span>Lc 90+</span> <span style="font-weight: 500;">Preferred for body text</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Lc 75+</span> <span style="font-weight: 500;">Minimum for body text</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Lc 60+</span> <span style="font-weight: 500;">Minimum for large text</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Lc 45+</span> <span style="font-weight: 500;">Minimum for UI components</span>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div v-if="error" class="gi-result" style="border-color: var(--gi-tint-red-border)">
-      <p style="color: var(--gi-tint-red-text)">{{ t('utmBuilder.invalidUrl') }}</p>
     </div>
   </div>
 </template>
@@ -50,28 +98,40 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { checkContrast } from '../composables/useContrastChecker'
+import { getWcagContrast, getApcaContrast, meetsWcagLevel } from '../composables/useContrast'
 
 const { t } = useI18n()
 
+const textHex = ref('#0aaa8e')
 const bgHex = ref('#ffffff')
-const fgHex = ref('#0aaa8e')
 
-const result = computed(() => {
-  return checkContrast(bgHex.value, fgHex.value)
-})
-
-const error = computed(() => {
-  return bgHex.value && fgHex.value && !result.value
-})
-
-const scores = computed(() => {
-  if (!result.value) return {}
-  return {
-    aaLarge: result.value.aaLarge,
-    aa: result.value.aa,
-    aaaLarge: result.value.aaaLarge,
-    aaa: result.value.aaa,
+const wcagRatio = computed(() => {
+  try {
+    return getWcagContrast(textHex.value, bgHex.value)
+  } catch {
+    return 1
   }
 })
+
+const apcaScore = computed(() => {
+  try {
+    return getApcaContrast(textHex.value, bgHex.value)
+  } catch {
+    return 0
+  }
+})
+
+const wcagChecks = computed(() => [
+  { label: t('contrastChecker.levels.aaNormal'), pass: meetsWcagLevel(wcagRatio.value, 'AA_Normal') },
+  { label: t('contrastChecker.levels.aaaNormal'), pass: meetsWcagLevel(wcagRatio.value, 'AAA_Normal') },
+  { label: t('contrastChecker.levels.aaLarge'), pass: meetsWcagLevel(wcagRatio.value, 'AA_Large') },
+  { label: t('contrastChecker.levels.aaaLarge'), pass: meetsWcagLevel(wcagRatio.value, 'AAA_Large') },
+  { label: t('contrastChecker.levels.uiComponent'), pass: meetsWcagLevel(wcagRatio.value, 'UI_Component') },
+])
+
+function swapColors() {
+  const temp = textHex.value
+  textHex.value = bgHex.value
+  bgHex.value = temp
+}
 </script>

@@ -37,7 +37,9 @@
   --gi-tint-red-border: #fecdd3;
   --gi-radius: 8px;
   --gi-radius-lg: 12px;
-  --gi-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --gi-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --gi-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --gi-gap: 1.5rem;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.6;
@@ -100,5 +102,39 @@ body { min-height: 100vh; background: var(--gi-bg); overflow-x: hidden; }
 
 .gi-code { font-family: 'Menlo', 'Monaco', monospace; font-size: 0.85rem; background: var(--gi-bg-soft); padding: 0.75rem 1rem; border-radius: var(--gi-radius); color: var(--gi-text); word-break: break-all; }
 
-.gi-back-link { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; color: var(--gi-text-muted); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.12s; }
 .gi-back-link:hover { color: var(--gi-brand); }
+
+/* Delphi Utility Grid */
+.gi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--gi-gap);
+}
+
+/* Professional Input Group (Delphi Pattern) */
+.gi-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gi-data-value {
+  font-family: 'Menlo', 'Monaco', monospace;
+  font-weight: 500;
+  color: var(--gi-text);
+  font-size: 0.95rem;
+}
+
+.gi-card {
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--gi-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.gi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--gi-shadow-lg);
+}

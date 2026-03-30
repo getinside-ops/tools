@@ -5,67 +5,57 @@
       <p>{{ t('colorConverter.desc') }}</p>
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 1.5rem">
-      <!-- Preview & Color Picker -->
-      <div style="display: flex; gap: 1.5rem; align-items: start">
+    <!-- Input Section -->
+    <div class="gi-card" style="margin-bottom: 2rem;">
+      <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+        <!-- Large Preview -->
         <div 
-          class="gi-result" 
-          :style="{ backgroundColor: hex, width: '100px', height: '100px', padding: 0, marginTop: 0, border: '1px solid var(--gi-border)' }"
+          class="preview-circle"
+          :style="{ backgroundColor: hex }"
         ></div>
-        <div class="gi-field" style="flex: 1">
+        
+        <!-- HEX Input -->
+        <div class="gi-input-group" style="flex: 1; min-width: 200px;">
           <label class="gi-label">{{ t('colorConverter.hex') }}</label>
-          <div style="display: flex; gap: 0.5rem">
-            <input v-model="hex" type="color" class="gi-input" style="width: 50px; padding: 2px" />
+          <div style="display: flex; gap: 0.5rem;">
+            <input v-model="hex" type="color" class="gi-input" style="width: 60px; padding: 2px; height: 42px;" />
             <input v-model="hex" type="text" class="gi-input" placeholder="#FFFFFF" @input="updateFromHex" />
           </div>
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem">
-        <!-- RGB -->
-        <div class="gi-field">
+      <!-- Quick Adjust (RGB/HSL Sliders) -->
+      <div class="gi-grid" style="margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div class="gi-input-group">
           <label class="gi-label">{{ t('colorConverter.rgb') }}</label>
-          <div style="display: flex; gap: 0.5rem">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
             <input v-model.number="rgb.r" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
             <input v-model.number="rgb.g" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
             <input v-model.number="rgb.b" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
           </div>
         </div>
-
-        <!-- HSL -->
-        <div class="gi-field">
+        <div class="gi-input-group">
           <label class="gi-label">{{ t('colorConverter.hsl') }}</label>
-          <div style="display: flex; gap: 0.5rem">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
             <input v-model.number="hsl.h" type="number" class="gi-input" min="0" max="360" @input="updateFromHsl" />
             <input v-model.number="hsl.s" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
             <input v-model.number="hsl.l" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
           </div>
         </div>
       </div>
-
-      <!-- CMYK -->
-      <div class="gi-field">
-        <label class="gi-label">{{ t('colorConverter.cmyk') }}</label>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem">
-          <input v-model.number="cmyk.c" type="number" class="gi-input" min="0" max="100" @input="updateFromCmyk" />
-          <input v-model.number="cmyk.m" type="number" class="gi-input" min="0" max="100" @input="updateFromCmyk" />
-          <input v-model.number="cmyk.y" type="number" class="gi-input" min="0" max="100" @input="updateFromCmyk" />
-          <input v-model.number="cmyk.k" type="number" class="gi-input" min="0" max="100" @input="updateFromCmyk" />
-        </div>
-      </div>
     </div>
 
-    <div class="gi-result">
-      <div class="gi-result-label">Values</div>
-      <div style="display: flex; flex-direction: column; gap: 0.5rem">
-        <div v-for="fmt in formats" :key="fmt.label" style="display: flex; justify-content: space-between; align-items: center">
-          <span style="font-weight: 500; font-size: 0.9rem">{{ fmt.label }}:</span>
-          <div style="display: flex; gap: 0.5rem; align-items: center">
-            <code class="gi-code" style="padding: 0.2rem 0.5rem">{{ fmt.value }}</code>
-            <button class="gi-btn-ghost" style="padding: 0.2rem 0.6rem; font-size: 0.75rem" @click="copy(fmt.value, fmt.label)">
-              {{ copiedLabel === fmt.label ? t('colorConverter.copied') : t('colorConverter.copy') }}
-            </button>
-          </div>
+    <!-- Professional Results Grid (Delphic Pattern) -->
+    <div class="gi-grid">
+      <div v-for="fmt in formats" :key="fmt.label" class="gi-card result-card">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+          <span class="gi-result-label" style="margin-bottom: 0">{{ fmt.label }}</span>
+          <button class="gi-btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; border-radius: 6px;" @click="copy(fmt.value, fmt.label)">
+            {{ copiedLabel === fmt.label ? t('colorConverter.copied') : t('colorConverter.copy') }}
+          </button>
+        </div>
+        <div class="gi-data-value" style="font-size: 1.1rem; word-break: break-all;">
+          {{ fmt.value }}
         </div>
       </div>
     </div>
@@ -76,7 +66,8 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { 
-  hexToRgb, rgbToHex, rgbToHsl, hslToRgb, rgbToCmyk, cmykToRgb 
+  hexToRgb, rgbToHex, rgbToHsl, hslToRgb, rgbToCmyk,
+  rgbToOklch, rgbToLab, rgbToLch
 } from '../composables/useColorConverter'
 
 const { t } = useI18n()
@@ -88,14 +79,23 @@ const cmyk = ref({ c: 94, m: 0, y: 16, k: 33 })
 
 const copiedLabel = ref('')
 
-const formats = computed(() => [
-  { label: 'HEX', value: hex.value.toUpperCase() },
-  { label: 'RGB', value: `rgb(${rgb.value.r}, ${rgb.value.g}, ${rgb.value.b})` },
-  { label: 'HSL', value: `hsl(${hsl.value.h}, ${hsl.value.s}%, ${hsl.value.l}%)` },
-  { label: 'CMYK', value: `cmyk(${cmyk.value.c}%, ${cmyk.value.m}%, ${cmyk.value.y}%, ${cmyk.value.k}%)` },
-])
+const formats = computed(() => {
+  const oklch = rgbToOklch(rgb.value)
+  const lab = rgbToLab(rgb.value)
+  const lch = rgbToLch(rgb.value)
+  
+  return [
+    { label: 'HEX', value: hex.value.toUpperCase() },
+    { label: 'RGB', value: `rgb(${rgb.value.r}, ${rgb.value.g}, ${rgb.value.b})` },
+    { label: 'HSL', value: `hsl(${hsl.value.h}, ${hsl.value.s}%, ${hsl.value.l}%)` },
+    { label: 'OKLCH', value: `oklch(${oklch.l.toFixed(2)} ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)})` },
+    { label: 'LAB', value: `lab(${lab.l.toFixed(2)} ${lab.a.toFixed(2)} ${lab.b.toFixed(2)})` },
+    { label: 'LCH', value: `lch(${lch.l.toFixed(2)} ${lch.c.toFixed(2)} ${lch.h.toFixed(1)})` },
+  ]
+})
 
 function updateFromHex() {
+  if (hex.value.length < 4) return
   const converted = hexToRgb(hex.value)
   if (converted) {
     rgb.value = converted
@@ -114,12 +114,6 @@ function updateFromHsl() {
   cmyk.value = rgbToCmyk(rgb.value)
 }
 
-function updateFromCmyk() {
-  rgb.value = cmykToRgb(cmyk.value)
-  hex.value = rgbToHex(rgb.value)
-  hsl.value = rgbToHsl(rgb.value)
-}
-
 function syncFromRgb() {
   hsl.value = rgbToHsl(rgb.value)
   cmyk.value = rgbToCmyk(rgb.value)
@@ -131,3 +125,22 @@ async function copy(val: string, label: string) {
   setTimeout(() => { copiedLabel.value = '' }, 2000)
 }
 </script>
+
+<style scoped>
+.preview-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 4px solid var(--gi-surface);
+  box-shadow: 0 0 0 1px var(--gi-border), var(--gi-shadow);
+}
+
+.result-card {
+  padding: 1.25rem;
+  border-left: 4px solid var(--gi-brand);
+}
+
+.result-card:hover {
+  border-left-color: var(--gi-mint);
+}
+</style>
