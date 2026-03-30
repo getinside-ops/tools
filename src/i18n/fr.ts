@@ -104,6 +104,22 @@ const fr = {
     customDimensions: 'Dimensions (mm)',
     otherQuantity: 'Autre...',
     otherWeight: 'Autre...',
+    reset: 'Réinitialiser',
+    enterValues: 'Entrez les valeurs pour calculer',
+    hints: {
+      light: 'Papier bureau standard',
+      medium: 'Papier bureau premium',
+      flyer: 'Papier flyer / Dépliant',
+      card: 'Papier cartonné / Couverture',
+      thick: 'Carton épais / Emballage',
+    },
+    comparisons: {
+      lightPackage: 'un petit colis',
+      mediumPackage: 'un sac de farine',
+      heavyPackage: 'un pneu de voiture',
+      bowlingBall: 'un ballon de bowling',
+      veryHeavy: 'plusieurs ballons de bowling',
+    },
   },
   utmBuilder: {
     title: "Créateur d'URL UTM",

@@ -106,6 +106,22 @@ const en: Messages = {
     customDimensions: 'Dimensions (mm)',
     otherQuantity: 'Other...',
     otherWeight: 'Other...',
+    reset: 'Reset calculator',
+    enterValues: 'Enter values to calculate',
+    hints: {
+      light: 'Standard office paper',
+      medium: 'Premium office paper',
+      flyer: 'Flyer / Leaflet paper',
+      card: 'Card stock / Cover paper',
+      thick: 'Heavy card / Packaging',
+    },
+    comparisons: {
+      lightPackage: 'a small package',
+      mediumPackage: 'a bag of flour',
+      heavyPackage: 'a car tire',
+      bowlingBall: 'a bowling ball',
+      veryHeavy: 'several bowling balls',
+    },
   },
   utmBuilder: {
     title: 'UTM URL Builder',
