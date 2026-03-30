@@ -98,7 +98,7 @@ const base = import.meta.env.BASE_URL
 import type { Component } from 'vue'
 import {
   Scale, Link2, Printer, CornerDownRight, Tag, FileText, Palette, Smartphone,
-  Globe, Ruler, Type, Eye, Pipette, FileDown, Crop, Maximize, Sparkles, ImagePlus, Square, Compass, AlignLeft, Barcode, Frame, Repeat
+  Globe, Ruler, Type, Eye, Pipette, FileDown, Crop, Maximize, Sparkles, ImagePlus, Square, Compass, AlignLeft, Barcode, Frame, Repeat, Info, QrCode
 } from 'lucide-vue-next'
 
 const { t } = useI18n()
@@ -146,6 +146,10 @@ const allTools: Tool[] = [
   { route: '/barcode',           icon: Barcode,         titleKey: 'home.tools.barcode.title',          descKey: 'home.tools.barcode.desc',          category: 'print',   isNew: true  },
   { route: '/safety-margin',     icon: Frame,           titleKey: 'home.tools.safetyMargin.title',     descKey: 'home.tools.safetyMargin.desc',     category: 'print',   isNew: true  },
   { route: '/image-converter',   icon: Repeat,          titleKey: 'home.tools.imageConverter.title',   descKey: 'home.tools.imageConverter.desc',   category: 'design',  isNew: true  },
+  { route: '/metadata',          icon: Info,            titleKey: 'home.tools.metadata.title',         descKey: 'home.tools.metadata.desc',         category: 'digital', isNew: true  },
+  { route: '/colorblind',        icon: Eye,             titleKey: 'home.tools.colorblind.title',       descKey: 'home.tools.colorblind.desc',       category: 'design',  isNew: true  },
+  { route: '/qr-decoder',        icon: QrCode,          titleKey: 'home.tools.qrDecoder.title',        descKey: 'home.tools.qrDecoder.desc',        category: 'digital', isNew: true  },
+  { route: '/palette',           icon: Palette,         titleKey: 'home.tools.palette.title',          descKey: 'home.tools.palette.desc',          category: 'design',  isNew: true  },
 ]
 
 const toolsByCategory = computed((): Record<ContentCategory, Tool[]> => ({

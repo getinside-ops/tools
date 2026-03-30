@@ -33,6 +33,9 @@ const router = createRouter({
     { path: '/safety-margin', component: () => import('../views/SafetyMarginView.vue') },
     { path: '/image-converter', component: () => import('../views/ImageConverterView.vue') },
     { path: '/metadata', component: () => import('../views/MetadataView.vue') },
+    { path: '/colorblind', component: () => import('../views/ColorblindView.vue') },
+    { path: '/qr-decoder', component: () => import('../views/QrDecoderView.vue') },
+    { path: '/palette', component: () => import('../views/PaletteView.vue') },
   ],
 })
 

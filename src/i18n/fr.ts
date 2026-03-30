@@ -29,6 +29,7 @@ const fr = {
     metadata: 'Métadonnées Image',
     colorblind: 'Simulateur Daltonisme',
     qrDecoder: 'Décodeur QR Code',
+    palette: 'Palette Couleurs',
     back: '← Retour aux outils',
     search: 'Rechercher un outil…',
   },
@@ -84,6 +85,7 @@ const fr = {
       metadata: { title: 'Détails Image', desc: 'Visualisez les métadonnées et propriétés techniques de vos images.' },
       colorblind: { title: 'Simulation Accessibilité', desc: 'Visualisez vos designs comme une personne daltonienne.' },
       qrDecoder: { title: 'Lecture QR Code', desc: 'Décodez le contenu d\'un QR Code à partir d\'une capture.' },
+      palette: { title: 'Extraction Couleurs', desc: 'Récupérez les couleurs dominantes d\'un visuel ou logo.' },
     },
   },
   paperWeight: {
@@ -414,6 +416,13 @@ const fr = {
     result: 'Résultat du décodage',
     noQr: 'Aucun QR Code détecté dans cette image.',
     copy: 'Copier le contenu',
+  },
+  palette: {
+    title: 'Extracteur de Palette',
+    desc: 'Récupérez les couleurs dominantes d\'une image pour créer une charte graphique.',
+    upload: 'Extraire les couleurs (Faites glisser ici)',
+    colors: 'Palette extraite',
+    copy: 'Copié !',
   },
 }
 

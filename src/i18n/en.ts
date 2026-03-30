@@ -31,6 +31,7 @@ const en: Messages = {
     metadata: 'Image Details',
     colorblind: 'Colorblind Simulator',
     qrDecoder: 'QR Code Decoder',
+    palette: 'Color Palette',
     back: '← Back to tools',
     search: 'Search tools…',
   },
@@ -86,6 +87,7 @@ const en: Messages = {
       metadata: { title: 'Image Details', desc: 'View technical properties and metadata for any image file.' },
       colorblind: { title: 'Accessibility Simulation', desc: 'View your designs as a colorblind person would.' },
       qrDecoder: { title: 'QR Code Reading', desc: 'Decode QR code content from a screenshot or image.' },
+      palette: { title: 'Palette Extraction', desc: 'Extract dominant colors from a visual asset or logo.' },
     },
   },
   paperWeight: {
@@ -416,6 +418,13 @@ const en: Messages = {
     result: 'Decoding Result',
     noQr: 'No QR code detected in this image.',
     copy: 'Copy Content',
+  },
+  palette: {
+    title: 'Image Palette Extractor',
+    desc: 'Extract dominant colors from an image to create a brand color palette.',
+    upload: 'Extract colors (Drag & drop here)',
+    colors: 'Extracted Palette',
+    copy: 'Copied!',
   },
 }
 
