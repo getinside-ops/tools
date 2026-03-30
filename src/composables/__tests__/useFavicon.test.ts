@@ -9,7 +9,6 @@ describe('useFavicon - getFaviconSizes', () => {
 
   it('should generate multiple data URLs for a given image', async () => {
     // In JSDOM, we test the flow. Actual canvas rendering is basic.
-    const fakeDataUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='
-    // ... we'll implement generateFavicons(url, sizes)
+    // ... we'll implement generateFavicons(url, sizes) in future if needed
   })
 })

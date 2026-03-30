@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getColorMatrix, type ColorBlindType } from '../useColorblind'
+import { getColorMatrix } from '../useColorblind'
 
 describe('useColorblind - Matrix Generation', () => {
   it('should return the correct matrix for Protanopia', () => {
