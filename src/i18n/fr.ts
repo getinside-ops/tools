@@ -27,6 +27,7 @@ const fr = {
     safetyMargin: 'Vérification Print',
     imageConverter: 'Convertisseur d\'Image',
     metadata: 'Métadonnées Image',
+    colorblind: 'Simulateur Daltonisme',
     back: '← Retour aux outils',
     search: 'Rechercher un outil…',
   },
@@ -80,6 +81,7 @@ const fr = {
       safetyMargin: { title: 'Vérification Print', desc: 'Visualisez les marges de sécurité et le fond perdu sur vos visuels.' },
       imageConverter: { title: 'Convertisseur Universel', desc: 'Changez le format de vos images (SVG, PNG, JPG, WebP).' },
       metadata: { title: 'Détails Image', desc: 'Visualisez les métadonnées et propriétés techniques de vos images.' },
+      colorblind: { title: 'Simulation Accessibilité', desc: 'Visualisez vos designs comme une personne daltonienne.' },
     },
   },
   paperWeight: {
@@ -390,6 +392,18 @@ const fr = {
     size: 'Taille',
     type: 'Format MIME',
     lastModified: 'Dernière modification',
+  },
+  colorblind: {
+    title: 'Simulateur Colorblind',
+    desc: 'Visualisez comment vos designs apparaissent avec différents types de daltonisme.',
+    upload: 'Choisir une image pour simuler (Faites glisser ici)',
+    types: {
+      normal: 'Vision Normale',
+      protanopia: 'Protanopie (Pas de rouge)',
+      deuteranopia: 'Deutéranopie (Pas de vert)',
+      tritanopia: 'Tritanopie (Pas de bleu)',
+      achromatopsia: 'Achromatopsie (Gris)',
+    },
   },
 }
 

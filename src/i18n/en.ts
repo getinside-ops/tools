@@ -29,6 +29,7 @@ const en: Messages = {
     safetyMargin: 'Print Checker',
     imageConverter: 'Image Converter',
     metadata: 'Image Details',
+    colorblind: 'Colorblind Simulator',
     back: '← Back to tools',
     search: 'Search tools…',
   },
@@ -82,6 +83,7 @@ const en: Messages = {
       safetyMargin: { title: 'Print Checker', desc: 'Visualize safety margins and bleed on your artwork.' },
       imageConverter: { title: 'Universal Converter', desc: 'Convert your images between SVG, PNG, JPG, and WebP.' },
       metadata: { title: 'Image Details', desc: 'View technical properties and metadata for any image file.' },
+      colorblind: { title: 'Accessibility Simulation', desc: 'View your designs as a colorblind person would.' },
     },
   },
   paperWeight: {
@@ -392,6 +394,18 @@ const en: Messages = {
     size: 'Size',
     type: 'MIME Type',
     lastModified: 'Last Modified',
+  },
+  colorblind: {
+    title: 'Colorblind Simulator',
+    desc: 'Visualize how your designs appear with different types of colorblindness.',
+    upload: 'Select an image to simulate (Drag & drop here)',
+    types: {
+      normal: 'Normal Vision',
+      protanopia: 'Protanopia (No red)',
+      deuteranopia: 'Deuteranopia (No green)',
+      tritanopia: 'Tritanopia (No blue)',
+      achromatopsia: 'Achromatopsia (Gray)',
+    },
   },
 }
 
