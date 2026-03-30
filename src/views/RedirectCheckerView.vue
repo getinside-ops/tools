@@ -37,7 +37,7 @@
               {{ copiedIndex === i ? t('redirectChecker.copied') : t('redirectChecker.copy') }}
             </button>
           </div>
-          <div v-if="i < result.hops.length - 1" class="gi-arrow">↓</div>
+          <div v-if="i < result.hops.length - 1" class="gi-arrow" aria-hidden="true">↓</div>
         </div>
       </div>
     </div>
@@ -80,15 +80,19 @@ async function check() {
 function statusClass(status: number): string {
   if (status >= 200 && status < 300) return 'gi-status-2xx'
   if (status === 301 || status === 308) return 'gi-status-3xx-perm'
-  if (status === 302 || status === 307) return 'gi-status-3xx-temp'
+  if (status >= 300 && status < 400) return 'gi-status-3xx-temp'
   if (status >= 400) return 'gi-status-err'
   return ''
 }
 
 async function copyUrl(url: string, index: number) {
-  await navigator.clipboard.writeText(url)
-  copiedIndex.value = index
-  setTimeout(() => { copiedIndex.value = null }, 1500)
+  try {
+    await navigator.clipboard.writeText(url)
+    copiedIndex.value = index
+    setTimeout(() => { copiedIndex.value = null }, 1500)
+  } catch {
+    // clipboard access denied — fail silently
+  }
 }
 </script>
 
