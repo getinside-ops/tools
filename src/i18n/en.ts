@@ -100,7 +100,12 @@ const en: Messages = {
     customHeight: 'Height (mm)',
     result: 'Estimated total weight',
     formula: 'Formula',
-    formats: { A5: 'A5 — 148 × 210 mm', A6: 'A6 — 105 × 148 mm', Carte: 'Card — 105 × 148 mm', Custom: 'Custom' },
+    formats: { A6: 'A6', A5: 'A5', Carte: 'Card', Custom: 'Custom' },
+    popularWeights: 'Weight',
+    popularQuantities: 'Quantity',
+    customDimensions: 'Dimensions (mm)',
+    otherQuantity: 'Other...',
+    otherWeight: 'Other...',
   },
   utmBuilder: {
     title: 'UTM URL Builder',

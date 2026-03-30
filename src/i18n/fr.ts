@@ -98,7 +98,12 @@ const fr = {
     customHeight: 'Hauteur (mm)',
     result: 'Poids total estimé',
     formula: 'Formule',
-    formats: { A5: 'A5 — 148 × 210 mm', A6: 'A6 — 105 × 148 mm', Carte: 'Carte — 105 × 148 mm', Custom: 'Personnalisé' },
+    formats: { A6: 'A6', A5: 'A5', Carte: 'Carte', Custom: 'Libre' },
+    popularWeights: 'Grammages',
+    popularQuantities: 'Quantités',
+    customDimensions: 'Dimensions (mm)',
+    otherQuantity: 'Autre...',
+    otherWeight: 'Autre...',
   },
   utmBuilder: {
     title: "Créateur d'URL UTM",

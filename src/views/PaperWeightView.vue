@@ -58,11 +58,14 @@ import { calculatePaperWeight, FORMATS, type FormatKey } from '../composables/us
 
 const { t } = useI18n()
 
+const POPULAR_GRAMMAGES = [80, 90, 115, 135, 170, 250, 300, 350, 400]
+const POPULAR_QUANTITIES = [100, 250, 500, 1000, 2500, 5000]
+
 const quantity = ref(1000)
 const selectedFormat = ref<FormatKey>('A6')
 const customWidth = ref(100)
 const customHeight = ref(100)
-const grammage = ref(300)
+const grammage = ref(250)
 
 const activeDims = computed(() => {
   if (selectedFormat.value === 'Custom') return { width: customWidth.value, height: customHeight.value }
