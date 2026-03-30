@@ -80,7 +80,7 @@ export function getRecommendedUses(widthPx: number, heightPx: number): Recommend
   const notSuitable: string[] = []
 
   const allFormats = [...FEATURED_FORMATS, ...EXTENDED_FORMATS] as string[]
-  
+
   for (const format of allFormats) {
     const fmt = format as keyof FormatStatusMap
     if (statusMap[fmt] === 'ok') {
@@ -93,7 +93,7 @@ export function getRecommendedUses(widthPx: number, heightPx: number): Recommend
   return { suitable, notSuitable }
 }
 
-export function getDpiColor(dpi: number): string {
+export function getDpiColor(dpi: number): 'ok' | 'warning' | 'error' {
   if (dpi >= 300) return 'ok'
   if (dpi >= 150) return 'warning'
   return 'error'
