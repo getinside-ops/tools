@@ -19,9 +19,23 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders })
     }
 
+    if (request.method !== 'GET') {
+      return new Response(null, { status: 405, headers: corsHeaders })
+    }
+
     const rawUrl = new URL(request.url).searchParams.get('url')
     if (!rawUrl) {
       return Response.json({ error: 'Missing url parameter' }, { status: 400, headers: corsHeaders })
+    }
+
+    let parsedUrl
+    try {
+      parsedUrl = new URL(rawUrl)
+    } catch {
+      return Response.json({ error: 'Invalid url parameter' }, { status: 400, headers: corsHeaders })
+    }
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+      return Response.json({ error: 'Only http and https URLs are supported' }, { status: 400, headers: corsHeaders })
     }
 
     const hops = []
