@@ -7,10 +7,12 @@
       @mouseleave="show = false"
       @focus="show = true"
       @blur="show = false"
+      @keydown="handleKeydown"
       tabindex="0"
       role="button"
-      aria-haspopup="tooltip"
+      aria-haspopup="menu"
       :aria-expanded="show"
+      :aria-label="content || 'More information'"
     >
       <slot name="trigger">
         <Info class="gi-tooltip-icon" />
@@ -34,10 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Info } from 'lucide-vue-next'
 
-const props = defineProps<{
+defineProps<{
   content?: string
 }>()
 
@@ -52,6 +54,37 @@ const tooltipStyle = computed(() => {
     left: `${rect.left + rect.width / 2}px`,
     transform: 'translateX(-50%)',
   }
+})
+
+function handleClickOutside(e: MouseEvent) {
+  if (show.value && triggerRef.value && !triggerRef.value.contains(e.target as Node)) {
+    show.value = false
+  }
+}
+
+function handleScroll() {
+  if (show.value) {
+    show.value = false
+  }
+}
+
+function handleKeydown(e: KeyboardEvent) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault()
+    show.value = !show.value
+  } else if (e.key === 'Escape') {
+    show.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside, true)
+  document.addEventListener('scroll', handleScroll, true)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside, true)
+  document.removeEventListener('scroll', handleScroll, true)
 })
 </script>
 
