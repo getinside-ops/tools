@@ -8,7 +8,18 @@
 
     <div class="gi-field">
       <label class="gi-label">{{ t('paperWeight.quantity') }}</label>
-      <input v-model.number="quantity" type="number" min="1" class="gi-input" />
+      <div class="gi-chips">
+        <button
+          v-for="q in POPULAR_QUANTITIES" :key="q"
+          type="button" class="gi-chip" :class="{ active: quantity === q }"
+          @click="quantity = q"
+        >
+          {{ q.toLocaleString() }}
+        </button>
+        <div class="gi-chip-input-wrap">
+          <input v-model.number="quantity" type="number" min="1" class="gi-input gi-chip-input" :placeholder="t('paperWeight.otherQuantity')" />
+        </div>
+      </div>
     </div>
 
     <div class="gi-field">
@@ -52,7 +63,18 @@
 
     <div class="gi-field">
       <label class="gi-label">{{ t('paperWeight.grammage') }}</label>
-      <input v-model.number="grammage" type="number" min="1" class="gi-input" />
+      <div class="gi-chips">
+        <button
+          v-for="g in POPULAR_GRAMMAGES" :key="g"
+          type="button" class="gi-chip" :class="{ active: grammage === g }"
+          @click="grammage = g"
+        >
+          {{ g }}g
+        </button>
+        <div class="gi-chip-input-wrap">
+          <input v-model.number="grammage" type="number" min="1" class="gi-input gi-chip-input" :placeholder="t('paperWeight.otherWeight')" />
+        </div>
+      </div>
     </div>
 
     <div v-if="result" class="gi-result">
@@ -121,4 +143,14 @@ const result = computed(() => {
 .gi-format-card.active { border-color: var(--gi-brand); background: var(--gi-bg); box-shadow: 0 0 0 1px var(--gi-brand); }
 .gi-card-title { font-weight: 600; color: var(--gi-text); margin-bottom: 0.25rem; }
 .gi-card-desc { font-size: 0.75rem; color: var(--gi-text-muted); font-variant-numeric: tabular-nums; }
+.gi-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+.gi-chip {
+  padding: 0.5rem 0.75rem; border: 1.5px solid var(--gi-border); border-radius: 2rem;
+  background: var(--gi-bg-alt); color: var(--gi-text); cursor: pointer;
+  font-size: 0.85rem; font-weight: 500; transition: all 0.2s; white-space: nowrap;
+}
+.gi-chip:hover { border-color: var(--gi-border-strong); }
+.gi-chip.active { background: var(--gi-brand); border-color: var(--gi-brand); color: white; }
+.gi-chip-input-wrap { flex: 1; min-width: 100px; display: flex; }
+.gi-chip-input { border-radius: 2rem; padding: 0.4rem 0.75rem; height: auto; }
 </style>
