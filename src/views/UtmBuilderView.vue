@@ -31,7 +31,10 @@
       </datalist>
     </div>
     <div class="gi-field">
-      <label class="gi-label">{{ t('utmBuilder.campaign') }}</label>
+      <label class="gi-label">
+        {{ t('utmBuilder.campaign') }}
+        <span class="gi-optional">({{ t('utmBuilder.optional') }})</span>
+      </label>
       <input v-model="campaign" class="gi-input" />
     </div>
     <div class="gi-field">
@@ -79,14 +82,14 @@ const copied = ref(false)
 const urlError = ref(false)
 
 const generatedUrl = computed(() => {
-  if (!url.value || !source.value || !medium.value || !campaign.value) return ''
+  if (!url.value || !source.value || !medium.value) return ''
   try {
     urlError.value = false
     return buildUtmUrl({
       url: url.value,
       source: source.value,
       medium: medium.value,
-      campaign: campaign.value,
+      campaign: campaign.value || undefined,
       content: content.value || undefined,
       term: term.value || undefined,
     })
