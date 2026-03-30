@@ -42,6 +42,7 @@ describe('checkRedirect', () => {
     expect(result.redirected).toBe(false)
     expect(result.hops).toHaveLength(1)
     expect(result.finalUrl).toBe('https://example.com/')
+    expect(result.inputUrl).toBe('https://example.com/')
   })
 
   it('normalizes URL without protocol', async () => {
@@ -51,11 +52,20 @@ describe('checkRedirect', () => {
     })
     vi.stubGlobal('fetch', mockFetch)
 
-    await checkRedirect('example.com')
+    const result = await checkRedirect('example.com')
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining(encodeURIComponent('https://example.com')),
     )
+    expect(result.inputUrl).toBe('https://example.com')
+  })
+
+  it('throws when API returns empty hops array', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ hops: [] }),
+    }))
+    await expect(checkRedirect('https://example.com')).rejects.toThrow('API returned empty hop list')
   })
 
   it('throws on API error response', async () => {
