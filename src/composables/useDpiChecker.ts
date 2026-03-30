@@ -22,6 +22,10 @@ export interface FormatStatusMap {
   Square: 'ok' | 'warning' | 'error'
 }
 
+export const FEATURED_FORMATS = ['A6', 'A5'] as const
+export const EXTENDED_FORMATS = ['A4', 'A3', 'Letter', 'Square'] as const
+
+/** Format dimensions in millimeters (ISO 216 standard) */
 export const FORMATS: Record<string, FormatDimensions> = {
   A6: { width: 105, height: 148 },
   A5: { width: 148, height: 210 },
@@ -30,9 +34,6 @@ export const FORMATS: Record<string, FormatDimensions> = {
   Letter: { width: 216, height: 279 },
   Square: { width: 100, height: 100 },
 }
-
-export const FEATURED_FORMATS = ['A6', 'A5'] as const
-export const EXTENDED_FORMATS = ['A4', 'A3', 'Letter', 'Square'] as const
 
 export function getOrientation(widthPx: number, heightPx: number): Orientation {
   if (widthPx > heightPx) return 'landscape'
@@ -43,13 +44,13 @@ export function getOrientation(widthPx: number, heightPx: number): Orientation {
 export function calculatePrintDimensions(widthPx: number, heightPx: number): DpiEntry[] {
   return DPIS.map(dpi => ({
     dpi,
-    widthCm:  Math.round((widthPx  / dpi) * 2.54 * 10) / 10,
+    widthCm: Math.round((widthPx / dpi) * 2.54 * 10) / 10,
     heightCm: Math.round((heightPx / dpi) * 2.54 * 10) / 10,
   }))
 }
 
 export function getFormatStatus(widthPx: number, heightPx: number): FormatStatusMap {
-  const wCm = (widthPx  / 300) * 2.54
+  const wCm = (widthPx / 300) * 2.54
   const hCm = (heightPx / 300) * 2.54
 
   function status(reqW: number, reqH: number): 'ok' | 'warning' | 'error' {
@@ -59,12 +60,12 @@ export function getFormatStatus(widthPx: number, heightPx: number): FormatStatus
   }
 
   return {
-    A6: status(10.5, 14.8),
-    A5: status(14.8, 21.0),
-    A4: status(21.0, 29.7),
-    A3: status(29.7, 42.0),
-    Letter: status(21.6, 27.9),
-    Square: status(10.0, 10.0),
+    A6: status(FORMATS.A6.width / 10, FORMATS.A6.height / 10),
+    A5: status(FORMATS.A5.width / 10, FORMATS.A5.height / 10),
+    A4: status(FORMATS.A4.width / 10, FORMATS.A4.height / 10),
+    A3: status(FORMATS.A3.width / 10, FORMATS.A3.height / 10),
+    Letter: status(FORMATS.Letter.width / 10, FORMATS.Letter.height / 10),
+    Square: status(FORMATS.Square.width / 10, FORMATS.Square.height / 10),
   }
 }
 
