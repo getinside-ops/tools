@@ -98,7 +98,7 @@ const base = import.meta.env.BASE_URL
 import type { Component } from 'vue'
 import {
   Scale, Link2, Printer, CornerDownRight, Tag, FileText, Palette, Smartphone,
-  Globe, Ruler, Type, Eye, Pipette, FileDown, Crop, Maximize, Sparkles, ImagePlus, Square
+  Globe, Ruler, Type, Eye, Pipette, FileDown, Crop, Maximize, Sparkles, ImagePlus, Square, Compass, AlignLeft, Barcode, Frame, Repeat
 } from 'lucide-vue-next'
 
 const { t } = useI18n()
@@ -141,6 +141,11 @@ const allTools: Tool[] = [
   { route: '/image-filters',     icon: Sparkles,        titleKey: 'home.tools.imageFilters.title',     descKey: 'home.tools.imageFilters.desc',     category: 'design',  isNew: true  },
   { route: '/placeholder',       icon: ImagePlus,       titleKey: 'home.tools.placeholder.title',      descKey: 'home.tools.placeholder.desc',      category: 'design',  isNew: true  },
   { route: '/matte-generator',   icon: Square,          titleKey: 'home.tools.matteGenerator.title',   descKey: 'home.tools.matteGenerator.desc',   category: 'design',  isNew: true  },
+  { route: '/favicon',           icon: Compass,         titleKey: 'home.tools.favicon.title',          descKey: 'home.tools.favicon.desc',          category: 'digital', isNew: true  },
+  { route: '/lorem',             icon: AlignLeft,       titleKey: 'home.tools.lorem.title',            descKey: 'home.tools.lorem.desc',            category: 'design',  isNew: true  },
+  { route: '/barcode',           icon: Barcode,         titleKey: 'home.tools.barcode.title',          descKey: 'home.tools.barcode.desc',          category: 'print',   isNew: true  },
+  { route: '/safety-margin',     icon: Frame,           titleKey: 'home.tools.safetyMargin.title',     descKey: 'home.tools.safetyMargin.desc',     category: 'print',   isNew: true  },
+  { route: '/image-converter',   icon: Repeat,          titleKey: 'home.tools.imageConverter.title',   descKey: 'home.tools.imageConverter.desc',   category: 'design',  isNew: true  },
 ]
 
 const toolsByCategory = computed((): Record<ContentCategory, Tool[]> => ({

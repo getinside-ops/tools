@@ -27,6 +27,11 @@ const router = createRouter({
     { path: '/image-filters', component: () => import('../views/ImageFiltersView.vue') },
     { path: '/placeholder', component: () => import('../views/PlaceholderView.vue') },
     { path: '/matte-generator', component: () => import('../views/MatteGeneratorView.vue') },
+    { path: '/favicon', component: () => import('../views/FaviconView.vue') },
+    { path: '/lorem', component: () => import('../views/LoremIpsumView.vue') },
+    { path: '/barcode', component: () => import('../views/BarcodeView.vue') },
+    { path: '/safety-margin', component: () => import('../views/SafetyMarginView.vue') },
+    { path: '/image-converter', component: () => import('../views/ImageConverterView.vue') },
   ],
 })
 
