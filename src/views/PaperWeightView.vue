@@ -13,12 +13,28 @@
 
     <div class="gi-field">
       <label class="gi-label">{{ t('paperWeight.format') }}</label>
-      <select v-model="selectedFormat" class="gi-select">
-        <option value="A5">{{ t('paperWeight.formats.A5') }}</option>
-        <option value="A6">{{ t('paperWeight.formats.A6') }}</option>
-        <option value="Carte">{{ t('paperWeight.formats.Carte') }}</option>
-        <option value="Custom">{{ t('paperWeight.formats.Custom') }}</option>
-      </select>
+      <div class="gi-format-grid">
+        <button
+          v-for="fmt in ['A6', 'A5', 'Carte'] as const" 
+          :key="fmt"
+          type="button"
+          class="gi-format-card"
+          :class="{ active: selectedFormat === fmt }"
+          @click="selectedFormat = fmt"
+        >
+          <div class="gi-card-title">{{ t(`paperWeight.formats.${fmt}`) }}</div>
+          <div class="gi-card-desc">{{ FORMATS[fmt].width }} × {{ FORMATS[fmt].height }} mm</div>
+        </button>
+        <button
+          type="button"
+          class="gi-format-card"
+          :class="{ active: selectedFormat === 'Custom' }"
+          @click="selectedFormat = 'Custom'"
+        >
+          <div class="gi-card-title">{{ t('paperWeight.formats.Custom') }}</div>
+          <div class="gi-card-desc">{{ t('paperWeight.customDimensions') }}</div>
+        </button>
+      </div>
     </div>
 
     <template v-if="selectedFormat === 'Custom'">
@@ -94,4 +110,15 @@ const result = computed(() => {
 .gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
 .gi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .gi-formula { margin-top: 0.75rem; font-size: 0.85rem; color: var(--gi-text-muted); font-family: monospace; }
+.gi-format-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin-top: 0.5rem; }
+.gi-format-card {
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  padding: 1rem; border: 1.5px solid var(--gi-border); border-radius: var(--gi-radius);
+  background: var(--gi-bg-alt); cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+.gi-format-card:hover { border-color: var(--gi-border-strong); background: var(--gi-bg); }
+.gi-format-card.active { border-color: var(--gi-brand); background: var(--gi-bg); box-shadow: 0 0 0 1px var(--gi-brand); }
+.gi-card-title { font-weight: 600; color: var(--gi-text); margin-bottom: 0.25rem; }
+.gi-card-desc { font-size: 0.75rem; color: var(--gi-text-muted); font-variant-numeric: tabular-nums; }
 </style>
