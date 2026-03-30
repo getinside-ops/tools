@@ -429,6 +429,7 @@ const en: Messages = {
     decoding: 'Decoding…',
     noQrFound: 'No QR code detected',
     resultTitle: 'Decoded content',
+    preview: 'Preview',
     copy: 'Copy',
     copied: 'Copied!',
   },

@@ -35,6 +35,17 @@
       <span>{{ t('qrDecoder.upload') }}</span>
     </div>
 
+    <!-- Preview Image -->
+    <div v-if="imageUrl" class="gi-preview-section">
+      <div class="gi-preview-header">
+        <span class="gi-preview-label">{{ t('qrDecoder.preview') }}</span>
+        <button class="gi-btn-ghost gi-btn-sm" @click="reset">Clear</button>
+      </div>
+      <div class="gi-preview-container">
+        <img :src="imageUrl" alt="QR Code preview" class="gi-preview-img" ref="previewImg" @load="performDecoding" />
+      </div>
+    </div>
+
     <!-- Loading State -->
     <div v-if="analyzing" class="gi-result gi-result-loading">
       <div class="gi-status gi-status-warning">{{ t('qrDecoder.decoding') }}</div>
@@ -54,11 +65,6 @@
           {{ isCopying ? t('qrDecoder.copied') : t('qrDecoder.copy') }}
         </button>
       </div>
-    </div>
-
-    <!-- Preview Image -->
-    <div v-if="imageUrl" class="gi-preview">
-      <img :src="imageUrl" alt="QR Code preview" class="gi-preview-img" ref="previewImg" @load="performDecoding" />
     </div>
 
     <!-- Hidden Canvas for Pixel Data -->
@@ -98,10 +104,10 @@ async function processPasteEvent(e: ClipboardEvent) {
   decodeError.value = null
   decodedResult.value = null
   imageUrl.value = ''
-  
+
   const decodeResult = await decodeQrFromPasteEvent(e)
   analyzing.value = false
-  
+
   if (decodeResult.success && decodeResult.data) {
     decodedResult.value = decodeResult.data
     // Create preview from first clipboard item
@@ -112,6 +118,8 @@ async function processPasteEvent(e: ClipboardEvent) {
           const blob = item.getAsFile()
           if (blob) {
             imageUrl.value = URL.createObjectURL(blob)
+            // Decode from the loaded image for better accuracy
+            performDecodingFromBlob(blob)
           }
           break
         }
@@ -179,10 +187,28 @@ function copyResult() {
   if (!decodedResult.value) return
   isCopying.value = true
   navigator.clipboard.writeText(decodedResult.value)
-  
+
   setTimeout(() => {
     isCopying.value = false
   }, 2000)
+}
+
+async function performDecodingFromBlob(blob: Blob) {
+  const decodeResult = await decodeQrFromBlob(blob)
+  if (decodeResult.success && decodeResult.data) {
+    decodedResult.value = decodeResult.data
+    decodeError.value = null
+  } else {
+    decodeError.value = decodeResult.error || t('qrDecoder.noQrFound')
+  }
+}
+
+function reset() {
+  imageUrl.value = ''
+  decodedResult.value = null
+  decodeError.value = null
+  analyzing.value = false
+  if (fileInput.value) fileInput.value.value = ''
 }
 </script>
 
@@ -311,15 +337,41 @@ function copyResult() {
 }
 
 /* Preview */
-.gi-preview {
-  margin-top: 1rem;
-  text-align: center;
+.gi-preview-section {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+.gi-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+.gi-preview-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gi-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.gi-btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+}
+.gi-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  padding: 1rem;
 }
 .gi-preview-img {
   max-width: 100%;
-  max-height: 300px;
+  max-height: 400px;
   border-radius: var(--gi-radius);
-  border: 1px solid var(--gi-border);
+  display: block;
 }
 
 /* Status messages */

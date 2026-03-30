@@ -427,6 +427,7 @@ const fr = {
     decoding: 'Décodage en cours…',
     noQrFound: 'Aucun QR code détecté',
     resultTitle: 'Contenu décodé',
+    preview: 'Aperçu',
     copy: 'Copier',
     copied: 'Copié !',
   },
