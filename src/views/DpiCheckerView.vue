@@ -721,4 +721,24 @@ function getComparisonHeight(wCm: number, hCm: number) {
   opacity: 0;
   transform: translateY(-8px);
 }
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .slide-enter-active,
+  .slide-leave-active {
+    transition: none;
+  }
+  .slide-enter-from,
+  .slide-leave-to {
+    transform: none;
+  }
+  .gi-upload-zone.is-dragover {
+    transform: none;
+  }
+  .gi-back-link,
+  .gi-upload-zone,
+  .gi-comparison-rect {
+    transition: none;
+  }
+}
 </style>
