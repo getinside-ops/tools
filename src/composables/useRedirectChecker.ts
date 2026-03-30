@@ -21,7 +21,7 @@ export async function checkRedirect(inputUrl: string): Promise<RedirectResult> {
   if (hops.length === 0) throw new Error('API returned empty hop list')
   return {
     inputUrl: normalized,
-    finalUrl: hops.at(-1)!.url,
+    finalUrl: hops[hops.length - 1].url,
     hops,
     redirected: hops.length > 1,
   }
