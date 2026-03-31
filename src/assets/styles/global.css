@@ -231,6 +231,15 @@
   box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.25);
 }
 
+/* Dark mode elevated card adjustments */
+[data-theme="dark"] .gi-card-elevated {
+  box-shadow: var(--gi-shadow-md);
+}
+
+[data-theme="dark"] .gi-card-elevated:hover {
+  box-shadow: var(--gi-shadow-lg);
+}
+
 /* ============================================
    BASE ELEMENT STYLES
    ============================================ */
@@ -387,6 +396,12 @@ body {
 }
 
 .gi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--gi-shadow-md);
+  border-color: var(--gi-border-hover);
+}
+
+.gi-card:focus-within {
   transform: translateY(-2px);
   box-shadow: var(--gi-shadow-md);
   border-color: var(--gi-border-hover);
