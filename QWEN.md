@@ -605,3 +605,46 @@ chore: verify build and tests pass
 - `docs/design-system.md` — Component API and usage
 - `docs/plans/` — Implementation plans and results
 - `QWEN.md` — Project-wide patterns and learnings
+
+---
+
+## Session Learnings & Best Practices (Continued)
+
+### GitHub Pages Routing: Hash History Required
+
+**Critical Rule:** Always use `createWebHashHistory()` for Vue Router when deploying to GitHub Pages.
+
+**Why:** GitHub Pages is a static host that doesn't support URL rewriting. Using `createWebHistory()` causes 404 errors on:
+- Page refresh
+- Direct URL access (new tab)
+- Deep linking
+
+**Correct Configuration:**
+```typescript
+// ✅ Good - works with GitHub Pages
+import { createRouter, createWebHashHistory } from 'vue-router'
+
+const router = createRouter({
+  history: createWebHashHistory(import.meta.env.BASE_URL),
+  routes: [...]
+})
+```
+
+**Incorrect Configuration:**
+```typescript
+// ❌ Bad - causes 404 on GitHub Pages
+import { createRouter, createWebHistory } from 'vue-router'
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [...]
+})
+```
+
+**URL Format:** With hash history, URLs will be:
+- `https://getinside-ops.github.io/tools/#/paper-weight`
+- `https://getinside-ops.github.io/tools/#/qr-decoder`
+
+This is expected and correct for static hosting deployments.
+
+**Debugging Tip:** If users report 404 on tool pages, check that router uses `createWebHashHistory`, not `createWebHistory`.
