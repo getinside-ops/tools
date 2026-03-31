@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-    
+
     <div class="gi-tool-header">
       <h1>{{ t('paperWeight.title') }}</h1>
       <p>{{ t('paperWeight.desc') }}</p>
@@ -10,22 +10,54 @@
     <!-- Quantity Section -->
     <div class="gi-field">
       <label class="gi-label">{{ t('paperWeight.quantity') }}</label>
+      
+      <!-- Dual-Mode Slider -->
+      <div class="gi-slider-container">
+        <div class="gi-slider-header">
+          <span class="gi-slider-value">{{ quantity.toLocaleString() }} ex.</span>
+          <button
+            type="button"
+            class="gi-slider-mode-toggle"
+            @click="toggleSliderMode"
+            :aria-label="t('paperWeight.toggleSliderMode')"
+          >
+            <span class="gi-mode-indicator" :class="{ active: sliderMode === 'precise' }">{{ t('paperWeight.sliderModes.precise') }}</span>
+            <span class="gi-mode-indicator" :class="{ active: sliderMode === 'fast' }">{{ t('paperWeight.sliderModes.fast') }}</span>
+          </button>
+        </div>
+        <input
+          v-model.number="sliderValue"
+          type="range"
+          :min="sliderMin"
+          :max="sliderMax"
+          :step="sliderStep"
+          class="gi-slider"
+          @input="onSliderInput"
+          aria-label="Quantity slider"
+        />
+        <div class="gi-slider-labels">
+          <span>{{ sliderMin.toLocaleString() }}</span>
+          <span>{{ sliderMax.toLocaleString() }}</span>
+        </div>
+      </div>
+
+      <!-- Quantity Chips -->
       <div class="gi-chips">
         <button
-          v-for="q in POPULAR_QUANTITIES" :key="q"
+          v-for="q in QUANTITY_PRESETS" :key="q"
           type="button" class="gi-chip" :class="{ active: quantity === q }"
-          @click="quantity = q"
+          @click="setQuantity(q)"
           :aria-pressed="quantity === q"
         >
-          {{ q.toLocaleString() }}
+          {{ formatQuantity(q) }}
         </button>
         <div class="gi-chip-input-wrap">
-          <input 
-            v-model.number="quantity" 
-            type="number" 
-            min="1" 
-            class="gi-input gi-chip-input" 
-            :placeholder="t('paperWeight.otherQuantity')" 
+          <input
+            v-model.number="quantity"
+            type="number"
+            min="1"
+            class="gi-input gi-chip-input"
+            :placeholder="t('paperWeight.otherQuantity')"
             aria-label="Custom quantity"
           />
         </div>
@@ -37,18 +69,18 @@
       <label class="gi-label">{{ t('paperWeight.format') }}</label>
       <div class="gi-format-grid">
         <button
-          v-for="fmt in ['A6', 'A5', 'Carte'] as const"
+          v-for="fmt in ['A6', 'A5', 'DL', 'A4', 'Carte'] as const"
           :key="fmt"
           type="button"
           class="gi-format-card"
-          :class="{ active: selectedFormat === fmt }"
+          :class="{ active: selectedFormat === fmt, primary: ['A5', 'A6'].includes(fmt) }"
           @click="selectedFormat = fmt"
           :aria-pressed="selectedFormat === fmt"
         >
           <div class="gi-format-preview">
             <svg :viewBox="getFormatViewBox(fmt)" class="gi-format-svg">
-              <rect 
-                :width="getFormatSvgWidth(fmt)" 
+              <rect
+                :width="getFormatSvgWidth(fmt)"
                 :height="getFormatSvgHeight(fmt)"
                 class="gi-format-rect"
               />
@@ -98,8 +130,8 @@
           </div>
           <div class="gi-custom-preview">
             <svg :viewBox="customViewBox" class="gi-custom-svg">
-              <rect 
-                :width="customSvgWidth" 
+              <rect
+                :width="customSvgWidth"
                 :height="customSvgHeight"
                 class="gi-format-rect"
                 rx="4"
@@ -124,12 +156,12 @@
           {{ g }}g
         </button>
         <div class="gi-chip-input-wrap">
-          <input 
-            v-model.number="grammage" 
-            type="number" 
-            min="1" 
-            class="gi-input gi-chip-input" 
-            :placeholder="t('paperWeight.otherWeight')" 
+          <input
+            v-model.number="grammage"
+            type="number"
+            min="1"
+            class="gi-input gi-chip-input"
+            :placeholder="t('paperWeight.otherWeight')"
             aria-label="Custom grammage"
           />
         </div>
@@ -154,15 +186,26 @@
         </div>
         <div class="gi-result-content">
           <div class="gi-result-main">
-            <span class="gi-result-value">{{ result.kg }}</span>
-            <span class="gi-result-unit">kg</span>
+            <span class="gi-result-value">{{ displayWeight.value }}</span>
+            <span class="gi-result-unit">{{ displayWeight.unit }}</span>
           </div>
-          <div class="gi-result-secondary">{{ result.grams.toLocaleString() }} g</div>
+          <div class="gi-result-secondary">
+            {{ result.grams.toLocaleString() }} g
+            <span class="gi-result-divider">•</span>
+            {{ totalSheets.toLocaleString() }} {{ t('paperWeight.sheets') }}
+          </div>
         </div>
-        
-        <!-- Weight Comparison -->
-        <div class="gi-comparison">
-          <div class="gi-comparison-title">≈ {{ getWeightComparison() }}</div>
+
+        <!-- Weight per 1000 units -->
+        <div class="gi-metric-grid">
+          <div class="gi-metric-card">
+            <div class="gi-metric-label">{{ t('paperWeight.weightPer1000') }}</div>
+            <div class="gi-metric-value">{{ weightPerThousand }}</div>
+          </div>
+          <div class="gi-metric-card">
+            <div class="gi-metric-label">{{ t('paperWeight.totalSheets') }}</div>
+            <div class="gi-metric-value">{{ totalSheets.toLocaleString() }}</div>
+          </div>
         </div>
 
         <!-- Formula -->
@@ -186,18 +229,69 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { calculatePaperWeight, FORMATS, type FormatKey } from '../composables/usePaperWeight'
+import {
+  calculatePaperWeight,
+  FORMATS,
+  type FormatKey,
+  DEFAULT_QUANTITY,
+  QUANTITY_PRESETS,
+} from '../composables/usePaperWeight'
 
 const { t } = useI18n()
 
 const POPULAR_GRAMMAGES = [80, 90, 115, 135, 170, 250, 300, 350, 400]
-const POPULAR_QUANTITIES = [100, 250, 500, 1000, 2500, 5000]
 
-const quantity = ref(1000)
+const quantity = ref(DEFAULT_QUANTITY)
+const sliderMode = ref<'precise' | 'fast'>('precise')
+const sliderValue = ref(DEFAULT_QUANTITY / 1000) // Store in thousands for slider
+
 const selectedFormat = ref<FormatKey>('A6')
 const customWidth = ref(100)
 const customHeight = ref(100)
 const grammage = ref(250)
+
+// Slider mode configuration
+const sliderMin = computed(() => sliderMode.value === 'precise' ? 5 : 50)
+const sliderMax = computed(() => sliderMode.value === 'precise' ? 50 : 1000)
+const sliderStep = computed(() => sliderMode.value === 'precise' ? 1 : 25)
+
+// Sync slider with quantity
+const onSliderInput = () => {
+  quantity.value = sliderValue.value * 1000
+}
+
+// Toggle slider mode
+const toggleSliderMode = () => {
+  sliderMode.value = sliderMode.value === 'precise' ? 'fast' : 'precise'
+  // Adjust slider value to stay in range when switching modes
+  const currentK = quantity.value / 1000
+  if (sliderMode.value === 'precise' && currentK > 50) {
+    sliderValue.value = 50
+    quantity.value = 50000
+  } else if (sliderMode.value === 'fast' && currentK < 50) {
+    sliderValue.value = 50
+    quantity.value = 50000
+  }
+}
+
+// Format quantity with k/M notation
+const formatQuantity = (q: number): string => {
+  if (q >= 1000000) return `${q / 1000000}M`
+  if (q >= 1000) return `${q / 1000}k`
+  return q.toString()
+}
+
+// Set quantity and update slider
+const setQuantity = (q: number) => {
+  quantity.value = q
+  sliderValue.value = q / 1000
+  // Auto-switch mode based on quantity
+  if (q <= 50000) {
+    sliderMode.value = 'precise'
+  } else {
+    sliderMode.value = 'fast'
+  }
+}
 
 const activeDims = computed(() => {
   if (selectedFormat.value === 'Custom') return { width: customWidth.value, height: customHeight.value }
@@ -208,6 +302,31 @@ const result = computed(() => {
   if (quantity.value <= 0 || activeDims.value.width <= 0 || activeDims.value.height <= 0 || grammage.value <= 0) return null
   return calculatePaperWeight(quantity.value, activeDims.value.width, activeDims.value.height, grammage.value)
 })
+
+// Display weight with auto-scaling
+const displayWeight = computed(() => {
+  if (!result.value) return { value: '0', unit: 'kg' }
+  const kg = result.value.kg
+  if (kg >= 1000) {
+    const tonnes = (kg / 1000).toFixed(2)
+    return { value: tonnes, unit: 't' }
+  }
+  return { value: Math.round(kg).toLocaleString(), unit: 'kg' }
+})
+
+// Weight per 1000 units
+const weightPerThousand = computed(() => {
+  if (!result.value || quantity.value === 0) return '0 g'
+  const gramsPerUnit = result.value.grams / quantity.value
+  const gramsPerThousand = Math.round(gramsPerUnit * 1000)
+  if (gramsPerThousand >= 1000) {
+    return `${(gramsPerThousand / 1000).toFixed(2)} kg`
+  }
+  return `${gramsPerThousand.toLocaleString()} g`
+})
+
+// Total sheets (same as quantity, but explicit)
+const totalSheets = computed(() => quantity.value)
 
 // SVG helpers for format previews
 const getFormatViewBox = (format: FormatKey) => {
@@ -259,19 +378,10 @@ const getGrammageHint = () => {
   return t('paperWeight.hints.thick')
 }
 
-// Weight comparison for real-world context
-const getWeightComparison = () => {
-  const kg = result.value?.kg || 0
-  if (kg < 1) return `${Math.round(kg * 1000)}g`
-  if (kg < 2) return t('paperWeight.comparisons.lightPackage')
-  if (kg < 5) return t('paperWeight.comparisons.mediumPackage')
-  if (kg < 10) return t('paperWeight.comparisons.heavyPackage')
-  if (kg < 20) return t('paperWeight.comparisons.bowlingBall')
-  return t('paperWeight.comparisons.veryHeavy')
-}
-
 const resetCalculator = () => {
-  quantity.value = 1000
+  quantity.value = DEFAULT_QUANTITY
+  sliderValue.value = DEFAULT_QUANTITY / 1000
+  sliderMode.value = 'precise'
   selectedFormat.value = 'A6'
   customWidth.value = 100
   customHeight.value = 100
@@ -295,112 +405,212 @@ const resetCalculator = () => {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   background: var(--gi-surface);
 }
-.gi-back-link:hover { 
-  border-color: var(--gi-brand); 
+.gi-back-link:hover {
+  border-color: var(--gi-brand);
   color: var(--gi-brand);
   transform: translateY(-1px);
 }
 
 /* Tool Header */
-.gi-tool-header { 
+.gi-tool-header {
   margin-bottom: 2.5rem;
 }
-.gi-tool-header h1 { 
-  font-size: 2rem; 
-  font-weight: 700; 
+.gi-tool-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
   margin-bottom: 0.5rem;
   letter-spacing: -0.02em;
 }
-.gi-tool-header p { 
-  color: var(--gi-text-muted); 
+.gi-tool-header p {
+  color: var(--gi-text-muted);
   font-size: 1rem;
   max-width: 500px;
 }
 
 /* Fields */
-.gi-field { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 0.6rem; 
-  margin-bottom: 1.5rem; 
+.gi-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
 }
-.gi-label { 
-  font-size: 0.875rem; 
-  font-weight: 600; 
+.gi-label {
+  font-size: 0.875rem;
+  font-weight: 600;
   color: var(--gi-text);
   letter-spacing: -0.01em;
 }
 
+/* Slider */
+.gi-slider-container {
+  padding: 1.25rem 1rem;
+  background: var(--gi-bg-soft);
+  border-radius: calc(var(--gi-radius) * 1.25);
+  border: 1.5px solid var(--gi-border);
+  margin-bottom: 0.75rem;
+}
+.gi-slider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.gi-slider-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gi-text);
+  font-variant-numeric: tabular-nums;
+}
+.gi-slider-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--gi-surface);
+  border: 1.5px solid var(--gi-border);
+  border-radius: var(--gi-radius-pill);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gi-slider-mode-toggle:hover {
+  border-color: var(--gi-brand);
+}
+.gi-mode-indicator {
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--gi-radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gi-text-muted);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gi-mode-indicator.active {
+  background: var(--gi-brand);
+  color: white;
+}
+.gi-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--gi-border) 0%, var(--gi-border) 100%);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.gi-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gi-brand);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(10, 170, 142, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gi-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(10, 170, 142, 0.5);
+}
+.gi-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gi-brand);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(10, 170, 142, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gi-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(10, 170, 142, 0.5);
+}
+.gi-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--gi-text-muted);
+  font-weight: 500;
+}
+
 /* Chips */
-.gi-chips { 
-  display: flex; 
-  flex-wrap: wrap; 
-  gap: 0.5rem; 
+.gi-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 .gi-chip {
-  padding: 0.55rem 0.85rem; 
-  border: 1.5px solid var(--gi-border); 
+  padding: 0.65rem 1rem;
+  border: 1.5px solid var(--gi-border);
   border-radius: 2rem;
-  background: var(--gi-surface); 
-  color: var(--gi-text); 
+  background: var(--gi-surface);
+  color: var(--gi-text);
   cursor: pointer;
-  font-size: 0.85rem; 
-  font-weight: 500; 
+  font-size: 0.9rem;
+  font-weight: 600;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
-.gi-chip:hover { 
+.gi-chip:hover {
   border-color: var(--gi-brand);
   background: rgba(10, 170, 142, 0.04);
   transform: translateY(-1px);
 }
-.gi-chip.active { 
-  background: var(--gi-brand); 
-  border-color: var(--gi-brand); 
+.gi-chip.active {
+  background: var(--gi-brand);
+  border-color: var(--gi-brand);
   color: white;
   box-shadow: 0 2px 8px rgba(10, 170, 142, 0.3);
 }
-.gi-chip-input-wrap { 
-  flex: 1; 
-  min-width: 100px; 
-  display: flex; 
+.gi-chip-input-wrap {
+  flex: 1;
+  min-width: 100px;
+  display: flex;
 }
-.gi-chip-input { 
-  border-radius: 2rem; 
-  padding: 0.5rem 0.85rem; 
+.gi-chip-input {
+  border-radius: 2rem;
+  padding: 0.5rem 0.85rem;
   height: auto;
 }
 
 /* Format Grid */
-.gi-format-grid { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+.gi-format-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 0.75rem;
 }
 .gi-format-card {
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 1.25rem 1rem; 
-  border: 2px solid var(--gi-border); 
+  padding: 1.25rem 1rem;
+  border: 2px solid var(--gi-border);
   border-radius: calc(var(--gi-radius) * 1.25);
-  background: var(--gi-surface); 
-  cursor: pointer; 
+  background: var(--gi-surface);
+  cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: center;
   gap: 0.5rem;
 }
-.gi-format-card:hover { 
+.gi-format-card:hover {
   border-color: var(--gi-brand);
   background: rgba(10, 170, 142, 0.02);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
-.gi-format-card.active { 
-  border-color: var(--gi-brand); 
+.gi-format-card.active {
+  border-color: var(--gi-brand);
   background: rgba(10, 170, 142, 0.06);
   box-shadow: 0 0 0 2px var(--gi-brand), 0 4px 12px rgba(10, 170, 142, 0.15);
+}
+.gi-format-card.primary {
+  border-width: 2.5px;
+}
+.gi-format-card.primary.active {
+  box-shadow: 0 0 0 3px var(--gi-brand), 0 4px 12px rgba(10, 170, 142, 0.2);
 }
 .gi-format-preview {
   width: 60px;
@@ -424,14 +634,14 @@ const resetCalculator = () => {
   fill: var(--gi-brand);
   font-weight: 300;
 }
-.gi-card-title { 
-  font-weight: 600; 
-  color: var(--gi-text); 
+.gi-card-title {
+  font-weight: 600;
+  color: var(--gi-text);
   font-size: 0.9rem;
 }
-.gi-card-desc { 
-  font-size: 0.75rem; 
-  color: var(--gi-text-muted); 
+.gi-card-desc {
+  font-size: 0.75rem;
+  color: var(--gi-text-muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -443,10 +653,10 @@ const resetCalculator = () => {
   border-radius: calc(var(--gi-radius) * 1.25);
   border: 1.5px solid var(--gi-border);
 }
-.gi-row { 
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  gap: 1rem; 
+.gi-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 .gi-input-with-unit {
   position: relative;
@@ -513,12 +723,12 @@ const resetCalculator = () => {
   overflow: hidden;
 }
 .gi-result::before {
-  content: ''; 
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  height: 4px; 
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
   background: linear-gradient(90deg, var(--gi-brand), var(--gi-mint));
 }
 .gi-result-header {
@@ -528,11 +738,11 @@ const resetCalculator = () => {
   gap: 0.75rem;
   margin-bottom: 1.5rem;
 }
-.gi-result-label { 
-  font-size: 0.75rem; 
-  font-weight: 700; 
-  text-transform: uppercase; 
-  letter-spacing: 0.08em; 
+.gi-result-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--gi-brand);
 }
 .gi-reset-btn {
@@ -572,30 +782,58 @@ const resetCalculator = () => {
   font-weight: 600;
   color: var(--gi-text-muted);
 }
-.gi-result-secondary { 
+.gi-result-secondary {
   font-size: 1.1rem;
   font-weight: 500;
   color: var(--gi-text-muted);
   margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.gi-result-divider {
+  color: var(--gi-border-strong);
 }
 
-/* Comparison */
-.gi-comparison {
-  padding: 1rem 1.5rem;
-  background: var(--gi-bg-soft);
-  border-radius: var(--gi-radius);
+/* Metric Grid */
+.gi-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
   margin-bottom: 1.5rem;
 }
-.gi-comparison-title {
-  font-size: 0.9rem;
+.gi-metric-card {
+  padding: 1rem 1.25rem;
+  background: var(--gi-surface);
+  border: 1.5px solid var(--gi-border);
+  border-radius: calc(var(--gi-radius) * 1.25);
+  text-align: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gi-metric-card:hover {
+  border-color: var(--gi-brand);
+  background: rgba(10, 170, 142, 0.02);
+}
+.gi-metric-label {
+  font-size: 0.75rem;
   font-weight: 600;
+  color: var(--gi-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+.gi-metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--gi-text);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Formula */
 .gi-formula {
-  font-size: 0.8rem; 
-  color: var(--gi-text-muted); 
+  font-size: 0.8rem;
+  color: var(--gi-text-muted);
   font-family: 'Menlo', 'Monaco', monospace;
   padding: 0.75rem 1rem;
   background: var(--gi-bg);
@@ -675,6 +913,9 @@ const resetCalculator = () => {
     grid-template-columns: repeat(2, 1fr);
   }
   .gi-row {
+    grid-template-columns: 1fr;
+  }
+  .gi-metric-grid {
     grid-template-columns: 1fr;
   }
 }

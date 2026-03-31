@@ -137,10 +137,14 @@ const en: Messages = {
       ],
     },
     quantitySlider: 'Adjust quantity',
-    sliderModePrecise: 'Precise',
-    sliderModeFast: 'Fast',
+    toggleSliderMode: 'Toggle slider mode',
+    sliderModes: {
+      precise: 'Precise',
+      fast: 'Fast',
+    },
     weightPerThousand: 'Weight per 1000 sheets',
     totalSheets: 'Total number of sheets',
+    sheets: 'sheets',
   },
   utmBuilder: {
     title: 'UTM URL Builder',

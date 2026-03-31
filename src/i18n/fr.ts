@@ -135,10 +135,14 @@ const fr = {
       ],
     },
     quantitySlider: 'Ajuster la quantité',
-    sliderModePrecise: 'Précis',
-    sliderModeFast: 'Rapide',
+    toggleSliderMode: 'Changer le mode du slider',
+    sliderModes: {
+      precise: 'Précis',
+      fast: 'Rapide',
+    },
     weightPerThousand: 'Poids pour 1000 ex.',
     totalSheets: 'Nombre total d\'exemplaires',
+    sheets: 'ex.',
   },
   utmBuilder: {
     title: "Créateur d'URL UTM",
