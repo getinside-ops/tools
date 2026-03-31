@@ -553,6 +553,10 @@ const fr = {
     pass: 'Passe',
     fail: 'Échoue',
   },
+  pedagogic: {
+    tips: 'Conseils',
+    resources: 'Ressources',
+  },
 }
 
 export type Messages = typeof fr

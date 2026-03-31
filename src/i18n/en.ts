@@ -555,6 +555,10 @@ const en: Messages = {
     pass: 'Pass',
     fail: 'Fail',
   },
+  pedagogic: {
+    tips: 'Tips',
+    resources: 'Resources',
+  },
 }
 
 export default en
