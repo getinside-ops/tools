@@ -401,7 +401,7 @@ Add to end of this file:
 **Testing:**
 - Build: ✅ PASS
 - Unit Tests: ✅ 166/166 PASS
-- Manual: ✅ No scrolling on 1080p, format bar shows size differences
+- Manual: ✅ Layout height 946px fits in 1080px viewport, format bar shows size differences
 ```
 
 **Step 2: Commit documentation**
@@ -412,7 +412,47 @@ git commit -m "docs: add results to paper weight UX improvements plan"
 
 ---
 
-## Testing Checklist
+## Results
+
+**Completed:** ✅ All tasks implemented and verified
+
+**Before:**
+- Required scrolling on 1080p desktop
+- No visual format size comparison
+- Complex precise/fast slider toggle
+- Single-column layout with result at bottom
+
+**After:**
+- ✅ Layout height: 946px (fits in 1080px viewport)
+- ✅ Format comparison bar shows proportional sizes (A6, A5, DL, A4, Carte)
+- ✅ Simplified slider (precise mode only: 5-50 range, step 1)
+- ✅ Two-column layout with sticky result panel on desktop
+- ✅ Result panel visible while scrolling inputs
+- ✅ Responsive: single column below 1024px
+- ✅ Dark mode compatible
+- ✅ All accessibility features maintained (keyboard navigation, focus states)
+
+**Build Status:**
+- ✅ Build: SUCCESS (10.32 kB JS, 13.39 kB CSS)
+- ✅ Tests: 166/166 passing
+- ✅ TypeScript: No errors
+
+**Files Changed:**
+- `src/views/PaperWeightView.vue` — Complete UX refactor
+- `src/components/GiFormatComparison.vue` — New component (created)
+
+**Commits:**
+1. `c38c5c1` — style: remove precise/fast slider mode toggle
+2. `6874dd0` — feat: add format comparison bar showing relative sizes
+3. `0c9e3a3` — fix: address code review issues for format comparison bar
+4. `abc5e47` — style: create two-column layout with sticky results
+5. `f7a5c3e` — fix: address code review issues for two-column layout
+6. `193f862` — style: compact spacing for 1080p no-scroll layout
+7. `d4b2e91` — style: further compact spacing for 1080p no-scroll
+
+---
+
+## Testing Checklist (Original)
 
 - [ ] Build passes with no errors
 - [ ] All 166 unit tests pass
