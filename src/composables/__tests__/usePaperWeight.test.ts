@@ -78,6 +78,14 @@ describe('calculatePaperWeight', () => {
       expect(result.kg).toBe(8419.95)
     })
 
+    it('calculates weight for 500 000 A5 flyers at 250 g/m²', () => {
+      const { width, height } = FORMATS.A5
+      const result = calculatePaperWeight(500000, width, height, 250)
+      // 0.03108 m² × 250 × 500000 = 3885000 g
+      expect(result.grams).toBe(3885000)
+      expect(result.kg).toBe(3885)
+    })
+
     it('calculates weight for 100 000 DL flyers at 170 g/m²', () => {
       const { width, height } = FORMATS.DL
       const result = calculatePaperWeight(100000, width, height, 170)
@@ -94,13 +102,6 @@ describe('calculatePaperWeight', () => {
       // 0.01554 m² × 300 × 5000 = 23310 g
       expect(result.grams).toBe(23310)
       expect(result.kg).toBe(23.31)
-    })
-
-    it('calculates weight for maximum quantity (1 000 000 units)', () => {
-      const { width, height } = FORMATS.A6
-      const result = calculatePaperWeight(1000000, width, height, 300)
-      expect(result.grams).toBe(4662000)
-      expect(result.kg).toBe(4662)
     })
 
     it('returns zero weight for zero quantity', () => {
