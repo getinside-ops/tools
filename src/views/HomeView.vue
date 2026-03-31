@@ -352,6 +352,11 @@ function setCategory(cat: string) {
   border-color: rgba(10, 170, 142, 0.4);
 }
 
+.home-card:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
 [data-theme="dark"] .home-card:hover {
   box-shadow: var(--gi-shadow-glow);
   border-color: rgba(10, 170, 142, 0.6);
