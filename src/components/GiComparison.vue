@@ -1,11 +1,11 @@
 <template>
   <div class="gi-comparison">
-    <div class="gi-comparison-grid">
-      <div v-for="(item, index) in items" :key="index" class="gi-comparison-item">
+    <div class="gi-comparison-grid" role="list">
+      <div v-for="(item, index) in items" :key="item.label || index" class="gi-comparison-item" role="listitem">
         <div class="gi-comparison-label">{{ item.label }}</div>
         <div class="gi-comparison-content">
           <slot :name="`item-${index}`" :item="item">
-            <div v-if="item.value" class="gi-comparison-value">{{ item.value }}</div>
+            <div v-if="item.value !== undefined && item.value !== null" class="gi-comparison-value">{{ item.value }}</div>
           </slot>
         </div>
       </div>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-interface ComparisonItem {
+export interface ComparisonItem {
   label: string
   value?: string | number
 }
@@ -22,6 +22,10 @@ interface ComparisonItem {
 defineProps<{
   items: ComparisonItem[]
 }>()
+
+defineOptions({
+  name: 'GiComparison'
+})
 </script>
 
 <style scoped>
