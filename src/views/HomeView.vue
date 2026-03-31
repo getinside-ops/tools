@@ -7,7 +7,7 @@
           <img :src="`${base}gi-keyvisual.svg`" alt="" class="home-hero-img" aria-hidden="true" />
         </div>
         <div class="home-hero-content">
-          <h1>{{ t('home.title') }}</h1>
+          <h1 class="home-hero-title">{{ t('home.title') }}</h1>
           <p class="home-hero-tagline">{{ t('home.subtitle') }}</p>
           <p class="home-hero-body">{{ t('home.heroText') }}</p>
           <a href="#browse" class="gi-btn home-hero-cta">{{ t('home.exploreTools') }}</a>
@@ -189,8 +189,8 @@ function setCategory(cat: string) {
 
 /* Hero */
 .home-hero {
-  padding: 4rem 1.5rem 3.5rem;
-  max-width: 1100px;
+  padding: var(--gi-space-3xl) 1.5rem var(--gi-space-2xl);
+  max-width: var(--gi-container-hero); /* 1400px */
   margin: 0 auto;
 }
 .home-hero-inner {
@@ -200,7 +200,7 @@ function setCategory(cat: string) {
 }
 .home-hero-visual {
   flex-shrink: 0;
-  width: 150px;
+  width: 180px;
 }
 .home-hero-img {
   width: 100%;
@@ -210,38 +210,43 @@ function setCategory(cat: string) {
 .home-hero-content {
   flex: 1;
 }
-.home-hero h1 {
+.home-hero-title {
   font-family: 'Garnett', 'Inter', system-ui, sans-serif;
-  font-size: 2.5rem;
+  font-size: var(--gi-font-size-3xl); /* 2.5rem */
   font-weight: 700;
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
+  color: var(--gi-text);
 }
 .home-hero-tagline {
-  font-size: 1.05rem;
-  font-weight: 500;
+  font-size: 1rem; /* ~0.95rem */
+  font-weight: 600;
   color: var(--gi-text);
   margin-bottom: 0.75rem;
   line-height: 1.5;
 }
 .home-hero-body {
-  font-size: 0.95rem;
+  font-size: var(--gi-font-size-sm); /* 0.875rem */
   color: var(--gi-text-muted);
   line-height: 1.65;
   margin-bottom: 2rem;
 }
 .home-hero-cta {
-  font-size: 1rem;
+  font-size: var(--gi-font-size-md);
   padding: 0.7rem 1.5rem;
 }
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .home-hero-inner {
     flex-direction: column;
-    gap: 1.75rem;
+    gap: 2rem;
     text-align: center;
   }
-  .home-hero-visual { width: 100px; }
-  .home-hero h1 { font-size: 2rem; }
+  .home-hero-visual { 
+    width: 120px; 
+  }
+  .home-hero-title { 
+    font-size: var(--gi-font-size-2xl); 
+  }
 }
 
 /* Browse section */
