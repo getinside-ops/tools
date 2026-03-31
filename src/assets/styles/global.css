@@ -96,14 +96,25 @@
   --gi-space-2xl: 2.5rem;    /* 40px */
   --gi-space-3xl: 3.5rem;    /* 56px */
 
-  /* Typography Scale (Modular scale from 0.875rem base) */
-  --gi-font-size-xs: 0.75rem;     /* 12px */
-  --gi-font-size-sm: 0.875rem;    /* 14px */
-  --gi-font-size-md: 1rem;        /* 16px */
-  --gi-font-size-lg: 1.25rem;     /* 20px */
-  --gi-font-size-xl: 1.618rem;    /* 26px */
-  --gi-font-size-2xl: 2rem;       /* 32px */
-  --gi-font-size-3xl: 2.618rem;   /* 42px */
+  /* Typography Scale - Refined with better line-heights */
+  --gi-font-size-xs: 0.75rem;      /* 12px */
+  --gi-font-size-sm: 0.875rem;     /* 14px */
+  --gi-font-size-md: 1rem;         /* 16px */
+  --gi-font-size-lg: 1.25rem;      /* 20px */
+  --gi-font-size-xl: 1.5rem;       /* 24px */
+  --gi-font-size-2xl: 1.875rem;    /* 30px */
+  --gi-font-size-3xl: 2.25rem;     /* 36px */
+
+  /* Line heights - tighter for headings */
+  --gi-line-height-tight: 1.25;
+  --gi-line-height-base: 1.6;
+  --gi-line-height-relaxed: 1.75;
+
+  /* Font weights */
+  --gi-font-weight-normal: 400;
+  --gi-font-weight-medium: 500;
+  --gi-font-weight-semibold: 600;
+  --gi-font-weight-bold: 700;
 
   /* Border Radius */
   --gi-radius-sm: 6px;
