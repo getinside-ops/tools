@@ -2,9 +2,9 @@
   <div :class="['gi-info-box', `gi-info-box--${variant}`]">
     <div class="gi-info-box-icon">
       <slot name="icon">
-        <span v-if="variant === 'info'">ℹ️</span>
-        <span v-else-if="variant === 'tip'">💡</span>
-        <span v-else-if="variant === 'warning'">⚠️</span>
+        <Info v-if="variant === 'info'" :size="20" />
+        <Lightbulb v-else-if="variant === 'tip'" :size="20" />
+        <AlertTriangle v-else-if="variant === 'warning'" :size="20" />
       </slot>
     </div>
     <div class="gi-info-box-content">
@@ -17,15 +17,19 @@
 </template>
 
 <script setup lang="ts">
+import { Info, Lightbulb, AlertTriangle } from 'lucide-vue-next'
+
 /**
  * GiInfoBox - Contextual help component
  * Displays info, tips, or warnings in a styled box
  */
 
-defineProps<{
+withDefaults(defineProps<{
   variant?: 'info' | 'tip' | 'warning'
   title?: string
-}>()
+}>(), {
+  variant: 'info'
+})
 
 defineOptions({
   name: 'GiInfoBox'
@@ -60,7 +64,10 @@ defineOptions({
 }
 
 .gi-info-box-icon {
-  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
   flex-shrink: 0;
 }
 
@@ -70,7 +77,7 @@ defineOptions({
 
 .gi-info-box-title {
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--gi-space-xs);
 }
 
 .gi-info-box-text {
