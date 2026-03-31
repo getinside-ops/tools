@@ -125,10 +125,18 @@
   --gi-radius-2xl: 20px;
   --gi-radius-pill: 9999px;
 
-  /* Transitions */
-  --gi-transition-fast: 0.12s;
+  /* Transitions - Smooth and natural */
+  --gi-transition-instant: 0.1s;
+  --gi-transition-fast: 0.15s;
   --gi-transition-base: 0.2s;
   --gi-transition-slow: 0.3s;
+  --gi-transition-slower: 0.4s;
+
+  /* Easing curves */
+  --gi-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --gi-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --gi-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --gi-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Layout */
   --gi-container-hero: 1400px;
