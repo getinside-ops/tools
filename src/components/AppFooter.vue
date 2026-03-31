@@ -38,7 +38,7 @@
     
     <div class="gi-footer-bottom">
       <span>Contact &mdash; Opérations&nbsp;: <a href="mailto:benoit@getinside.fr">benoit@getinside.fr</a> · Studio&nbsp;: <a href="mailto:studio@getinside.fr">studio@getinside.fr</a></span>
-      <span>© 2026 getinside. Tous droits réservés.</span>
+      <span>{{ t('footer.copyright') }}</span>
     </div>
   </footer>
 </template>

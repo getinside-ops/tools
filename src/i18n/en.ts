@@ -42,6 +42,7 @@ const en: Messages = {
     tagline: 'Tools by getinside · Retail Media',
     toggleLanguage: 'Toggle language',
     toggleTheme: 'Toggle theme',
+    copyright: '© 2026 getinside. All rights reserved.',
   },
   home: {
     title: 'getinside toolbox',

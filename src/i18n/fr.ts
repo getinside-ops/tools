@@ -40,6 +40,7 @@ const fr = {
     tagline: 'Outils proposés par getinside · Retail Media',
     toggleLanguage: 'Changer de langue',
     toggleTheme: 'Changer de thème',
+    copyright: '© 2026 getinside. Tous droits réservés.',
   },
   home: {
     title: 'getinside toolbox',
