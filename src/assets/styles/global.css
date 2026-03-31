@@ -97,6 +97,7 @@
   --gi-space-3xl: 3.5rem;    /* 56px */
 
   /* Typography Scale - Refined with better line-heights */
+  --gi-font-size-base: 1rem;       /* 16px */
   --gi-font-size-xs: 0.75rem;      /* 12px */
   --gi-font-size-sm: 0.875rem;     /* 14px */
   --gi-font-size-md: 1rem;         /* 16px */
