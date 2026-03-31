@@ -110,6 +110,7 @@
   --gi-container-hero: 1400px;
   --gi-container-tool: 900px;
   --gi-grid-gap: 1rem;
+  --gi-card-min-height: 180px;
 
   /* Backward Compatibility Aliases */
   --gi-gap: var(--gi-grid-gap); /* Legacy alias */

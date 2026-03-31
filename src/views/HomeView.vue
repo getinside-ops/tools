@@ -57,6 +57,7 @@
                   <component :is="tool.icon" :size="20" />
                 </div>
                 <span v-if="tool.isNew" class="gi-badge-new">{{ t('home.new') }}</span>
+                <span v-else-if="tool.isPopular" class="gi-badge-popular">{{ t('home.popular') }}</span>
               </div>
               <strong class="home-card-title">{{ t(tool.titleKey) }}</strong>
               <p class="home-card-desc">{{ t(tool.descKey) }}</p>
@@ -80,6 +81,7 @@
                 <component :is="tool.icon" :size="20" />
               </div>
               <span v-if="tool.isNew" class="gi-badge-new">{{ t('home.new') }}</span>
+              <span v-else-if="tool.isPopular" class="gi-badge-popular">{{ t('home.popular') }}</span>
             </div>
             <strong class="home-card-title">{{ t(tool.titleKey) }}</strong>
             <p class="home-card-desc">{{ t(tool.descKey) }}</p>
@@ -116,13 +118,14 @@ interface Tool {
   descKey: string
   category: ContentCategory
   isNew: boolean
+  isPopular?: boolean
 }
 
 const allTools: Tool[] = [
   // Existing tools
-  { route: '/paper-weight',     icon: Scale,           titleKey: 'home.tools.paperWeight.title',     descKey: 'home.tools.paperWeight.desc',     category: 'print',   isNew: false },
-  { route: '/utm-builder',      icon: Link2,           titleKey: 'home.tools.utmBuilder.title',      descKey: 'home.tools.utmBuilder.desc',      category: 'digital', isNew: false },
-  { route: '/dpi-checker',      icon: Printer,         titleKey: 'home.tools.dpiChecker.title',      descKey: 'home.tools.dpiChecker.desc',      category: 'print',   isNew: false },
+  { route: '/paper-weight',     icon: Scale,           titleKey: 'home.tools.paperWeight.title',     descKey: 'home.tools.paperWeight.desc',     category: 'print',   isNew: false, isPopular: true },
+  { route: '/utm-builder',      icon: Link2,           titleKey: 'home.tools.utmBuilder.title',      descKey: 'home.tools.utmBuilder.desc',      category: 'digital', isNew: false, isPopular: true },
+  { route: '/dpi-checker',      icon: Printer,         titleKey: 'home.tools.dpiChecker.title',      descKey: 'home.tools.dpiChecker.desc',      category: 'print',   isNew: false, isPopular: true },
   { route: '/redirect-checker', icon: CornerDownRight, titleKey: 'home.tools.redirectChecker.title', descKey: 'home.tools.redirectChecker.desc', category: 'digital', isNew: false },
   { route: '/promo-code',       icon: Tag,             titleKey: 'home.tools.promoCode.title',       descKey: 'home.tools.promoCode.desc',       category: 'digital', isNew: false },
   { route: '/word-counter',     icon: FileText,        titleKey: 'home.tools.wordCounter.title',     descKey: 'home.tools.wordCounter.desc',     category: 'digital', isNew: true  },
@@ -323,51 +326,98 @@ function setCategory(cat: string) {
 .home-card {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  padding: 1.125rem;
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-xl);
   background: var(--gi-surface);
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.15s, border-color 0.15s;
-  min-height: 160px;
+  transition: transform var(--gi-transition-base), 
+              box-shadow var(--gi-transition-base), 
+              border-color var(--gi-transition-base);
+  min-height: var(--gi-card-min-height);
+  position: relative;
 }
+
 .home-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  border-color: rgba(10, 170, 142, 0.4);
+  transform: translateY(-4px);
+  box-shadow: var(--gi-shadow-lg);
+  border-color: rgba(10, 170, 142, 0.5);
 }
+
+[data-theme="dark"] .home-card:hover {
+  box-shadow: var(--gi-shadow-glow);
+}
+
 .home-card-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
+
 .home-icon-box {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   background: var(--gi-tint-green-bg);
   color: var(--gi-brand);
-  border-radius: var(--gi-radius);
+  border-radius: var(--gi-radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color var(--gi-transition-fast), color var(--gi-transition-fast);
 }
+
+.home-card:hover .home-icon-box {
+  background: var(--gi-brand);
+  color: white;
+}
+
 .home-card-title {
-  font-size: 0.9rem;
+  font-size: var(--gi-font-size-lg);
   font-weight: 600;
   line-height: 1.3;
+  color: var(--gi-text);
 }
+
 .home-card-desc {
-  font-size: 0.8rem;
+  font-size: var(--gi-font-size-xs);
   color: var(--gi-text-muted);
   line-height: 1.5;
   flex: 1;
 }
+
 .home-card-cta {
-  font-size: 0.8rem;
+  font-size: var(--gi-font-size-xs);
   font-weight: 500;
   color: var(--gi-brand);
   margin-top: auto;
+  transition: color var(--gi-transition-fast);
+}
+
+.home-card:hover .home-card-cta {
+  color: var(--gi-brand-dark);
+}
+
+/* Badges */
+.gi-badge-new,
+.gi-badge-popular {
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--gi-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.gi-badge-new {
+  background: var(--gi-violet);
+  color: white;
+}
+
+.gi-badge-popular {
+  background: var(--gi-tint-orange-text);
+  color: white;
 }
 </style>
