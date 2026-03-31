@@ -1,0 +1,33 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link "getinside" [ref=e6] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e7]
+          - generic [ref=e8]: tools
+        - navigation [ref=e9]:
+          - link "Accueil" [ref=e10] [cursor=pointer]:
+            - /url: "#/"
+      - button "EN" [ref=e11] [cursor=pointer]
+  - main [ref=e12]
+  - contentinfo [ref=e13]:
+    - generic [ref=e14]:
+      - link "getinside tools" [ref=e16] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e17]
+        - generic [ref=e18]: tools
+      - paragraph [ref=e20]: Outils proposés par getinside · Retail Media
+      - generic [ref=e21]:
+        - button "Changer de langue" [ref=e22] [cursor=pointer]: EN
+        - button "Changer de thème" [ref=e23] [cursor=pointer]:
+          - img [ref=e24]
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e32] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e33] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e34]: © 2026 getinside. Tous droits réservés.

@@ -69,18 +69,18 @@ const getRectStyle = (fmt: FormatInfo) => {
 
 <style scoped>
 .gi-format-comparison {
-  padding: var(--gi-space-md);
+  padding: var(--gi-space-sm);
   background: var(--gi-bg-soft);
   border-radius: var(--gi-radius-lg);
-  margin-bottom: var(--gi-space-md);
+  margin-bottom: var(--gi-space-sm);
 }
 
 .gi-comparison-bar {
   display: flex;
   align-items: flex-end;
-  gap: var(--gi-space-md);
-  padding: var(--gi-space-sm);
-  min-height: 80px;
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-xs);
+  min-height: 60px;
   justify-content: center;
 }
 
@@ -110,8 +110,8 @@ const getRectStyle = (fmt: FormatInfo) => {
 .gi-comparison-labels {
   display: flex;
   justify-content: center;
-  gap: var(--gi-space-md);
-  margin-top: var(--gi-space-sm);
+  gap: var(--gi-space-sm);
+  margin-top: var(--gi-space-xs);
 }
 
 .gi-comparison-label {

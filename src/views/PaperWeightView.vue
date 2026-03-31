@@ -401,12 +401,12 @@ const resetCalculator = () => {
 
 /* Tool Header */
 .gi-tool-header {
-  margin-bottom: var(--gi-space-xl);
+  margin-bottom: var(--gi-space-lg);
 }
 
 .gi-tool-header h1 {
   font-family: 'Garnett', 'Inter', system-ui, sans-serif;
-  font-size: var(--gi-font-size-xl);
+  font-size: var(--gi-font-size-lg);
   font-weight: 700;
   margin-bottom: var(--gi-space-xs);
   letter-spacing: -0.02em;
@@ -415,7 +415,7 @@ const resetCalculator = () => {
 
 .gi-tool-header p {
   color: var(--gi-text-muted);
-  font-size: var(--gi-font-size-md);
+  font-size: var(--gi-font-size-sm);
   max-width: 500px;
   line-height: var(--gi-line-height-base);
 }
@@ -424,8 +424,8 @@ const resetCalculator = () => {
 .gi-field {
   display: flex;
   flex-direction: column;
-  gap: var(--gi-space-sm);
-  margin-bottom: var(--gi-space-md);
+  gap: var(--gi-space-xs);
+  margin-bottom: var(--gi-space-sm);
 }
 
 .gi-label {
@@ -578,8 +578,8 @@ const resetCalculator = () => {
 .gi-format-card {
   display: flex;
   flex-direction: column;
-  gap: var(--gi-space-sm);
-  padding: var(--gi-space-md);
+  gap: var(--gi-space-xs);
+  padding: var(--gi-space-sm);
   background: var(--gi-surface);
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
@@ -619,8 +619,8 @@ const resetCalculator = () => {
 
 /* Icon Box - Homepage style */
 .gi-format-icon-box {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   background: var(--gi-brand-fade);
   color: var(--gi-brand);
@@ -665,7 +665,7 @@ const resetCalculator = () => {
 
 /* Format Title & Description */
 .gi-format-title {
-  font-size: var(--gi-font-size-lg);
+  font-size: var(--gi-font-size-md);
   font-weight: 600;
   line-height: 1.3;
   color: var(--gi-text);
@@ -743,9 +743,9 @@ const resetCalculator = () => {
   display: flex;
   align-items: center;
   gap: var(--gi-space-xs);
-  font-size: var(--gi-font-size-sm);
+  font-size: var(--gi-font-size-xs);
   color: var(--gi-text-muted);
-  padding: var(--gi-space-sm) var(--gi-space-md);
+  padding: var(--gi-space-xs) var(--gi-space-sm);
   background: var(--gi-bg-soft);
   border-radius: var(--gi-radius-md);
   margin-top: var(--gi-space-xs);
@@ -757,8 +757,8 @@ const resetCalculator = () => {
 
 /* Result Panel - Clean modern design */
 .gi-result {
-  margin-top: var(--gi-space-xl);
-  padding: var(--gi-space-xl) var(--gi-space-lg);
+  margin-top: var(--gi-space-lg);
+  padding: var(--gi-space-lg) var(--gi-space-md);
   background: var(--gi-surface);
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-xl);
@@ -814,7 +814,7 @@ const resetCalculator = () => {
 }
 
 .gi-result-value {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--gi-text);
@@ -822,7 +822,7 @@ const resetCalculator = () => {
 }
 
 .gi-result-unit {
-  font-size: var(--gi-font-size-xl);
+  font-size: var(--gi-font-size-lg);
   font-weight: 600;
   color: var(--gi-text-muted);
 }
@@ -846,12 +846,12 @@ const resetCalculator = () => {
 .gi-metric-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--gi-space-md);
+  gap: var(--gi-space-sm);
   margin-bottom: var(--gi-space-lg);
 }
 
 .gi-metric-card {
-  padding: var(--gi-space-md) var(--gi-space-lg);
+  padding: var(--gi-space-sm) var(--gi-space-md);
   background: var(--gi-bg-soft);
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
