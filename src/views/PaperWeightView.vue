@@ -401,14 +401,14 @@ const resetCalculator = () => {
 
 /* Tool Header */
 .gi-tool-header {
-  margin-bottom: var(--gi-space-2xl);
+  margin-bottom: var(--gi-space-xl);
 }
 
 .gi-tool-header h1 {
   font-family: 'Garnett', 'Inter', system-ui, sans-serif;
-  font-size: var(--gi-font-size-2xl);
+  font-size: var(--gi-font-size-xl);
   font-weight: 700;
-  margin-bottom: var(--gi-space-sm);
+  margin-bottom: var(--gi-space-xs);
   letter-spacing: -0.02em;
   color: var(--gi-text);
 }
@@ -425,7 +425,7 @@ const resetCalculator = () => {
   display: flex;
   flex-direction: column;
   gap: var(--gi-space-sm);
-  margin-bottom: var(--gi-space-lg);
+  margin-bottom: var(--gi-space-md);
 }
 
 .gi-label {
@@ -437,7 +437,7 @@ const resetCalculator = () => {
 
 /* Slider */
 .gi-slider-container {
-  padding: var(--gi-space-lg) var(--gi-space-md);
+  padding: var(--gi-space-md) var(--gi-space-sm);
   background: var(--gi-bg-soft);
   border-radius: var(--gi-radius-lg);
   border: 1px solid var(--gi-border);
@@ -570,8 +570,8 @@ const resetCalculator = () => {
 /* Format Grid */
 .gi-format-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--gi-grid-gap);
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--gi-space-sm);
 }
 
 /* Format Card - Homepage-style */
@@ -579,7 +579,7 @@ const resetCalculator = () => {
   display: flex;
   flex-direction: column;
   gap: var(--gi-space-sm);
-  padding: var(--gi-space-xl);
+  padding: var(--gi-space-md);
   background: var(--gi-surface);
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
@@ -619,8 +619,8 @@ const resetCalculator = () => {
 
 /* Icon Box - Homepage style */
 .gi-format-icon-box {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   background: var(--gi-brand-fade);
   color: var(--gi-brand);
@@ -757,8 +757,8 @@ const resetCalculator = () => {
 
 /* Result Panel - Clean modern design */
 .gi-result {
-  margin-top: var(--gi-space-2xl);
-  padding: var(--gi-space-2xl) var(--gi-space-xl);
+  margin-top: var(--gi-space-xl);
+  padding: var(--gi-space-xl) var(--gi-space-lg);
   background: var(--gi-surface);
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-xl);
@@ -814,7 +814,7 @@ const resetCalculator = () => {
 }
 
 .gi-result-value {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--gi-text);
