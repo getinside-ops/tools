@@ -117,11 +117,13 @@
   --gi-font-weight-semibold: 600;
   --gi-font-weight-bold: 700;
 
-  /* Border Radius */
+  /* Border Radius - Consistent and refined */
   --gi-radius-sm: 6px;
   --gi-radius-md: 8px;
   --gi-radius-lg: 12px;
-  --gi-radius-pill: 999px;
+  --gi-radius-xl: 16px;
+  --gi-radius-2xl: 20px;
+  --gi-radius-pill: 9999px;
 
   /* Transitions */
   --gi-transition-fast: 0.12s;
