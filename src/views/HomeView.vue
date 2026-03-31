@@ -299,21 +299,25 @@ function setCategory(cat: string) {
 
 /* Category section header */
 .home-cat-header {
-  font-size: 0.75rem;
+  font-size: var(--gi-font-size-sm);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--gi-text-muted);
-  margin: 2rem 0 0.75rem;
+  margin: var(--gi-space-2xl) 0 var(--gi-space-lg);
+  padding-bottom: var(--gi-space-sm);
+  border-bottom: 1px solid var(--gi-border);
 }
 
 /* Card grid */
 .home-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.875rem;
+  gap: var(--gi-grid-gap);
 }
-.home-grid--mt { margin-top: 1.5rem; }
+.home-grid--mt { 
+  margin-top: var(--gi-space-lg); 
+}
 
 /* Tool card */
 .home-card {
