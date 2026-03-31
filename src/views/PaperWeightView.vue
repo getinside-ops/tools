@@ -14,12 +14,13 @@
       <!-- Dual-Mode Slider -->
       <div class="gi-slider-container">
         <div class="gi-slider-header">
-          <span class="gi-slider-value">{{ quantity.toLocaleString() }} ex.</span>
+          <span class="gi-slider-value">{{ formatQuantity(quantity) }} ex.</span>
           <button
             type="button"
             class="gi-slider-mode-toggle"
             @click="toggleSliderMode"
             :aria-label="t('paperWeight.toggleSliderMode')"
+            :aria-pressed="sliderMode === 'fast'"
           >
             <span class="gi-mode-indicator" :class="{ active: sliderMode === 'precise' }">{{ t('paperWeight.sliderModes.precise') }}</span>
             <span class="gi-mode-indicator" :class="{ active: sliderMode === 'fast' }">{{ t('paperWeight.sliderModes.fast') }}</span>
@@ -199,7 +200,7 @@
         <!-- Weight per 1000 units -->
         <div class="gi-metric-grid">
           <div class="gi-metric-card">
-            <div class="gi-metric-label">{{ t('paperWeight.weightPer1000') }}</div>
+            <div class="gi-metric-label">{{ t('paperWeight.weightPerThousand') }}</div>
             <div class="gi-metric-value">{{ weightPerThousand }}</div>
           </div>
           <div class="gi-metric-card">
@@ -475,6 +476,10 @@ const resetCalculator = () => {
 .gi-slider-mode-toggle:hover {
   border-color: var(--gi-brand);
 }
+.gi-slider-mode-toggle:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
 .gi-mode-indicator {
   padding: 0.35rem 0.75rem;
   border-radius: var(--gi-radius-pill);
@@ -496,6 +501,10 @@ const resetCalculator = () => {
   -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
+}
+.gi-slider:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
 }
 .gi-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
