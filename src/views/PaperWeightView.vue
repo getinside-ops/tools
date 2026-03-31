@@ -55,6 +55,12 @@
       </div>
     </div>
 
+    <!-- Format Comparison Bar -->
+    <GiFormatComparison
+      :selected-format="selectedFormat"
+      @select="selectedFormat = $event"
+    />
+
     <!-- Format Section -->
     <div class="gi-field">
       <label class="gi-label">{{ t('paperWeight.format') }}</label>
@@ -231,6 +237,7 @@ import {
   DEFAULT_QUANTITY,
   QUANTITY_PRESETS,
 } from '../composables/usePaperWeight'
+import GiFormatComparison from '../components/GiFormatComparison.vue'
 
 const { t } = useI18n()
 
