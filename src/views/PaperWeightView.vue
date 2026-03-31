@@ -11,20 +11,10 @@
     <div class="gi-field">
       <label class="gi-label">{{ t('paperWeight.quantity') }}</label>
       
-      <!-- Dual-Mode Slider -->
+      <!-- Slider -->
       <div class="gi-slider-container">
         <div class="gi-slider-header">
           <span class="gi-slider-value">{{ formatQuantity(quantity) }} ex.</span>
-          <button
-            type="button"
-            class="gi-slider-mode-toggle"
-            @click="toggleSliderMode"
-            :aria-label="t('paperWeight.toggleSliderMode')"
-            :aria-pressed="sliderMode === 'fast'"
-          >
-            <span class="gi-mode-indicator" :class="{ active: sliderMode === 'precise' }">{{ t('paperWeight.sliderModes.precise') }}</span>
-            <span class="gi-mode-indicator" :class="{ active: sliderMode === 'fast' }">{{ t('paperWeight.sliderModes.fast') }}</span>
-          </button>
         </div>
         <input
           v-model.number="sliderValue"
@@ -247,7 +237,6 @@ const { t } = useI18n()
 const POPULAR_GRAMMAGES = [80, 90, 115, 135, 170, 250, 300, 350, 400]
 
 const quantity = ref(DEFAULT_QUANTITY)
-const sliderMode = ref<'precise' | 'fast'>('precise')
 const sliderValue = ref(DEFAULT_QUANTITY / 1000) // Store in thousands for slider
 
 const selectedFormat = ref<FormatKey>('A6')
@@ -255,28 +244,14 @@ const customWidth = ref(100)
 const customHeight = ref(100)
 const grammage = ref(250)
 
-// Slider mode configuration
-const sliderMin = computed(() => sliderMode.value === 'precise' ? 5 : 50)
-const sliderMax = computed(() => sliderMode.value === 'precise' ? 50 : 1000)
-const sliderStep = computed(() => sliderMode.value === 'precise' ? 1 : 25)
+// Slider configuration
+const sliderMin = 5
+const sliderMax = 50
+const sliderStep = 1
 
 // Sync slider with quantity
 const onSliderInput = () => {
   quantity.value = sliderValue.value * 1000
-}
-
-// Toggle slider mode
-const toggleSliderMode = () => {
-  sliderMode.value = sliderMode.value === 'precise' ? 'fast' : 'precise'
-  // Adjust slider value to stay in range when switching modes
-  const currentK = quantity.value / 1000
-  if (sliderMode.value === 'precise' && currentK > 50) {
-    sliderValue.value = 50
-    quantity.value = 50000
-  } else if (sliderMode.value === 'fast' && currentK < 50) {
-    sliderValue.value = 50
-    quantity.value = 50000
-  }
 }
 
 // Format quantity with k/M notation
@@ -290,12 +265,6 @@ const formatQuantity = (q: number): string => {
 const setQuantity = (q: number) => {
   quantity.value = q
   sliderValue.value = q / 1000
-  // Auto-switch mode based on quantity
-  if (q <= 50000) {
-    sliderMode.value = 'precise'
-  } else {
-    sliderMode.value = 'fast'
-  }
 }
 
 const activeDims = computed(() => {
@@ -386,7 +355,6 @@ const getGrammageHint = () => {
 const resetCalculator = () => {
   quantity.value = DEFAULT_QUANTITY
   sliderValue.value = DEFAULT_QUANTITY / 1000
-  sliderMode.value = 'precise'
   selectedFormat.value = 'A6'
   customWidth.value = 100
   customHeight.value = 100
@@ -474,42 +442,6 @@ const resetCalculator = () => {
   font-weight: 700;
   color: var(--gi-text);
   font-variant-numeric: tabular-nums;
-}
-
-/* Mode Toggle - Homepage pill tab style */
-.gi-slider-mode-toggle {
-  display: flex;
-  align-items: center;
-  gap: var(--gi-space-xs);
-  padding: var(--gi-space-xs);
-  background: var(--gi-surface);
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius-pill);
-  cursor: pointer;
-  transition: all var(--gi-transition-fast);
-}
-
-.gi-slider-mode-toggle:hover {
-  border-color: var(--gi-brand);
-}
-
-.gi-slider-mode-toggle:focus-visible {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 2px;
-}
-
-.gi-mode-indicator {
-  padding: var(--gi-space-xs) var(--gi-space-sm);
-  border-radius: var(--gi-radius-pill);
-  font-size: var(--gi-font-size-xs);
-  font-weight: 600;
-  color: var(--gi-text-muted);
-  transition: all var(--gi-transition-fast);
-}
-
-.gi-mode-indicator.active {
-  background: var(--gi-brand);
-  color: white;
 }
 
 /* Slider Track */
