@@ -126,6 +126,16 @@ const en: Messages = {
       bowlingBall: 'a bowling ball',
       veryHeavy: 'several bowling balls',
     },
+    pedagogic: {
+      title: 'About Paper Weight',
+      description: 'Grammage (g/m²) indicates the weight of a 1m² sheet. Multiplied by format and quantity, it gives the total weight of your order.',
+      tips: [
+        '80g/m² is standard for office paper',
+        '135-170g/m² is ideal for flyers',
+        '250-350g/m² corresponds to cardstock',
+        'Calculate weight to estimate shipping costs',
+      ],
+    },
   },
   utmBuilder: {
     title: 'UTM URL Builder',
@@ -142,6 +152,16 @@ const en: Messages = {
     copied: 'Copied!',
     invalidUrl: 'Invalid URL',
     fillRequired: 'Fill in the required fields (URL, source and medium)',
+    pedagogic: {
+      title: 'About UTM Parameters',
+      description: 'UTM parameters (Urchin Tracking Module) allow you to track the performance of your marketing campaigns in Google Analytics.',
+      tips: [
+        'Use consistent, lowercase names for your campaigns',
+        'utm_source identifies the platform (google, facebook, newsletter)',
+        'utm_medium specifies the channel (cpc, email, social)',
+        'utm_campaign names your specific campaign',
+      ],
+    },
   },
   dpiChecker: {
     title: 'DPI Checker',
@@ -167,10 +187,10 @@ const en: Messages = {
       landscape: 'Landscape',
       square: 'Square',
     },
-    status: { 
-      ok: 'Compatible 300 DPI ✓', 
-      warning: 'Borderline resolution (150 DPI)', 
-      error: 'Insufficient resolution' 
+    status: {
+      ok: 'Compatible 300 DPI ✓',
+      warning: 'Borderline resolution (150 DPI)',
+      error: 'Insufficient resolution'
     },
     recommendedUse: {
       title: 'Recommended uses',
@@ -198,6 +218,16 @@ const en: Messages = {
       remove: 'Remove',
       change: 'Change',
     },
+    pedagogic: {
+      title: 'About DPI',
+      description: 'DPI (Dots Per Inch) determines print quality. 300 DPI is the professional standard for sharp, detailed prints.',
+      tips: [
+        '72-96 DPI is sufficient for web and screens',
+        '150 DPI minimum for large formats viewed from a distance',
+        '300 DPI is required for professional printing',
+        '600 DPI for high-quality photo prints',
+      ],
+    },
   },
   redirectChecker: {
     title: 'Redirect Checker',
@@ -212,6 +242,16 @@ const en: Messages = {
     copied: 'Copied!',
     hopsCount: '{n} redirect(s)',
     tooManyRedirects: 'Redirect loop or chain too long (15 hops max).',
+    pedagogic: {
+      title: 'About URL Redirects',
+      description: 'URL redirects (301, 302) automatically forward from one address to another. Useful for site migrations or shortened links.',
+      tips: [
+        '301 = permanent redirect (good for SEO)',
+        '302 = temporary redirect',
+        'Too many redirects slow down page loading',
+        'Check redirect chains for debugging',
+      ],
+    },
   },
   promoCode: {
     title: 'Promo Code Validator',
@@ -225,6 +265,16 @@ const en: Messages = {
       noAmbiguous: 'No ambiguous characters (0/O, 1/I/l)',
       uppercase: 'All uppercase',
     },
+    pedagogic: {
+      title: 'About Promo Codes',
+      description: 'A good promo code is short, memorable, and unambiguous. Avoid special characters and use uppercase.',
+      tips: [
+        'Maximum 12 characters for easy entry',
+        'Avoid 0/O and 1/I/l which can be confused',
+        'Use only letters and numbers',
+        'All uppercase for better readability',
+      ],
+    },
   },
   pdfX: {
     title: 'PDF to PDF/X Converter',
@@ -237,6 +287,16 @@ const en: Messages = {
     errorSize: 'File too large (max 30 MB).',
     errorType: 'Please upload a PDF file.',
     errorServer: 'Conversion failed. Try again or check the file.',
+    pedagogic: {
+      title: 'About PDF/X',
+      description: 'PDF/X-1a is an ISO standard for professional printing. It ensures your file is print-ready.',
+      tips: [
+        'PDF/X-1a forces CMYK color mode',
+        'All fonts must be embedded',
+        'Transparent elements are flattened',
+        'Always verify with your print provider',
+      ],
+    },
   },
   wordCounter: {
     title: 'Word & Character Counter',
@@ -251,6 +311,16 @@ const en: Messages = {
       readingTime: 'Estimated reading time',
     },
     minutes: 'min',
+    pedagogic: {
+      title: 'About Word Counting',
+      description: 'Word counting helps optimize your content for SEO, social media, and print materials.',
+      tips: [
+        'Average reading speed: 200-250 words per minute',
+        'Twitter limits to 280 characters',
+        'A blog post is typically 1000-2000 words',
+        'Catchy headlines are 6-12 words',
+      ],
+    },
   },
   colorPalette: {
     title: 'Color Palette Generator',
@@ -260,6 +330,16 @@ const en: Messages = {
     lock: 'Lock',
     unlock: 'Unlock',
     copied: 'Copied!',
+    pedagogic: {
+      title: 'About Color Palettes',
+      description: 'A harmonious palette uses colors that work well together according to color theory rules.',
+      tips: [
+        'The 60-30-10 rule balances colors (60% dominant, 30% secondary, 10% accent)',
+        'Complementary colors create contrast',
+        'Analogous colors offer soft harmony',
+        'Use tools like the color wheel to guide your choices',
+      ],
+    },
   },
   mockupGenerator: {
     title: 'iPhone Mockup',
@@ -268,6 +348,16 @@ const en: Messages = {
     download: 'Download PNG',
     copy: 'Copy to clipboard',
     copied: 'Copied!',
+    pedagogic: {
+      title: 'About Mockups',
+      description: 'Mockups present your designs in a realistic context, perfect for portfolios, client presentations, and social media.',
+      tips: [
+        'Use screenshots at the right resolution for a crisp result',
+        'Mockups help clients visualize the final result',
+        'Export as PNG to preserve transparency',
+        'Adapt the mockup to your medium format (social, web, print)',
+      ],
+    },
   },
   urlParser: {
     title: 'URL Parser',
@@ -322,6 +412,16 @@ const en: Messages = {
         'Development: Parse and manipulate URLs in your code',
       ],
     },
+    pedagogic: {
+      title: 'About URL Structure',
+      description: 'A URL is made up of several parts: protocol, domain, path, parameters, and hash. Each element has a specific role.',
+      tips: [
+        'The https:// protocol ensures a secure connection',
+        'UTM parameters (?utm_source=...) track campaigns',
+        'The hash (#section) never goes to the server',
+        'The origin (protocol+domain+port) defines same-origin security',
+      ],
+    },
   },
   pxToRem: {
     title: 'PX ↔ REM Converter',
@@ -331,6 +431,16 @@ const en: Messages = {
     remLabel: 'REM (rem)',
     result: 'Conversion result',
     addRow: 'Add a row',
+    pedagogic: {
+      title: 'About REM Units',
+      description: 'REM (root em) is a unit relative to the root font size. Ideal for accessibility and responsive design.',
+      tips: [
+        '1rem = root font size (typically 16px)',
+        'REMs adapt to browser accessibility preferences',
+        'Prefer REMs over PX for text',
+        'Use PX for thin borders (1px)',
+      ],
+    },
   },
   typeScale: {
     title: 'Type Scale Generator',
@@ -350,6 +460,16 @@ const en: Messages = {
     preview: 'Scale Preview',
     step: 'Step',
     size: 'Size',
+    pedagogic: {
+      title: 'About Typographic Scales',
+      description: 'A type scale uses mathematical or musical ratios to create harmonious, hierarchical font sizes.',
+      tips: [
+        'The 1.250 ratio (Major Third) is versatile for web',
+        'The Golden Ratio (1.618) creates dramatic contrast',
+        'Use 4-6 levels maximum for clear hierarchy',
+        'Adapt the ratio to your project size',
+      ],
+    },
   },
 
   colorConverter: {
@@ -364,6 +484,16 @@ const en: Messages = {
     lch: 'LCH (Luminance-Chroma-Hue)',
     copy: 'Copy',
     copied: 'Copied!',
+    pedagogic: {
+      title: 'About Color Spaces',
+      description: 'Each color format has a specific use: HEX/RGB for web, CMYK for print, HSL for intuitive adjustments.',
+      tips: [
+        'HEX (#RRGGBB) is the web standard',
+        'RGB (0-255) for screens and digital',
+        'CMYK (0-100%) for professional printing',
+        'HSL is more intuitive for adjusting lightness and saturation',
+      ],
+    },
   },
   imageCompressor: {
     title: 'Image Compressor',
@@ -377,6 +507,16 @@ const en: Messages = {
     compressedSize: 'Compressed size',
     reduction: 'Reduction',
     download: 'Download',
+    pedagogic: {
+      title: 'About Image Compression',
+      description: 'Compression reduces image file size for faster web loading while preserving visual quality.',
+      tips: [
+        'WebP offers better compression than JPEG at equal quality',
+        '80-85% quality is often imperceptible',
+        'Resize before compressing for better results',
+        'Aim for under 200KB for web images',
+      ],
+    },
   },
   imageCropper: {
     title: 'Image Cropper',
@@ -390,6 +530,16 @@ const en: Messages = {
     crop: 'Crop',
     reset: 'Reset',
     download: 'Download',
+    pedagogic: {
+      title: 'About Image Cropping',
+      description: 'Cropping allows you to modify an image composition and adapt it to formats required by different platforms.',
+      tips: [
+        '1:1 (square) for Instagram and avatars',
+        '16:9 for YouTube videos and banners',
+        '4:5 for Instagram portrait posts',
+        'Keep important elements centered',
+      ],
+    },
   },
   imageResizer: {
     title: 'Image Resizer',
@@ -400,6 +550,16 @@ const en: Messages = {
     preserveRatio: 'Preserve aspect ratio',
     resize: 'Resize',
     download: 'Download',
+    pedagogic: {
+      title: 'About Image Resizing',
+      description: 'Resizing adjusts an image dimensions in pixels. Preserving aspect ratio prevents distortion.',
+      tips: [
+        'Always preserve aspect ratio to avoid distortion',
+        'Resize down to reduce file size',
+        'Follow recommended dimensions per platform',
+        'Avoid enlarging small images (quality loss)',
+      ],
+    },
   },
   imageFilters: {
     title: 'Image Filters',
@@ -412,6 +572,16 @@ const en: Messages = {
     contrast: 'Contrast',
     apply: 'Apply',
     download: 'Download',
+    pedagogic: {
+      title: 'About Image Filters',
+      description: 'Filters modify an image appearance by adjusting its colorimetric and luminous properties.',
+      tips: [
+        'Contrast improves text readability on images',
+        'Brightness adjusts overall clarity',
+        'Blur can create artistic effects or mask elements',
+        'Sepia gives a vintage, warm look',
+      ],
+    },
   },
   placeholder: {
     title: 'Placeholder Generator',
@@ -422,6 +592,16 @@ const en: Messages = {
     bgColor: 'Background Color',
     textColor: 'Text Color',
     download: 'Download',
+    pedagogic: {
+      title: 'About Placeholders',
+      description: 'Placeholders are temporary images used in mockups to represent final content before it is created.',
+      tips: [
+        'Use realistic dimensions for your mockups',
+        'Add descriptive text to identify content',
+        'Choose neutral colors to avoid distraction',
+        'Placeholders help visualize the layout',
+      ],
+    },
   },
   matteGenerator: {
     title: 'Seamless Matte Generator',
@@ -446,6 +626,16 @@ const en: Messages = {
     },
     apply: 'Generate & Download',
     download: 'Download',
+    pedagogic: {
+      title: 'About Mattes',
+      description: 'A matte adds a border around an image to adapt it to a specific format while preserving its visual integrity.',
+      tips: [
+        'Use mattes to adapt your visuals to social media formats',
+        'Seamless patterns add personality without distracting',
+        'Choose a brand color for the border',
+        'Keep the main image centered and clearly visible',
+      ],
+    },
   },
   favicon: {
     title: 'Favicon Generator',
@@ -453,6 +643,16 @@ const en: Messages = {
     upload: 'Select a logo (PNG, JPG, SVG)',
     download: 'Download bundle',
     preview: 'Size preview',
+    pedagogic: {
+      title: 'About Favicons',
+      description: 'A favicon is the small icon associated with your website, displayed in browser tabs and bookmarks.',
+      tips: [
+        '16x16px and 32x32px for desktop browsers',
+        '180x180px for Apple devices (touch icon)',
+        'Use a simple, recognizable design',
+        'Export as PNG with transparent background',
+      ],
+    },
   },
   lorem: {
     title: 'Lorem Ipsum Generator',
@@ -465,6 +665,16 @@ const en: Messages = {
     startWithLorem: 'Start with "Lorem ipsum"',
     generate: 'Generate',
     copy: 'Copy text',
+    pedagogic: {
+      title: 'About Lorem Ipsum',
+      description: 'Lorem Ipsum is standard placeholder text used for centuries to present mockups without distracting with real content.',
+      tips: [
+        'Lorem Ipsum comes from a text by Cicero (45 BC)',
+        'It mimics the normal letter distribution in Latin',
+        'Use it to test typography and layout',
+        'Replace it with real content before production',
+      ],
+    },
   },
   barcode: {
     title: 'EAN Barcode Generator',
@@ -474,6 +684,16 @@ const en: Messages = {
     invalid: 'Invalid format (digits only)',
     copy: 'Copy code',
     download: 'Download SVG',
+    pedagogic: {
+      title: 'About EAN Barcodes',
+      description: 'EAN-13 (European Article Numbering) is an international barcode standard used to identify products in retail.',
+      tips: [
+        '13 digits: 12 digits + 1 automatic checksum digit',
+        'The checksum is calculated using a modulo 10 algorithm',
+        'The first 2-3 digits identify the country',
+        'SVG format for perfect vector quality',
+      ],
+    },
   },
   safetyMargin: {
     title: 'Safety Margin & Bleed Checker',
@@ -486,6 +706,16 @@ const en: Messages = {
       bleed: 'Bleed area (trim)',
       safety: 'Safety zone (content)',
     },
+    pedagogic: {
+      title: 'About Margins and Bleed',
+      description: 'Bleed (3mm) is the trimmed area, safety margin (5mm) protects important elements. Essential for professional printing.',
+      tips: [
+        'Bleed prevents white edges after trimming',
+        'Keep text and logos in the safety zone',
+        '3mm bleed is the professional standard',
+        'Always verify with your print provider',
+      ],
+    },
   },
   imageConverter: {
     title: 'Universal Image Converter',
@@ -496,6 +726,16 @@ const en: Messages = {
     quality: 'Quality (Lossy)',
     scale: 'Scale multiplier',
     convert: 'Convert & Download',
+    pedagogic: {
+      title: 'About Image Formats',
+      description: 'Each image format has its advantages: PNG for transparency, JPG for photos, WebP for web, SVG for vectors.',
+      tips: [
+        'PNG: lossless quality, supports transparency',
+        'JPG: lossy compression, ideal for photos',
+        'WebP: best quality/size ratio for web',
+        'SVG: vector format, infinitely scalable',
+      ],
+    },
   },
   metadata: {
     title: 'Image Metadata Viewer',
@@ -505,6 +745,16 @@ const en: Messages = {
     size: 'Size',
     type: 'MIME Type',
     lastModified: 'Last Modified',
+    pedagogic: {
+      title: 'About Image Metadata',
+      description: 'Metadata contains technical information about the image: dimensions, format, creation date, and sometimes EXIF camera data.',
+      tips: [
+        'EXIF metadata may contain GPS location',
+        'Remove sensitive metadata before publishing',
+        'Dimensions and format are essential for web',
+        'Modification date helps organize your files',
+      ],
+    },
   },
   colorblind: {
     title: 'Colorblind Simulator',
@@ -516,6 +766,16 @@ const en: Messages = {
       deuteranopia: 'Deuteranopia (No green)',
       tritanopia: 'Tritanopia (No blue)',
       achromatopsia: 'Achromatopsia (Gray)',
+    },
+    pedagogic: {
+      title: 'About Colorblindness',
+      description: 'Colorblindness affects color perception. 8% of men and 0.5% of women are affected. Designing for accessibility is essential.',
+      tips: [
+        'Protanopia (no red) is the most common form',
+        'Deuteranopia (no green) affects 6% of males',
+        'Use strong contrasts and not just color to inform',
+        'Test your designs with colorblindness simulators',
+      ],
     },
   },
   qrDecoder: {
@@ -544,6 +804,16 @@ const en: Messages = {
     upload: 'Extract colors (Drag & drop here)',
     colors: 'Extracted Palette',
     copy: 'Copied!',
+    pedagogic: {
+      title: 'About Color Extraction',
+      description: 'Color extraction identifies dominant colors from an image to create harmonious palettes based on your content.',
+      tips: [
+        'Extracted colors reflect the mood of your image',
+        'Use them to create a consistent brand identity',
+        'Combine with the 60-30-10 rule for balance',
+        'Logos are excellent sources of brand palettes',
+      ],
+    },
   },
   contrastChecker: {
     title: 'Contrast Checker',
@@ -561,6 +831,16 @@ const en: Messages = {
     },
     pass: 'Pass',
     fail: 'Fail',
+    pedagogic: {
+      title: 'About Contrast and Accessibility',
+      description: 'Color contrast is essential for accessibility. WCAG standards define minimum ratios to ensure readability.',
+      tips: [
+        'WCAG AA requires 4.5:1 for normal text',
+        'WCAG AAA requires 7.0:1 for high contrast',
+        '3.0:1 is sufficient for large text (18px+)',
+        'UI components require 3.0:1 minimum',
+      ],
+    },
   },
   pedagogic: {
     tips: 'Tips',

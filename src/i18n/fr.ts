@@ -124,6 +124,16 @@ const fr = {
       bowlingBall: 'un ballon de bowling',
       veryHeavy: 'plusieurs ballons de bowling',
     },
+    pedagogic: {
+      title: 'À propos du poids papier',
+      description: 'Le grammage (g/m²) indique le poids d\'une feuille d\'1m². Multiplié par le format et la quantité, il donne le poids total de votre commande.',
+      tips: [
+        '80g/m² est le standard pour le papier bureau',
+        '135-170g/m² est idéal pour les flyers',
+        '250-350g/m² correspond à du papier cartonné',
+        'Prévoyez le poids pour calculer les frais de port',
+      ],
+    },
   },
   utmBuilder: {
     title: "Créateur d'URL UTM",
@@ -140,6 +150,16 @@ const fr = {
     copied: 'Copié !',
     invalidUrl: 'URL invalide',
     fillRequired: 'Remplissez les champs obligatoires (URL, source et medium)',
+    pedagogic: {
+      title: 'À propos des paramètres UTM',
+      description: 'Les paramètres UTM (Urchin Tracking Module) permettent de tracker la performance de vos campagnes marketing dans Google Analytics.',
+      tips: [
+        'Utilisez des noms cohérents et lowercase pour vos campagnes',
+        'utm_source identifie la plateforme (google, facebook, newsletter)',
+        'utm_medium précise le canal (cpc, email, social)',
+        'utm_campaign nomme votre campagne spécifique',
+      ],
+    },
   },
   dpiChecker: {
     title: 'DPI Checker',
@@ -165,10 +185,10 @@ const fr = {
       landscape: 'Paysage',
       square: 'Carré',
     },
-    status: { 
-      ok: 'Compatible 300 DPI ✓', 
-      warning: 'Résolution limite (150 DPI)', 
-      error: 'Résolution insuffisante' 
+    status: {
+      ok: 'Compatible 300 DPI ✓',
+      warning: 'Résolution limite (150 DPI)',
+      error: 'Résolution insuffisante'
     },
     recommendedUse: {
       title: 'Utilisations recommandées',
@@ -196,6 +216,16 @@ const fr = {
       remove: 'Supprimer',
       change: 'Changer',
     },
+    pedagogic: {
+      title: 'À propos du DPI',
+      description: 'Le DPI (Dots Per Inch) détermine la qualité d\'impression. 300 DPI est le standard professionnel pour des impressions nettes et détaillées.',
+      tips: [
+        '72-96 DPI suffit pour le web et les écrans',
+        '150 DPI minimum pour les grands formats vus de loin',
+        '300 DPI est requis pour l\'impression professionnelle',
+        '600 DPI pour les impressions photo haute qualité',
+      ],
+    },
   },
   redirectChecker: {
     title: 'Redirect Checker',
@@ -210,6 +240,16 @@ const fr = {
     copied: 'Copié !',
     hopsCount: '{n} redirection(s)',
     tooManyRedirects: 'Boucle de redirection ou chaîne trop longue (15 sauts max).',
+    pedagogic: {
+      title: 'À propos des redirections URL',
+      description: 'Les redirections URL (301, 302) transfèrent automatiquement d\'une adresse vers une autre. Utiles pour les migrations de site ou les liens raccourcis.',
+      tips: [
+        '301 = redirection permanente (bon pour le SEO)',
+        '302 = redirection temporaire',
+        'Trop de redirections ralentissent le chargement',
+        'Vérifiez les chaînes de redirection pour le débogage',
+      ],
+    },
   },
   promoCode: {
     title: 'Validateur de code promo',
@@ -223,6 +263,16 @@ const fr = {
       noAmbiguous: 'Pas de caractères ambigus (0/O, 1/I/l)',
       uppercase: 'Tout en majuscules',
     },
+    pedagogic: {
+      title: 'À propos des codes promo',
+      description: 'Un bon code promo est court, mémorable et sans ambiguïté. Évitez les caractères spéciaux et privilégiez les majuscules.',
+      tips: [
+        'Maximum 12 caractères pour une saisie facile',
+        'Évitez 0/O et 1/I/l qui prêtent à confusion',
+        'Utilisez uniquement des lettres et chiffres',
+        'Tout en majuscules pour une meilleure lisibilité',
+      ],
+    },
   },
   pdfX: {
     title: 'Convertisseur PDF → PDF/X',
@@ -235,6 +285,16 @@ const fr = {
     errorSize: 'Fichier trop lourd (max 30 Mo).',
     errorType: 'Veuillez charger un fichier PDF.',
     errorServer: 'La conversion a échoué. Réessayez ou vérifiez le fichier.',
+    pedagogic: {
+      title: 'À propos du PDF/X',
+      description: 'Le PDF/X-1a est un standard ISO pour l\'impression professionnelle. Il garantit que votre fichier est prêt pour l\'imprimeur.',
+      tips: [
+        'PDF/X-1a force le mode couleur CMJN',
+        'Toutes les polices doivent être embarquées',
+        'Les éléments transparents sont aplatis',
+        'Vérifiez toujours avec votre imprimeur',
+      ],
+    },
   },
   wordCounter: {
     title: 'Compteur de mots',
@@ -249,6 +309,16 @@ const fr = {
       readingTime: 'Temps de lecture estimé',
     },
     minutes: 'min',
+    pedagogic: {
+      title: 'À propos du comptage de mots',
+      description: 'Le comptage de mots aide à optimiser vos contenus pour le SEO, les réseaux sociaux et les supports imprimés.',
+      tips: [
+        'Vitesse de lecture moyenne : 200-250 mots/minute',
+        'Twitter limite à 280 caractères',
+        'Un article de blog fait généralement 1000-2000 mots',
+        'Les titres accrocheurs font 6-12 mots',
+      ],
+    },
   },
   colorPalette: {
     title: 'Générateur de palette de couleurs',
@@ -258,6 +328,16 @@ const fr = {
     lock: 'Verrouiller',
     unlock: 'Déverrouiller',
     copied: 'Copié !',
+    pedagogic: {
+      title: 'À propos des palettes de couleurs',
+      description: 'Une palette harmonieuse utilise des couleurs qui fonctionnent bien ensemble selon des règles de théorie des couleurs.',
+      tips: [
+        'La règle des 60-30-10 équilibre les couleurs (60% dominant, 30% secondaire, 10% accent)',
+        'Les couleurs complémentaires créent du contraste',
+        'Les couleurs analogues offrent une harmonie douce',
+        'Utilisez des outils comme le cercle chromatique pour guider vos choix',
+      ],
+    },
   },
   mockupGenerator: {
     title: 'Mockup iPhone 15',
@@ -266,6 +346,16 @@ const fr = {
     download: 'Télécharger en PNG',
     copy: 'Copier dans le presse-papiers',
     copied: 'Copié !',
+    pedagogic: {
+      title: 'À propos des mockups',
+      description: 'Les mockups présentent vos designs dans un contexte réaliste, parfaits pour les portfolios, présentations clients et réseaux sociaux.',
+      tips: [
+        'Utilisez des captures à la bonne résolution pour un rendu net',
+        'Les mockups aident les clients à visualiser le résultat final',
+        'Exportez en PNG pour préserver la transparence',
+        'Adaptez le mockup au format de votre support (social, web, print)',
+      ],
+    },
   },
   urlParser: {
     title: 'Analyseur d\'URL',
@@ -320,6 +410,16 @@ const fr = {
         'Développement : Parser et manipuler les URLs dans votre code',
       ],
     },
+    pedagogic: {
+      title: 'À propos de la structure des URL',
+      description: 'Une URL est composée de plusieurs parties : protocole, domaine, chemin, paramètres et ancre. Chaque élément a un rôle spécifique.',
+      tips: [
+        'Le protocole https:// garantit une connexion sécurisée',
+        'Les paramètres UTM (?utm_source=...) trackent les campagnes',
+        'Le hash (#section) ne va jamais au serveur',
+        'L\'origine (protocol+domain+port) définit la sécurité same-origin',
+      ],
+    },
   },
   pxToRem: {
     title: 'Convertisseur PX ↔ REM',
@@ -329,6 +429,16 @@ const fr = {
     remLabel: 'REM (rem)',
     result: 'Résultat de la conversion',
     addRow: 'Ajouter une ligne',
+    pedagogic: {
+      title: 'À propos des unités REM',
+      description: 'Le REM (root em) est une unité relative à la taille de police racine. Idéal pour l\'accessibilité et le responsive design.',
+      tips: [
+        '1rem = taille de police racine (généralement 16px)',
+        'Les REM s\'adaptent aux préférences d\'accessibilité du navigateur',
+        'Préférez les REM aux PX pour le texte',
+        'Utilisez les PX pour les bordures fines (1px)',
+      ],
+    },
   },
   typeScale: {
     title: 'Générateur de Type Scale',
@@ -348,6 +458,16 @@ const fr = {
     preview: 'Aperçu de l\'échelle',
     step: 'Étape',
     size: 'Taille',
+    pedagogic: {
+      title: 'À propos des échelles typographiques',
+      description: 'Une type scale utilise des ratios mathématiques ou musicaux pour créer des tailles de police harmonieuses et hiérarchisées.',
+      tips: [
+        'Le ratio 1.250 (Tierce Majeure) est polyvalent pour le web',
+        'Le Nombre d\'Or (1.618) crée des contrastes dramatiques',
+        'Utilisez 4-6 niveaux maximum pour une hiérarchie claire',
+        'Adaptez le ratio à la taille de votre projet',
+      ],
+    },
   },
 
   colorConverter: {
@@ -362,6 +482,16 @@ const fr = {
     lch: 'LCH (Luminance-Chroma-Teinte)',
     copy: 'Copier',
     copied: 'Copié !',
+    pedagogic: {
+      title: 'À propos des espaces colorimétriques',
+      description: 'Chaque format de couleur a un usage spécifique : HEX/RGB pour le web, CMYK pour l\'impression, HSL pour les ajustements intuitifs.',
+      tips: [
+        'HEX (#RRGGBB) est le standard web',
+        'RGB (0-255) pour les écrans et le digital',
+        'CMYK (0-100%) pour l\'impression professionnelle',
+        'HSL est plus intuitif pour ajuster luminosité et saturation',
+      ],
+    },
   },
   imageCompressor: {
     title: 'Compresseur d\'Image',
@@ -375,6 +505,16 @@ const fr = {
     compressedSize: 'Taille compressée',
     reduction: 'Réduction',
     download: 'Télécharger',
+    pedagogic: {
+      title: 'À propos de la compression d\'images',
+      description: 'La compression réduit le poids des images pour un chargement plus rapide sur le web, tout en préservant la qualité visuelle.',
+      tips: [
+        'WebP offre une meilleure compression que JPEG à qualité égale',
+        'Une qualité de 80-85% est souvent imperceptible',
+        'Redimensionnez avant de compresser pour de meilleurs résultats',
+        'Visez moins de 200Ko pour les images web',
+      ],
+    },
   },
   imageCropper: {
     title: 'Recadreur d\'Image',
@@ -388,6 +528,16 @@ const fr = {
     crop: 'Recadrer',
     reset: 'Réinitialiser',
     download: 'Télécharger',
+    pedagogic: {
+      title: 'À propos du recadrage d\'images',
+      description: 'Le recadrage permet de modifier la composition d\'une image et de l\'adapter aux formats requis par les différentes plateformes.',
+      tips: [
+        '1:1 (carré) pour Instagram et les avatars',
+        '16:9 pour les vidéos YouTube et les bannières',
+        '4:5 pour les posts portrait Instagram',
+        'Conservez les éléments importants au centre',
+      ],
+    },
   },
   imageResizer: {
     title: 'Redimensionneur d\'Image',
@@ -398,6 +548,16 @@ const fr = {
     preserveRatio: 'Conserver les proportions',
     resize: 'Redimensionner',
     download: 'Télécharger',
+    pedagogic: {
+      title: 'À propos du redimensionnement d\'images',
+      description: 'Le redimensionnement ajuste les dimensions en pixels d\'une image. Conserver les proportions évite la déformation.',
+      tips: [
+        'Conservez toujours les proportions pour éviter la déformation',
+        'Redimensionnez vers le bas pour réduire le poids',
+        'Respectez les dimensions recommandées par plateforme',
+        'Évitez d\'agrandir une petite image (perte de qualité)',
+      ],
+    },
   },
   imageFilters: {
     title: 'Filtres d\'Image',
@@ -410,6 +570,16 @@ const fr = {
     contrast: 'Contraste',
     apply: 'Appliquer',
     download: 'Télécharger',
+    pedagogic: {
+      title: 'À propos des filtres d\'image',
+      description: 'Les filtres modifient l\'apparence d\'une image en ajustant ses propriétés colorimétriques et lumineuses.',
+      tips: [
+        'Le contraste améliore la lisibilité des textes sur image',
+        'La luminosité ajuste la clarté globale',
+        'Le flou peut créer des effets artistiques ou masquer des éléments',
+        'Le sépia donne un aspect vintage et chaleureux',
+      ],
+    },
   },
   placeholder: {
     title: 'Générateur de Placeholder',
@@ -420,6 +590,16 @@ const fr = {
     bgColor: 'Couleur de fond',
     textColor: 'Couleur du texte',
     download: 'Télécharger',
+    pedagogic: {
+      title: 'À propos des placeholders',
+      description: 'Les placeholders sont des images temporaires utilisées dans les maquettes pour représenter le contenu final avant sa création.',
+      tips: [
+        'Utilisez des dimensions réalistes pour vos maquettes',
+        'Ajoutez du texte descriptif pour identifier le contenu',
+        'Choisissez des couleurs neutres pour ne pas distraire',
+        'Les placeholders aident à visualiser la mise en page',
+      ],
+    },
   },
   matteGenerator: {
     title: 'Générateur de Matte (Seamless)',
@@ -444,6 +624,16 @@ const fr = {
     },
     apply: 'Générer & Télécharger',
     download: 'Télécharger',
+    pedagogic: {
+      title: 'À propos des mattes',
+      description: 'Une matte ajoute une bordure autour d\'une image pour l\'adapter à un format spécifique tout en conservant son intégrité visuelle.',
+      tips: [
+        'Utilisez des mattes pour adapter vos visuels aux formats sociaux',
+        'Les motifs seamless ajoutent de la personnalité sans distraire',
+        'Choisissez une couleur de marque pour la bordure',
+        'Gardez l\'image principale centrée et bien visible',
+      ],
+    },
   },
   favicon: {
     title: 'Générateur de Favicon',
@@ -451,6 +641,16 @@ const fr = {
     upload: 'Choisir un logo (PNG, JPG, SVG)',
     download: 'Télécharger les icônes',
     preview: 'Aperçu des tailles',
+    pedagogic: {
+      title: 'À propos des favicons',
+      description: 'Une favicon est la petite icône associée à votre site web, affichée dans les onglets du navigateur et les favoris.',
+      tips: [
+        '16x16px et 32x32px pour les navigateurs desktop',
+        '180x180px pour les appareils Apple (touch icon)',
+        'Utilisez un design simple et reconnaissable',
+        'Exportez en PNG avec fond transparent',
+      ],
+    },
   },
   lorem: {
     title: 'Générateur de Lorem Ipsum',
@@ -463,6 +663,16 @@ const fr = {
     startWithLorem: 'Commencer par "Lorem ipsum"',
     generate: 'Générer',
     copy: 'Copier le texte',
+    pedagogic: {
+      title: 'À propos du Lorem Ipsum',
+      description: 'Le Lorem Ipsum est un texte de remplissage standard utilisé depuis des siècles pour présenter des maquettes sans distraire avec du contenu réel.',
+      tips: [
+        'Le Lorem Ipsum vient d\'un texte de Cicéron (45 av. J.-C.)',
+        'Il imite la distribution normale des lettres en latin',
+        'Utilisez-le pour tester la typographie et la mise en page',
+        'Remplacez-le par du contenu réel avant la mise en production',
+      ],
+    },
   },
   barcode: {
     title: 'Générateur de Code-barres EAN',
@@ -472,6 +682,16 @@ const fr = {
     invalid: 'Format invalide (chiffres uniquement)',
     copy: 'Copier le code',
     download: 'Télécharger en SVG',
+    pedagogic: {
+      title: 'À propos des codes-barres EAN',
+      description: 'L\'EAN-13 (European Article Numbering) est un standard international de code-barres utilisé pour identifier les produits dans le commerce de détail.',
+      tips: [
+        '13 chiffres : 12 chiffres + 1 clé de contrôle automatique',
+        'La clé de contrôle est calculée par un algorithme modulo 10',
+        'Les 2-3 premiers chiffres identifient le pays',
+        'Format SVG pour une qualité vectorielle parfaite',
+      ],
+    },
   },
   safetyMargin: {
     title: 'Vérification Marges & Fond Perdu',
@@ -484,6 +704,16 @@ const fr = {
       bleed: 'Fond perdu (découpe)',
       safety: 'Zone de sécurité (textes)',
     },
+    pedagogic: {
+      title: 'À propos des marges et fond perdu',
+      description: 'Le fond perdu (3mm) est la zone découpée, la marge de sécurité (5mm) protège les éléments importants. Essentiel pour l\'impression professionnelle.',
+      tips: [
+        'Le fond perdu évite les bords blancs après découpe',
+        'Gardez textes et logos dans la zone de sécurité',
+        '3mm de fond perdu est le standard professionnel',
+        'Vérifiez toujours avec votre imprimeur',
+      ],
+    },
   },
   imageConverter: {
     title: 'Convertisseur d\'Image (Universal)',
@@ -494,6 +724,16 @@ const fr = {
     quality: 'Qualité (Lossy)',
     scale: 'Multiplicateur (Scale)',
     convert: 'Convertir et Télécharger',
+    pedagogic: {
+      title: 'À propos des formats d\'image',
+      description: 'Chaque format d\'image a ses avantages : PNG pour la transparence, JPG pour les photos, WebP pour le web, SVG pour les vecteurs.',
+      tips: [
+        'PNG : qualité sans perte, supporte la transparence',
+        'JPG : compression avec perte, idéal pour les photos',
+        'WebP : meilleur rapport qualité/poids pour le web',
+        'SVG : format vectoriel, redimensionnable à l\'infini',
+      ],
+    },
   },
   metadata: {
     title: 'Informations de l\'Image (Metadata)',
@@ -503,6 +743,16 @@ const fr = {
     size: 'Taille',
     type: 'Format MIME',
     lastModified: 'Dernière modification',
+    pedagogic: {
+      title: 'À propos des métadonnées d\'image',
+      description: 'Les métadonnées contiennent des informations techniques sur l\'image : dimensions, format, date de création, et parfois les données EXIF de l\'appareil photo.',
+      tips: [
+        'Les métadonnées EXIF peuvent contenir la localisation GPS',
+        'Supprimez les métadonnées sensibles avant de publier',
+        'Les dimensions et le format sont essentiels pour le web',
+        'La date de modification aide à organiser vos fichiers',
+      ],
+    },
   },
   colorblind: {
     title: 'Simulateur Colorblind',
@@ -514,6 +764,16 @@ const fr = {
       deuteranopia: 'Deutéranopie (Pas de vert)',
       tritanopia: 'Tritanopie (Pas de bleu)',
       achromatopsia: 'Achromatopsie (Gris)',
+    },
+    pedagogic: {
+      title: 'À propos du daltonisme',
+      description: 'Le daltonisme affecte la perception des couleurs. 8% des hommes et 0.5% des femmes sont concernés. Concevoir pour l\'accessibilité est essentiel.',
+      tips: [
+        'La protanopie (pas de rouge) est la forme la plus courante',
+        'La deutéranopie (pas de vert) touche 6% de la population masculine',
+        'Utilisez des contrastes forts et pas seulement la couleur pour informer',
+        'Testez vos designs avec des simulateurs de daltonisme',
+      ],
     },
   },
   qrDecoder: {
@@ -542,6 +802,16 @@ const fr = {
     upload: 'Extraire les couleurs (Faites glisser ici)',
     colors: 'Palette extraite',
     copy: 'Copié !',
+    pedagogic: {
+      title: 'À propos de l\'extraction de couleurs',
+      description: 'L\'extraction de couleurs identifie les couleurs dominantes d\'une image pour créer des palettes harmonieuses basées sur votre contenu.',
+      tips: [
+        'Les couleurs extraites reflètent l\'ambiance de votre image',
+        'Utilisez-les pour créer une charte graphique cohérente',
+        'Combinez avec la règle des 60-30-10 pour l\'équilibre',
+        'Les logos sont d\'excellentes sources de palettes de marque',
+      ],
+    },
   },
   contrastChecker: {
     title: 'Vérificateur de Contraste',
@@ -559,6 +829,16 @@ const fr = {
     },
     pass: 'Passe',
     fail: 'Échoue',
+    pedagogic: {
+      title: 'À propos du contraste et de l\'accessibilité',
+      description: 'Le contraste des couleurs est essentiel pour l\'accessibilité. Les normes WCAG définissent des ratios minimums pour assurer la lisibilité.',
+      tips: [
+        'WCAG AA requiert 4.5:1 pour le texte normal',
+        'WCAG AAA requiert 7.0:1 pour un contraste élevé',
+        '3.0:1 suffit pour les textes de grande taille (18px+)',
+        'Les composants UI nécessitent 3.0:1 minimum',
+      ],
+    },
   },
   pedagogic: {
     tips: 'Conseils',
