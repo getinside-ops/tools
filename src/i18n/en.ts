@@ -40,6 +40,8 @@ const en: Messages = {
     discover: 'Discover getinside',
     platform: 'Access the platform',
     tagline: 'Tools by getinside · Retail Media',
+    toggleLanguage: 'Toggle language',
+    toggleTheme: 'Toggle theme',
   },
   home: {
     title: 'getinside toolbox',

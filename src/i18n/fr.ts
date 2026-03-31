@@ -38,6 +38,8 @@ const fr = {
     discover: 'Découvrir getinside',
     platform: 'Accéder à la plateforme',
     tagline: 'Outils proposés par getinside · Retail Media',
+    toggleLanguage: 'Changer de langue',
+    toggleTheme: 'Changer de thème',
   },
   home: {
     title: 'getinside toolbox',
