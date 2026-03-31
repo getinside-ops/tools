@@ -83,6 +83,15 @@ const { t } = useI18n()
   transform: translateX(-2px);
 }
 
+.tool-back-link:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] .tool-back-link:hover {
+  background: rgba(10, 170, 142, 0.15);
+}
+
 .tool-header {
   margin-bottom: 2rem;
 }
@@ -104,7 +113,13 @@ const { t } = useI18n()
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all var(--gi-transition-base);
+  transition: all var(--gi-transition-base) var(--gi-ease-bounce);
+}
+
+.tool-header:hover .tool-icon {
+  transform: scale(1.05);
+  background: var(--gi-brand);
+  color: white;
 }
 
 .tool-title-section {
