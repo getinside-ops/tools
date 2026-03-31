@@ -985,7 +985,7 @@ const resetCalculator = () => {
 /* Two-column layout with sticky results */
 .pw-layout {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: 1fr 380px; /* Optimized for result panel content + comfortable padding */
   gap: var(--gi-space-2xl);
   align-items: start;
 }
@@ -997,15 +997,26 @@ const resetCalculator = () => {
 .pw-results {
   position: sticky;
   top: var(--gi-space-lg);
+  min-width: 0; /* Prevents overflow from fixed-width content */
+}
+
+/* Remove margin-top in two-column context */
+.pw-results .gi-result {
+  margin-top: 0;
 }
 
 @media (max-width: 1024px) {
   .pw-layout {
     grid-template-columns: 1fr;
   }
-  
+
   .pw-results {
     position: static;
+  }
+
+  /* Keep margin for single-column mobile layout */
+  .pw-results .gi-result {
+    margin-top: var(--gi-space-2xl);
   }
 }
 </style>
