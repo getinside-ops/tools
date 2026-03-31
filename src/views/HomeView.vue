@@ -340,21 +340,21 @@ function setCategory(cat: string) {
   border-radius: var(--gi-radius-lg);
   text-decoration: none;
   color: inherit;
-  transition: transform var(--gi-transition-base), 
-              box-shadow var(--gi-transition-base), 
-              border-color var(--gi-transition-base);
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
   min-height: var(--gi-card-min-height);
   position: relative;
+  box-shadow: var(--gi-shadow-sm);
 }
 
 .home-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--gi-shadow-lg);
-  border-color: rgba(10, 170, 142, 0.5);
+  border-color: rgba(10, 170, 142, 0.4);
 }
 
 [data-theme="dark"] .home-card:hover {
   box-shadow: var(--gi-shadow-glow);
+  border-color: rgba(10, 170, 142, 0.6);
 }
 
 .home-card-top {
@@ -364,21 +364,22 @@ function setCategory(cat: string) {
 }
 
 .home-icon-box {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
-  background: var(--gi-tint-green-bg);
+  background: var(--gi-brand-fade);
   color: var(--gi-brand);
   border-radius: var(--gi-radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color var(--gi-transition-fast), color var(--gi-transition-fast);
+  transition: all var(--gi-transition-base) var(--gi-ease-bounce);
 }
 
 .home-card:hover .home-icon-box {
   background: var(--gi-brand);
   color: white;
+  transform: scale(1.05);
 }
 
 .home-card-title {
