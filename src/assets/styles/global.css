@@ -20,22 +20,28 @@
    THEME VARIABLES - LIGHT (DEFAULT)
    ============================================ */
 :root {
-  /* Brand Colors */
+  /* Brand Colors - Refined */
   --gi-brand: #0aaa8e;
   --gi-brand-dark: #08937b;
   --gi-brand-light: #0dc4a5;
+  --gi-brand-fade: rgba(10, 170, 142, 0.08);
+
+  /* Accent Colors - Softer */
   --gi-mint: #6AE7C8;
   --gi-yellow: #FCF758;
   --gi-violet: #C990FC;
+  --gi-coral: #FF8A65;
 
-  /* Backgrounds */
-  --gi-bg: #F7F6F3;
-  --gi-bg-soft: #EEECEA;
-  --gi-surface: #FFFFFF;
+  /* Backgrounds - Zerokit-inspired neutrals */
+  --gi-bg: #faf9f7;
+  --gi-bg-soft: #f5f4f2;
+  --gi-surface: #ffffff;
+  --gi-surface-elevated: #ffffff;
 
-  /* Borders */
-  --gi-border: #E0DDD9;
-  --gi-border-hover: #C9C6C2;
+  /* Borders - Subtle and refined */
+  --gi-border: #e8e6e1;
+  --gi-border-hover: #d4d2cd;
+  --gi-border-strong: #c9c6c2;
 
   /* Text */
   --gi-text: #1a1a1a;
@@ -128,14 +134,16 @@
    THEME VARIABLES - DARK
    ============================================ */
 [data-theme="dark"] {
-  /* Backgrounds */
-  --gi-bg: #0a0a0c;
-  --gi-bg-soft: #121216;
-  --gi-surface: #15151a;
+  /* Backgrounds - Refined dark neutrals */
+  --gi-bg: #0d0d0f;
+  --gi-bg-soft: #141418;
+  --gi-surface: #1a1a20;
+  --gi-surface-elevated: #1f1f26;
 
-  /* Borders */
-  --gi-border: #2a2a35;
-  --gi-border-hover: #3a3a45;
+  /* Borders - Softer contrast */
+  --gi-border: #2a2a32;
+  --gi-border-hover: #3a3a42;
+  --gi-border-strong: #40404a;
 
   /* Text */
   --gi-text: #f5f5f7;
