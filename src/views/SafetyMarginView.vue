@@ -46,10 +46,10 @@
       </div>
 
       <!-- Preview Area -->
-      <div v-if="imageUrl" class="gi-result" style="margin-top: 0; display: flex; justify-content: center; align-items: flex-start; overflow: auto; background: #f0f0f0; padding: 2rem;">
+      <div v-if="imageUrl" class="gi-result" style="margin-top: 0; display: flex; justify-content: center; align-items: flex-start; overflow: auto; background: var(--gi-bg-soft); padding: 2rem;">
         <div class="preview-container" :style="containerStyle">
           <img :src="imageUrl" class="preview-img" ref="previewImg" @load="updateImageSize" />
-          
+
           <!-- Bleed Overlay -->
           <div class="overlay-bleed" :style="bleedStyle"></div>
           <!-- Safety Overlay -->

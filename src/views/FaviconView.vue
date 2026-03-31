@@ -92,7 +92,7 @@ function downloadSingle(res: FaviconResult) {
   border: 1px solid var(--gi-border);
 }
 .favicon-preview-box {
-  background: #f0f0f0;
+  background: var(--gi-bg-soft);
   display: flex;
   align-items: center;
   justify-content: center;

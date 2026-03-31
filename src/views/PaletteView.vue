@@ -40,7 +40,7 @@
       </div>
 
       <!-- Preview Image -->
-      <div class="gi-result" style="margin-top: 0; display: flex; align-items: center; justify-content: center; background: #fafafa;">
+      <div class="gi-result" style="margin-top: 0; display: flex; align-items: center; justify-content: center; background: var(--gi-bg-soft);">
         <img v-if="imageUrl" :src="imageUrl" class="preview-img" ref="previewImg" @load="performExtraction" />
         <p v-else class="gi-text-muted">{{ t('palette.upload') }}</p>
       </div>

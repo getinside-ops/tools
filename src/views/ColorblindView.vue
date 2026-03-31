@@ -34,7 +34,7 @@
       </div>
 
       <!-- Preview Area -->
-      <div class="gi-result" style="margin-top: 0; min-height: 300px; display: flex; align-items: center; justify-content: center; background: #eee;">
+      <div class="gi-result" style="margin-top: 0; min-height: 300px; display: flex; align-items: center; justify-content: center; background: var(--gi-bg-soft);">
         <div v-if="imageUrl" class="preview-container">
           <img :src="imageUrl" class="preview-img" :style="{ filter: `url(#colorblind-filter)` }" />
         </div>

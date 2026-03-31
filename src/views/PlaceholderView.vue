@@ -50,8 +50,8 @@
       <!-- Preview -->
       <div class="gi-result" style="margin-top: 0">
         <div class="gi-result-label">Preview</div>
-        <div 
-          style="background: #f0f0f0; border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 300px; padding: 2rem;"
+        <div
+          style="background: var(--gi-bg-soft); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 300px; padding: 2rem;"
         >
           <div v-html="svgCode" style="box-shadow: 0 10px 30px rgba(0,0,0,0.1); line-height: 0;"></div>
         </div>

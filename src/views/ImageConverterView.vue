@@ -150,6 +150,6 @@ async function performConversion() {
   max-width: 100%;
   border-radius: var(--gi-radius);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  background: #fdfdfd;
+  background: var(--gi-bg-soft);
 }
 </style>

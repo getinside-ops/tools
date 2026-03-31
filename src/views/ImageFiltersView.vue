@@ -41,7 +41,7 @@
       <!-- Preview -->
       <div class="gi-result" style="margin-top: 0">
         <div class="gi-result-label">Preview (Real-time CSS)</div>
-        <div style="background: #1a1a1a; border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 300px;">
+        <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 300px;">
           <img :src="originalUrl" :style="previewStyle" style="max-width: 100%; transition: filter 0.2s;" />
         </div>
       </div>

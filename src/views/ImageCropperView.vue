@@ -30,10 +30,10 @@
       </div>
 
       <!-- Cropper Workspace -->
-      <div 
+      <div
         ref="containerRef"
         class="cropper-workspace"
-        style="position: relative; overflow: hidden; background: #1a1a1a; border-radius: var(--gi-radius); display: flex; justify-content: center; align-items: center; min-height: 400px; max-height: 70vh;"
+        style="position: relative; overflow: hidden; background: var(--gi-bg); border-radius: var(--gi-radius); display: flex; justify-content: center; align-items: center; min-height: 400px; max-height: 70vh;"
       >
         <div style="position: relative; display: inline-block;">
           <img 

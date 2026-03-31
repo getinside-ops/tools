@@ -16,6 +16,8 @@ const route = useRoute()
 
 const isHomePage = computed(() => {
   const path = route.path
-  return path === '/' || path === '' || path === '#'
+  const hash = route.hash
+  // Check for: /, /#/, /#, or empty (handles hash routes like /#/qr-decoder)
+  return path === '/' || path === '' || hash === '/' || hash === '' || hash === '#/'
 })
 </script>

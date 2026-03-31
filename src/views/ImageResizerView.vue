@@ -42,9 +42,9 @@
       <!-- Preview -->
       <div class="gi-result" style="margin-top: 0">
         <div class="gi-result-label">Preview</div>
-        <div style="background: #1a1a1a; border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 200px;">
+        <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 200px;">
           <img :src="originalUrl" style="max-width: 100%; opacity: 0.5" />
-          <div style="position: absolute; color: white; background: rgba(0,0,0,0.7); padding: 0.5rem; border-radius: 4px; pointer-events: none;">
+          <div style="position: absolute; color: var(--gi-text); background: rgba(0,0,0,0.7); padding: 0.5rem; border-radius: 4px; pointer-events: none;">
             {{ originalWidth }} x {{ originalHeight }}
           </div>
         </div>
