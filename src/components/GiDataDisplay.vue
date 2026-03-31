@@ -1,6 +1,6 @@
 <template>
-  <div class="gi-data-display">
-    <div v-for="(row, index) in data" :key="row.label || index" class="gi-data-row">
+  <div class="gi-data-display" role="list" aria-label="Data display">
+    <div v-for="row in data" :key="row.label" class="gi-data-row" role="listitem">
       <div class="gi-data-label">{{ row.label }}</div>
       <div class="gi-data-value" :style="{ color: row.color }">
         <code v-if="row.code">{{ row.value }}</code>
@@ -11,10 +11,23 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * GiDataDisplay - Displays structured data in label/value row pairs
+ * Inspired by Delphi.tools data presentation pattern
+ */
+
+/**
+ * Single row of data to display
+ * Note: label must be unique for proper key binding
+ */
 export interface DataRow {
+  /** Label text */
   label: string
+  /** Value to display */
   value: string | number
+  /** Optional text color */
   color?: string
+  /** Display value in code styling */
   code?: boolean
 }
 
@@ -41,6 +54,15 @@ defineOptions({
   padding: var(--gi-space-sm) var(--gi-space-md);
   background: var(--gi-bg-soft);
   border-radius: var(--gi-radius-md);
+  gap: var(--gi-space-md);
+}
+
+@media (max-width: 480px) {
+  .gi-data-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gi-space-xs);
+  }
 }
 
 .gi-data-label {
