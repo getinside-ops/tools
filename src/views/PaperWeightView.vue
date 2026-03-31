@@ -78,17 +78,19 @@
           @click="selectedFormat = fmt"
           :aria-pressed="selectedFormat === fmt"
         >
-          <div class="gi-format-preview">
-            <svg :viewBox="getFormatViewBox(fmt)" class="gi-format-svg">
-              <rect
-                :width="getFormatSvgWidth(fmt)"
-                :height="getFormatSvgHeight(fmt)"
-                class="gi-format-rect"
-              />
-            </svg>
+          <div class="gi-format-top">
+            <div class="gi-format-icon-box">
+              <svg :viewBox="getFormatViewBox(fmt)" class="gi-format-icon-svg">
+                <rect
+                  :width="getFormatSvgWidth(fmt)"
+                  :height="getFormatSvgHeight(fmt)"
+                  class="gi-format-icon-rect"
+                />
+              </svg>
+            </div>
           </div>
-          <div class="gi-card-title">{{ t(`paperWeight.formats.${fmt}`) }}</div>
-          <div class="gi-card-desc">{{ FORMATS[fmt].width }} × {{ FORMATS[fmt].height }} mm</div>
+          <strong class="gi-format-title">{{ t(`paperWeight.formats.${fmt}`) }}</strong>
+          <p class="gi-format-desc">{{ FORMATS[fmt].width }} × {{ FORMATS[fmt].height }} mm</p>
         </button>
         <button
           type="button"
@@ -97,14 +99,16 @@
           @click="selectedFormat = 'Custom'"
           :aria-pressed="selectedFormat === 'Custom'"
         >
-          <div class="gi-format-preview">
-            <svg viewBox="0 0 60 60" class="gi-format-svg">
-              <rect width="60" height="60" rx="4" class="gi-format-rect" stroke-dasharray="4 2" fill="none" stroke="currentColor" stroke-width="2"/>
-              <text x="30" y="35" text-anchor="middle" class="gi-format-text">+</text>
-            </svg>
+          <div class="gi-format-top">
+            <div class="gi-format-icon-box gi-format-icon-box--custom">
+              <svg viewBox="0 0 60 60" class="gi-format-icon-svg">
+                <rect width="60" height="60" rx="8" class="gi-format-icon-rect" stroke-dasharray="4 2" fill="none" stroke="currentColor" stroke-width="2"/>
+                <text x="30" y="38" text-anchor="middle" class="gi-format-plus">+</text>
+              </svg>
+            </div>
           </div>
-          <div class="gi-card-title">{{ t('paperWeight.formats.Custom') }}</div>
-          <div class="gi-card-desc">{{ t('paperWeight.customDimensions') }}</div>
+          <strong class="gi-format-title">{{ t('paperWeight.formats.Custom') }}</strong>
+          <p class="gi-format-desc">{{ t('paperWeight.customDimensions') }}</p>
         </button>
       </div>
     </div>
@@ -395,17 +399,18 @@ const resetCalculator = () => {
 .gi-back-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 1.5rem;
-  padding: 0.4rem 0.8rem;
+  gap: var(--gi-space-xs);
+  margin-bottom: var(--gi-space-lg);
+  padding: var(--gi-space-xs) var(--gi-space-sm);
   border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
+  border-radius: var(--gi-radius-md);
+  font-size: var(--gi-font-size-sm);
   color: var(--gi-text-muted);
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
   background: var(--gi-surface);
 }
+
 .gi-back-link:hover {
   border-color: var(--gi-brand);
   color: var(--gi-brand);
@@ -414,29 +419,35 @@ const resetCalculator = () => {
 
 /* Tool Header */
 .gi-tool-header {
-  margin-bottom: 2.5rem;
+  margin-bottom: var(--gi-space-2xl);
 }
+
 .gi-tool-header h1 {
-  font-size: 2rem;
+  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-size: var(--gi-font-size-2xl);
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--gi-space-sm);
   letter-spacing: -0.02em;
+  color: var(--gi-text);
 }
+
 .gi-tool-header p {
   color: var(--gi-text-muted);
-  font-size: 1rem;
+  font-size: var(--gi-font-size-md);
   max-width: 500px;
+  line-height: var(--gi-line-height-base);
 }
 
 /* Fields */
 .gi-field {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  margin-bottom: 1.5rem;
+  gap: var(--gi-space-sm);
+  margin-bottom: var(--gi-space-lg);
 }
+
 .gi-label {
-  font-size: 0.875rem;
+  font-size: var(--gi-font-size-sm);
   font-weight: 600;
   color: var(--gi-text);
   letter-spacing: -0.01em;
@@ -444,102 +455,118 @@ const resetCalculator = () => {
 
 /* Slider */
 .gi-slider-container {
-  padding: 1.25rem 1rem;
+  padding: var(--gi-space-lg) var(--gi-space-md);
   background: var(--gi-bg-soft);
-  border-radius: calc(var(--gi-radius) * 1.25);
-  border: 1.5px solid var(--gi-border);
-  margin-bottom: 0.75rem;
+  border-radius: var(--gi-radius-lg);
+  border: 1px solid var(--gi-border);
+  margin-bottom: var(--gi-space-sm);
 }
+
 .gi-slider-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--gi-space-sm);
 }
+
 .gi-slider-value {
-  font-size: 1.25rem;
+  font-size: var(--gi-font-size-xl);
   font-weight: 700;
   color: var(--gi-text);
   font-variant-numeric: tabular-nums;
 }
+
+/* Mode Toggle - Homepage pill tab style */
 .gi-slider-mode-toggle {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem;
+  gap: var(--gi-space-xs);
+  padding: var(--gi-space-xs);
   background: var(--gi-surface);
   border: 1.5px solid var(--gi-border);
   border-radius: var(--gi-radius-pill);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--gi-transition-fast);
 }
+
 .gi-slider-mode-toggle:hover {
   border-color: var(--gi-brand);
 }
+
 .gi-slider-mode-toggle:focus-visible {
   outline: 2px solid var(--gi-brand);
   outline-offset: 2px;
 }
+
 .gi-mode-indicator {
-  padding: 0.35rem 0.75rem;
+  padding: var(--gi-space-xs) var(--gi-space-sm);
   border-radius: var(--gi-radius-pill);
-  font-size: 0.75rem;
+  font-size: var(--gi-font-size-xs);
   font-weight: 600;
   color: var(--gi-text-muted);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--gi-transition-fast);
 }
+
 .gi-mode-indicator.active {
   background: var(--gi-brand);
   color: white;
 }
+
+/* Slider Track */
 .gi-slider {
   width: 100%;
-  height: 8px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, var(--gi-border) 0%, var(--gi-border) 100%);
+  height: 6px;
+  border-radius: var(--gi-radius-pill);
+  background: var(--gi-border);
   outline: none;
   -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
 }
+
 .gi-slider:focus-visible {
   outline: 2px solid var(--gi-brand);
   outline-offset: 2px;
 }
+
 .gi-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--gi-brand);
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(10, 170, 142, 0.4);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(10, 170, 142, 0.4);
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
 }
+
 .gi-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
   box-shadow: 0 4px 12px rgba(10, 170, 142, 0.5);
 }
+
 .gi-slider::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--gi-brand);
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 8px rgba(10, 170, 142, 0.4);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(10, 170, 142, 0.4);
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
 }
+
 .gi-slider::-moz-range-thumb:hover {
   transform: scale(1.15);
   box-shadow: 0 4px 12px rgba(10, 170, 142, 0.5);
 }
+
 .gi-slider-labels {
   display: flex;
   justify-content: space-between;
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
+  margin-top: var(--gi-space-xs);
+  font-size: var(--gi-font-size-xs);
   color: var(--gi-text-muted);
   font-weight: 500;
 }
@@ -548,156 +575,218 @@ const resetCalculator = () => {
 .gi-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--gi-space-sm);
 }
+
 .gi-chip {
-  padding: 0.65rem 1rem;
+  padding: var(--gi-space-sm) var(--gi-space-md);
   border: 1.5px solid var(--gi-border);
-  border-radius: 2rem;
+  border-radius: var(--gi-radius-pill);
   background: var(--gi-surface);
   color: var(--gi-text);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: var(--gi-font-size-sm);
   font-weight: 600;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
   white-space: nowrap;
 }
+
 .gi-chip:hover {
   border-color: var(--gi-brand);
   background: rgba(10, 170, 142, 0.04);
   transform: translateY(-1px);
 }
+
+.gi-chip:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
 .gi-chip.active {
   background: var(--gi-brand);
   border-color: var(--gi-brand);
   color: white;
   box-shadow: 0 2px 8px rgba(10, 170, 142, 0.3);
 }
+
 .gi-chip-input-wrap {
   flex: 1;
-  min-width: 100px;
+  min-width: 120px;
   display: flex;
 }
+
 .gi-chip-input {
-  border-radius: 2rem;
-  padding: 0.5rem 0.85rem;
+  border-radius: var(--gi-radius-pill);
+  padding: var(--gi-space-sm) var(--gi-space-md);
   height: auto;
 }
 
 /* Format Grid */
 .gi-format-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--gi-grid-gap);
 }
+
+/* Format Card - Homepage-style */
 .gi-format-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.25rem 1rem;
-  border: 2px solid var(--gi-border);
-  border-radius: calc(var(--gi-radius) * 1.25);
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-xl);
   background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  text-align: center;
-  gap: 0.5rem;
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
+  text-align: left;
+  position: relative;
+  box-shadow: var(--gi-shadow-sm);
 }
+
 .gi-format-card:hover {
-  border-color: var(--gi-brand);
-  background: rgba(10, 170, 142, 0.02);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-4px);
+  box-shadow: var(--gi-shadow-lg);
+  border-color: rgba(10, 170, 142, 0.4);
 }
+
+.gi-format-card:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
 .gi-format-card.active {
   border-color: var(--gi-brand);
-  background: rgba(10, 170, 142, 0.06);
-  box-shadow: 0 0 0 2px var(--gi-brand), 0 4px 12px rgba(10, 170, 142, 0.15);
+  box-shadow: 0 0 0 2px var(--gi-brand), var(--gi-shadow-lg);
+  background: rgba(10, 170, 142, 0.02);
 }
+
 .gi-format-card.primary {
-  border-width: 2.5px;
+  border-width: 1.5px;
 }
-.gi-format-card.primary.active {
-  box-shadow: 0 0 0 3px var(--gi-brand), 0 4px 12px rgba(10, 170, 142, 0.2);
+
+.gi-format-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
-.gi-format-preview {
-  width: 60px;
-  height: 60px;
+
+/* Icon Box - Homepage style */
+.gi-format-icon-box {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  background: var(--gi-brand-fade);
+  color: var(--gi-brand);
+  border-radius: var(--gi-radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all var(--gi-transition-base) var(--gi-ease-bounce);
 }
-.gi-format-svg {
-  width: 100%;
-  height: 100%;
+
+.gi-format-card:hover .gi-format-icon-box {
+  background: var(--gi-brand);
+  color: white;
+  transform: scale(1.05);
 }
-.gi-format-rect {
-  fill: rgba(10, 170, 142, 0.15);
-  stroke: var(--gi-brand);
-  stroke-width: 2;
-  rx: 4;
+
+.gi-format-card.active .gi-format-icon-box {
+  background: var(--gi-brand);
+  color: white;
 }
-.gi-format-text {
-  font-size: 24px;
-  fill: var(--gi-brand);
+
+.gi-format-icon-box--custom {
+  background: var(--gi-tint-blue-bg);
+  color: var(--gi-tint-blue-text);
+}
+
+.gi-format-icon-svg {
+  width: 28px;
+  height: 28px;
+}
+
+.gi-format-icon-rect {
+  fill: currentColor;
+  opacity: 0.2;
+}
+
+.gi-format-plus {
+  font-size: 28px;
   font-weight: 300;
+  fill: currentColor;
 }
-.gi-card-title {
+
+/* Format Title & Description */
+.gi-format-title {
+  font-size: var(--gi-font-size-lg);
   font-weight: 600;
+  line-height: 1.3;
   color: var(--gi-text);
-  font-size: 0.9rem;
 }
-.gi-card-desc {
-  font-size: 0.75rem;
+
+.gi-format-desc {
+  font-size: var(--gi-font-size-xs);
   color: var(--gi-text-muted);
-  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+}
+
+[data-theme="dark"] .gi-format-card:hover {
+  box-shadow: var(--gi-shadow-glow);
+  border-color: rgba(10, 170, 142, 0.6);
 }
 
 /* Custom Format */
 .gi-custom-format {
-  margin-top: 0.75rem;
-  padding: 1rem;
+  margin-top: var(--gi-space-sm);
+  padding: var(--gi-space-lg);
   background: var(--gi-bg-soft);
-  border-radius: calc(var(--gi-radius) * 1.25);
-  border: 1.5px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  border: 1px solid var(--gi-border);
 }
+
 .gi-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: var(--gi-space-md);
 }
+
 .gi-input-with-unit {
   position: relative;
   display: flex;
   align-items: center;
 }
+
 .gi-input-with-unit .gi-input {
   padding-right: 2.5rem;
 }
+
 .gi-unit {
   position: absolute;
-  right: 0.75rem;
+  right: var(--gi-space-sm);
   color: var(--gi-text-muted);
-  font-size: 0.85rem;
+  font-size: var(--gi-font-size-sm);
   font-weight: 500;
   pointer-events: none;
 }
+
 .gi-custom-preview {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
+  gap: var(--gi-space-sm);
+  margin-top: var(--gi-space-md);
+  padding-top: var(--gi-space-md);
   border-top: 1px dashed var(--gi-border);
 }
+
 .gi-custom-svg {
   width: 50px;
   height: 50px;
   flex-shrink: 0;
 }
+
 .gi-custom-dims {
-  font-size: 0.85rem;
+  font-size: var(--gi-font-size-sm);
   font-weight: 500;
   color: var(--gi-text-muted);
   font-variant-numeric: tabular-nums;
@@ -707,100 +796,102 @@ const resetCalculator = () => {
 .gi-grammage-hint {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.85rem;
+  gap: var(--gi-space-xs);
+  font-size: var(--gi-font-size-sm);
   color: var(--gi-text-muted);
-  padding: 0.5rem 0.75rem;
+  padding: var(--gi-space-sm) var(--gi-space-md);
   background: var(--gi-bg-soft);
-  border-radius: var(--gi-radius);
-  margin-top: 0.25rem;
-}
-.gi-hint-icon {
-  font-size: 1rem;
+  border-radius: var(--gi-radius-md);
+  margin-top: var(--gi-space-xs);
 }
 
-/* Result Panel */
+.gi-hint-icon {
+  font-size: var(--gi-font-size-md);
+}
+
+/* Result Panel - Clean modern design */
 .gi-result {
-  margin-top: 2.5rem;
-  padding: 2.5rem 2rem;
-  background: linear-gradient(145deg, var(--gi-surface), var(--gi-bg-soft));
-  border: 2px solid var(--gi-mint);
-  border-radius: calc(var(--gi-radius) * 2);
+  margin-top: var(--gi-space-2xl);
+  padding: var(--gi-space-2xl) var(--gi-space-xl);
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-xl);
   text-align: center;
-  box-shadow: 0 8px 32px -8px rgba(10, 170, 142, 0.15);
+  box-shadow: var(--gi-shadow-lg);
   position: relative;
   overflow: hidden;
 }
-.gi-result::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--gi-brand), var(--gi-mint));
-}
+
 .gi-result-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: var(--gi-space-md);
+  margin-bottom: var(--gi-space-lg);
 }
+
 .gi-result-label {
-  font-size: 0.75rem;
+  font-size: var(--gi-font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--gi-brand);
 }
+
 .gi-reset-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.4rem;
+  padding: var(--gi-space-xs);
   border: none;
   background: transparent;
   color: var(--gi-text-muted);
   cursor: pointer;
-  border-radius: var(--gi-radius);
-  transition: all 0.2s;
+  border-radius: var(--gi-radius-md);
+  transition: all var(--gi-transition-fast);
 }
+
 .gi-reset-btn:hover {
   background: var(--gi-bg-soft);
   color: var(--gi-brand);
 }
+
 .gi-result-content {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--gi-space-lg);
 }
+
 .gi-result-main {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--gi-space-sm);
 }
+
 .gi-result-value {
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--gi-text);
   line-height: 1;
 }
+
 .gi-result-unit {
-  font-size: 1.5rem;
+  font-size: var(--gi-font-size-xl);
   font-weight: 600;
   color: var(--gi-text-muted);
 }
+
 .gi-result-secondary {
-  font-size: 1.1rem;
+  font-size: var(--gi-font-size-md);
   font-weight: 500;
   color: var(--gi-text-muted);
-  margin-top: 0.5rem;
+  margin-top: var(--gi-space-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--gi-space-sm);
 }
+
 .gi-result-divider {
   color: var(--gi-border-strong);
 }
@@ -809,31 +900,35 @@ const resetCalculator = () => {
 .gi-metric-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: var(--gi-space-md);
+  margin-bottom: var(--gi-space-lg);
 }
+
 .gi-metric-card {
-  padding: 1rem 1.25rem;
-  background: var(--gi-surface);
-  border: 1.5px solid var(--gi-border);
-  border-radius: calc(var(--gi-radius) * 1.25);
+  padding: var(--gi-space-md) var(--gi-space-lg);
+  background: var(--gi-bg-soft);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
   text-align: center;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
 }
+
 .gi-metric-card:hover {
   border-color: var(--gi-brand);
   background: rgba(10, 170, 142, 0.02);
 }
+
 .gi-metric-label {
-  font-size: 0.75rem;
+  font-size: var(--gi-font-size-xs);
   font-weight: 600;
   color: var(--gi-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--gi-space-xs);
 }
+
 .gi-metric-value {
-  font-size: 1.5rem;
+  font-size: var(--gi-font-size-xl);
   font-weight: 700;
   color: var(--gi-text);
   font-variant-numeric: tabular-nums;
@@ -841,15 +936,16 @@ const resetCalculator = () => {
 
 /* Formula */
 .gi-formula {
-  font-size: 0.8rem;
+  font-size: var(--gi-font-size-xs);
   color: var(--gi-text-muted);
   font-family: 'Menlo', 'Monaco', monospace;
-  padding: 0.75rem 1rem;
+  padding: var(--gi-space-sm) var(--gi-space-md);
   background: var(--gi-bg);
-  border-radius: var(--gi-radius);
+  border-radius: var(--gi-radius-md);
   border: 1px dashed var(--gi-border);
   display: inline-block;
 }
+
 .gi-formula code {
   color: var(--gi-brand-dark);
   font-weight: 500;
@@ -863,29 +959,34 @@ const resetCalculator = () => {
   min-height: 200px;
   border-style: dashed;
 }
+
 .gi-empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--gi-space-md);
   color: var(--gi-text-muted);
 }
+
 .gi-empty-state svg {
-  color: var(--gi-border-strong, #c9c6c2);
+  color: var(--gi-border-strong);
 }
+
 .gi-empty-state p {
-  font-size: 0.9rem;
+  font-size: var(--gi-font-size-sm);
 }
 
 /* Animations */
 .fade-up-enter-active,
 .fade-up-leave-active {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--gi-transition-slow) var(--gi-ease-out);
 }
+
 .fade-up-enter-from {
   opacity: 0;
   transform: translateY(20px);
 }
+
 .fade-up-leave-to {
   opacity: 0;
   transform: translateY(-10px);
@@ -893,8 +994,9 @@ const resetCalculator = () => {
 
 .slide-enter-active,
 .slide-leave-active {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
 }
+
 .slide-enter-from,
 .slide-leave-to {
   opacity: 0;
@@ -903,6 +1005,7 @@ const resetCalculator = () => {
   margin: 0;
   padding: 0;
 }
+
 .slide-enter-to,
 .slide-leave-from {
   opacity: 1;
@@ -913,17 +1016,21 @@ const resetCalculator = () => {
 /* Responsive */
 @media (max-width: 600px) {
   .gi-tool-header h1 {
-    font-size: 1.5rem;
+    font-size: var(--gi-font-size-xl);
   }
+
   .gi-result-value {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
+
   .gi-format-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .gi-row {
     grid-template-columns: 1fr;
   }
+
   .gi-metric-grid {
     grid-template-columns: 1fr;
   }
