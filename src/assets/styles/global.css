@@ -35,6 +35,15 @@
   --gi-tint-red-bg: #fff5f5;
   --gi-tint-red-text: #dc2626;
   --gi-tint-red-border: #fecdd3;
+  --gi-tint-blue-bg: #eff6ff;
+  --gi-tint-blue-text: #2563eb;
+  --gi-tint-blue-border: #bfdbfe;
+  --gi-tint-purple-bg: #f5f3ff;
+  --gi-tint-purple-text: #7c3aed;
+  --gi-tint-purple-border: #ddd6fe;
+  --gi-tint-orange-bg: #fff7ed;
+  --gi-tint-orange-text: #ea580c;
+  --gi-tint-orange-border: #fed7aa;
   --gi-radius: 8px;
   --gi-radius-lg: 12px;
   --gi-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);

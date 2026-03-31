@@ -1,12 +1,12 @@
 <template>
   <div class="gi-url-anatomy">
-    <div class="gi-url-example">
-      <span class="gi-url-part protocol">https://</span>
-      <span class="gi-url-part hostname">example.com</span>
-      <span class="gi-url-part port">:8080</span>
-      <span class="gi-url-part pathname">/path/to/page</span>
-      <span class="gi-url-part search">?search=term</span>
-      <span class="gi-url-part hash">#section</span>
+    <div class="gi-url-example" role="text" :aria-label="ariaLabel">
+      <span class="gi-url-part protocol" :aria-label="t('urlParser.guide.anatomy.protocol') + ': https://'">https://</span>
+      <span class="gi-url-part hostname" :aria-label="t('urlParser.guide.anatomy.hostname') + ': example.com'">example.com</span>
+      <span class="gi-url-part port" :aria-label="t('urlParser.guide.anatomy.port') + ': :8080'">:8080</span>
+      <span class="gi-url-part pathname" :aria-label="t('urlParser.guide.anatomy.pathname') + ': /path/to/page'">/path/to/page</span>
+      <span class="gi-url-part search" :aria-label="t('urlParser.guide.anatomy.search') + ': ?search=term'">?search=term</span>
+      <span class="gi-url-part hash" :aria-label="t('urlParser.guide.anatomy.hash') + ': #section'">#section</span>
     </div>
     <div class="gi-url-labels">
       <div class="gi-url-label">
@@ -38,14 +38,26 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+
+const ariaLabel = computed(() => {
+  return [
+    t('urlParser.guide.anatomy.protocol') + ': https://',
+    t('urlParser.guide.anatomy.hostname') + ': example.com',
+    t('urlParser.guide.anatomy.port') + ': :8080',
+    t('urlParser.guide.anatomy.pathname') + ': /path/to/page',
+    t('urlParser.guide.anatomy.search') + ': ?search=term',
+    t('urlParser.guide.anatomy.hash') + ': #section',
+  ].join(', ')
+})
 </script>
 
 <style scoped>
 .gi-url-anatomy {
-  background: var(--gi-surface-alt);
+  background: var(--gi-surface-alt, var(--gi-bg-soft));
   border: 1px solid var(--gi-border);
   border-radius: 8px;
   padding: 1.5rem;
@@ -59,6 +71,16 @@ const { t } = useI18n()
   word-break: break-all;
 }
 
+@media (max-width: 480px) {
+  .gi-url-example {
+    font-size: 0.85rem;
+  }
+  .gi-url-labels {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
 .gi-url-part {
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
@@ -66,32 +88,32 @@ const { t } = useI18n()
 }
 
 .gi-url-part.protocol {
-  background: var(--gi-tint-green-light);
+  background: var(--gi-tint-green-bg);
   color: var(--gi-tint-green-text);
 }
 
 .gi-url-part.hostname {
-  background: var(--gi-tint-blue-light);
+  background: var(--gi-tint-blue-bg);
   color: var(--gi-tint-blue-text);
 }
 
 .gi-url-part.port {
-  background: var(--gi-tint-yellow-light);
+  background: var(--gi-tint-yellow-bg);
   color: var(--gi-tint-yellow-text);
 }
 
 .gi-url-part.pathname {
-  background: var(--gi-tint-purple-light);
+  background: var(--gi-tint-purple-bg);
   color: var(--gi-tint-purple-text);
 }
 
 .gi-url-part.search {
-  background: var(--gi-tint-orange-light);
+  background: var(--gi-tint-orange-bg);
   color: var(--gi-tint-orange-text);
 }
 
 .gi-url-part.hash {
-  background: var(--gi-tint-red-light);
+  background: var(--gi-tint-red-bg);
   color: var(--gi-tint-red-text);
 }
 
