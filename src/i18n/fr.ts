@@ -528,6 +528,13 @@ const fr = {
     preview: 'Aperçu',
     copy: 'Copier',
     copied: 'Copié !',
+    pedagogic: {
+      title: 'À propos des QR Codes',
+      description: 'Les QR Codes (Quick Response Codes) sont des codes-barres 2D lisibles par smartphone.',
+      tip1: 'Assurez-vous que le QR Code est bien éclairé et net',
+      tip2: 'Les QR Codes peuvent être lus même partiellement endommagés',
+      tip3: 'Vérifiez toujours la source d\'un QR Code avant de scanner',
+    },
   },
   palette: {
     title: 'Extracteur de Palette',

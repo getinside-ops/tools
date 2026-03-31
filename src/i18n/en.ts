@@ -530,6 +530,13 @@ const en: Messages = {
     preview: 'Preview',
     copy: 'Copy',
     copied: 'Copied!',
+    pedagogic: {
+      title: 'About QR Codes',
+      description: 'QR Codes (Quick Response Codes) are 2D barcodes readable by smartphone.',
+      tip1: 'Ensure the QR code is well-lit and clear',
+      tip2: 'QR codes can be read even when partially damaged',
+      tip3: 'Always verify the source of a QR code before scanning',
+    },
   },
   palette: {
     title: 'Image Palette Extractor',

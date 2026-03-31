@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-    <div class="gi-tool-header">
-      <h1>{{ t('qrDecoder.title') }}</h1>
-      <p>{{ t('qrDecoder.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('qrDecoder.title')"
+    :description="t('qrDecoder.desc')"
+  >
+    <template #icon>
+      <QrCode :size="24" />
+    </template>
 
     <!-- Paste Zone -->
     <div
@@ -69,12 +70,28 @@
 
     <!-- Hidden Canvas for Pixel Data -->
     <canvas ref="hiddenCanvas" style="display: none;"></canvas>
-  </div>
+
+    <!-- Pedagogic Section -->
+    <template #pedagogic>
+      <GiPedagogic
+        :title="t('qrDecoder.pedagogic.title')"
+        :description="t('qrDecoder.pedagogic.description')"
+        :tips="[
+          t('qrDecoder.pedagogic.tip1'),
+          t('qrDecoder.pedagogic.tip2'),
+          t('qrDecoder.pedagogic.tip3'),
+        ]"
+      />
+    </template>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { QrCode } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiPedagogic from '../components/GiPedagogic.vue'
 import { decodeQrFromBlob, decodeQrFromImageData, decodeQrFromPasteEvent } from '../composables/useQrDecoder'
 
 const { t } = useI18n()
@@ -213,20 +230,6 @@ function reset() {
 </script>
 
 <style scoped>
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-
 /* Paste Zone */
 .gi-paste-zone {
   border: 2px dashed var(--gi-border);
