@@ -66,19 +66,21 @@ const { t } = useI18n()
   align-items: center;
   gap: 0.4rem;
   margin-bottom: 1.5rem;
-  padding: 0.4rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
+  padding: 0.375rem 0.625rem;
+  border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-md);
   font-size: var(--gi-font-size-sm);
   color: var(--gi-text-muted);
   text-decoration: none;
-  transition: all var(--gi-transition-fast);
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+  background: var(--gi-surface);
 }
 
 .tool-back-link:hover {
   border-color: var(--gi-brand);
   color: var(--gi-brand);
-  background: var(--gi-tint-green-bg);
+  background: var(--gi-brand-fade);
+  transform: translateX(-2px);
 }
 
 .tool-header {
@@ -95,13 +97,14 @@ const { t } = useI18n()
 .tool-icon {
   width: 48px;
   height: 48px;
-  background: var(--gi-tint-green-bg);
+  background: var(--gi-brand-fade);
   color: var(--gi-brand);
   border-radius: var(--gi-radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: all var(--gi-transition-base);
 }
 
 .tool-title-section {
