@@ -76,7 +76,7 @@
   --gi-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --gi-shadow-glow: 0 0 20px rgba(10, 170, 142, 0.3);
 
-  /* Spacing Scale (Golden Ratio - 1.618) */
+  /* Spacing Scale (Progressive spacing values) */
   --gi-space-xs: 0.375rem;   /* 6px */
   --gi-space-sm: 0.5rem;     /* 8px */
   --gi-space-md: 0.75rem;    /* 12px */
@@ -85,7 +85,7 @@
   --gi-space-2xl: 2.5rem;    /* 40px */
   --gi-space-3xl: 3.5rem;    /* 56px */
 
-  /* Typography Scale (Golden Ratio from 0.875rem base) */
+  /* Typography Scale (Modular scale from 0.875rem base) */
   --gi-font-size-xs: 0.75rem;     /* 12px */
   --gi-font-size-sm: 0.875rem;    /* 14px */
   --gi-font-size-md: 1rem;        /* 16px */
@@ -109,6 +109,10 @@
   --gi-container-hero: 1400px;
   --gi-container-tool: 900px;
   --gi-grid-gap: 1rem;
+
+  /* Backward Compatibility Aliases */
+  --gi-gap: var(--gi-grid-gap); /* Legacy alias */
+  --gi-radius: var(--gi-radius-md); /* Legacy alias */
 
   /* Base element styles */
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -179,10 +183,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  transition: background-color var(--gi-transition-base) ease,
-              border-color var(--gi-transition-base) ease,
-              color var(--gi-transition-base) ease,
-              box-shadow var(--gi-transition-base) ease;
 }
 
 body {
@@ -279,4 +279,13 @@ body {
 .gi-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--gi-shadow-lg);
+}
+
+/* Accessibility: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
