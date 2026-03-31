@@ -278,27 +278,34 @@ function setCategory(cat: string) {
 /* Search */
 .home-search { margin-bottom: 1.25rem; }
 
-/* Underline tabs */
+/* Zerokit-style pill tabs */
 .home-tab-bar {
   display: flex;
-  border-bottom: 1px solid var(--gi-border);
-  margin-bottom: 0;
+  gap: var(--gi-space-sm);
+  margin-bottom: var(--gi-space-lg);
+  flex-wrap: wrap;
 }
 .home-tab {
-  padding: 0.6rem 1rem;
-  border: none;
-  background: transparent;
-  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border: 1.5px solid var(--gi-border);
+  background: var(--gi-surface);
+  font-size: var(--gi-font-size-sm);
   font-weight: 500;
   color: var(--gi-text-muted);
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
+  border-radius: var(--gi-radius-pill);
   cursor: pointer;
   font-family: inherit;
-  transition: color 0.12s, border-color 0.12s;
+  transition: all var(--gi-transition-fast);
 }
-.home-tab:hover { color: var(--gi-text); }
-.home-tab.active { color: var(--gi-brand); border-bottom-color: var(--gi-brand); }
+.home-tab:hover {
+  border-color: var(--gi-border-hover);
+  color: var(--gi-text);
+}
+.home-tab.active {
+  background: var(--gi-brand);
+  color: white;
+  border-color: var(--gi-brand);
+}
 
 /* Category section header */
 .home-cat-header {
