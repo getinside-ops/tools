@@ -15,40 +15,102 @@
   font-display: swap;
 }
 
+/* ============================================
+   THEME VARIABLES - LIGHT (DEFAULT)
+   ============================================ */
 :root {
+  /* Brand Colors */
   --gi-brand: #0aaa8e;
   --gi-brand-dark: #08937b;
+  --gi-brand-light: #0dc4a5;
   --gi-mint: #6AE7C8;
   --gi-yellow: #FCF758;
   --gi-violet: #C990FC;
+
+  /* Backgrounds */
   --gi-bg: #F7F6F3;
   --gi-bg-soft: #EEECEA;
   --gi-surface: #FFFFFF;
+
+  /* Borders */
   --gi-border: #E0DDD9;
+  --gi-border-hover: #C9C6C2;
+
+  /* Text */
   --gi-text: #1a1a1a;
   --gi-text-muted: #6b7280;
+  --gi-text-inverse: #FFFFFF;
+
+  /* Tint Backgrounds - Green */
   --gi-tint-green-bg: #f0fdf4;
   --gi-tint-green-text: #059669;
   --gi-tint-green-border: #ccf3df;
+
+  /* Tint Backgrounds - Yellow */
   --gi-tint-yellow-bg: rgba(252, 247, 88, 0.18);
   --gi-tint-yellow-text: #d97706;
+  --gi-tint-yellow-border: #fef3c7;
+
+  /* Tint Backgrounds - Red */
   --gi-tint-red-bg: #fff5f5;
   --gi-tint-red-text: #dc2626;
   --gi-tint-red-border: #fecdd3;
+
+  /* Tint Backgrounds - Blue */
   --gi-tint-blue-bg: #eff6ff;
   --gi-tint-blue-text: #2563eb;
   --gi-tint-blue-border: #bfdbfe;
+
+  /* Tint Backgrounds - Purple */
   --gi-tint-purple-bg: #f5f3ff;
   --gi-tint-purple-text: #7c3aed;
   --gi-tint-purple-border: #ddd6fe;
+
+  /* Tint Backgrounds - Orange */
   --gi-tint-orange-bg: #fff7ed;
   --gi-tint-orange-text: #ea580c;
   --gi-tint-orange-border: #fed7aa;
-  --gi-radius: 8px;
-  --gi-radius-lg: 12px;
+
+  /* Shadows */
   --gi-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --gi-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --gi-gap: 1.5rem;
+  --gi-shadow-glow: 0 0 20px rgba(10, 170, 142, 0.3);
+
+  /* Spacing Scale (Golden Ratio - 1.618) */
+  --gi-space-xs: 0.375rem;   /* 6px */
+  --gi-space-sm: 0.5rem;     /* 8px */
+  --gi-space-md: 0.75rem;    /* 12px */
+  --gi-space-lg: 1.25rem;    /* 20px */
+  --gi-space-xl: 1.75rem;    /* 28px */
+  --gi-space-2xl: 2.5rem;    /* 40px */
+  --gi-space-3xl: 3.5rem;    /* 56px */
+
+  /* Typography Scale (Golden Ratio from 0.875rem base) */
+  --gi-font-size-xs: 0.75rem;     /* 12px */
+  --gi-font-size-sm: 0.875rem;    /* 14px */
+  --gi-font-size-md: 1rem;        /* 16px */
+  --gi-font-size-lg: 1.25rem;     /* 20px */
+  --gi-font-size-xl: 1.618rem;    /* 26px */
+  --gi-font-size-2xl: 2rem;       /* 32px */
+  --gi-font-size-3xl: 2.618rem;   /* 42px */
+
+  /* Border Radius */
+  --gi-radius-sm: 6px;
+  --gi-radius-md: 8px;
+  --gi-radius-lg: 12px;
+  --gi-radius-pill: 999px;
+
+  /* Transitions */
+  --gi-transition-fast: 0.12s;
+  --gi-transition-base: 0.2s;
+  --gi-transition-slow: 0.3s;
+
+  /* Layout */
+  --gi-container-hero: 1400px;
+  --gi-container-tool: 900px;
+  --gi-grid-gap: 1rem;
+
+  /* Base element styles */
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.6;
@@ -56,8 +118,79 @@
   background: var(--gi-bg);
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { min-height: 100vh; background: var(--gi-bg); overflow-x: hidden; }
+/* ============================================
+   THEME VARIABLES - DARK
+   ============================================ */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --gi-bg: #0a0a0c;
+  --gi-bg-soft: #121216;
+  --gi-surface: #15151a;
+
+  /* Borders */
+  --gi-border: #2a2a35;
+  --gi-border-hover: #3a3a45;
+
+  /* Text */
+  --gi-text: #f5f5f7;
+  --gi-text-muted: #9ca3af;
+  --gi-text-inverse: #0a0a0c;
+
+  /* Tint Backgrounds - Green (reduced opacity) */
+  --gi-tint-green-bg: rgba(16, 185, 129, 0.15);
+  --gi-tint-green-text: #34d399;
+  --gi-tint-green-border: rgba(16, 185, 129, 0.3);
+
+  /* Tint Backgrounds - Yellow (reduced opacity) */
+  --gi-tint-yellow-bg: rgba(252, 247, 88, 0.12);
+  --gi-tint-yellow-text: #fcd34d;
+  --gi-tint-yellow-border: rgba(252, 247, 88, 0.25);
+
+  /* Tint Backgrounds - Red (reduced opacity) */
+  --gi-tint-red-bg: rgba(239, 68, 68, 0.15);
+  --gi-tint-red-text: #f87171;
+  --gi-tint-red-border: rgba(239, 68, 68, 0.3);
+
+  /* Tint Backgrounds - Blue (reduced opacity) */
+  --gi-tint-blue-bg: rgba(59, 130, 246, 0.15);
+  --gi-tint-blue-text: #60a5fa;
+  --gi-tint-blue-border: rgba(59, 130, 246, 0.3);
+
+  /* Tint Backgrounds - Purple (reduced opacity) */
+  --gi-tint-purple-bg: rgba(139, 92, 246, 0.15);
+  --gi-tint-purple-text: #a78bfa;
+  --gi-tint-purple-border: rgba(139, 92, 246, 0.3);
+
+  /* Tint Backgrounds - Orange (reduced opacity) */
+  --gi-tint-orange-bg: rgba(249, 115, 22, 0.15);
+  --gi-tint-orange-text: #fb923c;
+  --gi-tint-orange-border: rgba(249, 115, 22, 0.3);
+
+  /* Shadows with glow effects */
+  --gi-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --gi-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --gi-shadow-glow: 0 0 20px rgba(10, 170, 142, 0.5);
+}
+
+/* ============================================
+   BASE ELEMENT STYLES
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color var(--gi-transition-base) ease,
+              border-color var(--gi-transition-base) ease,
+              color var(--gi-transition-base) ease,
+              box-shadow var(--gi-transition-base) ease;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--gi-bg);
+  color: var(--gi-text);
+  overflow-x: hidden;
+}
 
 .gi-main { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
@@ -67,12 +200,12 @@ body { min-height: 100vh; background: var(--gi-bg); overflow-x: hidden; }
 .gi-input, .gi-select {
   padding: 0.55rem 0.75rem;
   border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
+  border-radius: var(--gi-radius-md);
   font-size: 0.95rem;
   font-family: inherit;
   background: var(--gi-surface);
   color: var(--gi-text);
-  transition: border-color 0.15s;
+  transition: border-color var(--gi-transition-fast);
   width: 100%;
 }
 .gi-input:focus, .gi-select:focus { outline: none; border-color: var(--gi-brand); }
@@ -80,8 +213,8 @@ body { min-height: 100vh; background: var(--gi-bg); overflow-x: hidden; }
 .gi-btn {
   display: inline-flex; align-items: center; gap: 0.4rem;
   padding: 0.55rem 1.2rem; background: var(--gi-brand); color: #fff;
-  border: none; border-radius: var(--gi-radius); font-size: 0.95rem;
-  font-weight: 500; cursor: pointer; transition: background 0.15s;
+  border: none; border-radius: var(--gi-radius-md); font-size: 0.95rem;
+  font-weight: 500; cursor: pointer; transition: background var(--gi-transition-fast);
   text-decoration: none;
 }
 .gi-btn:hover { background: var(--gi-brand-dark); }
@@ -109,7 +242,7 @@ body { min-height: 100vh; background: var(--gi-bg); overflow-x: hidden; }
 .gi-table th, .gi-table td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--gi-border); }
 .gi-table th { font-weight: 600; color: var(--gi-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
-.gi-code { font-family: 'Menlo', 'Monaco', monospace; font-size: 0.85rem; background: var(--gi-bg-soft); padding: 0.75rem 1rem; border-radius: var(--gi-radius); color: var(--gi-text); word-break: break-all; }
+.gi-code { font-family: 'Menlo', 'Monaco', monospace; font-size: 0.85rem; background: var(--gi-bg-soft); padding: 0.75rem 1rem; border-radius: var(--gi-radius-md); color: var(--gi-text); word-break: break-all; }
 
 .gi-back-link:hover { color: var(--gi-brand); }
 
@@ -117,7 +250,7 @@ body { min-height: 100vh; background: var(--gi-bg); overflow-x: hidden; }
 .gi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--gi-gap);
+  gap: var(--gi-grid-gap);
 }
 
 /* Professional Input Group (Delphi Pattern) */
@@ -140,7 +273,7 @@ body { min-height: 100vh; background: var(--gi-bg); overflow-x: hidden; }
   border-radius: var(--gi-radius-lg);
   padding: 1.5rem;
   box-shadow: var(--gi-shadow);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform var(--gi-transition-base), box-shadow var(--gi-transition-base);
 }
 
 .gi-card:hover {
