@@ -416,3 +416,192 @@ browser_verify_text_visible # Assertion
 - **URL:** https://github.com/getinside-ops/tools
 - **Deployed:** https://getinside-ops.github.io/tools/
 - **License:** See `LICENSE` file
+
+---
+
+## Session Learnings & Best Practices
+
+### Subagent-Driven Development with Code Review
+
+**Pattern that works:**
+1. Dispatch subagent for each task with clear plan instructions
+2. Request code review immediately after task completion
+3. Fix issues before proceeding to next task
+4. Repeat for all tasks
+
+**Example workflow:**
+```
+Subagent executes task → Code review → Fix issues → Commit → Next task
+```
+
+**Why it works:**
+- Fresh eyes on each task catch issues early
+- Two-stage review (subagent + code-reviewer) prevents problems compounding
+- Fast iteration with clear boundaries between tasks
+
+### Design System Token Usage
+
+**Always use CSS variables** for consistency:
+```css
+/* ✅ Good */
+color: var(--gi-text);
+background: var(--gi-surface);
+padding: var(--gi-space-md);
+
+/* ❌ Avoid */
+color: #1a1a1a;
+background: #ffffff;
+padding: 0.75rem;
+```
+
+**Token categories to use:**
+- `--gi-brand-*` — Brand colors (primary, dark, light, fade)
+- `--gi-bg-*`, `--gi-surface-*` — Backgrounds
+- `--gi-border-*` — Borders
+- `--gi-text-*` — Text colors
+- `--gi-tint-*-*` — Tint backgrounds (blue, green, yellow, red, purple, orange)
+- `--gi-shadow-*` — Shadows (sm, md, lg, xl, inner, glow)
+- `--gi-space-*` — Spacing (xs, sm, md, lg, xl, 2xl, 3xl)
+- `--gi-font-size-*` — Typography (xs, sm, md, lg, xl, 2xl, 3xl, base)
+- `--gi-radius-*` — Border radius (sm, md, lg, xl, 2xl, pill)
+- `--gi-transition-*` — Durations (instant, fast, base, slow, slower)
+- `--gi-ease-*` — Easing curves (in, out, in-out, bounce)
+
+### Accessibility Checklist
+
+**For all interactive components:**
+- [ ] `:focus-visible` state with visible outline
+- [ ] `:focus-within` for card-like containers
+- [ ] ARIA roles for custom components (`role="list"`, `role="listitem"`)
+- [ ] Keyboard navigation works (Tab key)
+- [ ] Color contrast meets WCAG AA (4.5:1 for text)
+- [ ] Dark mode focus states are visible
+
+**Example focus state:**
+```css
+.gi-btn:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+```
+
+### Component Creation Pattern
+
+**When creating new components:**
+1. Export TypeScript interfaces for reusability
+2. Add `defineOptions({ name: 'ComponentName' })` for DevTools
+3. Add JSDoc documentation with examples
+4. Use ARIA attributes for semantic markup
+5. Use stable keys in `v-for` (not array index)
+6. Handle edge cases (value: 0, undefined, null)
+7. Test in both light and dark modes
+
+**Example:**
+```typescript
+/**
+ * GiComparison - Side-by-side comparison component
+ */
+export interface ComparisonItem {
+  label: string
+  value?: string | number
+}
+
+defineOptions({
+  name: 'GiComparison'
+})
+```
+
+### Dark Mode Considerations
+
+**Always verify:**
+1. Tint variables have dark mode equivalents with adjusted opacity
+2. Focus rings are visible on dark backgrounds (may need stronger opacity)
+3. Shadows use higher opacity for dark backgrounds
+4. Custom colors (passed as props) have sufficient contrast
+
+**Example dark mode override:**
+```css
+[data-theme="dark"] .gi-input:focus {
+  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.25); /* Stronger than light mode */
+}
+```
+
+### Animation Best Practices
+
+**For smooth, polished animations:**
+1. Use easing curves (not linear): `var(--gi-ease-out)` for most transitions
+2. GPU-accelerate with `transform` and `opacity` (avoid `top`, `left`)
+3. Keep durations short: 0.15s for hover, 0.2s for standard, 0.4s for complex
+4. Use `var(--gi-ease-bounce)` for playful micro-interactions
+5. Respect `prefers-reduced-motion` media query
+
+**Example:**
+```css
+.home-card {
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
+}
+
+.home-card:hover {
+  transform: translateY(-4px); /* GPU-accelerated */
+  box-shadow: var(--gi-shadow-lg);
+}
+```
+
+### Code Review Integration
+
+**When to request code review:**
+- After completing each task (before next task)
+- Before committing changes
+- When adding new components
+- When modifying core styles
+
+**What reviewers check:**
+- Critical: Syntax errors, breaking changes, accessibility
+- Important: Dark mode compatibility, contrast, consistency
+- Minor: Comments, organization, documentation
+
+### Visual Testing Strategy
+
+**Manual testing checklist:**
+1. Homepage in light and dark mode
+2. At least 4 individual tool pages
+3. Keyboard navigation (Tab through interactive elements)
+4. Focus states are visible
+5. Hover animations are smooth
+6. New components render correctly
+7. Mobile responsive behavior
+
+**Document with screenshots:**
+- Save to `visual-tests/` directory
+- Name files descriptively: `homepage-light.png`, `homepage-dark.png`
+- Create report in `docs/plans/visual-regression-report.md`
+
+### Commit Message Patterns
+
+**Follow conventional commits:**
+```
+style: refine color palette for cleaner aesthetic
+fix: add missing --gi-surface-elevated to dark theme
+feat: add comparison component for side-by-side views
+docs: update design system with new components
+chore: verify build and tests pass
+```
+
+**Pattern:** `type: description` where:
+- `style` — Visual/design changes
+- `fix` — Bug fixes
+- `feat` — New features/components
+- `docs` — Documentation updates
+- `chore` — Build/test verification
+
+### Documentation Updates
+
+**When to update docs:**
+- After adding new components (add to design-system.md)
+- After major refactors (update patterns section)
+- At end of large changes (create results document)
+
+**Documentation locations:**
+- `docs/design-system.md` — Component API and usage
+- `docs/plans/` — Implementation plans and results
+- `QWEN.md` — Project-wide patterns and learnings
