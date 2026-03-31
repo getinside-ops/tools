@@ -53,11 +53,12 @@ const { t } = useI18n()
 
 <style scoped>
 .gi-pedagogic {
-  background: var(--gi-tint-blue-bg);
-  border: 1px solid var(--gi-tint-blue-border);
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
   padding: var(--gi-space-lg);
   margin-top: var(--gi-space-xl);
+  box-shadow: var(--gi-shadow-sm);
 }
 
 .gi-pedagogic-header {
@@ -65,17 +66,20 @@ const { t } = useI18n()
   align-items: center;
   gap: var(--gi-space-sm);
   margin-bottom: var(--gi-space-md);
+  padding-bottom: var(--gi-space-sm);
+  border-bottom: 1px solid var(--gi-border);
 }
 
 .gi-pedagogic-icon {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
 .gi-pedagogic-title {
-  font-size: var(--gi-font-size-lg);
+  font-size: var(--gi-font-size-md);
   font-weight: 600;
-  color: var(--gi-tint-blue-text);
+  color: var(--gi-text);
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .gi-pedagogic-content {
