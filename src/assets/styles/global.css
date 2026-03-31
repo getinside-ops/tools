@@ -216,6 +216,15 @@
   --gi-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.4);
 }
 
+/* Dark mode button shadow adjustments */
+[data-theme="dark"] .gi-btn {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .gi-btn:hover {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+}
+
 /* ============================================
    BASE ELEMENT STYLES
    ============================================ */
@@ -279,16 +288,26 @@ body {
   transform: translateY(0);
 }
 
+.gi-btn:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
 .gi-btn-ghost {
   background: transparent;
   color: var(--gi-brand);
-  border: 1.5px solid var(--gi-brand);
+  border: 1px solid var(--gi-brand);
   box-shadow: none;
 }
 
 .gi-btn-ghost:hover {
   background: var(--gi-brand-fade);
   transform: translateY(-1px);
+}
+
+.gi-btn-ghost:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
 }
 
 .gi-result {
