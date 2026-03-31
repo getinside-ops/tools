@@ -383,11 +383,21 @@ body {
   border-radius: var(--gi-radius-lg);
   padding: 1.5rem;
   box-shadow: var(--gi-shadow);
-  transition: transform var(--gi-transition-base), box-shadow var(--gi-transition-base);
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
 }
 
 .gi-card:hover {
   transform: translateY(-2px);
+  box-shadow: var(--gi-shadow-md);
+  border-color: var(--gi-border-hover);
+}
+
+/* Elevated card variant */
+.gi-card-elevated {
+  box-shadow: var(--gi-shadow-md);
+}
+
+.gi-card-elevated:hover {
   box-shadow: var(--gi-shadow-lg);
 }
 
