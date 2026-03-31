@@ -1,31 +1,36 @@
 <template>
   <div class="gi-format-comparison">
     <div class="gi-comparison-bar">
-      <div
+      <button
         v-for="fmt in formats"
         :key="fmt.key"
+        type="button"
         class="gi-comparison-rect"
         :class="{ active: selectedFormat === fmt.key }"
         :style="getRectStyle(fmt)"
         @click="$emit('select', fmt.key)"
         :title="fmt.label"
+        :aria-pressed="selectedFormat === fmt.key"
       />
     </div>
     <div class="gi-comparison-labels">
-      <span
+      <button
         v-for="fmt in formats"
         :key="fmt.key"
+        type="button"
         class="gi-comparison-label"
         :class="{ active: selectedFormat === fmt.key }"
         @click="$emit('select', fmt.key)"
+        :aria-pressed="selectedFormat === fmt.key"
       >
         {{ fmt.label }}
-      </span>
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { FORMATS } from '../composables/usePaperWeight'
 import type { FormatKey } from '../composables/usePaperWeight'
 
 interface FormatInfo {
@@ -35,13 +40,12 @@ interface FormatInfo {
   height: number
 }
 
-const formats: FormatInfo[] = [
-  { key: 'A6', label: 'A6', width: 105, height: 148 },
-  { key: 'A5', label: 'A5', width: 148, height: 210 },
-  { key: 'DL', label: 'DL', width: 100, height: 210 },
-  { key: 'A4', label: 'A4', width: 210, height: 297 },
-  { key: 'Carte', label: 'Carte', width: 85, height: 55 },
-]
+const formats: FormatInfo[] = (Object.keys(FORMATS) as Array<Exclude<FormatKey, 'Custom'>>).map((key) => ({
+  key,
+  label: key,
+  width: FORMATS[key].width,
+  height: FORMATS[key].height,
+}))
 
 defineProps<{
   selectedFormat: FormatKey | 'Custom'
@@ -97,6 +101,10 @@ const getRectStyle = (fmt: FormatInfo) => {
 .gi-comparison-rect.active {
   background: var(--gi-brand);
   box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.3);
+}
+
+[data-theme="dark"] .gi-comparison-rect.active {
+  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.5);
 }
 
 .gi-comparison-labels {
