@@ -7,8 +7,10 @@
       <p>{{ t('paperWeight.desc') }}</p>
     </div>
 
-    <!-- Quantity Section -->
-    <div class="gi-field">
+    <div class="pw-layout">
+      <div class="pw-inputs">
+        <!-- Quantity Section -->
+        <div class="gi-field">
       <label class="gi-label">{{ t('paperWeight.quantity') }}</label>
       
       <!-- Slider -->
@@ -172,10 +174,13 @@
         <span>{{ getGrammageHint() }}</span>
       </div>
     </div>
+      </div>
 
-    <!-- Result Section -->
-    <transition name="fade-up" mode="out-in">
-      <div v-if="result" key="result" class="gi-result">
+      <!-- Results Column -->
+      <div class="pw-results">
+        <!-- Result Section -->
+        <transition name="fade-up" mode="out-in">
+          <div v-if="result" key="result" class="gi-result">
         <div class="gi-result-header">
           <span class="gi-result-label">{{ t('paperWeight.result') }}</span>
           <button class="gi-reset-btn" @click="resetCalculator" :title="t('paperWeight.reset')">
@@ -223,7 +228,9 @@
           <p>{{ t('paperWeight.enterValues') }}</p>
         </div>
       </div>
-    </transition>
+        </transition>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -972,6 +979,33 @@ const resetCalculator = () => {
 
   .gi-metric-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Two-column layout with sticky results */
+.pw-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--gi-space-2xl);
+  align-items: start;
+}
+
+.pw-inputs {
+  min-width: 0;
+}
+
+.pw-results {
+  position: sticky;
+  top: var(--gi-space-lg);
+}
+
+@media (max-width: 1024px) {
+  .pw-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .pw-results {
+    position: static;
   }
 }
 </style>
