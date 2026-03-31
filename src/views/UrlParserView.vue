@@ -63,7 +63,7 @@
             </Tooltip>
           </div>
           <div class="gi-card-value gi-code">{{ parsedUrl.protocol }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.protocol)">
+          <button class="gi-copy-btn" @click="copy(parsedUrl.protocol, 'protocol')">
             <Copy class="gi-icon-sm" />
             {{ copiedField === 'protocol' ? t('urlParser.copied') : t('nav.copy') }}
           </button>
@@ -80,7 +80,7 @@
             </Tooltip>
           </div>
           <div class="gi-card-value gi-code">{{ parsedUrl.origin }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.origin)">
+          <button class="gi-copy-btn" @click="copy(parsedUrl.origin, 'origin')">
             <Copy class="gi-icon-sm" />
             {{ copiedField === 'origin' ? t('urlParser.copied') : t('nav.copy') }}
           </button>
@@ -97,7 +97,7 @@
             </Tooltip>
           </div>
           <div class="gi-card-value gi-code">{{ parsedUrl.hostname }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.hostname)">
+          <button class="gi-copy-btn" @click="copy(parsedUrl.hostname, 'hostname')">
             <Copy class="gi-icon-sm" />
             {{ copiedField === 'hostname' ? t('urlParser.copied') : t('nav.copy') }}
           </button>
@@ -114,7 +114,7 @@
             </Tooltip>
           </div>
           <div class="gi-card-value gi-code">{{ parsedUrl.port || '-' }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.port)">
+          <button class="gi-copy-btn" @click="copy(parsedUrl.port, 'port')">
             <Copy class="gi-icon-sm" />
             {{ copiedField === 'port' ? t('urlParser.copied') : t('nav.copy') }}
           </button>
@@ -131,7 +131,7 @@
             </Tooltip>
           </div>
           <div class="gi-card-value gi-code">{{ parsedUrl.pathname }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.pathname)">
+          <button class="gi-copy-btn" @click="copy(parsedUrl.pathname, 'pathname')">
             <Copy class="gi-icon-sm" />
             {{ copiedField === 'pathname' ? t('urlParser.copied') : t('nav.copy') }}
           </button>
@@ -148,7 +148,7 @@
             </Tooltip>
           </div>
           <div class="gi-card-value gi-code">{{ parsedUrl.search || '-' }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.search)">
+          <button class="gi-copy-btn" @click="copy(parsedUrl.search, 'search')">
             <Copy class="gi-icon-sm" />
             {{ copiedField === 'search' ? t('urlParser.copied') : t('nav.copy') }}
           </button>
@@ -165,7 +165,7 @@
             </Tooltip>
           </div>
           <div class="gi-card-value gi-code">{{ parsedUrl.hash || '-' }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.hash)">
+          <button class="gi-copy-btn" @click="copy(parsedUrl.hash, 'hash')">
             <Copy class="gi-icon-sm" />
             {{ copiedField === 'hash' ? t('urlParser.copied') : t('nav.copy') }}
           </button>
@@ -190,7 +190,7 @@
           >
             <span class="gi-param-key gi-code">{{ key }}</span>
             <span class="gi-param-value">{{ value }}</span>
-            <button class="gi-param-copy" @click="copy(`${key}=${value}`)">
+            <button class="gi-param-copy" @click="copy(`${key}=${value}`, `param-${key}`)">
               <Copy class="gi-icon-sm" />
             </button>
           </div>
@@ -258,10 +258,10 @@ function clearInput() {
   error.value = false
 }
 
-async function copy(text: string) {
+async function copy(text: string, fieldName: string) {
   if (!text) return
   await navigator.clipboard.writeText(text)
-  copiedField.value = 'temp'
+  copiedField.value = fieldName
   setTimeout(() => {
     copiedField.value = null
   }, 2000)
