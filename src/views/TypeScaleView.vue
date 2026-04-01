@@ -35,8 +35,7 @@
       </GiFormField>
     </div>
 
-    <div class="gi-result">
-      <div class="gi-result-label">{{ t('typeScale.preview') }}</div>
+    <GiResultCard :title="t('typeScale.preview')">
       <div class="gi-table-wrapper" style="overflow-x: auto;">
         <table class="gi-table">
           <thead>
@@ -61,7 +60,7 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </GiResultCard>
   </ToolPageLayout>
 </template>
 
@@ -71,6 +70,7 @@ import { useI18n } from 'vue-i18n'
 import { Type } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { generateTypeScale, TYPE_SCALE_RATIOS } from '../composables/useTypeScale'
 
 const { t } = useI18n()
