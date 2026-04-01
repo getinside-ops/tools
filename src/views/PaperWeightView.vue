@@ -97,6 +97,10 @@ import {
   DEFAULT_QUANTITY,
 } from '../composables/usePaperWeight'
 
+defineOptions({
+  name: 'PaperWeightView'
+})
+
 const { t } = useI18n()
 
 const quantity = ref(DEFAULT_QUANTITY)
