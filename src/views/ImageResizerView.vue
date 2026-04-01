@@ -23,14 +23,18 @@
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-          <div class="gi-field">
-            <label class="gi-label">{{ t('imageResizer.width') }}</label>
-            <input v-model.number="width" type="number" class="gi-input" @input="onWidthInput" />
-          </div>
-          <div class="gi-field">
-            <label class="gi-label">{{ t('imageResizer.height') }}</label>
-            <input v-model.number="height" type="number" class="gi-input" @input="onHeightInput" />
-          </div>
+          <GiFormField
+            :label="t('imageResizer.width')"
+            type="number"
+            :model-value="width"
+            @update:model-value="width = Number($event); onWidthInput()"
+          />
+          <GiFormField
+            :label="t('imageResizer.height')"
+            type="number"
+            :model-value="height"
+            @update:model-value="height = Number($event); onHeightInput()"
+          />
         </div>
 
         <div class="gi-field">
@@ -68,6 +72,7 @@ import { useI18n } from 'vue-i18n'
 import { Maximize2 } from 'lucide-vue-next'
 import { resizeImage } from '../composables/useImageResizer'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiFormField from '../components/GiFormField.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
