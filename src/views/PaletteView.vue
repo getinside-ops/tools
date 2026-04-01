@@ -8,19 +8,20 @@
     <div class="gi-grid">
       <!-- Upload Area -->
       <div class="gi-field">
-        <div v-if="!imageUrl" class="gi-result" style="border: 2px dashed var(--gi-border); cursor: pointer; text-align: center; padding: 4rem;" @click="fileInput?.click()">
-          <p>📁 {{ t('palette.upload') }}</p>
-          <input ref="fileInput" type="file" hidden accept="image/*" @change="handleFile" />
-        </div>
+        <GiImageUpload
+          v-if="!imageUrl"
+          @upload="handleImageUpload"
+          @error="handleError"
+        />
 
         <div v-else>
           <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 2rem" @click="reset">{{ t('imageCropper.reset') }}</button>
-          
+
           <div v-if="extractedColors.length > 0">
             <h3 class="gi-label" style="margin-bottom: 1rem">{{ t('palette.colors') }}</h3>
             <div class="palette-grid">
-              <div 
-                v-for="color in extractedColors" 
+              <div
+                v-for="color in extractedColors"
                 :key="color"
                 class="color-card"
                 @click="copyColor(color)"
@@ -55,26 +56,28 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { extractDominantColors } from '../composables/usePalette'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
-const fileInput = ref<HTMLInputElement | null>(null)
 const hiddenCanvas = ref<HTMLCanvasElement | null>(null)
 const previewImg = ref<HTMLImageElement | null>(null)
 const imageUrl = ref('')
 const extractedColors = ref<string[]>([])
 const copiedColor = ref('')
 
-function handleFile(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
-  
+function handleImageUpload(file: File) {
   extractedColors.value = []
   const reader = new FileReader()
   reader.onload = (ev) => {
     imageUrl.value = ev.target?.result as string
   }
   reader.readAsDataURL(file)
+}
+
+function handleError(error: string) {
+  console.error(error)
+  alert(error)
 }
 
 function performExtraction() {
@@ -106,7 +109,6 @@ function reset() {
   imageUrl.value = ''
   extractedColors.value = []
   copiedColor.value = ''
-  if (fileInput.value) fileInput.value.value = ''
 }
 </script>
 

@@ -7,14 +7,10 @@
 
     <div class="gi-field">
       <!-- Upload Area -->
-      <div 
-        class="gi-result" 
-        style="border: 2px dashed var(--gi-border); cursor: pointer; text-align: center; padding: 3rem;" 
-        @click="fileInput?.click()"
-      >
-        <p>📁 {{ t('metadata.upload') }}</p>
-        <input ref="fileInput" type="file" hidden accept="image/*" @change="handleFile" />
-      </div>
+      <GiImageUpload
+        @upload="handleImageUpload"
+        @error="handleError"
+      />
     </div>
 
     <div v-if="metadata" class="gi-result" style="margin-top: 2rem;">
@@ -49,24 +45,26 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { extractBasicMetadata, type ImageMetadata } from '../composables/useMetadata'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
-const fileInput = ref<HTMLInputElement | null>(null)
 const metadata = ref<ImageMetadata | null>(null)
 const previewUrl = ref('')
 
-function handleFile(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
-
+function handleImageUpload(file: File) {
   metadata.value = extractBasicMetadata(file)
-  
+
   const reader = new FileReader()
   reader.onload = (ev) => {
     previewUrl.value = ev.target?.result as string
   }
   reader.readAsDataURL(file)
+}
+
+function handleError(error: string) {
+  console.error(error)
+  alert(error)
 }
 
 function formatSize(bytes: number): string {
