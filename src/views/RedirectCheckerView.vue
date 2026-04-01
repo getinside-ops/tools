@@ -31,7 +31,7 @@
       <div class="gi-chain">
         <div v-for="(hop, i) in result.hops" :key="i" class="gi-chain-item">
           <div class="gi-chain-row">
-            <span class="gi-status-badge" :class="statusClass(hop.status)">{{ hop.status }}</span>
+            <GiStatusBadge :variant="statusVariant(hop.status)">{{ hop.status }}</GiStatusBadge>
             <span class="gi-code gi-chain-url">{{ hop.url }}</span>
             <button class="gi-btn-ghost gi-copy-btn" @click="copyUrl(hop.url, i)">
               {{ copiedIndex === i ? t('redirectChecker.copied') : t('redirectChecker.copy') }}
@@ -62,6 +62,7 @@ import { useI18n } from 'vue-i18n'
 import { Link } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiResultCard from '../components/GiResultCard.vue'
+import GiStatusBadge from '../components/GiStatusBadge.vue'
 import { checkRedirect, type RedirectResult } from '../composables/useRedirectChecker'
 
 const { t } = useI18n()
@@ -86,12 +87,12 @@ async function check() {
   }
 }
 
-function statusClass(status: number): string {
-  if (status >= 200 && status < 300) return 'gi-status-2xx'
-  if (status === 301 || status === 308) return 'gi-status-3xx-perm'
-  if (status >= 300 && status < 400) return 'gi-status-3xx-temp'
-  if (status >= 400) return 'gi-status-err'
-  return ''
+function statusVariant(status: number): 'ok' | 'error' | 'warning' | 'info' {
+  if (status >= 200 && status < 300) return 'ok'
+  if (status === 301 || status === 308) return 'info'
+  if (status >= 300 && status < 400) return 'warning'
+  if (status >= 400) return 'error'
+  return 'info'
 }
 
 async function copyUrl(url: string, index: number) {
@@ -142,21 +143,6 @@ async function copyUrl(url: string, index: number) {
   font-size: 0.875rem;
 }
 .gi-arrow { font-size: 1.1rem; color: var(--gi-brand); padding: 0.1rem 0; }
-
-/* Status badges */
-.gi-status-badge {
-  font-size: 0.75rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.gi-status-2xx   { background: var(--gi-tint-green-bg);  color: var(--gi-tint-green-text); }
-.gi-status-3xx-perm { background: color-mix(in srgb, var(--gi-brand) 15%, transparent); color: var(--gi-brand); }
-.gi-status-3xx-temp { background: var(--gi-tint-yellow-bg); color: var(--gi-tint-yellow-text); }
-.gi-status-err   { background: var(--gi-tint-red-bg);    color: var(--gi-tint-red-text); }
 
 /* Copy button */
 .gi-copy-btn {
