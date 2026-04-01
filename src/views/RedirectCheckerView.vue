@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-    <div class="gi-tool-header">
-      <h1>{{ t('redirectChecker.title') }}</h1>
-      <p>{{ t('redirectChecker.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('redirectChecker.title')" :description="t('redirectChecker.desc')">
+    <template #icon>
+      <Link class="tool-page-icon" />
+    </template>
 
     <div class="gi-field">
       <label class="gi-label">{{ t('redirectChecker.label') }}</label>
@@ -47,12 +45,14 @@
       <p style="margin-bottom:0.5rem; font-size:0.9rem; color:var(--gi-text-muted)">{{ t('redirectChecker.fallbackDesc') }}</p>
       <code class="gi-code">curl -IL {{ inputUrl }}</code>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Link } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { checkRedirect, type RedirectResult } from '../composables/useRedirectChecker'
 
 const { t } = useI18n()
@@ -97,20 +97,6 @@ async function copyUrl(url: string, index: number) {
 </script>
 
 <style scoped>
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-
 .gi-hops-meta {
   font-size: 0.85rem;
   color: var(--gi-text-muted);
