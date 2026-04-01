@@ -78,10 +78,17 @@ defineOptions({
   cursor: pointer;
   color: var(--gi-text-muted);
   transition: transform var(--gi-transition-fast) var(--gi-ease-out);
+  border-radius: var(--gi-radius-sm);
 }
 
 .gi-result-card-toggle:hover {
   color: var(--gi-text);
+  background: var(--gi-bg-soft);
+}
+
+.gi-result-card-toggle:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
 }
 
 .gi-result-card-toggle .is-collapsed {
