@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('typeScale.title') }}</h1>
-      <p>{{ t('typeScale.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('typeScale.title')"
+    :description="t('typeScale.desc')"
+  >
+    <template #icon>
+      <Type :size="24" />
+    </template>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
       <div class="gi-field">
@@ -47,12 +49,14 @@
         </table>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Type } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { generateTypeScale, TYPE_SCALE_RATIOS } from '../composables/useTypeScale'
 
 const { t } = useI18n()
