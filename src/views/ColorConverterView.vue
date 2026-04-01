@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('colorConverter.title') }}</h1>
-      <p>{{ t('colorConverter.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('colorConverter.title')"
+    :description="t('colorConverter.desc')"
+  >
+    <template #icon>
+      <Palette />
+    </template>
 
     <!-- Input Section -->
     <div class="gi-card" style="margin-bottom: 2rem;">
@@ -59,13 +61,15 @@
         </div>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { 
+import { Palette } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import {
   hexToRgb, rgbToHex, rgbToHsl, hslToRgb, rgbToCmyk,
   rgbToOklch, rgbToLab, rgbToLch
 } from '../composables/useColorConverter'
