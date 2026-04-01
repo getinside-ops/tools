@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('imageResizer.title') }}</h1>
-      <p>{{ t('imageResizer.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('imageResizer.title')"
+    :description="t('imageResizer.desc')"
+  >
+    <template #icon>
+      <Maximize2 :size="24" />
+    </template>
 
     <GiImageUpload
       v-if="!originalUrl"
@@ -57,14 +59,16 @@
       <img :src="resizedUrl" style="max-width: 100%; border-radius: var(--gi-radius); margin-bottom: 1rem;" />
       <button class="gi-btn-primary" @click="downloadResized">⬇️ {{ t('imageResizer.download') }}</button>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Maximize2 } from 'lucide-vue-next'
 import { resizeImage } from '../composables/useImageResizer'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
