@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('colorblind.title') }}</h1>
-      <p>{{ t('colorblind.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('colorblind.title')"
+    :description="t('colorblind.desc')"
+  >
+    <template #icon>
+      <Eye :size="24" />
+    </template>
 
     <div class="gi-grid">
       <!-- Controls -->
@@ -49,14 +51,16 @@
         <feColorMatrix type="matrix" :values="currentMatrix" />
       </filter>
     </svg>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Eye } from 'lucide-vue-next'
 import { getColorMatrix, type ColorBlindType } from '../composables/useColorblind'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
