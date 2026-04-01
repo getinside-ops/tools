@@ -12,9 +12,8 @@
     <div v-else>
       <div class="gi-grid">
         <!-- Controls -->
-        <div class="gi-field">
+        <GiResultCard :title="t('favicon.preview')">
           <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1rem" @click="reset">{{ t('imageCropper.reset') }}</button>
-          <div class="gi-result-label">{{ t('favicon.preview') }}</div>
 
           <div class="favicon-previews">
             <div v-for="res in results" :key="res.size" class="favicon-preview-item">
@@ -25,13 +24,12 @@
               <button class="gi-btn-ghost" @click="downloadSingle(res)">⬇️</button>
             </div>
           </div>
-        </div>
+        </GiResultCard>
 
         <!-- Main Preview -->
-        <div class="gi-result" style="margin-top: 0">
-          <div class="gi-result-label">Source</div>
+        <GiResultCard title="Source">
           <img :src="originalUrl" style="max-width: 100%; border-radius: var(--gi-radius); box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
-        </div>
+        </GiResultCard>
       </div>
     </div>
   </ToolPageLayout>
@@ -43,6 +41,7 @@ import { useI18n } from 'vue-i18n'
 import { Image } from 'lucide-vue-next'
 import { generateFavicons, type FaviconResult } from '../composables/useFavicon'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
