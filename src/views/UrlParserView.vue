@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-
-    <div class="gi-tool-header">
-      <h1>{{ t('urlParser.title') }}</h1>
-      <p>{{ t('urlParser.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('urlParser.title')" :subtitle="t('urlParser.desc')">
+    <template #icon>
+      <Link class="tool-page-icon" />
+    </template>
 
     <!-- Input Section -->
     <div class="gi-field">
@@ -199,6 +196,7 @@
     </div>
 
     <!-- Educational Guide (Collapsible) -->
+    <template #pedagogic>
     <div class="gi-guide-section">
       <button class="gi-guide-toggle" @click="showGuide = !showGuide">
         <ChevronDown :class="['gi-guide-icon', { 'gi-guide-expanded': showGuide }]" />
@@ -217,16 +215,18 @@
         </div>
       </Transition>
     </div>
-  </div>
+    </template>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Copy, X, Info, ChevronDown } from 'lucide-vue-next'
+import { Copy, X, Info, ChevronDown, Link } from 'lucide-vue-next'
 import { parseUrl, type ParsedUrl } from '../composables/useUrlParser'
 import Tooltip from '../components/Tooltip.vue'
 import UrlAnatomyDiagram from '../components/UrlAnatomyDiagram.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
@@ -279,6 +279,11 @@ async function copyAll() {
 </script>
 
 <style scoped>
+.tool-page-icon {
+  width: 24px;
+  height: 24px;
+}
+
 .gi-input-wrapper {
   display: flex;
   gap: 0.5rem;
