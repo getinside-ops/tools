@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('contrastChecker.title') }}</h1>
-      <p>{{ t('contrastChecker.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('contrastChecker.title')"
+    :description="t('contrastChecker.desc')"
+  >
+    <template #icon>
+      <Contrast :size="24" />
+    </template>
 
     <!-- Inputs & Preview Card -->
     <div class="gi-card gi-grid" style="margin-bottom: 2rem; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
@@ -92,12 +94,14 @@
         </div>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import { Contrast } from 'lucide-vue-next'
 import { getWcagContrast, getApcaContrast, meetsWcagLevel } from '../composables/useContrast'
 
 const { t } = useI18n()
