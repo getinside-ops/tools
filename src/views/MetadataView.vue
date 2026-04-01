@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('metadata.title') }}</h1>
-      <p>{{ t('metadata.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('metadata.title')"
+    :description="t('metadata.desc')"
+  >
+    <template #icon>
+      <FileText :size="24" />
+    </template>
 
-    <div class="gi-field">
-      <!-- Upload Area -->
-      <GiImageUpload
-        @upload="handleImageUpload"
-        @error="handleError"
-      />
-    </div>
+    <!-- Upload Area -->
+    <GiImageUpload
+      @upload="handleImageUpload"
+      @error="handleError"
+    />
 
     <div v-if="metadata" class="gi-result" style="margin-top: 2rem;">
       <div class="gi-result-label">Technical Properties</div>
@@ -38,14 +38,16 @@
         <img :src="previewUrl" class="preview-thumb" />
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { FileText } from 'lucide-vue-next'
 import { extractBasicMetadata, type ImageMetadata } from '../composables/useMetadata'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
