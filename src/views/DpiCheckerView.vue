@@ -33,8 +33,7 @@
     <!-- Results -->
     <template v-if="widthPx > 0 && heightPx > 0">
       <!-- DPI Table -->
-      <div class="gi-result">
-        <div class="gi-result-label">{{ t('dpiChecker.resultTitle') }}</div>
+      <GiResultCard :title="t('dpiChecker.resultTitle')">
         <table class="gi-table gi-dpi-table" style="margin-top:0.75rem">
           <thead>
             <tr>
@@ -60,14 +59,10 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </GiResultCard>
 
       <!-- Format Compatibility -->
-      <div class="gi-result" style="margin-top:1rem">
-        <div class="gi-result-header">
-          <span class="gi-result-label">{{ t('dpiChecker.formatTitle') }}</span>
-        </div>
-
+      <GiResultCard :title="t('dpiChecker.formatTitle')" style="margin-top:1rem">
         <div class="gi-format-section">
           <h3 class="gi-format-section-title">{{ t('dpiChecker.featuredFormats') }}</h3>
           <div class="gi-format-grid">
@@ -100,11 +95,10 @@
             {{ t(showExtendedFormats ? 'dpiChecker.showLess' : 'dpiChecker.showMore') }}
           </button>
         </div>
-      </div>
+      </GiResultCard>
 
       <!-- Recommended Uses -->
-      <div class="gi-result gi-recommended-use" style="margin-top:1rem">
-        <div class="gi-result-label">{{ t('dpiChecker.recommendedUse.title') }}</div>
+      <GiResultCard :title="t('dpiChecker.recommendedUse.title')" style="margin-top:1rem">
         <div class="gi-recommended-grid">
           <div class="gi-recommended-section gi-suitable">
             <h4>{{ t('dpiChecker.recommendedUse.suitable') }}</h4>
@@ -119,11 +113,10 @@
             </ul>
           </div>
         </div>
-      </div>
+      </GiResultCard>
 
       <!-- Visual Comparison -->
-      <div class="gi-result gi-visual-comparison" style="margin-top:1rem">
-        <div class="gi-result-label">{{ t('dpiChecker.visualComparison.title') }}</div>
+      <GiResultCard :title="t('dpiChecker.visualComparison.title')" style="margin-top:1rem">
         <p class="gi-comparison-desc">{{ t('dpiChecker.visualComparison.description') }}</p>
         <div class="gi-comparison-grid">
           <div v-for="row in dimensions" :key="row.dpi" class="gi-comparison-item">
@@ -144,11 +137,10 @@
             <div class="gi-comparison-dims">{{ row.widthCm }} × {{ row.heightCm }} cm</div>
           </div>
         </div>
-      </div>
+      </GiResultCard>
 
       <!-- Educational Section -->
-      <div class="gi-result gi-educational" style="margin-top:1rem">
-        <div class="gi-result-label">{{ t('dpiChecker.educational.title') }}</div>
+      <GiResultCard :title="t('dpiChecker.educational.title')" collapsible style="margin-top:1rem">
         <div class="gi-educational-content">
           <h3 class="gi-edu-title">{{ t('dpiChecker.educational.whatIsDpi') }}</h3>
           <p class="gi-edu-text">{{ t('dpiChecker.educational.dpiDefinition') }}</p>
@@ -161,7 +153,7 @@
             <li>{{ t('dpiChecker.educational.dpiLevels.photo') }}</li>
           </ul>
         </div>
-      </div>
+      </GiResultCard>
     </template>
   </ToolPageLayout>
 </template>
@@ -172,6 +164,7 @@ import { Ruler } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import {
   calculatePrintDimensions,
   getFormatStatus,
@@ -398,9 +391,6 @@ function getComparisonHeight(wCm: number, hCm: number) {
 }
 
 /* Format Section */
-.gi-result-header {
-  margin-bottom: 1rem;
-}
 .gi-format-section {
   margin-bottom: 1.25rem;
 }
