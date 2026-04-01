@@ -9,9 +9,9 @@
 
     <!-- Inputs & Preview Card -->
     <div class="gi-card gi-grid" style="margin-bottom: 2rem; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-      
+
       <!-- Interactive Preview Area -->
-      <div 
+      <div
         style="padding: 3rem 2rem; min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: background 0.2s, color 0.2s"
         :style="{ backgroundColor: bgHex, color: textHex }"
       >
@@ -25,25 +25,27 @@
 
       <!-- Controls -->
       <div style="padding: 1.5rem; display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; background: var(--gi-surface);">
-        <div class="gi-input-group" style="flex: 1; min-width: 150px;">
-          <label class="gi-label">{{ t('contrastChecker.textColor') }}</label>
-          <div style="display: flex; gap: 0.5rem">
-            <input v-model="textHex" type="color" class="gi-input" style="width: 50px; padding: 2px" />
-            <input v-model="textHex" type="text" class="gi-input" placeholder="#000000" />
-          </div>
-        </div>
+        <GiFormField :label="t('contrastChecker.textColor')" style="flex: 1; min-width: 150px; margin-bottom: 0;">
+          <template #input>
+            <div style="display: flex; gap: 0.5rem">
+              <input v-model="textHex" type="color" class="gi-input" style="width: 50px; padding: 2px" />
+              <input v-model="textHex" type="text" class="gi-input" placeholder="#000000" />
+            </div>
+          </template>
+        </GiFormField>
 
-        <button @click="swapColors" class="gi-btn-ghost" title="Swap Colors" style="padding: 0.5rem; border-radius: 50%;">
+        <button @click="swapColors" class="gi-btn-ghost" title="Swap Colors" style="padding: 0.5rem; border-radius: 50%; margin-top: var(--gi-space-md);">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
         </button>
 
-        <div class="gi-input-group" style="flex: 1; min-width: 150px;">
-          <label class="gi-label">{{ t('contrastChecker.bgColor') }}</label>
-          <div style="display: flex; gap: 0.5rem">
-            <input v-model="bgHex" type="color" class="gi-input" style="width: 50px; padding: 2px" />
-            <input v-model="bgHex" type="text" class="gi-input" placeholder="#FFFFFF" />
-          </div>
-        </div>
+        <GiFormField :label="t('contrastChecker.bgColor')" style="flex: 1; min-width: 150px; margin-bottom: 0;">
+          <template #input>
+            <div style="display: flex; gap: 0.5rem">
+              <input v-model="bgHex" type="color" class="gi-input" style="width: 50px; padding: 2px" />
+              <input v-model="bgHex" type="text" class="gi-input" placeholder="#FFFFFF" />
+            </div>
+          </template>
+        </GiFormField>
       </div>
     </div>
 
@@ -101,6 +103,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 import { Contrast } from 'lucide-vue-next'
 import { getWcagContrast, getApcaContrast, meetsWcagLevel } from '../composables/useContrast'
 
