@@ -1,12 +1,8 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-
-    <div class="gi-tool-header">
-      <h1>{{ t('dpiChecker.title') }}</h1>
-      <p>{{ t('dpiChecker.desc') }}</p>
-    </div>
-
+  <ToolPageLayout
+    :title="t('dpiChecker.title')"
+    :description="t('dpiChecker.desc')"
+  >
     <!-- Upload Zone -->
     <GiImageUpload
       @upload="handleImageUpload"
@@ -160,12 +156,13 @@
         </div>
       </div>
     </template>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import {
   calculatePrintDimensions,
   getFormatStatus,
@@ -244,21 +241,6 @@ function getComparisonHeight(wCm: number, hCm: number) {
 </script>
 
 <style scoped>
-/* Back Link */
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-
 /* Upload Zone */
 .gi-upload-zone {
   border: 2px dashed var(--gi-border);
@@ -666,7 +648,6 @@ function getComparisonHeight(wCm: number, hCm: number) {
   .gi-upload-zone.is-dragover {
     transform: none;
   }
-  .gi-back-link,
   .gi-upload-zone,
   .gi-comparison-rect {
     transition: none;
