@@ -242,6 +242,7 @@ const fr = {
     label: 'URL à vérifier',
     check: 'Vérifier',
     checking: 'Vérification…',
+    resultTitle: 'Résultat',
     noRedirect: 'Aucune redirection — cette URL pointe directement vers sa destination.',
     fallbackTitle: 'Impossible de vérifier via le navigateur',
     fallbackDesc: 'Utilisez cette commande dans votre terminal :',

@@ -244,6 +244,7 @@ const en: Messages = {
     label: 'URL to check',
     check: 'Check',
     checking: 'Checking…',
+    resultTitle: 'Result',
     noRedirect: 'No redirect — this URL points directly to its destination.',
     fallbackTitle: 'Cannot check via browser',
     fallbackDesc: 'Use this command in your terminal:',

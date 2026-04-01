@@ -15,7 +15,12 @@
       {{ loading ? t('redirectChecker.checking') : t('redirectChecker.check') }}
     </button>
 
-    <div v-if="result" class="gi-result" style="margin-top:1.5rem">
+    <GiResultCard
+      v-if="result"
+      :title="t('redirectChecker.resultTitle')"
+      variant="success"
+      style="margin-top: 1.5rem"
+    >
       <p v-if="!result.redirected" class="gi-no-redirect">{{ t('redirectChecker.noRedirect') }}</p>
       <div v-else class="gi-hops-meta">
         {{ t('redirectChecker.hopsCount', { n: result.hops.length - 1 }) }}
@@ -35,13 +40,19 @@
           <div v-if="i < result.hops.length - 1" class="gi-arrow" aria-hidden="true">↓</div>
         </div>
       </div>
-    </div>
+    </GiResultCard>
 
-    <div v-if="error" class="gi-result" style="border-color: var(--gi-tint-red-border); margin-top:1.5rem">
-      <div class="gi-result-label" style="color:var(--gi-tint-red-text)">{{ t('redirectChecker.fallbackTitle') }}</div>
-      <p style="margin-bottom:0.5rem; font-size:0.9rem; color:var(--gi-text-muted)">{{ t('redirectChecker.fallbackDesc') }}</p>
+    <GiResultCard
+      v-if="error"
+      :title="t('redirectChecker.fallbackTitle')"
+      variant="error"
+      style="margin-top: 1.5rem"
+    >
+      <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--gi-text-muted)">
+        {{ t('redirectChecker.fallbackDesc') }}
+      </p>
       <code class="gi-code">curl -IL {{ inputUrl }}</code>
-    </div>
+    </GiResultCard>
   </ToolPageLayout>
 </template>
 
@@ -50,7 +61,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Link } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
-import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { checkRedirect, type RedirectResult } from '../composables/useRedirectChecker'
 
 const { t } = useI18n()
