@@ -51,133 +51,137 @@
       <!-- Components Grid -->
       <div class="gi-components-grid">
         <!-- Protocol -->
-        <div class="gi-result-card">
-          <div class="gi-card-header">
-            <span class="gi-card-label">{{ t('urlParser.keys.protocol') }}</span>
-            <Tooltip :content="t('urlParser.tooltips.protocol')">
-              <template #trigger>
+        <GiResultCard :title="t('urlParser.keys.protocol')">
+          <div class="gi-card-content">
+            <div class="gi-card-header">
+              <Tooltip :content="t('urlParser.tooltips.protocol')">
                 <Info class="gi-tooltip-icon" />
-              </template>
-            </Tooltip>
+              </Tooltip>
+            </div>
+            <div class="gi-card-value gi-code">{{ parsedUrl.protocol }}</div>
           </div>
-          <div class="gi-card-value gi-code">{{ parsedUrl.protocol }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.protocol, 'protocol')">
-            <Copy class="gi-icon-sm" />
-            {{ copiedField === 'protocol' ? t('urlParser.copied') : t('nav.copy') }}
-          </button>
-        </div>
+          <template #actions>
+            <button class="gi-copy-btn" @click="copy(parsedUrl.protocol, 'protocol')">
+              <Copy class="gi-icon-sm" />
+              {{ copiedField === 'protocol' ? t('urlParser.copied') : t('nav.copy') }}
+            </button>
+          </template>
+        </GiResultCard>
 
         <!-- Origin -->
-        <div class="gi-result-card">
-          <div class="gi-card-header">
-            <span class="gi-card-label">{{ t('urlParser.keys.origin') }}</span>
-            <Tooltip :content="t('urlParser.tooltips.origin')">
-              <template #trigger>
+        <GiResultCard :title="t('urlParser.keys.origin')">
+          <div class="gi-card-content">
+            <div class="gi-card-header">
+              <Tooltip :content="t('urlParser.tooltips.origin')">
                 <Info class="gi-tooltip-icon" />
-              </template>
-            </Tooltip>
+              </Tooltip>
+            </div>
+            <div class="gi-card-value gi-code">{{ parsedUrl.origin }}</div>
           </div>
-          <div class="gi-card-value gi-code">{{ parsedUrl.origin }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.origin, 'origin')">
-            <Copy class="gi-icon-sm" />
-            {{ copiedField === 'origin' ? t('urlParser.copied') : t('nav.copy') }}
-          </button>
-        </div>
+          <template #actions>
+            <button class="gi-copy-btn" @click="copy(parsedUrl.origin, 'origin')">
+              <Copy class="gi-icon-sm" />
+              {{ copiedField === 'origin' ? t('urlParser.copied') : t('nav.copy') }}
+            </button>
+          </template>
+        </GiResultCard>
 
         <!-- Hostname -->
-        <div class="gi-result-card">
-          <div class="gi-card-header">
-            <span class="gi-card-label">{{ t('urlParser.keys.hostname') }}</span>
-            <Tooltip :content="t('urlParser.tooltips.hostname')">
-              <template #trigger>
+        <GiResultCard :title="t('urlParser.keys.hostname')">
+          <div class="gi-card-content">
+            <div class="gi-card-header">
+              <Tooltip :content="t('urlParser.tooltips.hostname')">
                 <Info class="gi-tooltip-icon" />
-              </template>
-            </Tooltip>
+              </Tooltip>
+            </div>
+            <div class="gi-card-value gi-code">{{ parsedUrl.hostname }}</div>
           </div>
-          <div class="gi-card-value gi-code">{{ parsedUrl.hostname }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.hostname, 'hostname')">
-            <Copy class="gi-icon-sm" />
-            {{ copiedField === 'hostname' ? t('urlParser.copied') : t('nav.copy') }}
-          </button>
-        </div>
+          <template #actions>
+            <button class="gi-copy-btn" @click="copy(parsedUrl.hostname, 'hostname')">
+              <Copy class="gi-icon-sm" />
+              {{ copiedField === 'hostname' ? t('urlParser.copied') : t('nav.copy') }}
+            </button>
+          </template>
+        </GiResultCard>
 
         <!-- Port -->
-        <div class="gi-result-card">
-          <div class="gi-card-header">
-            <span class="gi-card-label">{{ t('urlParser.keys.port') }}</span>
-            <Tooltip :content="t('urlParser.tooltips.port')">
-              <template #trigger>
+        <GiResultCard :title="t('urlParser.keys.port')">
+          <div class="gi-card-content">
+            <div class="gi-card-header">
+              <Tooltip :content="t('urlParser.tooltips.port')">
                 <Info class="gi-tooltip-icon" />
-              </template>
-            </Tooltip>
+              </Tooltip>
+            </div>
+            <div class="gi-card-value gi-code">{{ parsedUrl.port || '-' }}</div>
           </div>
-          <div class="gi-card-value gi-code">{{ parsedUrl.port || '-' }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.port, 'port')">
-            <Copy class="gi-icon-sm" />
-            {{ copiedField === 'port' ? t('urlParser.copied') : t('nav.copy') }}
-          </button>
-        </div>
+          <template #actions>
+            <button class="gi-copy-btn" @click="copy(parsedUrl.port, 'port')">
+              <Copy class="gi-icon-sm" />
+              {{ copiedField === 'port' ? t('urlParser.copied') : t('nav.copy') }}
+            </button>
+          </template>
+        </GiResultCard>
 
         <!-- Pathname -->
-        <div class="gi-result-card gi-card-full-width">
-          <div class="gi-card-header">
-            <span class="gi-card-label">{{ t('urlParser.keys.pathname') }}</span>
-            <Tooltip :content="t('urlParser.tooltips.pathname')">
-              <template #trigger>
+        <GiResultCard :title="t('urlParser.keys.pathname')" class="gi-card-full-width">
+          <div class="gi-card-content">
+            <div class="gi-card-header">
+              <Tooltip :content="t('urlParser.tooltips.pathname')">
                 <Info class="gi-tooltip-icon" />
-              </template>
-            </Tooltip>
+              </Tooltip>
+            </div>
+            <div class="gi-card-value gi-code">{{ parsedUrl.pathname }}</div>
           </div>
-          <div class="gi-card-value gi-code">{{ parsedUrl.pathname }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.pathname, 'pathname')">
-            <Copy class="gi-icon-sm" />
-            {{ copiedField === 'pathname' ? t('urlParser.copied') : t('nav.copy') }}
-          </button>
-        </div>
+          <template #actions>
+            <button class="gi-copy-btn" @click="copy(parsedUrl.pathname, 'pathname')">
+              <Copy class="gi-icon-sm" />
+              {{ copiedField === 'pathname' ? t('urlParser.copied') : t('nav.copy') }}
+            </button>
+          </template>
+        </GiResultCard>
 
         <!-- Search -->
-        <div class="gi-result-card gi-card-full-width">
-          <div class="gi-card-header">
-            <span class="gi-card-label">{{ t('urlParser.keys.search') }}</span>
-            <Tooltip :content="t('urlParser.tooltips.search')">
-              <template #trigger>
+        <GiResultCard :title="t('urlParser.keys.search')" class="gi-card-full-width">
+          <div class="gi-card-content">
+            <div class="gi-card-header">
+              <Tooltip :content="t('urlParser.tooltips.search')">
                 <Info class="gi-tooltip-icon" />
-              </template>
-            </Tooltip>
+              </Tooltip>
+            </div>
+            <div class="gi-card-value gi-code">{{ parsedUrl.search || '-' }}</div>
           </div>
-          <div class="gi-card-value gi-code">{{ parsedUrl.search || '-' }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.search, 'search')">
-            <Copy class="gi-icon-sm" />
-            {{ copiedField === 'search' ? t('urlParser.copied') : t('nav.copy') }}
-          </button>
-        </div>
+          <template #actions>
+            <button class="gi-copy-btn" @click="copy(parsedUrl.search, 'search')">
+              <Copy class="gi-icon-sm" />
+              {{ copiedField === 'search' ? t('urlParser.copied') : t('nav.copy') }}
+            </button>
+          </template>
+        </GiResultCard>
 
         <!-- Hash -->
-        <div class="gi-result-card gi-card-full-width">
-          <div class="gi-card-header">
-            <span class="gi-card-label">{{ t('urlParser.keys.hash') }}</span>
-            <Tooltip :content="t('urlParser.tooltips.hash')">
-              <template #trigger>
+        <GiResultCard :title="t('urlParser.keys.hash')" class="gi-card-full-width">
+          <div class="gi-card-content">
+            <div class="gi-card-header">
+              <Tooltip :content="t('urlParser.tooltips.hash')">
                 <Info class="gi-tooltip-icon" />
-              </template>
-            </Tooltip>
+              </Tooltip>
+            </div>
+            <div class="gi-card-value gi-code">{{ parsedUrl.hash || '-' }}</div>
           </div>
-          <div class="gi-card-value gi-code">{{ parsedUrl.hash || '-' }}</div>
-          <button class="gi-copy-btn" @click="copy(parsedUrl.hash, 'hash')">
-            <Copy class="gi-icon-sm" />
-            {{ copiedField === 'hash' ? t('urlParser.copied') : t('nav.copy') }}
-          </button>
-        </div>
+          <template #actions>
+            <button class="gi-copy-btn" @click="copy(parsedUrl.hash, 'hash')">
+              <Copy class="gi-icon-sm" />
+              {{ copiedField === 'hash' ? t('urlParser.copied') : t('nav.copy') }}
+            </button>
+          </template>
+        </GiResultCard>
       </div>
 
       <!-- Query Parameters -->
-      <div v-if="Object.keys(parsedUrl.params).length > 0" class="gi-params-section">
+      <GiResultCard v-if="Object.keys(parsedUrl.params).length > 0" :title="t('urlParser.parameters')" class="gi-params-section">
         <div class="gi-params-header">
-          <h3 class="gi-params-title">{{ t('urlParser.parameters') }}</h3>
           <Tooltip :content="t('urlParser.tooltips.params')">
-            <template #trigger>
-              <Info class="gi-tooltip-icon" />
-            </template>
+            <Info class="gi-tooltip-icon" />
           </Tooltip>
         </div>
         <div class="gi-params-grid">
@@ -193,7 +197,7 @@
             </button>
           </div>
         </div>
-      </div>
+      </GiResultCard>
     </div>
 
     <!-- Educational Guide (Collapsible) -->
@@ -229,6 +233,7 @@ import Tooltip from '../components/Tooltip.vue'
 import UrlAnatomyDiagram from '../components/UrlAnatomyDiagram.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 
 const { t } = useI18n()
 
@@ -337,34 +342,20 @@ async function copyAll() {
   margin-bottom: 2rem;
 }
 
-.gi-result-card {
-  background: var(--gi-surface);
-  border: 1px solid var(--gi-border);
-  border-radius: 8px;
-  padding: 1rem;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.gi-result-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
 .gi-card-full-width {
   grid-column: 1 / -1;
+}
+
+.gi-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .gi-card-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.gi-card-label {
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  font-weight: 500;
 }
 
 .gi-tooltip-icon {
@@ -383,7 +374,6 @@ async function copyAll() {
   font-size: 1rem;
   font-family: 'Fira Code', 'Consolas', monospace;
   word-break: break-all;
-  margin-bottom: 0.75rem;
   color: var(--gi-text);
 }
 
@@ -413,11 +403,7 @@ async function copyAll() {
 }
 
 .gi-params-section {
-  background: var(--gi-surface);
-  border: 1px solid var(--gi-border);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
 .gi-params-header {
@@ -425,13 +411,6 @@ async function copyAll() {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
-}
-
-.gi-params-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--gi-text);
-  margin: 0;
 }
 
 .gi-params-grid {
