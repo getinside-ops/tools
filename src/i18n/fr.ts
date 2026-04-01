@@ -110,13 +110,6 @@ const fr = {
     otherWeight: 'Autre...',
     reset: 'Réinitialiser',
     enterValues: 'Entrez les valeurs pour calculer',
-    hints: {
-      light: 'Papier bureau standard',
-      medium: 'Papier bureau premium',
-      flyer: 'Papier flyer / Dépliant',
-      card: 'Papier cartonné / Couverture',
-      thick: 'Carton épais / Emballage',
-    },
     comparisons: {
       lightPackage: 'un petit colis',
       mediumPackage: 'un sac de farine',

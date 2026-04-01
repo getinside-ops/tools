@@ -112,13 +112,6 @@ const en: Messages = {
     otherWeight: 'Other...',
     reset: 'Reset calculator',
     enterValues: 'Enter values to calculate',
-    hints: {
-      light: 'Standard office paper',
-      medium: 'Premium office paper',
-      flyer: 'Flyer / Leaflet paper',
-      card: 'Card stock / Cover paper',
-      thick: 'Heavy card / Packaging',
-    },
     comparisons: {
       lightPackage: 'a small package',
       mediumPackage: 'a bag of flour',
