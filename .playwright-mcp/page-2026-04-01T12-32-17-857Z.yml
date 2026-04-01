@@ -1,0 +1,147 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - link "getinside" [ref=e4] [cursor=pointer]:
+      - /url: https://getinside-ops.github.io/handbook/
+      - img "getinside" [ref=e5]
+    - generic [ref=e6]:
+      - button "Change language" [ref=e7] [cursor=pointer]:
+        - img [ref=e8]
+        - img [ref=e10]
+      - button "Toggle theme" [ref=e12] [cursor=pointer]:
+        - img [ref=e15]
+  - generic [ref=e18]:
+    - generic [ref=e19]:
+      - banner [ref=e20]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e23]: Cyrielle de MieuxQueDesFleurs
+            - heading "Tu veux faire venir le soleil plus vite ? 🌸" [level=1] [ref=e24]
+            - generic [ref=e25]: Klaviyo
+            - generic [ref=e26]: 20/03/2026 à 08:58
+          - generic [ref=e29]:
+            - button "Mobile view (1)" [ref=e30] [cursor=pointer]:
+              - img [ref=e31]
+            - button "Tablet view (2)" [ref=e33] [cursor=pointer]:
+              - img [ref=e34]
+            - button "Desktop view (3)" [ref=e36] [cursor=pointer]:
+              - img [ref=e37]
+          - generic [ref=e40]:
+            - button "Voir les liens" [ref=e41] [cursor=pointer]
+            - button "Download" [ref=e42] [cursor=pointer]
+            - button "Share" [ref=e43] [cursor=pointer]:
+              - img [ref=e44]
+              - text: Share
+      - iframe [ref=e52]:
+        - generic [ref=f1e9]:
+          - table [ref=f1e11]:
+            - rowgroup [ref=f1e12]:
+              - row [ref=f1e13]:
+                - cell [ref=f1e14]:
+                  - link [ref=f1e15] [cursor=pointer]:
+                    - /url: https://ctrk.klclick.com/l/01KM57G3ZRD2MTEN73X7RMAGG6_0
+                    - img [ref=f1e16]
+          - table [ref=f1e18]:
+            - rowgroup [ref=f1e19]:
+              - row [ref=f1e20]:
+                - cell [ref=f1e21]:
+                  - link [ref=f1e22] [cursor=pointer]:
+                    - /url: https://ctrk.klclick.com/l/01KM57G3ZRD2MTEN73X7RMAGG6_1
+                    - img [ref=f1e23]
+          - table [ref=f1e25]:
+            - rowgroup [ref=f1e26]:
+              - row [ref=f1e27]:
+                - cell [ref=f1e28]:
+                  - link [ref=f1e29] [cursor=pointer]:
+                    - /url: https://ctrk.klclick.com/l/01KM57G3ZRD2MTEN73X7RMAGG6_2
+                    - img [ref=f1e30]
+          - generic [ref=f1e32]:
+            - generic [ref=f1e34]:
+              - link "Custom":
+                - /url: https://ctrk.klclick.com/l/01KM57G3ZRD2MTEN73X7RMAGG6_3
+                - img "Custom" [ref=f1e35] [cursor=pointer]
+            - generic [ref=f1e37]:
+              - link "Custom":
+                - /url: https://ctrk.klclick.com/l/01KM57G3ZRD2MTEN73X7RMAGG6_4
+                - img "Custom" [ref=f1e38] [cursor=pointer]
+            - generic [ref=f1e40]:
+              - link "Custom":
+                - /url: https://ctrk.klclick.com/l/01KM57G3ZRD2MTEN73X7RMAGG6_5
+                - img "Custom" [ref=f1e41] [cursor=pointer]
+            - generic [ref=f1e43]:
+              - link "Button Text":
+                - /url: https://ctrk.klclick.com/l/01KM57G3ZRD2MTEN73X7RMAGG6_6
+                - img "Button Text" [ref=f1e44] [cursor=pointer]
+            - generic [ref=f1e46]:
+              - link "Custom":
+                - /url: https://ctrk.klclick.com/l/01KM57G3ZRD2MTEN73X7RMAGG6_7
+                - img "Custom" [ref=f1e47] [cursor=pointer]
+          - paragraph [ref=f1e49]
+          - paragraph [ref=f1e53]:
+            - generic [ref=f1e54]:
+              - text: Vous ne souhaitez plus recevoir nos emails
+              - generic [ref=f1e56]:
+                - text: "?"
+                - link "Vous pouvez vous désinscrire ici." [ref=f1e58] [cursor=pointer]:
+                  - /url: https://ctrk.klclick.com/l/01KM57G3ZRD2MTEN73X7RMAGG6_8
+    - region "Sidebar" [ref=e55]:
+      - region "Audit scorecard" [ref=e56]:
+        - generic [ref=e59]: WARN
+        - generic [ref=e60]:
+          - generic [ref=e63]: "PASS: Aucun problème"
+          - generic [ref=e66]: "WARN: Attention requise"
+          - generic [ref=e69]: "FAIL: Problème critique"
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - img [ref=e72]
+            - generic [ref=e75]: Metadata
+            - 'generic "PASS: Preheader and subject present" [ref=e76]': PASS
+          - generic [ref=e77]:
+            - img [ref=e78]
+            - generic [ref=e80]: Pixels
+            - generic [ref=e81]: "1"
+            - 'generic "PASS: Pixels detected" [ref=e82]': PASS
+          - generic [ref=e83]:
+            - img [ref=e84]
+            - generic [ref=e87]: Links
+            - generic [ref=e88]: 0/9
+            - 'generic "WARN: No tracking links detected" [ref=e89]': WARN
+      - region "Audit detail" [ref=e90]:
+        - generic [ref=e91]:
+          - button "META" [ref=e92] [cursor=pointer]
+          - button "PIXELS" [ref=e93] [cursor=pointer]
+          - button "LIENS 9" [ref=e94] [cursor=pointer]:
+            - text: LIENS
+            - generic [ref=e95]: "9"
+        - generic [ref=e98]:
+          - generic [ref=e99]:
+            - generic [ref=e100]: Expéditeur
+            - generic [ref=e101]: Cyrielle de MieuxQueDesFleurs
+          - generic [ref=e102]:
+            - generic [ref=e103]: CRM
+            - generic [ref=e104]: Klaviyo
+          - generic [ref=e105]:
+            - generic [ref=e106]: Sujet
+            - generic "Tu veux faire venir le soleil plus vite ? 🌸" [ref=e107]
+          - generic [ref=e108]:
+            - generic [ref=e109]: Prévisualisation
+            - generic "Je te partage le tuto ..." [ref=e110]
+          - generic [ref=e111]:
+            - generic [ref=e112]: Reçu le
+            - generic [ref=e113]: 20/03/2026 à 08:58
+          - generic [ref=e114]:
+            - generic [ref=e115]: Taille
+            - generic [ref=e116]: 20.3 KB
+          - generic [ref=e117]:
+            - generic [ref=e118]: Risque coupure
+            - generic [ref=e119]: Low
+          - generic [ref=e120]:
+            - generic [ref=e121]: Liens
+            - generic [ref=e122]: "9"
+      - paragraph [ref=e124]:
+        - text: "Contact Opérations :"
+        - link "benoit@getinside.fr" [ref=e125] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e126] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+        - text: © 2026 getinside. Tous droits réservés.
