@@ -945,8 +945,9 @@ const resetCalculator = () => {
   grid-template-columns: 1fr 1fr 1.2fr;
   gap: var(--gi-space-lg);
   align-items: start;
-  max-height: calc(100vh - 200px);
+  max-height: calc(100vh - 280px);
   padding: var(--gi-space-md);
+  overflow-y: auto;
 }
 
 /* Compact input sections */
