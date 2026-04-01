@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-    <div class="gi-tool-header">
-      <h1>{{ t('utmBuilder.title') }}</h1>
-      <p>{{ t('utmBuilder.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('utmBuilder.title')"
+    :description="t('utmBuilder.desc')"
+  >
+    <template #icon>
+      <Link />
+    </template>
 
     <div class="gi-field">
       <label class="gi-label">{{ t('utmBuilder.destinationUrl') }}</label>
@@ -67,12 +68,14 @@
         </button>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Link } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { buildUtmUrl } from '../composables/useUtmBuilder'
 
 const { t } = useI18n()
@@ -111,19 +114,3 @@ async function copy() {
   setTimeout(() => { copied.value = false }, 2000)
 }
 </script>
-
-<style scoped>
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-</style>
