@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('imageCompressor.title') }}</h1>
-      <p>{{ t('imageCompressor.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('imageCompressor.title')"
+    :description="t('imageCompressor.desc')"
+  >
+    <template #icon>
+      <Image :size="24" />
+    </template>
 
     <!-- Upload Area -->
     <GiImageUpload
@@ -63,13 +65,15 @@
         </button>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Image } from 'lucide-vue-next'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { compressImage } from '../composables/useImageCompressor'
 
 const { t } = useI18n()
