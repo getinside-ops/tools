@@ -16,14 +16,18 @@
 
     <!-- Manual Input -->
     <div class="gi-row">
-      <div class="gi-field">
-        <label class="gi-label">{{ t('dpiChecker.widthPx') }}</label>
-        <input v-model.number="widthPx" type="number" min="1" class="gi-input" />
-      </div>
-      <div class="gi-field">
-        <label class="gi-label">{{ t('dpiChecker.heightPx') }}</label>
-        <input v-model.number="heightPx" type="number" min="1" class="gi-input" />
-      </div>
+      <GiFormField
+        :label="t('dpiChecker.widthPx')"
+        v-model="widthPx"
+        type="number"
+        min="1"
+      />
+      <GiFormField
+        :label="t('dpiChecker.heightPx')"
+        v-model="heightPx"
+        type="number"
+        min="1"
+      />
     </div>
 
     <!-- Results -->
@@ -167,6 +171,7 @@ import { ref, computed } from 'vue'
 import { Ruler } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 import {
   calculatePrintDimensions,
   getFormatStatus,
