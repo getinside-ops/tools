@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('palette.title') }}</h1>
-      <p>{{ t('palette.desc') }}</p>
-    </div>
+  <ToolPageLayout>
+    <template #icon>
+      <Palette />
+    </template>
 
     <div class="gi-grid">
       <!-- Upload Area -->
@@ -49,14 +48,16 @@
 
     <!-- Hidden Canvas -->
     <canvas ref="hiddenCanvas" style="display: none;"></canvas>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Palette } from 'lucide-vue-next'
 import { extractDominantColors } from '../composables/usePalette'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
