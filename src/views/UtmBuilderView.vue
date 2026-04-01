@@ -34,21 +34,20 @@
     <GiFormField :label="t('utmBuilder.content') + ' (' + t('utmBuilder.optional') + ')'" v-model="content" />
     <GiFormField :label="t('utmBuilder.term') + ' (' + t('utmBuilder.optional') + ')'" v-model="term" />
 
-    <div class="gi-result">
-      <div class="gi-result-label">{{ t('utmBuilder.result') }}</div>
+    <GiResultCard :title="t('utmBuilder.result')">
       <div v-if="urlError" style="color: var(--gi-tint-red-text)">
         {{ t('utmBuilder.invalidUrl') }}
       </div>
       <div v-else-if="!generatedUrl" style="color: var(--gi-text-muted); font-size: 0.9rem">
         {{ t('utmBuilder.fillRequired') }}
       </div>
-      <div v-else>
-        <p class="gi-code">{{ generatedUrl }}</p>
-        <button class="gi-btn" style="margin-top:0.75rem" @click="copy">
+      <p v-else class="gi-code">{{ generatedUrl }}</p>
+      <template #actions>
+        <button v-if="generatedUrl && !urlError" class="gi-btn" @click="copy">
           {{ copied ? t('utmBuilder.copied') : t('utmBuilder.copy') }}
         </button>
-      </div>
-    </div>
+      </template>
+    </GiResultCard>
   </ToolPageLayout>
 </template>
 
@@ -58,6 +57,7 @@ import { useI18n } from 'vue-i18n'
 import { Link } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { buildUtmUrl } from '../composables/useUtmBuilder'
 
 const { t } = useI18n()
