@@ -9,15 +9,15 @@
       <div class="gi-field">
         <div class="gi-label">{{ t('lorem.type') }}</div>
         <div class="mode-toggle">
-          <button 
-            class="gi-btn-ghost" 
+          <button
+            class="gi-btn-ghost"
             :class="{ active: mode === 'paragraphs' }"
             @click="mode = 'paragraphs'"
           >
             {{ t('lorem.modeParagraphs') }}
           </button>
-          <button 
-            class="gi-btn-ghost" 
+          <button
+            class="gi-btn-ghost"
             :class="{ active: mode === 'words' }"
             @click="mode = 'words'"
           >
@@ -25,15 +25,21 @@
           </button>
         </div>
 
-        <div v-if="mode === 'paragraphs'" class="gi-field">
-          <label class="gi-label">{{ t('lorem.paragraphs') }}</label>
-          <input v-model.number="paragraphs" type="number" class="gi-input" min="1" max="50" />
-        </div>
+        <GiFormField
+          v-if="mode === 'paragraphs'"
+          :label="t('lorem.paragraphs')"
+          type="number"
+          :model-value="paragraphs"
+          @update:model-value="paragraphs = Number($event)"
+        />
 
-        <div v-else class="gi-field">
-          <label class="gi-label">{{ t('lorem.words') }}</label>
-          <input v-model.number="words" type="number" class="gi-input" min="1" max="1000" />
-        </div>
+        <GiFormField
+          v-else
+          :label="t('lorem.words')"
+          type="number"
+          :model-value="words"
+          @update:model-value="words = Number($event)"
+        />
 
         <div class="gi-field">
           <label class="checkbox-label">
@@ -68,6 +74,7 @@ import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { generateLorem } from '../composables/useLoremIpsum'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 import { FileText } from 'lucide-vue-next'
 
 const { t } = useI18n()
