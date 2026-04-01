@@ -242,6 +242,7 @@ const fr = {
     label: 'URL à vérifier',
     check: 'Vérifier',
     checking: 'Vérification…',
+    resultTitle: 'Résultat',
     noRedirect: 'Aucune redirection — cette URL pointe directement vers sa destination.',
     fallbackTitle: 'Impossible de vérifier via le navigateur',
     fallbackDesc: 'Utilisez cette commande dans votre terminal :',
@@ -296,6 +297,9 @@ const fr = {
     errorSize: 'Fichier trop lourd (max 30 Mo).',
     errorType: 'Veuillez charger un fichier PDF.',
     errorServer: 'La conversion a échoué. Réessayez ou vérifiez le fichier.',
+    selectedFile: 'Fichier sélectionné',
+    error: 'Erreur',
+    ready: 'Prêt à télécharger',
     pedagogic: {
       title: 'À propos du PDF/X',
       description: 'Le PDF/X-1a est un standard ISO pour l\'impression professionnelle. Il garantit que votre fichier est prêt pour l\'imprimeur.',
@@ -507,6 +511,7 @@ const fr = {
   imageCompressor: {
     title: 'Compresseur d\'Image',
     desc: 'Optimisez vos images en réduisant leur poids tout en préservant la qualité.',
+    stats: 'Statistiques',
     select: 'Choisir une image',
     quality: 'Qualité',
     format: 'Format de sortie',
@@ -539,6 +544,7 @@ const fr = {
     crop: 'Recadrer',
     reset: 'Réinitialiser',
     download: 'Télécharger',
+    result: 'Résultat',
     pedagogic: {
       title: 'À propos du recadrage d\'images',
       description: 'Le recadrage permet de modifier la composition d\'une image et de l\'adapter aux formats requis par les différentes plateformes.',
@@ -600,6 +606,7 @@ const fr = {
     text: 'Texte (optionnel)',
     bgColor: 'Couleur de fond',
     textColor: 'Couleur du texte',
+    preview: 'Aperçu',
     download: 'Télécharger',
     pedagogic: {
       title: 'À propos des placeholders',
@@ -691,6 +698,7 @@ const fr = {
     label: 'Code EAN-13 (12 ou 13 chiffres)',
     checksum: 'Clé de contrôle : {n}',
     invalid: 'Format invalide (chiffres uniquement)',
+    preview: 'Aperçu du code-barres',
     copy: 'Copier le code',
     download: 'Télécharger en SVG',
     pedagogic: {
@@ -710,6 +718,8 @@ const fr = {
     dpi: 'Résolution de l\'image (DPI)',
     bleed: 'Fond perdu (mm)',
     safety: 'Zone de sécurité (mm)',
+    preview: 'Aperçu avec marges',
+    uploadTitle: 'Aucune image chargée',
     upload: 'Charger une image pour vérification',
     legend: {
       bleed: 'Fond perdu (découpe)',
@@ -750,6 +760,7 @@ const fr = {
     title: 'Informations de l\'Image (Metadata)',
     desc: 'Visualisez les propriétés et les métadonnées de n\'importe quelle image instantanément.',
     upload: 'Analyser une image (Faites glisser ici)',
+    technicalProperties: 'Propriétés Techniques',
     name: 'Nom du fichier',
     size: 'Taille',
     type: 'Format MIME',

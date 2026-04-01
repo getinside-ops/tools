@@ -1,78 +1,63 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-    <div class="gi-tool-header">
-      <h1>{{ t('utmBuilder.title') }}</h1>
-      <p>{{ t('utmBuilder.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('utmBuilder.title')"
+    :description="t('utmBuilder.desc')"
+  >
+    <template #icon>
+      <Link />
+    </template>
 
-    <div class="gi-field">
-      <label class="gi-label">{{ t('utmBuilder.destinationUrl') }}</label>
-      <input v-model="url" type="url" placeholder="https://example.com/page" class="gi-input" />
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">{{ t('utmBuilder.source') }}</label>
-      <input v-model="source" list="source-list" class="gi-input" />
-      <datalist id="source-list">
-        <option value="sponsored-mail" />
-        <option value="dedicated-email" />
-        <option value="display-email" />
-        <option value="social-ads" />
-      </datalist>
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">{{ t('utmBuilder.medium') }}</label>
-      <input v-model="medium" list="medium-list" class="gi-input" />
-      <datalist id="medium-list">
-        <option value="insert" />
-        <option value="email" />
-        <option value="display" />
-        <option value="social" />
-      </datalist>
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">
-        {{ t('utmBuilder.campaign') }}
-        <span class="gi-optional">({{ t('utmBuilder.optional') }})</span>
-      </label>
-      <input v-model="campaign" class="gi-input" />
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">
-        {{ t('utmBuilder.content') }}
-        <span class="gi-optional">({{ t('utmBuilder.optional') }})</span>
-      </label>
-      <input v-model="content" class="gi-input" />
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">
-        {{ t('utmBuilder.term') }}
-        <span class="gi-optional">({{ t('utmBuilder.optional') }})</span>
-      </label>
-      <input v-model="term" class="gi-input" />
-    </div>
+    <GiFormField :label="t('utmBuilder.destinationUrl')" type="url" placeholder="https://example.com/page" v-model="url" />
+    <GiFormField :label="t('utmBuilder.source')" v-model="source">
+      <template #input>
+        <input id="source-input" v-model="source" list="source-list" class="gi-input" />
+        <datalist id="source-list">
+          <option value="sponsored-mail" />
+          <option value="dedicated-email" />
+          <option value="display-email" />
+          <option value="social-ads" />
+        </datalist>
+      </template>
+    </GiFormField>
+    <GiFormField :label="t('utmBuilder.medium')" v-model="medium">
+      <template #input>
+        <input id="medium-input" v-model="medium" list="medium-list" class="gi-input" />
+        <datalist id="medium-list">
+          <option value="insert" />
+          <option value="email" />
+          <option value="display" />
+          <option value="social" />
+        </datalist>
+      </template>
+    </GiFormField>
+    <GiFormField :label="t('utmBuilder.campaign') + ' (' + t('utmBuilder.optional') + ')'" v-model="campaign" />
+    <GiFormField :label="t('utmBuilder.content') + ' (' + t('utmBuilder.optional') + ')'" v-model="content" />
+    <GiFormField :label="t('utmBuilder.term') + ' (' + t('utmBuilder.optional') + ')'" v-model="term" />
 
-    <div class="gi-result">
-      <div class="gi-result-label">{{ t('utmBuilder.result') }}</div>
+    <GiResultCard :title="t('utmBuilder.result')">
       <div v-if="urlError" style="color: var(--gi-tint-red-text)">
         {{ t('utmBuilder.invalidUrl') }}
       </div>
       <div v-else-if="!generatedUrl" style="color: var(--gi-text-muted); font-size: 0.9rem">
         {{ t('utmBuilder.fillRequired') }}
       </div>
-      <div v-else>
-        <p class="gi-code">{{ generatedUrl }}</p>
-        <button class="gi-btn" style="margin-top:0.75rem" @click="copy">
+      <p v-else class="gi-code">{{ generatedUrl }}</p>
+      <template #actions>
+        <button v-if="generatedUrl && !urlError" class="gi-btn" @click="copy">
           {{ copied ? t('utmBuilder.copied') : t('utmBuilder.copy') }}
         </button>
-      </div>
-    </div>
-  </div>
+      </template>
+    </GiResultCard>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Link } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { buildUtmUrl } from '../composables/useUtmBuilder'
 
 const { t } = useI18n()
@@ -111,19 +96,3 @@ async function copy() {
   setTimeout(() => { copied.value = false }, 2000)
 }
 </script>
-
-<style scoped>
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-</style>

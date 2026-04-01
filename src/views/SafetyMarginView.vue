@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('safetyMargin.title') }}</h1>
-      <p>{{ t('safetyMargin.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('safetyMargin.title')" :description="t('safetyMargin.desc')">
+    <template #icon>
+      <Ruler />
+    </template>
 
     <div class="gi-grid">
       <!-- Controls -->
@@ -17,21 +16,32 @@
 
         <div v-else class="gi-field">
           <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1.5rem" @click="reset">{{ t('imageCropper.reset') }}</button>
-          
-          <div class="gi-field">
-            <label class="gi-label">{{ t('safetyMargin.dpi') }}</label>
-            <input v-model.number="dpi" type="number" class="gi-input" min="72" max="1200" />
-          </div>
 
-          <div class="gi-field">
-            <label class="gi-label">{{ t('safetyMargin.bleed') }} (mm)</label>
-            <input v-model.number="bleedMm" type="number" class="gi-input" step="0.1" />
-          </div>
+          <GiFormField
+            :label="t('safetyMargin.dpi')"
+            type="number"
+            :model-value="dpi"
+            @update:model-value="dpi = Number($event)"
+            placeholder="300"
+            min="72"
+            max="1200"
+          />
 
-          <div class="gi-field">
-            <label class="gi-label">{{ t('safetyMargin.safety') }} (mm)</label>
-            <input v-model.number="safetyMm" type="number" class="gi-input" step="0.1" />
-          </div>
+          <GiFormField
+            :label="`${t('safetyMargin.bleed')} (mm)`"
+            type="number"
+            :model-value="bleedMm"
+            @update:model-value="bleedMm = Number($event)"
+            step="0.1"
+          />
+
+          <GiFormField
+            :label="`${t('safetyMargin.safety')} (mm)`"
+            type="number"
+            :model-value="safetyMm"
+            @update:model-value="safetyMm = Number($event)"
+            step="0.1"
+          />
 
           <div class="margin-legend">
             <div class="legend-item">
@@ -47,28 +57,36 @@
       </div>
 
       <!-- Preview Area -->
-      <div v-if="imageUrl" class="gi-result" style="margin-top: 0; display: flex; justify-content: center; align-items: flex-start; overflow: auto; background: var(--gi-bg-soft); padding: 2rem;">
-        <div class="preview-container" :style="containerStyle">
-          <img :src="imageUrl" class="preview-img" ref="previewImg" @load="updateImageSize" />
+      <GiResultCard v-if="imageUrl" :title="t('safetyMargin.preview')" style="margin-top: 0;">
+        <div style="display: flex; justify-content: center; overflow: auto;">
+          <div class="preview-container" :style="containerStyle">
+            <img :src="imageUrl" class="preview-img" ref="previewImg" @load="updateImageSize" />
 
-          <!-- Bleed Overlay -->
-          <div class="overlay-bleed" :style="bleedStyle"></div>
-          <!-- Safety Overlay -->
-          <div class="overlay-safety" :style="safetyStyle"></div>
+            <!-- Bleed Overlay -->
+            <div class="overlay-bleed" :style="bleedStyle"></div>
+            <!-- Safety Overlay -->
+            <div class="overlay-safety" :style="safetyStyle"></div>
+          </div>
         </div>
-      </div>
-      <div v-else class="gi-result" style="margin-top: 0; display: flex; align-items: center; justify-content: center; color: var(--gi-text-muted);">
-        {{ t('safetyMargin.upload') }}
-      </div>
+      </GiResultCard>
+      <GiResultCard v-else :title="t('safetyMargin.uploadTitle')" style="margin-top: 0;">
+        <div style="display: flex; align-items: center; justify-content: center; color: var(--gi-text-muted); padding: 2rem;">
+          {{ t('safetyMargin.upload') }}
+        </div>
+      </GiResultCard>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Ruler } from 'lucide-vue-next'
 import { mmToPx, DEFAULT_BLEED_MM, DEFAULT_SAFETY_MM } from '../composables/useSafetyMargin'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 

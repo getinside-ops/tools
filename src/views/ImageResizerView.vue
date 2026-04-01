@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('imageResizer.title') }}</h1>
-      <p>{{ t('imageResizer.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('imageResizer.title')"
+    :description="t('imageResizer.desc')"
+  >
+    <template #icon>
+      <Maximize2 :size="24" />
+    </template>
 
     <GiImageUpload
       v-if="!originalUrl"
@@ -21,14 +23,18 @@
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-          <div class="gi-field">
-            <label class="gi-label">{{ t('imageResizer.width') }}</label>
-            <input v-model.number="width" type="number" class="gi-input" @input="onWidthInput" />
-          </div>
-          <div class="gi-field">
-            <label class="gi-label">{{ t('imageResizer.height') }}</label>
-            <input v-model.number="height" type="number" class="gi-input" @input="onHeightInput" />
-          </div>
+          <GiFormField
+            :label="t('imageResizer.width')"
+            type="number"
+            :model-value="width"
+            @update:model-value="width = Number($event); onWidthInput()"
+          />
+          <GiFormField
+            :label="t('imageResizer.height')"
+            type="number"
+            :model-value="height"
+            @update:model-value="height = Number($event); onHeightInput()"
+          />
         </div>
 
         <div class="gi-field">
@@ -40,31 +46,35 @@
       </div>
 
       <!-- Preview -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-label">Preview</div>
-        <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 200px;">
+      <GiResultCard title="Preview">
+        <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 200px; position: relative;">
           <img :src="originalUrl" style="max-width: 100%; opacity: 0.5" />
           <div style="position: absolute; color: var(--gi-text); background: rgba(0,0,0,0.7); padding: 0.5rem; border-radius: 4px; pointer-events: none;">
             {{ originalWidth }} x {{ originalHeight }}
           </div>
         </div>
-      </div>
+      </GiResultCard>
     </div>
 
-    <!-- Result Result -->
-    <div v-if="resizedUrl" class="gi-result" style="margin-top: 2rem;">
-      <div class="gi-result-label">Result ({{ width }} x {{ height }})</div>
+    <!-- Result -->
+    <GiResultCard v-if="resizedUrl" :title="`Result (${width} x ${height})`">
       <img :src="resizedUrl" style="max-width: 100%; border-radius: var(--gi-radius); margin-bottom: 1rem;" />
-      <button class="gi-btn-primary" @click="downloadResized">⬇️ {{ t('imageResizer.download') }}</button>
-    </div>
-  </div>
+      <template #actions>
+        <button class="gi-btn-primary" @click="downloadResized">⬇️ {{ t('imageResizer.download') }}</button>
+      </template>
+    </GiResultCard>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Maximize2 } from 'lucide-vue-next'
 import { resizeImage } from '../composables/useImageResizer'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 

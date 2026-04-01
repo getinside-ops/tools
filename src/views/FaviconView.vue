@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('favicon.title') }}</h1>
-      <p>{{ t('favicon.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('favicon.title')" :description="t('favicon.desc')">
+    <template #icon>
+      <Image />
+    </template>
 
     <!-- Upload Area -->
     <div v-if="!originalUrl">
@@ -13,10 +12,9 @@
     <div v-else>
       <div class="gi-grid">
         <!-- Controls -->
-        <div class="gi-field">
+        <GiResultCard :title="t('favicon.preview')">
           <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1rem" @click="reset">{{ t('imageCropper.reset') }}</button>
-          <div class="gi-result-label">{{ t('favicon.preview') }}</div>
-          
+
           <div class="favicon-previews">
             <div v-for="res in results" :key="res.size" class="favicon-preview-item">
               <div class="favicon-preview-box" :style="{ width: res.size > 64 ? '64px' : res.size + 'px', height: res.size > 64 ? '64px' : res.size + 'px' }">
@@ -26,23 +24,25 @@
               <button class="gi-btn-ghost" @click="downloadSingle(res)">⬇️</button>
             </div>
           </div>
-        </div>
+        </GiResultCard>
 
         <!-- Main Preview -->
-        <div class="gi-result" style="margin-top: 0">
-          <div class="gi-result-label">Source</div>
+        <GiResultCard title="Source">
           <img :src="originalUrl" style="max-width: 100%; border-radius: var(--gi-radius); box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
-        </div>
+        </GiResultCard>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Image } from 'lucide-vue-next'
 import { generateFavicons, type FaviconResult } from '../composables/useFavicon'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiResultCard from '../components/GiResultCard.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 

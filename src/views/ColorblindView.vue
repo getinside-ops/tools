@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('colorblind.title') }}</h1>
-      <p>{{ t('colorblind.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('colorblind.title')"
+    :description="t('colorblind.desc')"
+  >
+    <template #icon>
+      <Eye :size="24" />
+    </template>
 
     <div class="gi-grid">
       <!-- Controls -->
@@ -34,13 +36,13 @@
         </div>
       </div>
 
-      <!-- Preview Area -->
-      <div class="gi-result" style="margin-top: 0; min-height: 300px; display: flex; align-items: center; justify-content: center; background: var(--gi-bg-soft);">
+      <!-- Simulation Preview -->
+      <GiResultCard :title="t('colorblind.types.normal')">
         <div v-if="imageUrl" class="preview-container">
           <img :src="imageUrl" class="preview-img" :style="{ filter: `url(#colorblind-filter)` }" />
         </div>
         <div v-else class="gi-text-muted">{{ t('colorblind.upload') }}</div>
-      </div>
+      </GiResultCard>
     </div>
 
     <!-- Hidden SVG Filter -->
@@ -49,14 +51,17 @@
         <feColorMatrix type="matrix" :values="currentMatrix" />
       </filter>
     </svg>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Eye } from 'lucide-vue-next'
 import { getColorMatrix, type ColorBlindType } from '../composables/useColorblind'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiResultCard from '../components/GiResultCard.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 

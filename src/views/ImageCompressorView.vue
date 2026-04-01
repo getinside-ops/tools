@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('imageCompressor.title') }}</h1>
-      <p>{{ t('imageCompressor.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('imageCompressor.title')"
+    :description="t('imageCompressor.desc')"
+  >
+    <template #icon>
+      <Image :size="24" />
+    </template>
 
     <!-- Upload Area -->
     <GiImageUpload
@@ -13,32 +15,39 @@
 
     <div v-if="originalUrl" style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
       <!-- Controls -->
-      <div class="gi-field">
-        <label class="gi-label">{{ t('imageCompressor.quality') }}: {{ (quality * 100).toFixed(0) }}%</label>
-        <input v-model.number="quality" type="range" min="0.1" max="1" step="0.05" class="gi-input" @change="processImage" />
+      <div>
+        <GiFormField :label="`${t('imageCompressor.quality')}: ${(quality * 100).toFixed(0)}%`">
+          <template #input>
+            <input v-model.number="quality" type="range" min="0.1" max="1" step="0.05" class="gi-input" @change="processImage" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label" style="margin-top: 1rem">{{ t('imageCompressor.format') }}</label>
-        <select v-model="format" class="gi-select" @change="processImage">
-          <option value="image/jpeg">JPEG</option>
-          <option value="image/webp">WebP</option>
-          <option value="image/png">PNG (Lossless)</option>
-        </select>
+        <GiFormField :label="t('imageCompressor.format')">
+          <template #input>
+            <select v-model="format" class="gi-select" @change="processImage">
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/webp">WebP</option>
+              <option value="image/png">PNG (Lossless)</option>
+            </select>
+          </template>
+        </GiFormField>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
-          <div class="gi-field">
-            <label class="gi-label">{{ t('imageCompressor.maxWidth') }}</label>
-            <input v-model.number="maxWidth" type="number" class="gi-input" @change="processImage" />
-          </div>
-          <div class="gi-field">
-            <label class="gi-label">{{ t('imageCompressor.maxHeight') }}</label>
-            <input v-model.number="maxHeight" type="number" class="gi-input" @change="processImage" />
-          </div>
+          <GiFormField :label="t('imageCompressor.maxWidth')">
+            <template #input>
+              <input v-model.number="maxWidth" type="number" class="gi-input" @change="processImage" />
+            </template>
+          </GiFormField>
+          <GiFormField :label="t('imageCompressor.maxHeight')">
+            <template #input>
+              <input v-model.number="maxHeight" type="number" class="gi-input" @change="processImage" />
+            </template>
+          </GiFormField>
         </div>
       </div>
 
       <!-- Stats & Download -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-label">Stats</div>
+      <GiResultCard :title="t('imageCompressor.stats')">
         <div style="display: flex; flex-direction: column; gap: 0.5rem">
           <div style="display: flex; justify-content: space-between">
             <span>{{ t('imageCompressor.originalSize') }}:</span>
@@ -50,26 +59,32 @@
           </div>
           <div style="display: flex; justify-content: space-between">
             <span>{{ t('imageCompressor.reduction') }}:</span>
-            <span class="gi-status gi-status-ok">{{ reduction }}%</span>
+            <GiStatusBadge variant="ok" :showIcon="true">{{ reduction }}%</GiStatusBadge>
           </div>
         </div>
 
-        <button 
-          class="gi-btn-primary" 
-          style="width: 100%; margin-top: 1.5rem" 
-          @click="downloadImage"
-        >
-          ⬇️ {{ t('imageCompressor.download') }}
-        </button>
-      </div>
+        <template #actions>
+          <button
+            class="gi-btn-primary"
+            style="width: 100%"
+            @click="downloadImage"
+          >
+            ⬇️ {{ t('imageCompressor.download') }}
+          </button>
+        </template>
+      </GiResultCard>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Image } from 'lucide-vue-next'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiResultCard from '../components/GiResultCard.vue'
+import GiStatusBadge from '../components/GiStatusBadge.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { compressImage } from '../composables/useImageCompressor'
 
 const { t } = useI18n()

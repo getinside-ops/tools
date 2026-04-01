@@ -1,27 +1,41 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('typeScale.title') }}</h1>
-      <p>{{ t('typeScale.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('typeScale.title')"
+    :description="t('typeScale.desc')"
+  >
+    <template #icon>
+      <Type :size="24" />
+    </template>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-      <div class="gi-field">
-        <label class="gi-label">{{ t('typeScale.baseSize') }}</label>
-        <input v-model.number="baseSize" type="number" class="gi-input" min="1" />
-      </div>
-      <div class="gi-field">
-        <label class="gi-label">{{ t('typeScale.ratio') }}</label>
-        <select v-model.number="ratio" class="gi-select">
-          <option v-for="(value, key) in TYPE_SCALE_RATIOS" :key="key" :value="value">
-            {{ t(`typeScale.ratios.${key}`) }}
-          </option>
-        </select>
-      </div>
+      <GiFormField
+        :label="t('typeScale.baseSize')"
+        type="number"
+        :model-value="baseSize"
+        @update:model-value="baseSize = Number($event)"
+      >
+        <template #input>
+          <input
+            v-model.number="baseSize"
+            type="number"
+            class="gi-input"
+            min="1"
+          />
+        </template>
+      </GiFormField>
+
+      <GiFormField :label="t('typeScale.ratio')">
+        <template #input>
+          <select v-model.number="ratio" class="gi-select">
+            <option v-for="(value, key) in TYPE_SCALE_RATIOS" :key="key" :value="value">
+              {{ t(`typeScale.ratios.${key}`) }}
+            </option>
+          </select>
+        </template>
+      </GiFormField>
     </div>
 
-    <div class="gi-result">
-      <div class="gi-result-label">{{ t('typeScale.preview') }}</div>
+    <GiResultCard :title="t('typeScale.preview')">
       <div class="gi-table-wrapper" style="overflow-x: auto;">
         <table class="gi-table">
           <thead>
@@ -46,13 +60,17 @@
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
+    </GiResultCard>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Type } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { generateTypeScale, TYPE_SCALE_RATIOS } from '../composables/useTypeScale'
 
 const { t } = useI18n()

@@ -45,7 +45,7 @@
 
     <!-- Error State -->
     <div v-if="localError" class="gi-result gi-result-error">
-      <div class="gi-status gi-status-error">{{ localError }}</div>
+      <GiStatusBadge variant="error" :showIcon="true">{{ localError }}</GiStatusBadge>
     </div>
   </div>
 </template>
@@ -54,6 +54,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useImageUpload } from '../composables/useImageUpload'
+import GiStatusBadge from './GiStatusBadge.vue'
 
 const { t } = useI18n()
 
@@ -245,20 +246,5 @@ defineExpose({
   border-radius: var(--gi-radius-lg);
   padding: 1.25rem;
   margin-bottom: 1rem;
-}
-
-.gi-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.gi-status-error {
-  background: var(--gi-tint-red-bg);
-  color: var(--gi-tint-red-text);
 }
 </style>

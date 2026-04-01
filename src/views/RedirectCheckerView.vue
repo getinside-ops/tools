@@ -1,26 +1,26 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-    <div class="gi-tool-header">
-      <h1>{{ t('redirectChecker.title') }}</h1>
-      <p>{{ t('redirectChecker.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('redirectChecker.title')" :description="t('redirectChecker.desc')">
+    <template #icon>
+      <Link class="tool-page-icon" />
+    </template>
 
-    <div class="gi-field">
-      <label class="gi-label">{{ t('redirectChecker.label') }}</label>
-      <input
-        v-model="inputUrl"
-        type="text"
-        placeholder="https://example.com/link"
-        class="gi-input"
-        @keydown.enter="check"
-      />
-    </div>
+    <GiFormField
+      v-model="inputUrl"
+      type="url"
+      :label="t('redirectChecker.label')"
+      placeholder="https://example.com/link"
+      @keydown.enter="check"
+    />
     <button class="gi-btn" :disabled="loading || !inputUrl" @click="check">
       {{ loading ? t('redirectChecker.checking') : t('redirectChecker.check') }}
     </button>
 
-    <div v-if="result" class="gi-result" style="margin-top:1.5rem">
+    <GiResultCard
+      v-if="result"
+      :title="t('redirectChecker.resultTitle')"
+      variant="success"
+      style="margin-top: 1.5rem"
+    >
       <p v-if="!result.redirected" class="gi-no-redirect">{{ t('redirectChecker.noRedirect') }}</p>
       <div v-else class="gi-hops-meta">
         {{ t('redirectChecker.hopsCount', { n: result.hops.length - 1 }) }}
@@ -31,7 +31,7 @@
       <div class="gi-chain">
         <div v-for="(hop, i) in result.hops" :key="i" class="gi-chain-item">
           <div class="gi-chain-row">
-            <span class="gi-status-badge" :class="statusClass(hop.status)">{{ hop.status }}</span>
+            <GiStatusBadge :variant="statusVariant(hop.status)">{{ hop.status }}</GiStatusBadge>
             <span class="gi-code gi-chain-url">{{ hop.url }}</span>
             <button class="gi-btn-ghost gi-copy-btn" @click="copyUrl(hop.url, i)">
               {{ copiedIndex === i ? t('redirectChecker.copied') : t('redirectChecker.copy') }}
@@ -40,19 +40,29 @@
           <div v-if="i < result.hops.length - 1" class="gi-arrow" aria-hidden="true">↓</div>
         </div>
       </div>
-    </div>
+    </GiResultCard>
 
-    <div v-if="error" class="gi-result" style="border-color: var(--gi-tint-red-border); margin-top:1.5rem">
-      <div class="gi-result-label" style="color:var(--gi-tint-red-text)">{{ t('redirectChecker.fallbackTitle') }}</div>
-      <p style="margin-bottom:0.5rem; font-size:0.9rem; color:var(--gi-text-muted)">{{ t('redirectChecker.fallbackDesc') }}</p>
+    <GiResultCard
+      v-if="error"
+      :title="t('redirectChecker.fallbackTitle')"
+      variant="error"
+      style="margin-top: 1.5rem"
+    >
+      <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--gi-text-muted)">
+        {{ t('redirectChecker.fallbackDesc') }}
+      </p>
       <code class="gi-code">curl -IL {{ inputUrl }}</code>
-    </div>
-  </div>
+    </GiResultCard>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Link } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiResultCard from '../components/GiResultCard.vue'
+import GiStatusBadge from '../components/GiStatusBadge.vue'
 import { checkRedirect, type RedirectResult } from '../composables/useRedirectChecker'
 
 const { t } = useI18n()
@@ -77,12 +87,12 @@ async function check() {
   }
 }
 
-function statusClass(status: number): string {
-  if (status >= 200 && status < 300) return 'gi-status-2xx'
-  if (status === 301 || status === 308) return 'gi-status-3xx-perm'
-  if (status >= 300 && status < 400) return 'gi-status-3xx-temp'
-  if (status >= 400) return 'gi-status-err'
-  return ''
+function statusVariant(status: number): 'ok' | 'error' | 'warning' | 'info' {
+  if (status >= 200 && status < 300) return 'ok'
+  if (status === 301 || status === 308) return 'info'
+  if (status >= 300 && status < 400) return 'warning'
+  if (status >= 400) return 'error'
+  return 'info'
 }
 
 async function copyUrl(url: string, index: number) {
@@ -97,20 +107,6 @@ async function copyUrl(url: string, index: number) {
 </script>
 
 <style scoped>
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-
 .gi-hops-meta {
   font-size: 0.85rem;
   color: var(--gi-text-muted);
@@ -147,21 +143,6 @@ async function copyUrl(url: string, index: number) {
   font-size: 0.875rem;
 }
 .gi-arrow { font-size: 1.1rem; color: var(--gi-brand); padding: 0.1rem 0; }
-
-/* Status badges */
-.gi-status-badge {
-  font-size: 0.75rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.gi-status-2xx   { background: var(--gi-tint-green-bg);  color: var(--gi-tint-green-text); }
-.gi-status-3xx-perm { background: color-mix(in srgb, var(--gi-brand) 15%, transparent); color: var(--gi-brand); }
-.gi-status-3xx-temp { background: var(--gi-tint-yellow-bg); color: var(--gi-tint-yellow-text); }
-.gi-status-err   { background: var(--gi-tint-red-bg);    color: var(--gi-tint-red-text); }
 
 /* Copy button */
 .gi-copy-btn {

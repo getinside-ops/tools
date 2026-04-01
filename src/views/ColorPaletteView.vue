@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-
-    <div class="gi-tool-header">
-      <h1>{{ t('colorPalette.title') }}</h1>
-      <p>{{ t('colorPalette.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('colorPalette.title')"
+    :subtitle="t('colorPalette.desc')"
+  >
+    <template #icon>
+      <Palette />
+    </template>
 
     <div class="gi-palette-actions">
       <button class="gi-btn" @click="regenerate">{{ t('colorPalette.generate') }}</button>
@@ -30,12 +30,14 @@
         </div>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Palette } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { initPalette, generatePalette, toggleLock } from '../composables/useColorPalette'
 import type { PaletteColor } from '../composables/useColorPalette'
 
@@ -73,20 +75,6 @@ onUnmounted(() => document.removeEventListener('keydown', handleKeydown))
 </script>
 
 <style scoped>
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-
 .gi-palette-actions {
   display: flex;
   align-items: center;

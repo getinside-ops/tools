@@ -1,44 +1,49 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('placeholder.title') }}</h1>
-      <p>{{ t('placeholder.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('placeholder.title')" :subtitle="t('placeholder.desc')">
+    <template #icon>
+      <Image />
+    </template>
 
     <div class="gi-grid">
       <!-- Controls -->
       <div class="gi-field">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-          <div class="gi-field">
-            <label class="gi-label">{{ t('placeholder.width') }}</label>
-            <input v-model.number="width" type="number" class="gi-input" />
-          </div>
-          <div class="gi-field">
-            <label class="gi-label">{{ t('placeholder.height') }}</label>
-            <input v-model.number="height" type="number" class="gi-input" />
-          </div>
+          <GiFormField
+            :label="t('placeholder.width')"
+            v-model.number="width"
+            type="number"
+          />
+          <GiFormField
+            :label="t('placeholder.height')"
+            v-model.number="height"
+            type="number"
+          />
         </div>
 
-        <div class="gi-field">
-          <label class="gi-label">{{ t('placeholder.text') }}</label>
-          <input v-model="text" type="text" class="gi-input" :placeholder="`${width} x ${height}`" />
-        </div>
+        <GiFormField
+          :label="t('placeholder.text')"
+          v-model="text"
+          type="text"
+          :placeholder="`${width} x ${height}`"
+        />
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-          <div class="gi-field">
-            <label class="gi-label">{{ t('placeholder.bgColor') }}</label>
-            <div style="display: flex; gap: 0.5rem">
-              <input v-model="bgColor" type="color" class="gi-input" style="width: 50px; padding: 2px" />
-              <input v-model="bgColor" type="text" class="gi-input" style="flex: 1" />
-            </div>
-          </div>
-          <div class="gi-field">
-            <label class="gi-label">{{ t('placeholder.textColor') }}</label>
-            <div style="display: flex; gap: 0.5rem">
-              <input v-model="textColor" type="color" class="gi-input" style="width: 50px; padding: 2px" />
-              <input v-model="textColor" type="text" class="gi-input" style="flex: 1" />
-            </div>
-          </div>
+          <GiFormField :label="t('placeholder.bgColor')">
+            <template #input>
+              <div style="display: flex; gap: 0.5rem">
+                <input v-model="bgColor" type="color" class="gi-input" style="width: 50px; padding: 2px" />
+                <input v-model="bgColor" type="text" class="gi-input" style="flex: 1" />
+              </div>
+            </template>
+          </GiFormField>
+          <GiFormField :label="t('placeholder.textColor')">
+            <template #input>
+              <div style="display: flex; gap: 0.5rem">
+                <input v-model="textColor" type="color" class="gi-input" style="width: 50px; padding: 2px" />
+                <input v-model="textColor" type="text" class="gi-input" style="flex: 1" />
+              </div>
+            </template>
+          </GiFormField>
         </div>
 
         <div style="display: flex; gap: 1rem; margin-top: 1rem">
@@ -48,21 +53,24 @@
       </div>
 
       <!-- Preview -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-label">Preview</div>
+      <GiResultCard :title="t('placeholder.preview')" style="margin-top: 0">
         <div
           style="background: var(--gi-bg-soft); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 300px; padding: 2rem;"
         >
           <div v-html="svgCode" style="box-shadow: 0 10px 30px rgba(0,0,0,0.1); line-height: 0;"></div>
         </div>
-      </div>
+      </GiResultCard>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Image } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { generatePlaceholderSvg, getPlaceholderDataUrl } from '../composables/usePlaceholder'
 
 const { t } = useI18n()
@@ -92,7 +100,7 @@ function download(format: 'png' | 'svg') {
     URL.revokeObjectURL(url)
   } else {
     // PNG via Canvas
-    const img = new Image()
+    const img = new window.Image()
     const svgUrl = getPlaceholderDataUrl({
       width: width.value,
       height: height.value,
@@ -100,7 +108,7 @@ function download(format: 'png' | 'svg') {
       bgColor: bgColor.value,
       textColor: textColor.value
     })
-    
+
     img.onload = () => {
       const canvas = document.createElement('canvas')
       canvas.width = width.value

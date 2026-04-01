@@ -1,24 +1,23 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('lorem.title') }}</h1>
-      <p>{{ t('lorem.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('lorem.title')" :description="t('lorem.desc')">
+    <template #icon>
+      <FileText />
+    </template>
 
     <div class="gi-grid">
       <!-- Controls -->
       <div class="gi-field">
         <div class="gi-label">{{ t('lorem.type') }}</div>
         <div class="mode-toggle">
-          <button 
-            class="gi-btn-ghost" 
+          <button
+            class="gi-btn-ghost"
             :class="{ active: mode === 'paragraphs' }"
             @click="mode = 'paragraphs'"
           >
             {{ t('lorem.modeParagraphs') }}
           </button>
-          <button 
-            class="gi-btn-ghost" 
+          <button
+            class="gi-btn-ghost"
             :class="{ active: mode === 'words' }"
             @click="mode = 'words'"
           >
@@ -26,15 +25,21 @@
           </button>
         </div>
 
-        <div v-if="mode === 'paragraphs'" class="gi-field">
-          <label class="gi-label">{{ t('lorem.paragraphs') }}</label>
-          <input v-model.number="paragraphs" type="number" class="gi-input" min="1" max="50" />
-        </div>
+        <GiFormField
+          v-if="mode === 'paragraphs'"
+          :label="t('lorem.paragraphs')"
+          type="number"
+          :model-value="paragraphs"
+          @update:model-value="paragraphs = Number($event)"
+        />
 
-        <div v-else class="gi-field">
-          <label class="gi-label">{{ t('lorem.words') }}</label>
-          <input v-model.number="words" type="number" class="gi-input" min="1" max="1000" />
-        </div>
+        <GiFormField
+          v-else
+          :label="t('lorem.words')"
+          type="number"
+          :model-value="words"
+          @update:model-value="words = Number($event)"
+        />
 
         <div class="gi-field">
           <label class="checkbox-label">
@@ -49,25 +54,28 @@
       </div>
 
       <!-- Result Area -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-header">
-          <div class="gi-result-label">Output</div>
-          <button class="gi-btn-ghost" @click="copy">
-            {{ copied ? t('utmBuilder.copied') : t('lorem.copy') }}
-          </button>
-        </div>
+      <GiResultCard :title="t('lorem.output')">
         <div class="lorem-output">
           {{ result }}
         </div>
-      </div>
+        <template #actions>
+          <button class="gi-btn-ghost" @click="copy">
+            {{ copied ? t('utmBuilder.copied') : t('lorem.copy') }}
+          </button>
+        </template>
+      </GiResultCard>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { generateLorem } from '../composables/useLoremIpsum'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
+import { FileText } from 'lucide-vue-next'
 
 const { t } = useI18n()
 
@@ -133,12 +141,5 @@ onMounted(() => {
   max-height: 400px;
   overflow-y: auto;
   padding-right: 0.5rem;
-}
-
-.gi-result-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
 }
 </style>

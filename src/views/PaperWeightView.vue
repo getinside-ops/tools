@@ -1,12 +1,11 @@
 <template>
-  <div class="pw-wrapper">
-    <!-- Back link + Header -->
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-
-    <div class="gi-tool-header">
-      <h1>{{ t('paperWeight.title') }}</h1>
-      <p>{{ t('paperWeight.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('paperWeight.title')"
+    :subtitle="t('paperWeight.desc')"
+  >
+    <template #icon>
+      <Weight />
+    </template>
 
     <!-- Result Banner (sticky, full-width) -->
     <div v-if="result" class="pw-result-banner">
@@ -32,8 +31,13 @@
     <!-- Input Section (centered, single column) -->
     <div class="pw-inputs">
       <!-- Quantity Section -->
-        <div class="gi-field">
-          <label class="gi-label">{{ t('paperWeight.quantity') }}</label>
+      <GiFormField
+        :label="t('paperWeight.quantity')"
+        type="number"
+        :model-value="quantity"
+        @update:model-value="quantity = Number($event)"
+      >
+        <template #input>
           <div class="pw-quantity-row">
             <input
               v-model.number="quantity"
@@ -44,50 +48,65 @@
             />
             <span class="pw-quantity-label">{{ t('paperWeight.sheets') }}</span>
           </div>
-        </div>
+        </template>
+      </GiFormField>
 
-        <!-- Format Section -->
-        <div class="gi-field">
-          <label class="gi-label">{{ t('paperWeight.format') }}</label>
+      <!-- Format Section -->
+      <GiFormField :label="t('paperWeight.format')">
+        <template #input>
           <select v-model="selectedFormat" class="gi-select pw-format-select">
             <option value="A5">A5 - {{ FORMATS.A5.width }} × {{ FORMATS.A5.height }} mm</option>
             <option value="A6">A6 - {{ FORMATS.A6.width }} × {{ FORMATS.A6.height }} mm</option>
             <option value="A4">A4 - {{ FORMATS.A4.width }} × {{ FORMATS.A4.height }} mm</option>
             <option value="Custom">{{ t('paperWeight.formats.Custom') }}...</option>
           </select>
-        </div>
+        </template>
+      </GiFormField>
 
-        <!-- Custom Format Inputs -->
-        <div v-if="selectedFormat === 'Custom'" class="gi-field">
-          <label class="gi-label">{{ t('paperWeight.customDimensions') }}</label>
+      <!-- Custom Format Inputs -->
+      <GiFormField
+        v-if="selectedFormat === 'Custom'"
+        :label="t('paperWeight.customDimensions')"
+      >
+        <template #input>
           <div class="pw-custom-row">
             <input v-model.number="customWidth" type="number" min="1" class="gi-input pw-custom-input" />
             <span class="pw-custom-sep">×</span>
             <input v-model.number="customHeight" type="number" min="1" class="gi-input pw-custom-input" />
             <span class="pw-custom-unit">mm</span>
           </div>
-        </div>
+        </template>
+      </GiFormField>
 
-        <!-- Grammage Section -->
-        <div class="gi-field">
-          <label class="gi-label">{{ t('paperWeight.grammage') }}</label>
+      <!-- Grammage Section -->
+      <GiFormField
+        :label="t('paperWeight.grammage')"
+        type="number"
+        :model-value="grammage"
+        @update:model-value="grammage = Number($event)"
+      >
+        <template #input>
           <div class="pw-grammage-row">
             <input v-model.number="grammage" type="number" min="1" class="gi-input pw-grammage-input" />
             <span class="pw-grammage-unit">g/m²</span>
           </div>
-        </div>
+        </template>
+      </GiFormField>
 
-        <!-- Reset Button (mobile only) -->
-        <button class="gi-btn gi-btn-ghost pw-reset-btn-mobile" @click="resetCalculator">
-          {{ t('paperWeight.reset') }}
-        </button>
-      </div>
-  </div>
+      <!-- Reset Button (mobile only) -->
+      <button class="gi-btn gi-btn-ghost pw-reset-btn-mobile" @click="resetCalculator">
+        {{ t('paperWeight.reset') }}
+      </button>
+    </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Weight } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 import {
   calculatePaperWeight,
   FORMATS,
@@ -141,55 +160,6 @@ const resetCalculator = () => {
 </script>
 
 <style scoped>
-/* Wrapper */
-.pw-wrapper {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-/* Back Link */
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gi-space-xs);
-  margin-bottom: var(--gi-space-lg);
-  padding: var(--gi-space-xs) var(--gi-space-sm);
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius-md);
-  font-size: var(--gi-font-size-sm);
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: all var(--gi-transition-base) var(--gi-ease-out);
-  background: var(--gi-surface);
-}
-
-.gi-back-link:hover {
-  border-color: var(--gi-brand);
-  color: var(--gi-brand);
-  transform: translateY(-1px);
-}
-
-/* Tool Header */
-.gi-tool-header {
-  margin-bottom: var(--gi-space-lg);
-}
-
-.gi-tool-header h1 {
-  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
-  font-size: var(--gi-font-size-lg);
-  font-weight: 700;
-  margin-bottom: var(--gi-space-xs);
-  letter-spacing: -0.02em;
-  color: var(--gi-text);
-}
-
-.gi-tool-header p {
-  color: var(--gi-text-muted);
-  font-size: var(--gi-font-size-sm);
-  max-width: 500px;
-  line-height: var(--gi-line-height-base);
-}
-
 /* Result Banner (sticky, full-width) */
 .pw-result-banner {
   position: sticky;
@@ -289,20 +259,6 @@ const resetCalculator = () => {
   gap: var(--gi-space-md);
   max-width: 600px;
   margin: 0 auto;
-}
-
-/* Fields */
-.gi-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gi-space-xs);
-}
-
-.gi-label {
-  font-size: var(--gi-font-size-sm);
-  font-weight: 600;
-  color: var(--gi-text);
-  letter-spacing: -0.01em;
 }
 
 /* Quantity Row */

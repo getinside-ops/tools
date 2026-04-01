@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-
-    <div class="gi-tool-header">
-      <h1>{{ t('dpiChecker.title') }}</h1>
-      <p>{{ t('dpiChecker.desc') }}</p>
-    </div>
-
+  <ToolPageLayout
+    :title="t('dpiChecker.title')"
+    :description="t('dpiChecker.desc')"
+  >
+    <template #icon>
+      <Ruler :size="24" />
+    </template>
     <!-- Upload Zone -->
     <GiImageUpload
       @upload="handleImageUpload"
@@ -17,21 +16,24 @@
 
     <!-- Manual Input -->
     <div class="gi-row">
-      <div class="gi-field">
-        <label class="gi-label">{{ t('dpiChecker.widthPx') }}</label>
-        <input v-model.number="widthPx" type="number" min="1" class="gi-input" />
-      </div>
-      <div class="gi-field">
-        <label class="gi-label">{{ t('dpiChecker.heightPx') }}</label>
-        <input v-model.number="heightPx" type="number" min="1" class="gi-input" />
-      </div>
+      <GiFormField
+        :label="t('dpiChecker.widthPx')"
+        v-model="widthPx"
+        type="number"
+        min="1"
+      />
+      <GiFormField
+        :label="t('dpiChecker.heightPx')"
+        v-model="heightPx"
+        type="number"
+        min="1"
+      />
     </div>
 
     <!-- Results -->
     <template v-if="widthPx > 0 && heightPx > 0">
       <!-- DPI Table -->
-      <div class="gi-result">
-        <div class="gi-result-label">{{ t('dpiChecker.resultTitle') }}</div>
+      <GiResultCard :title="t('dpiChecker.resultTitle')">
         <table class="gi-table gi-dpi-table" style="margin-top:0.75rem">
           <thead>
             <tr>
@@ -57,14 +59,10 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </GiResultCard>
 
       <!-- Format Compatibility -->
-      <div class="gi-result" style="margin-top:1rem">
-        <div class="gi-result-header">
-          <span class="gi-result-label">{{ t('dpiChecker.formatTitle') }}</span>
-        </div>
-
+      <GiResultCard :title="t('dpiChecker.formatTitle')" style="margin-top:1rem">
         <div class="gi-format-section">
           <h3 class="gi-format-section-title">{{ t('dpiChecker.featuredFormats') }}</h3>
           <div class="gi-format-grid">
@@ -97,11 +95,10 @@
             {{ t(showExtendedFormats ? 'dpiChecker.showLess' : 'dpiChecker.showMore') }}
           </button>
         </div>
-      </div>
+      </GiResultCard>
 
       <!-- Recommended Uses -->
-      <div class="gi-result gi-recommended-use" style="margin-top:1rem">
-        <div class="gi-result-label">{{ t('dpiChecker.recommendedUse.title') }}</div>
+      <GiResultCard :title="t('dpiChecker.recommendedUse.title')" style="margin-top:1rem">
         <div class="gi-recommended-grid">
           <div class="gi-recommended-section gi-suitable">
             <h4>{{ t('dpiChecker.recommendedUse.suitable') }}</h4>
@@ -116,11 +113,10 @@
             </ul>
           </div>
         </div>
-      </div>
+      </GiResultCard>
 
       <!-- Visual Comparison -->
-      <div class="gi-result gi-visual-comparison" style="margin-top:1rem">
-        <div class="gi-result-label">{{ t('dpiChecker.visualComparison.title') }}</div>
+      <GiResultCard :title="t('dpiChecker.visualComparison.title')" style="margin-top:1rem">
         <p class="gi-comparison-desc">{{ t('dpiChecker.visualComparison.description') }}</p>
         <div class="gi-comparison-grid">
           <div v-for="row in dimensions" :key="row.dpi" class="gi-comparison-item">
@@ -141,11 +137,10 @@
             <div class="gi-comparison-dims">{{ row.widthCm }} × {{ row.heightCm }} cm</div>
           </div>
         </div>
-      </div>
+      </GiResultCard>
 
       <!-- Educational Section -->
-      <div class="gi-result gi-educational" style="margin-top:1rem">
-        <div class="gi-result-label">{{ t('dpiChecker.educational.title') }}</div>
+      <GiResultCard :title="t('dpiChecker.educational.title')" collapsible style="margin-top:1rem">
         <div class="gi-educational-content">
           <h3 class="gi-edu-title">{{ t('dpiChecker.educational.whatIsDpi') }}</h3>
           <p class="gi-edu-text">{{ t('dpiChecker.educational.dpiDefinition') }}</p>
@@ -158,14 +153,18 @@
             <li>{{ t('dpiChecker.educational.dpiLevels.photo') }}</li>
           </ul>
         </div>
-      </div>
+      </GiResultCard>
     </template>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
+import { Ruler } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import {
   calculatePrintDimensions,
   getFormatStatus,
@@ -209,16 +208,6 @@ function handleError(error: string) {
 
 // changeImage is no longer needed - GiImageUpload handles reset internally
 
-// Listen for paste events globally - now handled by GiImageUpload
-// Keeping this for backward compatibility with manual paste if needed
-onMounted(() => {
-  // Global paste listener removed - GiImageUpload handles paste in its zone
-})
-
-onUnmounted(() => {
-  // Cleanup if needed
-})
-
 // Visual comparison helpers
 const MAX_SIZE = 120 // max dimension in pixels for comparison SVG
 
@@ -244,21 +233,6 @@ function getComparisonHeight(wCm: number, hCm: number) {
 </script>
 
 <style scoped>
-/* Back Link */
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-
 /* Upload Zone */
 .gi-upload-zone {
   border: 2px dashed var(--gi-border);
@@ -417,9 +391,6 @@ function getComparisonHeight(wCm: number, hCm: number) {
 }
 
 /* Format Section */
-.gi-result-header {
-  margin-bottom: 1rem;
-}
 .gi-format-section {
   margin-bottom: 1.25rem;
 }
@@ -666,7 +637,6 @@ function getComparisonHeight(wCm: number, hCm: number) {
   .gi-upload-zone.is-dragover {
     transform: none;
   }
-  .gi-back-link,
   .gi-upload-zone,
   .gi-comparison-rect {
     transition: none;

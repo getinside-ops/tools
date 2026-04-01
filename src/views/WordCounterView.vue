@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-
-    <div class="gi-tool-header">
-      <h1>{{ t('wordCounter.title') }}</h1>
-      <p>{{ t('wordCounter.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('wordCounter.title')" :description="t('wordCounter.desc')">
+    <template #icon>
+      <FileText />
+    </template>
 
     <div class="gi-field">
       <textarea
@@ -43,12 +40,14 @@
         <div class="gi-stat-label">{{ t('wordCounter.stats.readingTime') }}</div>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { FileText } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { analyzeText } from '../composables/useWordCounter'
 
 const { t } = useI18n()
@@ -57,19 +56,6 @@ const stats = computed(() => analyzeText(text.value))
 </script>
 
 <style scoped>
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
 .gi-textarea { resize: vertical; font-family: inherit; line-height: 1.6; }
 .gi-stats-grid {
   display: grid;

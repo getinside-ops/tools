@@ -1,71 +1,79 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('colorConverter.title') }}</h1>
-      <p>{{ t('colorConverter.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('colorConverter.title')"
+    :description="t('colorConverter.desc')"
+  >
+    <template #icon>
+      <Palette />
+    </template>
 
     <!-- Input Section -->
     <div class="gi-card" style="margin-bottom: 2rem;">
       <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
         <!-- Large Preview -->
-        <div 
+        <div
           class="preview-circle"
           :style="{ backgroundColor: hex }"
         ></div>
-        
+
         <!-- HEX Input -->
-        <div class="gi-input-group" style="flex: 1; min-width: 200px;">
-          <label class="gi-label">{{ t('colorConverter.hex') }}</label>
-          <div style="display: flex; gap: 0.5rem;">
-            <input v-model="hex" type="color" class="gi-input" style="width: 60px; padding: 2px; height: 42px;" />
-            <input v-model="hex" type="text" class="gi-input" placeholder="#FFFFFF" @input="updateFromHex" />
-          </div>
-        </div>
+        <GiFormField :label="t('colorConverter.hex')" style="flex: 1; min-width: 200px;">
+          <template #input>
+            <div style="display: flex; gap: 0.5rem;">
+              <input v-model="hex" type="color" class="gi-input" style="width: 60px; padding: 2px; height: 42px;" />
+              <input v-model="hex" type="text" class="gi-input" placeholder="#FFFFFF" @input="updateFromHex" />
+            </div>
+          </template>
+        </GiFormField>
       </div>
 
       <!-- Quick Adjust (RGB/HSL Sliders) -->
       <div class="gi-grid" style="margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-        <div class="gi-input-group">
-          <label class="gi-label">{{ t('colorConverter.rgb') }}</label>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
-            <input v-model.number="rgb.r" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
-            <input v-model.number="rgb.g" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
-            <input v-model.number="rgb.b" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
-          </div>
-        </div>
-        <div class="gi-input-group">
-          <label class="gi-label">{{ t('colorConverter.hsl') }}</label>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
-            <input v-model.number="hsl.h" type="number" class="gi-input" min="0" max="360" @input="updateFromHsl" />
-            <input v-model.number="hsl.s" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
-            <input v-model.number="hsl.l" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
-          </div>
-        </div>
+        <GiFormField :label="t('colorConverter.rgb')">
+          <template #input>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+              <input v-model.number="rgb.r" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
+              <input v-model.number="rgb.g" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
+              <input v-model.number="rgb.b" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
+            </div>
+          </template>
+        </GiFormField>
+        <GiFormField :label="t('colorConverter.hsl')">
+          <template #input>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+              <input v-model.number="hsl.h" type="number" class="gi-input" min="0" max="360" @input="updateFromHsl" />
+              <input v-model.number="hsl.s" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
+              <input v-model.number="hsl.l" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
+            </div>
+          </template>
+        </GiFormField>
       </div>
     </div>
 
     <!-- Professional Results Grid (Delphic Pattern) -->
     <div class="gi-grid">
-      <div v-for="fmt in formats" :key="fmt.label" class="gi-card result-card">
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
-          <span class="gi-result-label" style="margin-bottom: 0">{{ fmt.label }}</span>
-          <button class="gi-btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; border-radius: 6px;" @click="copy(fmt.value, fmt.label)">
-            {{ copiedLabel === fmt.label ? t('colorConverter.copied') : t('colorConverter.copy') }}
-          </button>
-        </div>
+      <GiResultCard v-for="fmt in formats" :key="fmt.label" :title="fmt.label">
         <div class="gi-data-value" style="font-size: 1.1rem; word-break: break-all;">
           {{ fmt.value }}
         </div>
-      </div>
+        <template #actions>
+          <button class="gi-btn-ghost" @click="copy(fmt.value, fmt.label)">
+            {{ copiedLabel === fmt.label ? t('colorConverter.copied') : t('colorConverter.copy') }}
+          </button>
+        </template>
+      </GiResultCard>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { 
+import { Palette } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
+import {
   hexToRgb, rgbToHex, rgbToHsl, hslToRgb, rgbToCmyk,
   rgbToOklch, rgbToLab, rgbToLch
 } from '../composables/useColorConverter'
@@ -133,14 +141,5 @@ async function copy(val: string, label: string) {
   border-radius: 50%;
   border: 4px solid var(--gi-surface);
   box-shadow: 0 0 0 1px var(--gi-border), var(--gi-shadow);
-}
-
-.result-card {
-  padding: 1.25rem;
-  border-left: 4px solid var(--gi-brand);
-}
-
-.result-card:hover {
-  border-left-color: var(--gi-mint);
 }
 </style>

@@ -1,35 +1,53 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('imageFilters.title') }}</h1>
-      <p>{{ t('imageFilters.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('imageFilters.title')"
+    :description="t('imageFilters.desc')"
+  >
+    <template #icon>
+      <Wand :size="24" />
+    </template>
 
     <!-- Upload Area -->
-    <div v-if="!originalUrl">
-      <GiImageUpload @upload="handleImageUpload" />
-    </div>
+    <GiImageUpload v-if="!originalUrl" @upload="handleImageUpload" />
 
     <div v-else class="gi-grid">
       <!-- Controls -->
       <div class="gi-field">
-        <label class="gi-label">{{ t('imageFilters.brightness') }}: {{ filters.brightness }}%</label>
-        <input v-model.number="filters.brightness" type="range" min="0" max="200" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.brightness')}: ${filters.brightness}%`">
+          <template #input>
+            <input v-model.number="filters.brightness" type="range" min="0" max="200" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.contrast') }}: {{ filters.contrast }}%</label>
-        <input v-model.number="filters.contrast" type="range" min="0" max="200" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.contrast')}: ${filters.contrast}%`">
+          <template #input>
+            <input v-model.number="filters.contrast" type="range" min="0" max="200" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.grayscale') }}: {{ filters.grayscale }}%</label>
-        <input v-model.number="filters.grayscale" type="range" min="0" max="100" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.grayscale')}: ${filters.grayscale}%`">
+          <template #input>
+            <input v-model.number="filters.grayscale" type="range" min="0" max="100" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.sepia') }}: {{ filters.sepia }}%</label>
-        <input v-model.number="filters.sepia" type="range" min="0" max="100" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.sepia')}: ${filters.sepia}%`">
+          <template #input>
+            <input v-model.number="filters.sepia" type="range" min="0" max="100" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.invert') }}: {{ filters.invert }}%</label>
-        <input v-model.number="filters.invert" type="range" min="0" max="100" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.invert')}: ${filters.invert}%`">
+          <template #input>
+            <input v-model.number="filters.invert" type="range" min="0" max="100" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.blur') }}: {{ filters.blur }}px</label>
-        <input v-model.number="filters.blur" type="range" min="0" max="20" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.blur')}: ${filters.blur}px`">
+          <template #input>
+            <input v-model.number="filters.blur" type="range" min="0" max="20" class="gi-input" />
+          </template>
+        </GiFormField>
 
         <div style="display: flex; gap: 1rem; margin-top: 1.5rem">
           <button class="gi-btn-primary" style="flex: 1" @click="handleApply">{{ t('imageFilters.apply') }}</button>
@@ -38,28 +56,32 @@
       </div>
 
       <!-- Preview -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-label">Preview (Real-time CSS)</div>
+      <GiResultCard title="Preview (Real-time CSS)">
         <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 300px;">
           <img :src="originalUrl" :style="previewStyle" style="max-width: 100%; transition: filter 0.2s;" />
         </div>
-      </div>
+      </GiResultCard>
     </div>
 
     <!-- Result Result -->
-    <div v-if="filteredUrl" class="gi-result" style="margin-top: 2rem;">
-      <div class="gi-result-label">Result (Flattened)</div>
-      <img :src="filteredUrl" style="max-width: 100%; border-radius: var(--gi-radius); margin-bottom: 1rem;" />
-      <button class="gi-btn-primary" @click="downloadFiltered">⬇️ {{ t('imageFilters.download') }}</button>
-    </div>
-  </div>
+    <GiResultCard v-if="filteredUrl" title="Result (Flattened)">
+      <img :src="filteredUrl" style="max-width: 100%; border-radius: var(--gi-radius);" />
+      <template #actions>
+        <button class="gi-btn-primary" @click="downloadFiltered">⬇️ {{ t('imageFilters.download') }}</button>
+      </template>
+    </GiResultCard>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { constructFilterString, applyFilters } from '../composables/useImageFilters'
+import { Wand } from 'lucide-vue-next'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import { constructFilterString, applyFilters } from '../composables/useImageFilters'
 
 const { t } = useI18n()
 

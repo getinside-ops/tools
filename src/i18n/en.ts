@@ -244,6 +244,7 @@ const en: Messages = {
     label: 'URL to check',
     check: 'Check',
     checking: 'Checking…',
+    resultTitle: 'Result',
     noRedirect: 'No redirect — this URL points directly to its destination.',
     fallbackTitle: 'Cannot check via browser',
     fallbackDesc: 'Use this command in your terminal:',
@@ -298,6 +299,9 @@ const en: Messages = {
     errorSize: 'File too large (max 30 MB).',
     errorType: 'Please upload a PDF file.',
     errorServer: 'Conversion failed. Try again or check the file.',
+    selectedFile: 'Selected file',
+    error: 'Error',
+    ready: 'Ready to download',
     pedagogic: {
       title: 'About PDF/X',
       description: 'PDF/X-1a is an ISO standard for professional printing. It ensures your file is print-ready.',
@@ -509,6 +513,7 @@ const en: Messages = {
   imageCompressor: {
     title: 'Image Compressor',
     desc: 'Optimize your images by reducing their size while maintaining quality.',
+    stats: 'Statistics',
     select: 'Select an image',
     quality: 'Quality',
     format: 'Output Format',
@@ -541,6 +546,7 @@ const en: Messages = {
     crop: 'Crop',
     reset: 'Reset',
     download: 'Download',
+    result: 'Result',
     pedagogic: {
       title: 'About Image Cropping',
       description: 'Cropping allows you to modify an image composition and adapt it to formats required by different platforms.',
@@ -602,6 +608,7 @@ const en: Messages = {
     text: 'Text (optional)',
     bgColor: 'Background Color',
     textColor: 'Text Color',
+    preview: 'Preview',
     download: 'Download',
     pedagogic: {
       title: 'About Placeholders',
@@ -693,6 +700,7 @@ const en: Messages = {
     label: 'EAN-13 Code (12 or 13 digits)',
     checksum: 'Checksum: {n}',
     invalid: 'Invalid format (digits only)',
+    preview: 'Barcode Preview',
     copy: 'Copy code',
     download: 'Download SVG',
     pedagogic: {
@@ -712,6 +720,8 @@ const en: Messages = {
     dpi: 'Image Resolution (DPI)',
     bleed: 'Bleed (mm)',
     safety: 'Safety Zone (mm)',
+    preview: 'Preview with margins',
+    uploadTitle: 'No image uploaded',
     upload: 'Upload an image to check',
     legend: {
       bleed: 'Bleed area (trim)',
@@ -752,6 +762,7 @@ const en: Messages = {
     title: 'Image Metadata Viewer',
     desc: 'View technical properties and metadata for any image file instantly.',
     upload: 'Analyze an image (Drag & drop here)',
+    technicalProperties: 'Technical Properties',
     name: 'Filename',
     size: 'Size',
     type: 'MIME Type',
