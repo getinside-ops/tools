@@ -6,33 +6,28 @@
 
     <div class="gi-grid">
       <!-- Controls -->
-      <div class="gi-field">
-        <label class="gi-label">{{ t('barcode.label') }}</label>
-        <input 
-          v-model="inputCode" 
-          type="text" 
-          class="gi-input" 
-          maxlength="13"
-          :placeholder="'4006381333931'"
-          @input="validateInput"
-        />
-        
-        <div v-if="checksum !== null && inputCode.length === 12" class="gi-hint" style="margin-top: 0.5rem">
-          {{ t('barcode.checksum', { n: checksum }) }}
-        </div>
+      <GiFormField
+        v-model="inputCode"
+        :label="t('barcode.label')"
+        type="text"
+        placeholder="4006381333931"
+      />
 
-        <div v-if="error" class="gi-text-error" style="margin-top: 0.5rem; font-size: 0.8rem">
-          {{ error }}
-        </div>
+      <div v-if="checksum !== null && inputCode.length === 12" class="gi-hint" style="margin-top: 0.5rem">
+        {{ t('barcode.checksum', { n: checksum }) }}
+      </div>
 
-        <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;">
-          <button class="gi-btn-ghost" style="flex: 1" @click="copyCode">
-            {{ copied ? t('utmBuilder.copied') : t('barcode.copy') }}
-          </button>
-          <button class="gi-btn" style="flex: 1" @click="downloadSvg">
-            {{ t('barcode.download') }}
-          </button>
-        </div>
+      <div v-if="error" class="gi-text-error" style="margin-top: 0.5rem; font-size: 0.8rem">
+        {{ error }}
+      </div>
+
+      <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;">
+        <button class="gi-btn-ghost" style="flex: 1" @click="copyCode">
+          {{ copied ? t('utmBuilder.copied') : t('barcode.copy') }}
+        </button>
+        <button class="gi-btn" style="flex: 1" @click="downloadSvg">
+          {{ t('barcode.download') }}
+        </button>
       </div>
 
       <!-- Result Area -->
@@ -72,11 +67,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Barcode } from 'lucide-vue-next'
 import { calculateEanChecksum, generateEanBinary } from '../composables/useBarcode'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 
 const { t } = useI18n()
 
@@ -84,6 +80,14 @@ const inputCode = ref('400638133393')
 const error = ref('')
 const copied = ref(false)
 const barcodeSvgContainer = ref<HTMLElement | null>(null)
+
+// Watch for input changes and validate
+watch(inputCode, () => {
+  inputCode.value = inputCode.value.replace(/\D/g, '')
+  if (inputCode.value.length > 13) {
+    inputCode.value = inputCode.value.slice(0, 13)
+  }
+})
 
 const checksum = computed(() => {
   if (inputCode.value.length === 12 && /^\d+$/.test(inputCode.value)) {
@@ -109,13 +113,6 @@ const binary = computed(() => {
   }
   return ''
 })
-
-function validateInput() {
-  inputCode.value = inputCode.value.replace(/\D/g, '')
-  if (inputCode.value.length > 13) {
-    inputCode.value = inputCode.value.slice(0, 13)
-  }
-}
 
 function isGuard(idx: number): boolean {
   // Start: 0,1,2 | Middle: 45,46,47,48,49 | End: 92,93,94
