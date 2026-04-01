@@ -849,6 +849,15 @@ const fr = {
       ],
     },
   },
+  imageUpload: {
+    pasteTitle: 'Coller une image',
+    pasteHint: 'Cliquez ici et appuyez sur Ctrl+V / Cmd+V',
+    uploadText: 'ou cliquez pour télécharger depuis votre appareil',
+    error: {
+      invalidFile: 'Type ou taille de fichier invalide',
+      noClipboard: 'Aucune donnée dans le presse-papiers',
+    },
+  },
   pedagogic: {
     tips: 'Conseils',
     resources: 'Ressources',

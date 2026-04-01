@@ -20,8 +20,8 @@
             <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
           </svg>
         </div>
-        <p class="gi-paste-title">{{ pasteTitle }}</p>
-        <p class="gi-paste-hint">{{ pasteHint }}</p>
+        <p class="gi-paste-title">{{ pasteTitleText }}</p>
+        <p class="gi-paste-hint">{{ pasteHintText }}</p>
       </div>
     </div>
 
@@ -40,7 +40,7 @@
         :multiple="multiple"
         @change="handleFileInput"
       />
-      <span>{{ uploadText }}</span>
+      <span>{{ uploadTextValue }}</span>
     </div>
 
     <!-- Error State -->
@@ -52,7 +52,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useImageUpload } from '../composables/useImageUpload'
+
+const { t } = useI18n()
 
 const props = withDefaults(defineProps<{
   accept?: string[]
@@ -66,9 +69,9 @@ const props = withDefaults(defineProps<{
   accept: () => ['image/*'],
   multiple: false,
   pasteZone: true,
-  pasteTitle: 'Paste an image',
-  pasteHint: 'Click here and press Ctrl+V / Cmd+V',
-  uploadText: 'or click to upload from your device',
+  pasteTitle: undefined,
+  pasteHint: undefined,
+  uploadText: undefined,
   maxSizeMB: undefined,
 })
 
@@ -90,6 +93,13 @@ const localError = ref<string | null>(null)
 
 const computedAccept = computed(() => props.accept.join(','))
 
+// Computed for i18n with override support
+const pasteTitleText = computed(() => props.pasteTitle || t('imageUpload.pasteTitle'))
+const pasteHintText = computed(() => props.pasteHint || t('imageUpload.pasteHint'))
+const uploadTextValue = computed(() => props.uploadText || t('imageUpload.uploadText'))
+const invalidFileError = computed(() => t('imageUpload.error.invalidFile'))
+const noClipboardError = computed(() => t('imageUpload.error.noClipboard'))
+
 function focusPasteZone() {
   pasteZoneRef.value?.focus()
 }
@@ -108,7 +118,7 @@ async function handlePaste(e: ClipboardEvent) {
 
   const items = e.clipboardData?.items
   if (!items || items.length === 0) {
-    localError.value = 'No clipboard data available'
+    localError.value = noClipboardError.value
     emit('error', localError.value)
     return
   }
@@ -144,7 +154,7 @@ function handleFileInput(e: Event) {
 
 async function handleFile(file: File) {
   if (!isValidFile(file)) {
-    localError.value = 'Invalid file type or size'
+    localError.value = invalidFileError.value
     emit('error', localError.value)
     return
   }

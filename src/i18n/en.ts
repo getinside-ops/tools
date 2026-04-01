@@ -851,6 +851,15 @@ const en: Messages = {
       ],
     },
   },
+  imageUpload: {
+    pasteTitle: 'Paste an image',
+    pasteHint: 'Click here and press Ctrl+V / Cmd+V',
+    uploadText: 'or click to upload from your device',
+    error: {
+      invalidFile: 'Invalid file type or size',
+      noClipboard: 'No clipboard data available',
+    },
+  },
   pedagogic: {
     tips: 'Tips',
     resources: 'Resources',
