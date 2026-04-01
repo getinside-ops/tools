@@ -54,17 +54,16 @@
       </div>
 
       <!-- Result Area -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-header">
-          <div class="gi-result-label">Output</div>
-          <button class="gi-btn-ghost" @click="copy">
-            {{ copied ? t('utmBuilder.copied') : t('lorem.copy') }}
-          </button>
-        </div>
+      <GiResultCard :title="t('lorem.output')">
         <div class="lorem-output">
           {{ result }}
         </div>
-      </div>
+        <template #actions>
+          <button class="gi-btn-ghost" @click="copy">
+            {{ copied ? t('utmBuilder.copied') : t('lorem.copy') }}
+          </button>
+        </template>
+      </GiResultCard>
     </div>
   </ToolPageLayout>
 </template>
@@ -75,6 +74,7 @@ import { useI18n } from 'vue-i18n'
 import { generateLorem } from '../composables/useLoremIpsum'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { FileText } from 'lucide-vue-next'
 
 const { t } = useI18n()
@@ -141,12 +141,5 @@ onMounted(() => {
   max-height: 400px;
   overflow-y: auto;
   padding-right: 0.5rem;
-}
-
-.gi-result-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
 }
 </style>
