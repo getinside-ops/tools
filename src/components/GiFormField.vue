@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, onMounted } from 'vue'
 
 export interface GiFormFieldProps {
   label?: string
@@ -52,7 +52,11 @@ defineEmits<{
   'update:modelValue': [value: string]
 }>()
 
-const inputId = computed(() => `gi-field-${Math.random().toString(36).slice(2, 9)}`)
+const inputId = ref('')
+
+onMounted(() => {
+  inputId.value = `gi-field-${Math.random().toString(36).slice(2, 9)}`
+})
 
 defineOptions({
   name: 'GiFormField'
@@ -92,6 +96,15 @@ defineOptions({
   outline: none;
   border-color: var(--gi-brand);
   box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.1);
+}
+
+.gi-input:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] .gi-input:focus {
+  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.25);
 }
 
 .gi-input--error {
