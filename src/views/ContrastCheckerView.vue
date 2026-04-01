@@ -66,9 +66,9 @@
         <div style="display: flex; flex-direction: column; gap: 1rem;">
           <div v-for="(level, key) in wcagChecks" :key="key" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--gi-border);">
             <span style="font-size: 0.95rem;">{{ level.label }}</span>
-            <span :class="level.pass ? 'gi-status-ok' : 'gi-status-error'" class="gi-status" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">
+            <GiStatusBadge :variant="level.pass ? 'ok' : 'error'" showIcon>
               {{ level.pass ? t('contrastChecker.pass') : t('contrastChecker.fail') }}
-            </span>
+            </GiStatusBadge>
           </div>
         </div>
       </GiResultCard>
@@ -114,6 +114,7 @@ import { useI18n } from 'vue-i18n'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 import GiResultCard from '../components/GiResultCard.vue'
+import GiStatusBadge from '../components/GiStatusBadge.vue'
 import { Contrast } from 'lucide-vue-next'
 import { getWcagContrast, getApcaContrast, meetsWcagLevel } from '../composables/useContrast'
 
