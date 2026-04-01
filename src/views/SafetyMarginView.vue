@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('safetyMargin.title') }}</h1>
-      <p>{{ t('safetyMargin.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('safetyMargin.title')" :description="t('safetyMargin.desc')">
+    <template #icon>
+      <Ruler />
+    </template>
 
     <div class="gi-grid">
       <!-- Controls -->
@@ -17,7 +16,7 @@
 
         <div v-else class="gi-field">
           <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1.5rem" @click="reset">{{ t('imageCropper.reset') }}</button>
-          
+
           <div class="gi-field">
             <label class="gi-label">{{ t('safetyMargin.dpi') }}</label>
             <input v-model.number="dpi" type="number" class="gi-input" min="72" max="1200" />
@@ -61,14 +60,16 @@
         {{ t('safetyMargin.upload') }}
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Ruler } from 'lucide-vue-next'
 import { mmToPx, DEFAULT_BLEED_MM, DEFAULT_SAFETY_MM } from '../composables/useSafetyMargin'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
