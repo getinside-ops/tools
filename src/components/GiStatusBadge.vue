@@ -1,5 +1,5 @@
 <template>
-  <span class="gi-status-badge" :class="[`gi-status-badge--${variant}`]">
+  <span class="gi-status-badge" :class="[`gi-status-badge--${variant}`]" role="status">
     <CheckCircle v-if="showIcon && variant === 'ok'" class="gi-status-badge-icon" size="14" />
     <AlertCircle v-if="showIcon && variant === 'error'" class="gi-status-badge-icon" size="14" />
     <AlertTriangle v-if="showIcon && variant === 'warning'" class="gi-status-badge-icon" size="14" />
@@ -41,6 +41,7 @@ defineOptions({
 
 .gi-status-badge-icon {
   flex-shrink: 0;
+  color: currentColor; /* Inherit parent text color for dark mode */
 }
 
 .gi-status-badge--ok {
