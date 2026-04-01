@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('lorem.title') }}</h1>
-      <p>{{ t('lorem.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('lorem.title')" :description="t('lorem.desc')">
+    <template #icon>
+      <FileText />
+    </template>
 
     <div class="gi-grid">
       <!-- Controls -->
@@ -61,13 +60,15 @@
         </div>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { generateLorem } from '../composables/useLoremIpsum'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import { FileText } from 'lucide-vue-next'
 
 const { t } = useI18n()
 
