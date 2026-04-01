@@ -57,15 +57,14 @@
       </div>
 
       <!-- Preview Area -->
-      <div class="gi-result" style="margin-top: 0">
+      <GiResultCard :title="t('imageConverter.preview')">
         <div v-if="sourceUrl" class="preview-wrapper">
-          <div class="gi-result-label">Preview</div>
           <img :src="sourceUrl" class="preview-img" />
         </div>
         <div v-else class="gi-text-muted" style="text-align: center; padding: 2rem;">
           {{ t('imageConverter.upload') }}
         </div>
-      </div>
+      </GiResultCard>
     </div>
   </ToolPageLayout>
 </template>
@@ -77,6 +76,7 @@ import { Image } from 'lucide-vue-next'
 import { getAvailableFormats, convertImage } from '../composables/useImageConverter'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
