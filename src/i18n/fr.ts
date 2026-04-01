@@ -297,6 +297,9 @@ const fr = {
     errorSize: 'Fichier trop lourd (max 30 Mo).',
     errorType: 'Veuillez charger un fichier PDF.',
     errorServer: 'La conversion a échoué. Réessayez ou vérifiez le fichier.',
+    selectedFile: 'Fichier sélectionné',
+    error: 'Erreur',
+    ready: 'Prêt à télécharger',
     pedagogic: {
       title: 'À propos du PDF/X',
       description: 'Le PDF/X-1a est un standard ISO pour l\'impression professionnelle. Il garantit que votre fichier est prêt pour l\'imprimeur.',

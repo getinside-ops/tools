@@ -16,11 +16,21 @@
       @error="handleError"
     />
 
-    <div v-if="selectedFile" class="gi-result">
-      <span class="gi-filename">📄 {{ selectedFile.name }} ({{ fileSizeMb }} MB)</span>
-    </div>
+    <GiResultCard
+      v-if="selectedFile"
+      :title="t('pdfX.selectedFile')"
+      variant="info"
+    >
+      📄 {{ selectedFile.name }} ({{ fileSizeMb }} MB)
+    </GiResultCard>
 
-    <div v-if="error" class="gi-error-box">{{ t(`pdfX.error${capitalize(error)}`) }}</div>
+    <GiResultCard
+      v-if="error"
+      :title="t('pdfX.error')"
+      variant="error"
+    >
+      {{ t(`pdfX.error${capitalize(error)}`) }}
+    </GiResultCard>
 
     <button
       class="gi-btn"
@@ -31,12 +41,16 @@
       {{ loading ? t('pdfX.converting') : t('pdfX.convert') }}
     </button>
 
-    <div v-if="downloadUrl" class="gi-result" style="margin-top:1.5rem">
+    <GiResultCard
+      v-if="downloadUrl"
+      :title="t('pdfX.ready')"
+      variant="success"
+    >
       <a :href="downloadUrl" :download="downloadName" class="gi-btn">
         ⬇ {{ t('pdfX.download') }}
       </a>
       <p class="gi-disclaimer">{{ t('pdfX.disclaimer') }}</p>
-    </div>
+    </GiResultCard>
   </ToolPageLayout>
 </template>
 
@@ -47,6 +61,7 @@ import { FileText } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { convertToPdfX, type ConversionError } from '../composables/usePdfXConverter'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 
 const { t } = useI18n()
 
@@ -92,21 +107,5 @@ async function convert() {
 </script>
 
 <style scoped>
-.gi-result {
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  background: var(--gi-surface);
-  border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius-lg);
-}
-.gi-filename { color: var(--gi-text); font-weight: 500; }
-.gi-error-box {
-  margin-top: 0.75rem;
-  padding: 0.6rem 1rem;
-  background: var(--gi-tint-red-bg);
-  color: var(--gi-tint-red-text);
-  border-radius: var(--gi-radius);
-  font-size: 0.9rem;
-}
 .gi-disclaimer { margin-top: 0.75rem; font-size: 0.8rem; color: var(--gi-text-muted); }
 </style>

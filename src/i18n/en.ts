@@ -299,6 +299,9 @@ const en: Messages = {
     errorSize: 'File too large (max 30 MB).',
     errorType: 'Please upload a PDF file.',
     errorServer: 'Conversion failed. Try again or check the file.',
+    selectedFile: 'Selected file',
+    error: 'Error',
+    ready: 'Ready to download',
     pedagogic: {
       title: 'About PDF/X',
       description: 'PDF/X-1a is an ISO standard for professional printing. It ensures your file is print-ready.',
