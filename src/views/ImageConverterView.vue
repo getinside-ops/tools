@@ -1,56 +1,56 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('imageConverter.title') }}</h1>
-      <p>{{ t('imageConverter.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('imageConverter.title')"
+    :description="t('imageConverter.desc')"
+  >
+    <template #icon>
+      <Image :size="24" />
+    </template>
 
     <div class="gi-grid">
       <!-- Upload / Params -->
-      <div class="gi-field">
-        <div v-if="!sourceUrl">
-          <GiImageUpload
-            @upload="handleImageUpload"
-            :accept="['image/png', 'image/jpeg', 'image/webp', 'image/gif']"
-          />
+      <div v-if="!sourceUrl">
+        <GiImageUpload
+          @upload="handleImageUpload"
+          :accept="['image/png', 'image/jpeg', 'image/webp', 'image/gif']"
+        />
+      </div>
+
+      <div v-else>
+        <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1.5rem" @click="reset">{{ t('imageCropper.reset') }}</button>
+
+        <div class="gi-hint" style="margin-bottom: 1rem">
+          {{ t('imageConverter.inputFormat', { f: sourceMime.split('/')[1].toUpperCase() }) }}
         </div>
 
-        <div v-else>
-          <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1.5rem" @click="reset">{{ t('imageCropper.reset') }}</button>
-          
-          <div class="gi-hint" style="margin-bottom: 1rem">
-            {{ t('imageConverter.inputFormat', { f: sourceMime.split('/')[1].toUpperCase() }) }}
+        <div class="gi-field">
+          <label class="gi-label">{{ t('imageConverter.outputFormat') }}</label>
+          <div class="format-selector">
+            <button
+              v-for="fmt in availableFormats"
+              :key="fmt"
+              class="gi-btn-ghost"
+              :class="{ active: targetMime === fmt }"
+              @click="targetMime = fmt"
+            >
+              {{ fmt.split('/')[1].toUpperCase() }}
+            </button>
           </div>
-
-          <div class="gi-field">
-            <label class="gi-label">{{ t('imageConverter.outputFormat') }}</label>
-            <div class="format-selector">
-              <button 
-                v-for="fmt in availableFormats" 
-                :key="fmt"
-                class="gi-btn-ghost"
-                :class="{ active: targetMime === fmt }"
-                @click="targetMime = fmt"
-              >
-                {{ fmt.split('/')[1].toUpperCase() }}
-              </button>
-            </div>
-          </div>
-
-          <div class="gi-field">
-            <label class="gi-label">{{ t('imageConverter.quality') }} ({{ Math.round(quality * 100) }}%)</label>
-            <input v-model.number="quality" type="range" min="0.1" max="1" step="0.05" class="gi-input" />
-          </div>
-
-          <div class="gi-field">
-            <label class="gi-label">{{ t('imageConverter.scale') }} (x{{ scale }})</label>
-            <input v-model.number="scale" type="number" min="0.1" max="10" step="0.5" class="gi-input" />
-          </div>
-
-          <button class="gi-btn" style="width: 100%; margin-top: 1rem" :disabled="!targetMime" @click="performConversion">
-            {{ t('imageConverter.convert') }}
-          </button>
         </div>
+
+        <div class="gi-field">
+          <label class="gi-label">{{ t('imageConverter.quality') }} ({{ Math.round(quality * 100) }}%)</label>
+          <input v-model.number="quality" type="range" min="0.1" max="1" step="0.05" class="gi-input" />
+        </div>
+
+        <div class="gi-field">
+          <label class="gi-label">{{ t('imageConverter.scale') }} (x{{ scale }})</label>
+          <input v-model.number="scale" type="number" min="0.1" max="10" step="0.5" class="gi-input" />
+        </div>
+
+        <button class="gi-btn" style="width: 100%; margin-top: 1rem" :disabled="!targetMime" @click="performConversion">
+          {{ t('imageConverter.convert') }}
+        </button>
       </div>
 
       <!-- Preview Area -->
@@ -64,14 +64,16 @@
         </div>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Image } from 'lucide-vue-next'
 import { getAvailableFormats, convertImage } from '../composables/useImageConverter'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
@@ -103,13 +105,13 @@ function reset() {
 
 async function performConversion() {
   if (!sourceUrl.value || !targetMime.value) return
-  
+
   try {
     const resultUrl = await convertImage(sourceUrl.value, targetMime.value, {
       quality: quality.value,
       scale: scale.value
     })
-    
+
     // Download automatically
     const link = document.createElement('a')
     const ext = targetMime.value.split('/')[1]
