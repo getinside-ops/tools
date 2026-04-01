@@ -52,17 +52,16 @@
 
     <!-- Professional Results Grid (Delphic Pattern) -->
     <div class="gi-grid">
-      <div v-for="fmt in formats" :key="fmt.label" class="gi-card result-card">
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
-          <span class="gi-result-label" style="margin-bottom: 0">{{ fmt.label }}</span>
-          <button class="gi-btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; border-radius: 6px;" @click="copy(fmt.value, fmt.label)">
-            {{ copiedLabel === fmt.label ? t('colorConverter.copied') : t('colorConverter.copy') }}
-          </button>
-        </div>
+      <GiResultCard v-for="fmt in formats" :key="fmt.label" :title="fmt.label">
         <div class="gi-data-value" style="font-size: 1.1rem; word-break: break-all;">
           {{ fmt.value }}
         </div>
-      </div>
+        <template #actions>
+          <button class="gi-btn-ghost" @click="copy(fmt.value, fmt.label)">
+            {{ copiedLabel === fmt.label ? t('colorConverter.copied') : t('colorConverter.copy') }}
+          </button>
+        </template>
+      </GiResultCard>
     </div>
   </ToolPageLayout>
 </template>
@@ -73,6 +72,7 @@ import { useI18n } from 'vue-i18n'
 import { Palette } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import {
   hexToRgb, rgbToHex, rgbToHsl, hslToRgb, rgbToCmyk,
   rgbToOklch, rgbToLab, rgbToLch
@@ -141,14 +141,5 @@ async function copy(val: string, label: string) {
   border-radius: 50%;
   border: 4px solid var(--gi-surface);
   box-shadow: 0 0 0 1px var(--gi-border), var(--gi-shadow);
-}
-
-.result-card {
-  padding: 1.25rem;
-  border-left: 4px solid var(--gi-brand);
-}
-
-.result-card:hover {
-  border-left-color: var(--gi-mint);
 }
 </style>
