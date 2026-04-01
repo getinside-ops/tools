@@ -46,23 +46,23 @@
       </div>
 
       <!-- Preview -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-label">Preview</div>
-        <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 200px;">
+      <GiResultCard title="Preview">
+        <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 200px; position: relative;">
           <img :src="originalUrl" style="max-width: 100%; opacity: 0.5" />
           <div style="position: absolute; color: var(--gi-text); background: rgba(0,0,0,0.7); padding: 0.5rem; border-radius: 4px; pointer-events: none;">
             {{ originalWidth }} x {{ originalHeight }}
           </div>
         </div>
-      </div>
+      </GiResultCard>
     </div>
 
-    <!-- Result Result -->
-    <div v-if="resizedUrl" class="gi-result" style="margin-top: 2rem;">
-      <div class="gi-result-label">Result ({{ width }} x {{ height }})</div>
+    <!-- Result -->
+    <GiResultCard v-if="resizedUrl" :title="`Result (${width} x ${height})`">
       <img :src="resizedUrl" style="max-width: 100%; border-radius: var(--gi-radius); margin-bottom: 1rem;" />
-      <button class="gi-btn-primary" @click="downloadResized">⬇️ {{ t('imageResizer.download') }}</button>
-    </div>
+      <template #actions>
+        <button class="gi-btn-primary" @click="downloadResized">⬇️ {{ t('imageResizer.download') }}</button>
+      </template>
+    </GiResultCard>
   </ToolPageLayout>
 </template>
 
@@ -73,6 +73,7 @@ import { Maximize2 } from 'lucide-vue-next'
 import { resizeImage } from '../composables/useImageResizer'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
