@@ -11,39 +11,42 @@
     <div class="gi-card" style="margin-bottom: 2rem;">
       <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
         <!-- Large Preview -->
-        <div 
+        <div
           class="preview-circle"
           :style="{ backgroundColor: hex }"
         ></div>
-        
+
         <!-- HEX Input -->
-        <div class="gi-input-group" style="flex: 1; min-width: 200px;">
-          <label class="gi-label">{{ t('colorConverter.hex') }}</label>
-          <div style="display: flex; gap: 0.5rem;">
-            <input v-model="hex" type="color" class="gi-input" style="width: 60px; padding: 2px; height: 42px;" />
-            <input v-model="hex" type="text" class="gi-input" placeholder="#FFFFFF" @input="updateFromHex" />
-          </div>
-        </div>
+        <GiFormField :label="t('colorConverter.hex')" style="flex: 1; min-width: 200px;">
+          <template #input>
+            <div style="display: flex; gap: 0.5rem;">
+              <input v-model="hex" type="color" class="gi-input" style="width: 60px; padding: 2px; height: 42px;" />
+              <input v-model="hex" type="text" class="gi-input" placeholder="#FFFFFF" @input="updateFromHex" />
+            </div>
+          </template>
+        </GiFormField>
       </div>
 
       <!-- Quick Adjust (RGB/HSL Sliders) -->
       <div class="gi-grid" style="margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-        <div class="gi-input-group">
-          <label class="gi-label">{{ t('colorConverter.rgb') }}</label>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
-            <input v-model.number="rgb.r" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
-            <input v-model.number="rgb.g" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
-            <input v-model.number="rgb.b" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
-          </div>
-        </div>
-        <div class="gi-input-group">
-          <label class="gi-label">{{ t('colorConverter.hsl') }}</label>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
-            <input v-model.number="hsl.h" type="number" class="gi-input" min="0" max="360" @input="updateFromHsl" />
-            <input v-model.number="hsl.s" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
-            <input v-model.number="hsl.l" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
-          </div>
-        </div>
+        <GiFormField :label="t('colorConverter.rgb')">
+          <template #input>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+              <input v-model.number="rgb.r" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
+              <input v-model.number="rgb.g" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
+              <input v-model.number="rgb.b" type="number" class="gi-input" min="0" max="255" @input="updateFromRgb" />
+            </div>
+          </template>
+        </GiFormField>
+        <GiFormField :label="t('colorConverter.hsl')">
+          <template #input>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+              <input v-model.number="hsl.h" type="number" class="gi-input" min="0" max="360" @input="updateFromHsl" />
+              <input v-model.number="hsl.s" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
+              <input v-model.number="hsl.l" type="number" class="gi-input" min="0" max="100" @input="updateFromHsl" />
+            </div>
+          </template>
+        </GiFormField>
       </div>
     </div>
 
@@ -69,6 +72,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Palette } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 import {
   hexToRgb, rgbToHex, rgbToHsl, hslToRgb, rgbToCmyk,
   rgbToOklch, rgbToLab, rgbToLch
