@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('pdfX.title') }}</h1>
-      <p>{{ t('pdfX.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('pdfX.title')"
+    :description="t('pdfX.desc')"
+  >
+    <template #icon>
+      <FileText :size="24" />
+    </template>
 
     <GiImageUpload
       :accept="['.pdf', 'application/pdf']"
@@ -35,12 +37,14 @@
       </a>
       <p class="gi-disclaimer">{{ t('pdfX.disclaimer') }}</p>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { FileText } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { convertToPdfX, type ConversionError } from '../composables/usePdfXConverter'
 import GiImageUpload from '../components/GiImageUpload.vue'
 
