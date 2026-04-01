@@ -7,51 +7,32 @@
       <Link />
     </template>
 
-    <div class="gi-field">
-      <label class="gi-label">{{ t('utmBuilder.destinationUrl') }}</label>
-      <input v-model="url" type="url" placeholder="https://example.com/page" class="gi-input" />
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">{{ t('utmBuilder.source') }}</label>
-      <input v-model="source" list="source-list" class="gi-input" />
-      <datalist id="source-list">
-        <option value="sponsored-mail" />
-        <option value="dedicated-email" />
-        <option value="display-email" />
-        <option value="social-ads" />
-      </datalist>
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">{{ t('utmBuilder.medium') }}</label>
-      <input v-model="medium" list="medium-list" class="gi-input" />
-      <datalist id="medium-list">
-        <option value="insert" />
-        <option value="email" />
-        <option value="display" />
-        <option value="social" />
-      </datalist>
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">
-        {{ t('utmBuilder.campaign') }}
-        <span class="gi-optional">({{ t('utmBuilder.optional') }})</span>
-      </label>
-      <input v-model="campaign" class="gi-input" />
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">
-        {{ t('utmBuilder.content') }}
-        <span class="gi-optional">({{ t('utmBuilder.optional') }})</span>
-      </label>
-      <input v-model="content" class="gi-input" />
-    </div>
-    <div class="gi-field">
-      <label class="gi-label">
-        {{ t('utmBuilder.term') }}
-        <span class="gi-optional">({{ t('utmBuilder.optional') }})</span>
-      </label>
-      <input v-model="term" class="gi-input" />
-    </div>
+    <GiFormField :label="t('utmBuilder.destinationUrl')" type="url" placeholder="https://example.com/page" v-model="url" />
+    <GiFormField :label="t('utmBuilder.source')" v-model="source">
+      <template #input>
+        <input id="source-input" v-model="source" list="source-list" class="gi-input" />
+        <datalist id="source-list">
+          <option value="sponsored-mail" />
+          <option value="dedicated-email" />
+          <option value="display-email" />
+          <option value="social-ads" />
+        </datalist>
+      </template>
+    </GiFormField>
+    <GiFormField :label="t('utmBuilder.medium')" v-model="medium">
+      <template #input>
+        <input id="medium-input" v-model="medium" list="medium-list" class="gi-input" />
+        <datalist id="medium-list">
+          <option value="insert" />
+          <option value="email" />
+          <option value="display" />
+          <option value="social" />
+        </datalist>
+      </template>
+    </GiFormField>
+    <GiFormField :label="t('utmBuilder.campaign') + ' (' + t('utmBuilder.optional') + ')'" v-model="campaign" />
+    <GiFormField :label="t('utmBuilder.content') + ' (' + t('utmBuilder.optional') + ')'" v-model="content" />
+    <GiFormField :label="t('utmBuilder.term') + ' (' + t('utmBuilder.optional') + ')'" v-model="term" />
 
     <div class="gi-result">
       <div class="gi-result-label">{{ t('utmBuilder.result') }}</div>
@@ -76,6 +57,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Link } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 import { buildUtmUrl } from '../composables/useUtmBuilder'
 
 const { t } = useI18n()
