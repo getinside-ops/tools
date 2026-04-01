@@ -4,16 +4,13 @@
       <Link class="tool-page-icon" />
     </template>
 
-    <div class="gi-field">
-      <label class="gi-label">{{ t('redirectChecker.label') }}</label>
-      <input
-        v-model="inputUrl"
-        type="text"
-        placeholder="https://example.com/link"
-        class="gi-input"
-        @keydown.enter="check"
-      />
-    </div>
+    <GiFormField
+      v-model="inputUrl"
+      type="url"
+      :label="t('redirectChecker.label')"
+      placeholder="https://example.com/link"
+      @keydown.enter="check"
+    />
     <button class="gi-btn" :disabled="loading || !inputUrl" @click="check">
       {{ loading ? t('redirectChecker.checking') : t('redirectChecker.check') }}
     </button>
@@ -53,6 +50,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Link } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 import { checkRedirect, type RedirectResult } from '../composables/useRedirectChecker'
 
 const { t } = useI18n()
