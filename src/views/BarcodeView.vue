@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('barcode.title') }}</h1>
-      <p>{{ t('barcode.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('barcode.title')" :description="t('barcode.desc')">
+    <template #icon>
+      <Barcode />
+    </template>
 
     <div class="gi-grid">
       <!-- Controls -->
@@ -69,13 +68,15 @@
         <div v-else class="gi-text-muted">{{ t('barcode.invalid') }}</div>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Barcode } from 'lucide-vue-next'
 import { calculateEanChecksum, generateEanBinary } from '../composables/useBarcode'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
