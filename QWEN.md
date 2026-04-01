@@ -648,3 +648,304 @@ const router = createRouter({
 This is expected and correct for static hosting deployments.
 
 **Debugging Tip:** If users report 404 on tool pages, check that router uses `createWebHashHistory`, not `createWebHistory`.
+
+---
+
+## Session Learnings: Image Upload Standardization (April 2026)
+
+### Component Architecture Pattern
+
+**Created `<GiImageUpload>` component** — Reusable component with three input methods:
+1. **Paste zone** — Click-to-focus div with clipboard paste support (keyboard accessible)
+2. **Drag & drop** — Drop files directly on the zone
+3. **Click to upload** — Hidden file input triggered by zone click
+
+**Key design decisions:**
+- Component uses `useImageUpload` composable for pure validation logic
+- i18n support via vue-i18n with optional prop overrides (for special cases like PDF/X)
+- Emits `upload: [file: File]` and `error: [error: string]` events
+- Exposes `reset()` method via `defineExpose`
+
+**Composable API:**
+```typescript
+export function useImageUpload(options: UseImageUploadOptions = {}): UseImageUploadReturn
+
+interface UseImageUploadOptions {
+  accept?: string[]      // ['image/*'], ['.pdf'], etc.
+  multiple?: boolean     // Future support
+  maxSizeMB?: number     // File size limit
+}
+
+interface UseImageUploadReturn {
+  file: Ref<File | null>
+  error: Ref<string | null>
+  isProcessing: Ref<boolean>
+  isValidFile: (file: File) => boolean
+  processFile: (file: File) => Promise<void>
+  reset: () => void
+}
+```
+
+### File Validation Logic
+
+**Critical pattern for accept type validation:**
+```typescript
+function isValidFile(file: File): boolean {
+  const isAccepted = accept.some(type => {
+    // Wildcard pattern (e.g., image/*)
+    if (type.endsWith('/*')) {
+      const baseType = type.slice(0, -2)
+      return file.type.startsWith(baseType + '/')
+    }
+    // MIME type (e.g., application/pdf)
+    if (type.includes('/') && !type.startsWith('.')) {
+      return file.type === type
+    }
+    // File extension (e.g., .png, .pdf)
+    if (type.startsWith('.')) {
+      return file.name.toLowerCase().endsWith(type.toLowerCase())
+    }
+    // Fallback: exact match
+    return file.type === type
+  })
+  
+  if (!isAccepted) {
+    error.value = `File type "${file.type}" is not accepted`
+    return false
+  }
+  
+  // Size validation
+  if (maxSizeMB && file.size > maxSizeMB * 1024 * 1024) {
+    error.value = `File size exceeds ${maxSizeMB}MB limit`
+    return false
+  }
+  
+  return true
+}
+```
+
+**Key lessons:**
+- Always check wildcards FIRST, then MIME types, then extensions
+- Use case-insensitive extension matching
+- Provide specific error messages (not generic "invalid file")
+
+### i18n Pattern for Components
+
+**Correct pattern for bilingual components:**
+```typescript
+// Props with undefined defaults (allow overrides)
+const props = withDefaults(defineProps<{
+  pasteTitle?: string
+  pasteHint?: string
+  uploadText?: string
+}>(), {
+  pasteTitle: undefined,
+  pasteHint: undefined,
+  uploadText: undefined,
+})
+
+// Computed with i18n fallback
+const pasteTitleText = computed(() => props.pasteTitle || t('imageUpload.pasteTitle'))
+const pasteHintText = computed(() => props.pasteHint || t('imageUpload.pasteHint'))
+const uploadTextValue = computed(() => props.uploadText || t('imageUpload.uploadText'))
+```
+
+**i18n keys structure:**
+```typescript
+// fr.ts (source of truth)
+imageUpload: {
+  pasteTitle: 'Coller une image',
+  pasteHint: 'Cliquez ici et appuyez sur Ctrl+V / Cmd+V',
+  uploadText: 'ou cliquez pour télécharger depuis votre appareil',
+  error: {
+    invalidFile: 'Type ou taille de fichier invalide',
+    noClipboard: 'Aucune donnée dans le presse-papiers',
+  },
+}
+```
+
+### Subagent-Driven Development Lessons
+
+**What worked:**
+1. **Dispatch per task** — Fresh subagent for each composable/view update
+2. **Code review between tasks** — Caught critical i18n issue before scaling to 13 tools
+3. **Parallel agents for batch updates** — Updated 9 tools in parallel (3 groups of 3)
+
+**What failed:**
+- **Agents working in wrong directory** — Agents reported success but worked in main directory instead of worktree
+- **Solution:** Manually copied files to worktree and verified with `git status`
+
+**Corrected workflow:**
+```bash
+# After agents report completion, ALWAYS verify
+cd .worktrees/<branch>
+git status --short
+npm run build  # Verify in worktree
+```
+
+### Git Worktree Best Practices
+
+**Critical checks:**
+1. Verify worktree directory is in `.gitignore`:
+   ```bash
+   git check-ignore -q .worktrees && echo "IGNORED" || echo "NOT_IGNORED"
+   ```
+
+2. Verify worktree has all changes before merge:
+   ```bash
+   cd .worktrees/<branch>
+   git status --short
+   npm test
+   npm run build
+   ```
+
+3. Copy files if agents worked in wrong directory:
+   ```bash
+   cp src/components/GiImageUpload.vue .worktrees/<branch>/src/components/
+   cp src/views/*.vue .worktrees/<branch>/src/views/
+   ```
+
+### Merge Conflict Resolution
+
+**When merging feature branch:**
+```bash
+git checkout main
+git merge --no-ff feat/image-upload-standardization
+
+# If conflict occurs:
+git diff <file>  # Review conflict
+git checkout --theirs <file>  # Use feature branch version
+git add <file>
+git commit
+```
+
+**Always verify after merge:**
+```bash
+npm test  # Ensure tests still pass
+npm run build  # Ensure build succeeds
+```
+
+### Vitest Configuration for Worktrees
+
+**Add worktree exclusion to `vite.config.ts`:**
+```typescript
+test: {
+  environment: 'jsdom',
+  globals: true,
+  exclude: ['**/node_modules/**', '**/dist/**', '**/.worktrees/**', '**/.git/**'],
+}
+```
+
+**Why:** Prevents Vitest from running tests in worktrees, which causes duplicate test runs and failures.
+
+### Accessibility Checklist for Upload Components
+
+**Keyboard navigation:**
+- [ ] Paste zone is focusable (`tabindex="0"`)
+- [ ] Enter/Space keys trigger file input
+- [ ] Ctrl+V / Cmd+V pastes from clipboard
+- [ ] Focus state is visible (green glow: `box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.15)`)
+
+**ARIA attributes (future enhancement):**
+- `role="button"` on paste and upload zones
+- `aria-label` for screen readers
+- `aria-describedby` linking to hint text
+
+### Testing Strategy
+
+**Unit tests (Vitest):**
+- Test composable logic (`useImageUpload.test.ts`)
+- Test file validation (wildcards, MIME types, extensions)
+- Test size validation
+- Test error messages
+
+**Component tests:**
+- Test paste zone renders
+- Test drag-drop emits upload event
+- Test click upload
+- Test keyboard events (Enter, Space)
+- Test error states
+
+**Manual testing:**
+- Test all 14 tools with actual images
+- Test paste from clipboard (screenshots, copied images)
+- Test drag-drop from file explorer
+- Test keyboard navigation
+- Test dark mode visibility
+
+### Rollout Pattern for Component Refactors
+
+**Phased approach:**
+1. **Phase 1:** Create component + composable with tests
+2. **Phase 2:** Update high-priority tools (9 image tools)
+3. **Phase 3:** Update medium-priority tools (3 tools with existing upload)
+4. **Phase 4:** Update remaining tools (Safety Margin, DPI Checker)
+5. **Phase 5:** Manual testing + verification
+
+**For each tool:**
+```vue
+<!-- Replace old upload UI with: -->
+<GiImageUpload
+  @upload="handleImageUpload"
+  @error="handleError"
+  :accept="['image/*']"  <!-- Customize if needed -->
+/>
+```
+
+```typescript
+// Add handlers
+function handleImageUpload(file: File) {
+  // Use file directly
+}
+
+function handleError(error: string) {
+  // Handle error
+}
+```
+
+### Common Pitfalls
+
+**❌ Agents working in wrong directory:**
+- Symptom: Agent reports success but files not in worktree
+- Fix: Manually verify with `git status` and copy files if needed
+
+**❌ Missing i18n:**
+- Symptom: Hardcoded English strings
+- Fix: Use `t()` with computed properties for override support
+
+**❌ Variable shadowing:**
+```typescript
+// ❌ Bad
+const file = ref<File | null>(null)
+function processFile(file: File) {
+  file.value = file  // Shadows reactive ref
+}
+
+// ✅ Good
+function processFile(inputFile: File) {
+  file.value = inputFile
+}
+```
+
+**❌ Generic error messages:**
+```typescript
+// ❌ Bad
+error.value = 'Invalid file'
+
+// ✅ Good
+error.value = `File type "${file.type}" is not accepted`
+```
+
+### Files Reference
+
+**Created:**
+- `src/components/GiImageUpload.vue` — Reusable upload component
+- `src/composables/useImageUpload.ts` — File validation logic
+- `src/composables/__tests__/useImageUpload.test.ts` — 16 tests
+- `src/components/__tests__/GiImageUpload.test.ts` — 15 tests
+
+**Updated (14 tools):**
+- All image upload tools now use `<GiImageUpload>`
+
+**Documentation:**
+- `docs/plans/2026-04-01-image-upload-standardization.md` — Full implementation plan
