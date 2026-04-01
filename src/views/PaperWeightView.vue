@@ -31,8 +31,13 @@
     <!-- Input Section (centered, single column) -->
     <div class="pw-inputs">
       <!-- Quantity Section -->
-        <div class="gi-field">
-          <label class="gi-label">{{ t('paperWeight.quantity') }}</label>
+      <GiFormField
+        :label="t('paperWeight.quantity')"
+        type="number"
+        :model-value="quantity"
+        @update:model-value="quantity = Number($event)"
+      >
+        <template #input>
           <div class="pw-quantity-row">
             <input
               v-model.number="quantity"
@@ -43,44 +48,56 @@
             />
             <span class="pw-quantity-label">{{ t('paperWeight.sheets') }}</span>
           </div>
-        </div>
+        </template>
+      </GiFormField>
 
-        <!-- Format Section -->
-        <div class="gi-field">
-          <label class="gi-label">{{ t('paperWeight.format') }}</label>
+      <!-- Format Section -->
+      <GiFormField :label="t('paperWeight.format')">
+        <template #input>
           <select v-model="selectedFormat" class="gi-select pw-format-select">
             <option value="A5">A5 - {{ FORMATS.A5.width }} × {{ FORMATS.A5.height }} mm</option>
             <option value="A6">A6 - {{ FORMATS.A6.width }} × {{ FORMATS.A6.height }} mm</option>
             <option value="A4">A4 - {{ FORMATS.A4.width }} × {{ FORMATS.A4.height }} mm</option>
             <option value="Custom">{{ t('paperWeight.formats.Custom') }}...</option>
           </select>
-        </div>
+        </template>
+      </GiFormField>
 
-        <!-- Custom Format Inputs -->
-        <div v-if="selectedFormat === 'Custom'" class="gi-field">
-          <label class="gi-label">{{ t('paperWeight.customDimensions') }}</label>
+      <!-- Custom Format Inputs -->
+      <GiFormField
+        v-if="selectedFormat === 'Custom'"
+        :label="t('paperWeight.customDimensions')"
+      >
+        <template #input>
           <div class="pw-custom-row">
             <input v-model.number="customWidth" type="number" min="1" class="gi-input pw-custom-input" />
             <span class="pw-custom-sep">×</span>
             <input v-model.number="customHeight" type="number" min="1" class="gi-input pw-custom-input" />
             <span class="pw-custom-unit">mm</span>
           </div>
-        </div>
+        </template>
+      </GiFormField>
 
-        <!-- Grammage Section -->
-        <div class="gi-field">
-          <label class="gi-label">{{ t('paperWeight.grammage') }}</label>
+      <!-- Grammage Section -->
+      <GiFormField
+        :label="t('paperWeight.grammage')"
+        type="number"
+        :model-value="grammage"
+        @update:model-value="grammage = Number($event)"
+      >
+        <template #input>
           <div class="pw-grammage-row">
             <input v-model.number="grammage" type="number" min="1" class="gi-input pw-grammage-input" />
             <span class="pw-grammage-unit">g/m²</span>
           </div>
-        </div>
+        </template>
+      </GiFormField>
 
-        <!-- Reset Button (mobile only) -->
-        <button class="gi-btn gi-btn-ghost pw-reset-btn-mobile" @click="resetCalculator">
-          {{ t('paperWeight.reset') }}
-        </button>
-      </div>
+      <!-- Reset Button (mobile only) -->
+      <button class="gi-btn gi-btn-ghost pw-reset-btn-mobile" @click="resetCalculator">
+        {{ t('paperWeight.reset') }}
+      </button>
+    </div>
   </ToolPageLayout>
 </template>
 
@@ -89,6 +106,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Weight } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 import {
   calculatePaperWeight,
   FORMATS,
@@ -241,20 +259,6 @@ const resetCalculator = () => {
   gap: var(--gi-space-md);
   max-width: 600px;
   margin: 0 auto;
-}
-
-/* Fields */
-.gi-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gi-space-xs);
-}
-
-.gi-label {
-  font-size: var(--gi-font-size-sm);
-  font-weight: 600;
-  color: var(--gi-text);
-  letter-spacing: -0.01em;
 }
 
 /* Quantity Row */
