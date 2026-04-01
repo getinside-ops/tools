@@ -21,47 +21,48 @@
         {{ error }}
       </div>
 
-      <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;">
-        <button class="gi-btn-ghost" style="flex: 1" @click="copyCode">
-          {{ copied ? t('utmBuilder.copied') : t('barcode.copy') }}
-        </button>
-        <button class="gi-btn" style="flex: 1" @click="downloadSvg">
-          {{ t('barcode.download') }}
-        </button>
-      </div>
-
       <!-- Result Area -->
-      <div class="gi-result" style="margin-top: 0; display: flex; align-items: center; justify-content: center; min-height: 200px; background: white;">
-        <div v-if="binary" ref="barcodeSvgContainer" class="barcode-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="200"
-            height="120"
-            viewBox="0 0 95 60"
-            preserveAspectRatio="xMidYMid meet"
-          >
-            <!-- Background -->
-            <rect width="95" height="60" fill="white" />
-            
-            <!-- Bars -->
-            <rect
-              v-for="(bit, idx) in binary.split('')"
-              :key="idx"
-              :x="idx"
-              y="0"
-              width="1"
-              :height="isGuard(idx) ? 55 : 50"
-              :fill="bit === '1' ? 'black' : 'transparent'"
-            />
+      <GiResultCard :title="t('barcode.preview')">
+        <div style="display: flex; align-items: center; justify-content: center; min-height: 200px;">
+          <div v-if="binary" ref="barcodeSvgContainer" class="barcode-container">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="200"
+              height="120"
+              viewBox="0 0 95 60"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <!-- Background -->
+              <rect width="95" height="60" fill="white" />
 
-            <!-- Text -->
-            <text x="0" y="58" font-size="6" font-family="monospace">{{ fullCode[0] }}</text>
-            <text x="25" y="58" font-size="6" font-family="monospace" text-anchor="middle">{{ fullCode.slice(1, 7) }}</text>
-            <text x="70" y="58" font-size="6" font-family="monospace" text-anchor="middle">{{ fullCode.slice(7) }}</text>
-          </svg>
+              <!-- Bars -->
+              <rect
+                v-for="(bit, idx) in binary.split('')"
+                :key="idx"
+                :x="idx"
+                y="0"
+                width="1"
+                :height="isGuard(idx) ? 55 : 50"
+                :fill="bit === '1' ? 'black' : 'transparent'"
+              />
+
+              <!-- Text -->
+              <text x="0" y="58" font-size="6" font-family="monospace">{{ fullCode[0] }}</text>
+              <text x="25" y="58" font-size="6" font-family="monospace" text-anchor="middle">{{ fullCode.slice(1, 7) }}</text>
+              <text x="70" y="58" font-size="6" font-family="monospace" text-anchor="middle">{{ fullCode.slice(7) }}</text>
+            </svg>
+          </div>
+          <div v-else class="gi-text-muted">{{ t('barcode.invalid') }}</div>
         </div>
-        <div v-else class="gi-text-muted">{{ t('barcode.invalid') }}</div>
-      </div>
+        <template #actions>
+          <button class="gi-btn-ghost" style="flex: 1" @click="copyCode">
+            {{ copied ? t('utmBuilder.copied') : t('barcode.copy') }}
+          </button>
+          <button class="gi-btn" style="flex: 1" @click="downloadSvg">
+            {{ t('barcode.download') }}
+          </button>
+        </template>
+      </GiResultCard>
     </div>
   </ToolPageLayout>
 </template>
@@ -73,6 +74,7 @@ import { Barcode } from 'lucide-vue-next'
 import { calculateEanChecksum, generateEanBinary } from '../composables/useBarcode'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 
 const { t } = useI18n()
 

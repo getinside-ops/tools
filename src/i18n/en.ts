@@ -697,6 +697,7 @@ const en: Messages = {
     label: 'EAN-13 Code (12 or 13 digits)',
     checksum: 'Checksum: {n}',
     invalid: 'Invalid format (digits only)',
+    preview: 'Barcode Preview',
     copy: 'Copy code',
     download: 'Download SVG',
     pedagogic: {

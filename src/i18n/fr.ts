@@ -695,6 +695,7 @@ const fr = {
     label: 'Code EAN-13 (12 ou 13 chiffres)',
     checksum: 'Clé de contrôle : {n}',
     invalid: 'Format invalide (chiffres uniquement)',
+    preview: 'Aperçu du code-barres',
     copy: 'Copier le code',
     download: 'Télécharger en SVG',
     pedagogic: {
