@@ -13,23 +13,41 @@
     <div v-else class="gi-grid">
       <!-- Controls -->
       <div class="gi-field">
-        <label class="gi-label">{{ t('imageFilters.brightness') }}: {{ filters.brightness }}%</label>
-        <input v-model.number="filters.brightness" type="range" min="0" max="200" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.brightness')}: ${filters.brightness}%`">
+          <template #input>
+            <input v-model.number="filters.brightness" type="range" min="0" max="200" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.contrast') }}: {{ filters.contrast }}%</label>
-        <input v-model.number="filters.contrast" type="range" min="0" max="200" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.contrast')}: ${filters.contrast}%`">
+          <template #input>
+            <input v-model.number="filters.contrast" type="range" min="0" max="200" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.grayscale') }}: {{ filters.grayscale }}%</label>
-        <input v-model.number="filters.grayscale" type="range" min="0" max="100" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.grayscale')}: ${filters.grayscale}%`">
+          <template #input>
+            <input v-model.number="filters.grayscale" type="range" min="0" max="100" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.sepia') }}: {{ filters.sepia }}%</label>
-        <input v-model.number="filters.sepia" type="range" min="0" max="100" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.sepia')}: ${filters.sepia}%`">
+          <template #input>
+            <input v-model.number="filters.sepia" type="range" min="0" max="100" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.invert') }}: {{ filters.invert }}%</label>
-        <input v-model.number="filters.invert" type="range" min="0" max="100" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.invert')}: ${filters.invert}%`">
+          <template #input>
+            <input v-model.number="filters.invert" type="range" min="0" max="100" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <label class="gi-label">{{ t('imageFilters.blur') }}: {{ filters.blur }}px</label>
-        <input v-model.number="filters.blur" type="range" min="0" max="20" class="gi-input" />
+        <GiFormField :label="`${t('imageFilters.blur')}: ${filters.blur}px`">
+          <template #input>
+            <input v-model.number="filters.blur" type="range" min="0" max="20" class="gi-input" />
+          </template>
+        </GiFormField>
 
         <div style="display: flex; gap: 1rem; margin-top: 1.5rem">
           <button class="gi-btn-primary" style="flex: 1" @click="handleApply">{{ t('imageFilters.apply') }}</button>
@@ -60,6 +78,7 @@ import { ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Wand } from 'lucide-vue-next'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiFormField from '../components/GiFormField.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { constructFilterString, applyFilters } from '../composables/useImageFilters'
 
