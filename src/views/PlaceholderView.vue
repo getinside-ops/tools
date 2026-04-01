@@ -53,14 +53,13 @@
       </div>
 
       <!-- Preview -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-label">Preview</div>
+      <GiResultCard :title="t('placeholder.preview')" style="margin-top: 0">
         <div
           style="background: var(--gi-bg-soft); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 300px; padding: 2rem;"
         >
           <div v-html="svgCode" style="box-shadow: 0 10px 30px rgba(0,0,0,0.1); line-height: 0;"></div>
         </div>
-      </div>
+      </GiResultCard>
     </div>
   </ToolPageLayout>
 </template>
@@ -71,6 +70,7 @@ import { useI18n } from 'vue-i18n'
 import { Image } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { generatePlaceholderSvg, getPlaceholderDataUrl } from '../composables/usePlaceholder'
 
 const { t } = useI18n()

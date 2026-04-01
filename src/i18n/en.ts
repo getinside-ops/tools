@@ -605,6 +605,7 @@ const en: Messages = {
     text: 'Text (optional)',
     bgColor: 'Background Color',
     textColor: 'Text Color',
+    preview: 'Preview',
     download: 'Download',
     pedagogic: {
       title: 'About Placeholders',

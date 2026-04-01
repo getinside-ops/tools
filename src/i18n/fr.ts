@@ -603,6 +603,7 @@ const fr = {
     text: 'Texte (optionnel)',
     bgColor: 'Couleur de fond',
     textColor: 'Couleur du texte',
+    preview: 'Aperçu',
     download: 'Télécharger',
     pedagogic: {
       title: 'À propos des placeholders',
