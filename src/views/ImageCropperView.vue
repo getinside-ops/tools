@@ -5,11 +5,11 @@
       <p>{{ t('imageCropper.desc') }}</p>
     </div>
 
-    <!-- Upload Area -->
-    <div v-if="!originalUrl" class="gi-result" style="border: 2px dashed var(--gi-border); cursor: pointer; text-align: center; padding: 3rem;" @click="fileInput?.click()">
-      <p>📁 {{ t('imageCropper.select') }}</p>
-      <input ref="fileInput" type="file" hidden accept="image/*" @change="handleFileChange" />
-    </div>
+    <GiImageUpload
+      v-if="!originalUrl"
+      @upload="handleImageUpload"
+      @error="handleError"
+    />
 
     <div v-else>
       <!-- Controls -->
@@ -79,10 +79,10 @@
 import { ref, computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { cropImage } from '../composables/useImageCropper'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
-const fileInput = ref<HTMLInputElement | null>(null)
 const imageRef = ref<HTMLImageElement | null>(null)
 const originalUrl = ref('')
 const croppedUrl = ref('')
@@ -109,6 +109,21 @@ const isDragging = ref(false)
 const isResizing = ref(false)
 const dragStart = { x: 0, y: 0, boxX: 0, boxY: 0, boxW: 0, boxH: 0 }
 
+function handleImageUpload(file: File) {
+  const reader = new FileReader()
+  reader.onload = (ev) => {
+    originalUrl.value = ev.target?.result as string
+    isLoaded.value = false
+    croppedUrl.value = ''
+  }
+  reader.readAsDataURL(file)
+}
+
+function handleError(error: string) {
+  console.error(error)
+  alert(error)
+}
+
 const boxStyle = computed(() => ({
   left: `${cropBox.x}px`,
   top: `${cropBox.y}px`,
@@ -132,18 +147,6 @@ const previewImgStyle = computed(() => {
     height: '100%',
   }
 })
-
-function handleFileChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
-  const reader = new FileReader()
-  reader.onload = (ev) => {
-    originalUrl.value = ev.target?.result as string
-    isLoaded.value = false
-    croppedUrl.value = ''
-  }
-  reader.readAsDataURL(file)
-}
 
 function onImageLoad() {
   if (!imageRef.value) return
