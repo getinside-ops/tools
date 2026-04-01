@@ -8,9 +8,11 @@
     <div class="gi-grid">
       <!-- Upload / Params -->
       <div class="gi-field">
-        <div v-if="!sourceUrl" class="gi-result" style="border: 2px dashed var(--gi-border); cursor: pointer; text-align: center; padding: 3rem;" @click="fileInput?.click()">
-          <p>📁 {{ t('imageConverter.upload') }}</p>
-          <input ref="fileInput" type="file" hidden :accept="SUPPORTED_INPUTS.join(',')" @change="handleFile" />
+        <div v-if="!sourceUrl">
+          <GiImageUpload
+            @upload="handleImageUpload"
+            :accept="['image/png', 'image/jpeg', 'image/webp', 'image/gif']"
+          />
         </div>
 
         <div v-else>
@@ -68,11 +70,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SUPPORTED_INPUTS, getAvailableFormats, convertImage } from '../composables/useImageConverter'
+import { getAvailableFormats, convertImage } from '../composables/useImageConverter'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
-const fileInput = ref<HTMLInputElement | null>(null)
 const sourceUrl = ref('')
 const sourceMime = ref('')
 const targetMime = ref('')
@@ -81,10 +83,7 @@ const scale = ref(1)
 
 const availableFormats = computed(() => getAvailableFormats(sourceMime.value))
 
-function handleFile(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
-  
+function handleImageUpload(file: File) {
   sourceMime.value = file.type
   const reader = new FileReader()
   reader.onload = (ev) => {
@@ -100,7 +99,6 @@ function reset() {
   sourceUrl.value = ''
   sourceMime.value = ''
   targetMime.value = ''
-  if (fileInput.value) fileInput.value.value = ''
 }
 
 async function performConversion() {

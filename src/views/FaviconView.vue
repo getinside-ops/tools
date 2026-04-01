@@ -6,9 +6,8 @@
     </div>
 
     <!-- Upload Area -->
-    <div v-if="!originalUrl" class="gi-result" style="border: 2px dashed var(--gi-border); cursor: pointer; text-align: center; padding: 3rem;" @click="fileInput?.click()">
-      <p>📁 {{ t('favicon.upload') }}</p>
-      <input ref="fileInput" type="file" hidden accept="image/*" @change="handleFileChange" />
+    <div v-if="!originalUrl">
+      <GiImageUpload @upload="handleImageUpload" />
     </div>
 
     <div v-else>
@@ -43,16 +42,14 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { generateFavicons, type FaviconResult } from '../composables/useFavicon'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
-const fileInput = ref<HTMLInputElement | null>(null)
 const originalUrl = ref('')
 const results = ref<FaviconResult[]>([])
 
-function handleFileChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
+function handleImageUpload(file: File) {
   const reader = new FileReader()
   reader.onload = async (ev) => {
     originalUrl.value = ev.target?.result as string
@@ -64,7 +61,6 @@ function handleFileChange(e: Event) {
 function reset() {
   originalUrl.value = ''
   results.value = []
-  if (fileInput.value) fileInput.value.value = ''
 }
 
 function downloadSingle(res: FaviconResult) {
