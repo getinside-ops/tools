@@ -135,6 +135,13 @@ const en: Messages = {
       precise: 'Precise',
       fast: 'Fast',
     },
+    hints: {
+      light: 'Light paper (newspapers, magazines)',
+      medium: 'Standard paper (documents, printing)',
+      flyer: 'Flyer paper (posters, promotions)',
+      card: 'Cardstock (business cards, covers)',
+      thick: 'Thick paper (hard covers, packaging)',
+    },
     weightPerThousand: 'Weight per 1000 sheets',
     totalSheets: 'Total number of sheets',
     sheets: 'sheets',

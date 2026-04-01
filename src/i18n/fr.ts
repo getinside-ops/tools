@@ -133,6 +133,13 @@ const fr = {
       precise: 'Précis',
       fast: 'Rapide',
     },
+    hints: {
+      light: 'Papier léger (journaux, magazines)',
+      medium: 'Papier standard (documents, impressions)',
+      flyer: 'Papier flyer (affiches, promotions)',
+      card: 'Papier cartonné (cartes de visite, couvertures)',
+      thick: 'Papier épais (couvertures rigides, packaging)',
+    },
     weightPerThousand: 'Poids pour 1000 ex.',
     totalSheets: 'Nombre total d\'exemplaires',
     sheets: 'ex.',
