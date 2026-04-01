@@ -5,26 +5,27 @@
     </template>
 
     <!-- Input Section -->
-    <div class="gi-field">
-      <label class="gi-label">{{ t('urlParser.label') }}</label>
-      <div class="gi-input-wrapper">
-        <input
-          v-model="urlInput"
-          type="url"
-          :placeholder="t('urlParser.placeholder')"
-          class="gi-input"
-          @input="handleInput"
-        />
-        <button
-          v-if="urlInput"
-          class="gi-btn-ghost gi-btn-sm"
-          @click="clearInput"
-          :aria-label="t('urlParser.clear')"
-        >
-          <X class="gi-icon" />
-        </button>
-      </div>
-    </div>
+    <GiFormField :label="t('urlParser.label')" type="url" :placeholder="t('urlParser.placeholder')" v-model="urlInput">
+      <template #input>
+        <div class="gi-input-wrapper">
+          <input
+            v-model="urlInput"
+            type="url"
+            :placeholder="t('urlParser.placeholder')"
+            class="gi-input"
+            @input="handleInput"
+          />
+          <button
+            v-if="urlInput"
+            class="gi-btn-ghost gi-btn-sm"
+            @click="clearInput"
+            :aria-label="t('urlParser.clear')"
+          >
+            <X class="gi-icon" />
+          </button>
+        </div>
+      </template>
+    </GiFormField>
 
     <!-- Empty State -->
     <div v-if="!urlInput && !error" class="gi-empty-state">
@@ -227,6 +228,7 @@ import { parseUrl, type ParsedUrl } from '../composables/useUrlParser'
 import Tooltip from '../components/Tooltip.vue'
 import UrlAnatomyDiagram from '../components/UrlAnatomyDiagram.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 
 const { t } = useI18n()
 
