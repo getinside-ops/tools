@@ -29,10 +29,9 @@
       </button>
     </div>
 
-    <!-- Two-Column Layout -->
-    <div class="pw-grid">
-      <div class="pw-inputs">
-        <!-- Quantity Section -->
+    <!-- Input Section (centered, single column) -->
+    <div class="pw-inputs">
+      <!-- Quantity Section -->
         <div class="gi-field">
           <label class="gi-label">{{ t('paperWeight.quantity') }}</label>
           <div class="pw-quantity-row">
@@ -83,7 +82,6 @@
           {{ t('paperWeight.reset') }}
         </button>
       </div>
-    </div>
   </div>
 </template>
 
@@ -284,18 +282,13 @@ const resetCalculator = () => {
   color: var(--gi-brand);
 }
 
-/* Grid Layout */
-.pw-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--gi-space-xl);
-  align-items: start;
-}
-
+/* Input Section (centered, single column) */
 .pw-inputs {
   display: flex;
   flex-direction: column;
   gap: var(--gi-space-md);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* Fields */
@@ -419,11 +412,6 @@ const resetCalculator = () => {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .pw-grid {
-    grid-template-columns: 1fr;
-    gap: var(--gi-space-lg);
-  }
-
   .pw-result-banner {
     flex-direction: column;
     text-align: center;
