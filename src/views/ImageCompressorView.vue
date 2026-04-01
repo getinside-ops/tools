@@ -59,7 +59,7 @@
           </div>
           <div style="display: flex; justify-content: space-between">
             <span>{{ t('imageCompressor.reduction') }}:</span>
-            <span class="gi-status gi-status-ok">{{ reduction }}%</span>
+            <GiStatusBadge variant="ok" :showIcon="true">{{ reduction }}%</GiStatusBadge>
           </div>
         </div>
 
@@ -83,6 +83,7 @@ import { useI18n } from 'vue-i18n'
 import { Image } from 'lucide-vue-next'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import GiResultCard from '../components/GiResultCard.vue'
+import GiStatusBadge from '../components/GiStatusBadge.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { compressImage } from '../composables/useImageCompressor'
 
