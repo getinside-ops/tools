@@ -3,6 +3,9 @@
     :title="t('dpiChecker.title')"
     :description="t('dpiChecker.desc')"
   >
+    <template #icon>
+      <Ruler :size="24" />
+    </template>
     <!-- Upload Zone -->
     <GiImageUpload
       @upload="handleImageUpload"
@@ -160,7 +163,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
+import { Ruler } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import {
@@ -205,16 +209,6 @@ function handleError(error: string) {
 // removeImage is no longer needed - user resets via GiImageUpload's built-in clear button
 
 // changeImage is no longer needed - GiImageUpload handles reset internally
-
-// Listen for paste events globally - now handled by GiImageUpload
-// Keeping this for backward compatibility with manual paste if needed
-onMounted(() => {
-  // Global paste listener removed - GiImageUpload handles paste in its zone
-})
-
-onUnmounted(() => {
-  // Cleanup if needed
-})
 
 // Visual comparison helpers
 const MAX_SIZE = 120 // max dimension in pixels for comparison SVG

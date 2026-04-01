@@ -1,9 +1,9 @@
 <template>
   <span class="gi-status-badge" :class="[`gi-status-badge--${variant}`]" role="status">
-    <CheckCircle v-if="showIcon && variant === 'ok'" class="gi-status-badge-icon" size="14" />
-    <AlertCircle v-if="showIcon && variant === 'error'" class="gi-status-badge-icon" size="14" />
-    <AlertTriangle v-if="showIcon && variant === 'warning'" class="gi-status-badge-icon" size="14" />
-    <Info v-if="showIcon && variant === 'info'" class="gi-status-badge-icon" size="14" />
+    <CheckCircle v-if="showIcon && variant === 'ok'" class="gi-status-badge-icon" :size="14" />
+    <AlertCircle v-if="showIcon && variant === 'error'" class="gi-status-badge-icon" :size="14" />
+    <AlertTriangle v-if="showIcon && variant === 'warning'" class="gi-status-badge-icon" :size="14" />
+    <Info v-if="showIcon && variant === 'info'" class="gi-status-badge-icon" :size="14" />
     <slot />
   </span>
 </template>
