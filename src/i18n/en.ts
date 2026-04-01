@@ -541,6 +541,7 @@ const en: Messages = {
     crop: 'Crop',
     reset: 'Reset',
     download: 'Download',
+    result: 'Result',
     pedagogic: {
       title: 'About Image Cropping',
       description: 'Cropping allows you to modify an image composition and adapt it to formats required by different platforms.',

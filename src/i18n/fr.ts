@@ -539,6 +539,7 @@ const fr = {
     crop: 'Recadrer',
     reset: 'Réinitialiser',
     download: 'Télécharger',
+    result: 'Résultat',
     pedagogic: {
       title: 'À propos du recadrage d\'images',
       description: 'Le recadrage permet de modifier la composition d\'une image et de l\'adapter aux formats requis par les différentes plateformes.',

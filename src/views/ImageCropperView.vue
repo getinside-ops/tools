@@ -70,12 +70,13 @@
         </div>
       </div>
 
-      <!-- Result Result -->
-      <div v-if="croppedUrl" class="gi-result" style="margin-top: 2rem;">
-        <div class="gi-result-label">Result</div>
-        <img :src="croppedUrl" style="max-width: 100%; border-radius: var(--gi-radius); margin-bottom: 1rem;" />
-        <button class="gi-btn-primary" @click="downloadCropped">⬇️ {{ t('imageCropper.download') }}</button>
-      </div>
+      <!-- Result -->
+      <GiResultCard v-if="croppedUrl" :title="t('imageCropper.result')" style="margin-top: 2rem;">
+        <img :src="croppedUrl" style="max-width: 100%; border-radius: var(--gi-radius);" />
+        <template #actions>
+          <button class="gi-btn-primary" @click="downloadCropped">⬇️ {{ t('imageCropper.download') }}</button>
+        </template>
+      </GiResultCard>
     </div>
   </ToolPageLayout>
 </template>
@@ -86,6 +87,7 @@ import { useI18n } from 'vue-i18n'
 import { Crop } from 'lucide-vue-next'
 import { cropImage } from '../composables/useImageCropper'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
