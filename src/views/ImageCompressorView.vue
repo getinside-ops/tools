@@ -47,8 +47,7 @@
       </div>
 
       <!-- Stats & Download -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-label">Stats</div>
+      <GiResultCard :title="t('imageCompressor.stats')">
         <div style="display: flex; flex-direction: column; gap: 0.5rem">
           <div style="display: flex; justify-content: space-between">
             <span>{{ t('imageCompressor.originalSize') }}:</span>
@@ -64,14 +63,16 @@
           </div>
         </div>
 
-        <button 
-          class="gi-btn-primary" 
-          style="width: 100%; margin-top: 1.5rem" 
-          @click="downloadImage"
-        >
-          ⬇️ {{ t('imageCompressor.download') }}
-        </button>
-      </div>
+        <template #actions>
+          <button
+            class="gi-btn-primary"
+            style="width: 100%"
+            @click="downloadImage"
+          >
+            ⬇️ {{ t('imageCompressor.download') }}
+          </button>
+        </template>
+      </GiResultCard>
     </div>
   </ToolPageLayout>
 </template>
@@ -81,7 +82,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Image } from 'lucide-vue-next'
 import GiImageUpload from '../components/GiImageUpload.vue'
-import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { compressImage } from '../composables/useImageCompressor'
 

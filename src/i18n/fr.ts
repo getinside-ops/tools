@@ -507,6 +507,7 @@ const fr = {
   imageCompressor: {
     title: 'Compresseur d\'Image',
     desc: 'Optimisez vos images en réduisant leur poids tout en préservant la qualité.',
+    stats: 'Statistiques',
     select: 'Choisir une image',
     quality: 'Qualité',
     format: 'Format de sortie',

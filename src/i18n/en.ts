@@ -509,6 +509,7 @@ const en: Messages = {
   imageCompressor: {
     title: 'Image Compressor',
     desc: 'Optimize your images by reducing their size while maintaining quality.',
+    stats: 'Statistics',
     select: 'Select an image',
     quality: 'Quality',
     format: 'Output Format',
