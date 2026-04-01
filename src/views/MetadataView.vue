@@ -13,8 +13,11 @@
       @error="handleError"
     />
 
-    <div v-if="metadata" class="gi-result" style="margin-top: 2rem;">
-      <div class="gi-result-label">Technical Properties</div>
+    <GiResultCard
+      v-if="metadata"
+      :title="t('metadata.technicalProperties')"
+      style="margin-top: 2rem;"
+    >
       <div class="metadata-table">
         <div class="meta-row">
           <span class="meta-key">{{ t('metadata.name') }}</span>
@@ -37,7 +40,7 @@
       <div class="gi-field" style="margin-top: 2rem; display: flex; justify-content: center;">
         <img :src="previewUrl" class="preview-thumb" />
       </div>
-    </div>
+    </GiResultCard>
   </ToolPageLayout>
 </template>
 
@@ -47,6 +50,7 @@ import { useI18n } from 'vue-i18n'
 import { FileText } from 'lucide-vue-next'
 import { extractBasicMetadata, type ImageMetadata } from '../composables/useMetadata'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()

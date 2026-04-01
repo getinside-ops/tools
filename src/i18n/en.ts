@@ -755,6 +755,7 @@ const en: Messages = {
     title: 'Image Metadata Viewer',
     desc: 'View technical properties and metadata for any image file instantly.',
     upload: 'Analyze an image (Drag & drop here)',
+    technicalProperties: 'Technical Properties',
     name: 'Filename',
     size: 'Size',
     type: 'MIME Type',

@@ -753,6 +753,7 @@ const fr = {
     title: 'Informations de l\'Image (Metadata)',
     desc: 'Visualisez les propriétés et les métadonnées de n\'importe quelle image instantanément.',
     upload: 'Analyser une image (Faites glisser ici)',
+    technicalProperties: 'Propriétés Techniques',
     name: 'Nom du fichier',
     size: 'Taille',
     type: 'Format MIME',
