@@ -23,30 +23,33 @@
           {{ t('imageConverter.inputFormat', { f: sourceMime.split('/')[1].toUpperCase() }) }}
         </div>
 
-        <div class="gi-field">
-          <label class="gi-label">{{ t('imageConverter.outputFormat') }}</label>
-          <div class="format-selector">
-            <button
-              v-for="fmt in availableFormats"
-              :key="fmt"
-              class="gi-btn-ghost"
-              :class="{ active: targetMime === fmt }"
-              @click="targetMime = fmt"
-            >
-              {{ fmt.split('/')[1].toUpperCase() }}
-            </button>
-          </div>
-        </div>
+        <GiFormField :label="t('imageConverter.outputFormat')">
+          <template #input>
+            <div class="format-selector">
+              <button
+                v-for="fmt in availableFormats"
+                :key="fmt"
+                class="gi-btn-ghost"
+                :class="{ active: targetMime === fmt }"
+                @click="targetMime = fmt"
+              >
+                {{ fmt.split('/')[1].toUpperCase() }}
+              </button>
+            </div>
+          </template>
+        </GiFormField>
 
-        <div class="gi-field">
-          <label class="gi-label">{{ t('imageConverter.quality') }} ({{ Math.round(quality * 100) }}%)</label>
-          <input v-model.number="quality" type="range" min="0.1" max="1" step="0.05" class="gi-input" />
-        </div>
+        <GiFormField :label="`${t('imageConverter.quality')} (${Math.round(quality * 100)}%)`">
+          <template #input>
+            <input v-model.number="quality" type="range" min="0.1" max="1" step="0.05" class="gi-input" />
+          </template>
+        </GiFormField>
 
-        <div class="gi-field">
-          <label class="gi-label">{{ t('imageConverter.scale') }} (x{{ scale }})</label>
-          <input v-model.number="scale" type="number" min="0.1" max="10" step="0.5" class="gi-input" />
-        </div>
+        <GiFormField :label="`${t('imageConverter.scale')} (x${scale})`" type="number">
+          <template #input>
+            <input v-model.number="scale" type="number" min="0.1" max="10" step="0.5" class="gi-input" />
+          </template>
+        </GiFormField>
 
         <button class="gi-btn" style="width: 100%; margin-top: 1rem" :disabled="!targetMime" @click="performConversion">
           {{ t('imageConverter.convert') }}
@@ -73,6 +76,7 @@ import { useI18n } from 'vue-i18n'
 import { Image } from 'lucide-vue-next'
 import { getAvailableFormats, convertImage } from '../composables/useImageConverter'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiFormField from '../components/GiFormField.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
