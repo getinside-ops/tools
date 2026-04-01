@@ -1,12 +1,11 @@
 <template>
-  <div class="pw-wrapper">
-    <!-- Back link + Header -->
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-
-    <div class="gi-tool-header">
-      <h1>{{ t('paperWeight.title') }}</h1>
-      <p>{{ t('paperWeight.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('paperWeight.title')"
+    :subtitle="t('paperWeight.desc')"
+  >
+    <template #icon>
+      <Weight />
+    </template>
 
     <!-- Result Banner (sticky, full-width) -->
     <div v-if="result" class="pw-result-banner">
@@ -82,12 +81,14 @@
           {{ t('paperWeight.reset') }}
         </button>
       </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Weight } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import {
   calculatePaperWeight,
   FORMATS,
@@ -141,55 +142,6 @@ const resetCalculator = () => {
 </script>
 
 <style scoped>
-/* Wrapper */
-.pw-wrapper {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-/* Back Link */
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gi-space-xs);
-  margin-bottom: var(--gi-space-lg);
-  padding: var(--gi-space-xs) var(--gi-space-sm);
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius-md);
-  font-size: var(--gi-font-size-sm);
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: all var(--gi-transition-base) var(--gi-ease-out);
-  background: var(--gi-surface);
-}
-
-.gi-back-link:hover {
-  border-color: var(--gi-brand);
-  color: var(--gi-brand);
-  transform: translateY(-1px);
-}
-
-/* Tool Header */
-.gi-tool-header {
-  margin-bottom: var(--gi-space-lg);
-}
-
-.gi-tool-header h1 {
-  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
-  font-size: var(--gi-font-size-lg);
-  font-weight: 700;
-  margin-bottom: var(--gi-space-xs);
-  letter-spacing: -0.02em;
-  color: var(--gi-text);
-}
-
-.gi-tool-header p {
-  color: var(--gi-text-muted);
-  font-size: var(--gi-font-size-sm);
-  max-width: 500px;
-  line-height: var(--gi-line-height-base);
-}
-
 /* Result Banner (sticky, full-width) */
 .pw-result-banner {
   position: sticky;
