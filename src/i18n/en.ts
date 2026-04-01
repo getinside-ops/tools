@@ -716,6 +716,8 @@ const en: Messages = {
     dpi: 'Image Resolution (DPI)',
     bleed: 'Bleed (mm)',
     safety: 'Safety Zone (mm)',
+    preview: 'Preview with margins',
+    uploadTitle: 'No image uploaded',
     upload: 'Upload an image to check',
     legend: {
       bleed: 'Bleed area (trim)',

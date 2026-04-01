@@ -714,6 +714,8 @@ const fr = {
     dpi: 'Résolution de l\'image (DPI)',
     bleed: 'Fond perdu (mm)',
     safety: 'Zone de sécurité (mm)',
+    preview: 'Aperçu avec marges',
+    uploadTitle: 'Aucune image chargée',
     upload: 'Charger une image pour vérification',
     legend: {
       bleed: 'Fond perdu (découpe)',
