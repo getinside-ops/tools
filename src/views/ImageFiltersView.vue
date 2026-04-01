@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('imageFilters.title') }}</h1>
-      <p>{{ t('imageFilters.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('imageFilters.title')"
+    :description="t('imageFilters.desc')"
+  >
+    <template #icon>
+      <Wand :size="24" />
+    </template>
 
     <!-- Upload Area -->
-    <div v-if="!originalUrl">
-      <GiImageUpload @upload="handleImageUpload" />
-    </div>
+    <GiImageUpload v-if="!originalUrl" @upload="handleImageUpload" />
 
     <div v-else class="gi-grid">
       <!-- Controls -->
@@ -52,14 +52,16 @@
       <img :src="filteredUrl" style="max-width: 100%; border-radius: var(--gi-radius); margin-bottom: 1rem;" />
       <button class="gi-btn-primary" @click="downloadFiltered">⬇️ {{ t('imageFilters.download') }}</button>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { constructFilterString, applyFilters } from '../composables/useImageFilters'
+import { Wand } from 'lucide-vue-next'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
+import { constructFilterString, applyFilters } from '../composables/useImageFilters'
 
 const { t } = useI18n()
 
