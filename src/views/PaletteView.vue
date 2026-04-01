@@ -40,10 +40,10 @@
       </div>
 
       <!-- Preview Image -->
-      <div class="gi-result" style="margin-top: 0; display: flex; align-items: center; justify-content: center; background: var(--gi-bg-soft);">
+      <GiResultCard :title="t('palette.title')">
         <img v-if="imageUrl" :src="imageUrl" class="preview-img" ref="previewImg" @load="performExtraction" />
         <p v-else class="gi-text-muted">{{ t('palette.upload') }}</p>
-      </div>
+      </GiResultCard>
     </div>
 
     <!-- Hidden Canvas -->
@@ -57,6 +57,7 @@ import { useI18n } from 'vue-i18n'
 import { Palette } from 'lucide-vue-next'
 import { extractDominantColors } from '../composables/usePalette'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
