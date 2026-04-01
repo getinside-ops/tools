@@ -31,10 +31,12 @@
     </div>
 
     <!-- Upload Zone -->
-    <div class="gi-upload-zone" @click="fileInput?.click()" @dragover.prevent @drop.prevent="onDrop">
-      <input ref="fileInput" type="file" hidden accept="image/*" @change="handleFile" />
-      <span>{{ t('qrDecoder.upload') }}</span>
-    </div>
+    <GiImageUpload
+      :paste-zone="false"
+      :upload-text="t('qrDecoder.upload')"
+      @upload="handleUpload"
+      @error="handleUploadError"
+    />
 
     <!-- Preview Image -->
     <div v-if="imageUrl" class="gi-preview-section">
@@ -92,12 +94,12 @@ import { useI18n } from 'vue-i18n'
 import { QrCode } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiPedagogic from '../components/GiPedagogic.vue'
+import GiImageUpload from '../components/GiImageUpload.vue'
 import { decodeQrFromBlob, decodeQrFromImageData, decodeQrFromPasteEvent } from '../composables/useQrDecoder'
 
 const { t } = useI18n()
 
 const pasteZone = ref<HTMLElement | null>(null)
-const fileInput = ref<HTMLInputElement | null>(null)
 const hiddenCanvas = ref<HTMLCanvasElement | null>(null)
 const previewImg = ref<HTMLImageElement | null>(null)
 const imageUrl = ref('')
@@ -147,17 +149,12 @@ async function processPasteEvent(e: ClipboardEvent) {
   }
 }
 
-function onDrop(e: DragEvent) {
-  const file = e.dataTransfer?.files?.[0]
-  if (file?.type.startsWith('image/')) {
-    processBlob(file)
-  }
+function handleUpload(file: File) {
+  processBlob(file)
 }
 
-function handleFile(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
-  processBlob(file)
+function handleUploadError(error: string) {
+  decodeError.value = error
 }
 
 async function processBlob(blob: Blob) {
@@ -225,7 +222,6 @@ function reset() {
   decodedResult.value = null
   decodeError.value = null
   analyzing.value = false
-  if (fileInput.value) fileInput.value.value = ''
 }
 </script>
 
@@ -270,20 +266,6 @@ function reset() {
   color: var(--gi-text-muted);
   margin: 0;
 }
-
-/* Upload Zone */
-.gi-upload-zone {
-  border: 2px dashed var(--gi-border);
-  border-radius: var(--gi-radius-lg);
-  padding: 1.5rem;
-  text-align: center;
-  cursor: pointer;
-  color: var(--gi-text-muted);
-  font-size: 0.9rem;
-  transition: border-color 0.15s;
-  margin-bottom: 1rem;
-}
-.gi-upload-zone:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
 
 /* Results */
 .gi-result {
