@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>
-
-    <div class="gi-tool-header">
-      <h1>{{ t('mockupGenerator.title') }}</h1>
-      <p>{{ t('mockupGenerator.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('mockupGenerator.title')"
+    :description="t('mockupGenerator.desc')"
+  >
+    <template #icon>
+      <Monitor />
+    </template>
 
     <GiImageUpload
       @upload="handleImageUpload"
@@ -24,14 +24,16 @@
         {{ copied ? t('mockupGenerator.copied') : t('mockupGenerator.copy') }}
       </button>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Monitor } from 'lucide-vue-next'
 import { generateMockup } from '../composables/useMockupGenerator'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
@@ -103,20 +105,6 @@ async function copyToClipboard() {
 </script>
 
 <style scoped>
-.gi-back-link {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  text-decoration: none;
-  transition: border-color 0.12s, color 0.12s;
-}
-.gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-
 .gi-mockup-preview {
   display: flex;
   justify-content: center;
