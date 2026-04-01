@@ -17,20 +17,31 @@
         <div v-else class="gi-field">
           <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1.5rem" @click="reset">{{ t('imageCropper.reset') }}</button>
 
-          <div class="gi-field">
-            <label class="gi-label">{{ t('safetyMargin.dpi') }}</label>
-            <input v-model.number="dpi" type="number" class="gi-input" min="72" max="1200" />
-          </div>
+          <GiFormField
+            :label="t('safetyMargin.dpi')"
+            type="number"
+            :model-value="dpi"
+            @update:model-value="dpi = Number($event)"
+            placeholder="300"
+            min="72"
+            max="1200"
+          />
 
-          <div class="gi-field">
-            <label class="gi-label">{{ t('safetyMargin.bleed') }} (mm)</label>
-            <input v-model.number="bleedMm" type="number" class="gi-input" step="0.1" />
-          </div>
+          <GiFormField
+            :label="`${t('safetyMargin.bleed')} (mm)`"
+            type="number"
+            :model-value="bleedMm"
+            @update:model-value="bleedMm = Number($event)"
+            step="0.1"
+          />
 
-          <div class="gi-field">
-            <label class="gi-label">{{ t('safetyMargin.safety') }} (mm)</label>
-            <input v-model.number="safetyMm" type="number" class="gi-input" step="0.1" />
-          </div>
+          <GiFormField
+            :label="`${t('safetyMargin.safety')} (mm)`"
+            type="number"
+            :model-value="safetyMm"
+            @update:model-value="safetyMm = Number($event)"
+            step="0.1"
+          />
 
           <div class="margin-legend">
             <div class="legend-item">
@@ -69,6 +80,7 @@ import { useI18n } from 'vue-i18n'
 import { Ruler } from 'lucide-vue-next'
 import { mmToPx, DEFAULT_BLEED_MM, DEFAULT_SAFETY_MM } from '../composables/useSafetyMargin'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiFormField from '../components/GiFormField.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
