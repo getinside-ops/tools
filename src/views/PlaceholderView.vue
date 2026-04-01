@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('placeholder.title') }}</h1>
-      <p>{{ t('placeholder.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('placeholder.title')" :subtitle="t('placeholder.desc')">
+    <template #icon>
+      <Image />
+    </template>
 
     <div class="gi-grid">
       <!-- Controls -->
@@ -57,12 +56,14 @@
         </div>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Image } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { generatePlaceholderSvg, getPlaceholderDataUrl } from '../composables/usePlaceholder'
 
 const { t } = useI18n()
@@ -92,7 +93,7 @@ function download(format: 'png' | 'svg') {
     URL.revokeObjectURL(url)
   } else {
     // PNG via Canvas
-    const img = new Image()
+    const img = new window.Image()
     const svgUrl = getPlaceholderDataUrl({
       width: width.value,
       height: height.value,
@@ -100,7 +101,7 @@ function download(format: 'png' | 'svg') {
       bgColor: bgColor.value,
       textColor: textColor.value
     })
-    
+
     img.onload = () => {
       const canvas = document.createElement('canvas')
       canvas.width = width.value
