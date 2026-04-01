@@ -939,22 +939,66 @@ const resetCalculator = () => {
   }
 }
 
-/* Two-column layout with sticky results */
+/* Three-column CSS Grid layout - compact for 100vh fit */
 .pw-layout {
   display: grid;
-  grid-template-columns: 1fr 380px; /* Optimized for result panel content + comfortable padding */
-  gap: var(--gi-space-2xl);
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: var(--gi-space-lg);
   align-items: start;
+  max-height: calc(100vh - 200px);
+  padding: var(--gi-space-md);
 }
 
+/* Compact input sections */
 .pw-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-md);
   min-width: 0;
 }
 
+.gi-field {
+  margin-bottom: 0;
+}
+
+/* Compact format grid (2×2) */
+.gi-format-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gi-space-sm);
+}
+
+.gi-format-card {
+  padding: var(--gi-space-sm);
+  min-height: 100px;
+}
+
+/* Compact result panel */
 .pw-results {
   position: sticky;
-  top: var(--gi-space-lg);
-  min-width: 0; /* Prevents overflow from fixed-width content */
+  top: var(--gi-space-md);
+}
+
+.gi-result {
+  padding: var(--gi-space-md);
+}
+
+.gi-result-value {
+  font-size: 2.5rem; /* Reduced from 3rem */
+}
+
+/* Compact slider and chips */
+.gi-slider-container {
+  padding: var(--gi-space-sm) var(--gi-space-xs);
+}
+
+.gi-chips {
+  gap: var(--gi-space-xs);
+}
+
+.gi-chip {
+  padding: var(--gi-space-xs) var(--gi-space-sm);
+  font-size: var(--gi-font-size-xs);
 }
 
 /* Remove margin-top in two-column context */
@@ -962,18 +1006,11 @@ const resetCalculator = () => {
   margin-top: 0;
 }
 
-@media (max-width: 1024px) {
+/* Responsive fallback */
+@media (max-width: 900px) {
   .pw-layout {
     grid-template-columns: 1fr;
-  }
-
-  .pw-results {
-    position: static;
-  }
-
-  /* Keep margin for single-column mobile layout */
-  .pw-results .gi-result {
-    margin-top: var(--gi-space-2xl);
+    max-height: none;
   }
 }
 </style>
