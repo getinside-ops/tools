@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('matteGenerator.title') }}</h1>
-      <p>{{ t('matteGenerator.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('matteGenerator.title')"
+    :subtitle="t('matteGenerator.desc')"
+  >
+    <template #icon>
+      <FrameIcon />
+    </template>
 
     <GiImageUpload
       @upload="handleImageUpload"
@@ -12,7 +14,7 @@
 
     <!-- Editor UI -->
     <div v-if="image" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: start;">
-      
+
       <!-- Preview Pane -->
       <div class="gi-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--gi-bg-soft); padding: 2rem;">
         <img v-if="previewResult" :src="previewResult" style="max-width: 100%; max-height: 500px; box-shadow: var(--gi-shadow-lg); border-radius: 4px;" />
@@ -21,7 +23,7 @@
 
       <!-- Controls -->
       <div class="gi-grid" style="grid-template-columns: 1fr; gap: 1.25rem;">
-        
+
         <div class="gi-input-group">
           <label class="gi-label">{{ t('matteGenerator.targetSize') }}</label>
           <select v-model="targetKey" class="gi-select">
@@ -67,14 +69,16 @@
 
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Frame as FrameIcon } from 'lucide-vue-next'
 import { applyMatte, type MatteOptions } from '../composables/useMatteGenerator'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
