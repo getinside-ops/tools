@@ -4,17 +4,13 @@
       <Tag />
     </template>
 
-    <div class="gi-field">
-      <label class="gi-label">{{ t('promoCode.label') }}</label>
-      <input
-        v-model="code"
-        type="text"
-        placeholder="SUMMER25FR"
-        class="gi-input gi-code-input"
-        spellcheck="false"
-        autocomplete="off"
-      />
-    </div>
+    <GiFormField
+      :label="t('promoCode.label')"
+      v-model="code"
+      type="text"
+      placeholder="SUMMER25FR"
+      class="gi-promo-code-field"
+    />
 
     <template v-if="checks.length">
       <div class="gi-score-bar">
@@ -38,6 +34,7 @@ import { useI18n } from 'vue-i18n'
 import { Tag } from 'lucide-vue-next'
 import { validatePromoCode } from '../composables/usePromoCode'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
+import GiFormField from '../components/GiFormField.vue'
 
 const { t } = useI18n()
 const code = ref('')
@@ -62,7 +59,12 @@ function camelRule(rule: string) { return ruleMap[rule] ?? rule }
 </script>
 
 <style scoped>
-.gi-code-input { font-family: 'Menlo', 'Monaco', monospace; font-size: 1.1rem; letter-spacing: 0.1em; }
+.gi-promo-code-field :deep(.gi-input) {
+  font-family: 'Menlo', 'Monaco', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+}
+
 .gi-score-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
 .gi-score-label { font-weight: 600; font-size: 0.9rem; }
 .gi-score-value { font-size: 1.4rem; font-weight: 700; }
