@@ -288,6 +288,8 @@ const en: Messages = {
   pdfX: {
     title: 'PDF to PDF/X Converter',
     desc: 'Convert your PDF to PDF/X-1a format — CMYK, embedded fonts, print-ready.',
+    pasteTitle: 'Paste a PDF',
+    pasteHint: 'Click here and press Ctrl+V / Cmd+V',
     upload: 'Upload a PDF',
     convert: 'Convert to PDF/X-1a',
     converting: 'Converting…',

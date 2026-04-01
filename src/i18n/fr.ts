@@ -286,6 +286,8 @@ const fr = {
   pdfX: {
     title: 'Convertisseur PDF → PDF/X',
     desc: "Convertissez votre PDF en PDF/X-1a — CMJN, polices embarquées, prêt pour l'impression.",
+    pasteTitle: 'Coller un PDF',
+    pasteHint: 'Cliquez ici et appuyez sur Ctrl+V / Cmd+V',
     upload: 'Charger un PDF',
     convert: 'Convertir en PDF/X-1a',
     converting: 'Conversion en cours…',

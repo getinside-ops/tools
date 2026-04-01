@@ -7,25 +7,10 @@
       <p>{{ t('mockupGenerator.desc') }}</p>
     </div>
 
-    <!-- Drop zone -->
-    <div
-      class="gi-drop-zone"
-      :class="{ 'gi-drop-zone--active': isDragging }"
-      @click="triggerFileInput"
-      @dragover.prevent="isDragging = true"
-      @dragleave="isDragging = false"
-      @drop.prevent="onDrop"
-    >
-      <span class="gi-drop-icon">📱</span>
-      <span class="gi-drop-label">{{ t('mockupGenerator.dropZone') }}</span>
-      <input
-        ref="fileInputRef"
-        type="file"
-        accept="image/*"
-        class="gi-drop-input"
-        @change="onFileChange"
-      />
-    </div>
+    <GiImageUpload
+      @upload="handleImageUpload"
+      @error="handleError"
+    />
 
     <!-- Preview -->
     <div v-if="canvas" class="gi-mockup-preview">
@@ -46,47 +31,37 @@
 import { ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { generateMockup } from '../composables/useMockupGenerator'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
-const fileInputRef = ref<HTMLInputElement | null>(null)
 const previewRef = ref<HTMLCanvasElement | null>(null)
 const canvas = ref<HTMLCanvasElement | null>(null)
-const isDragging = ref(false)
 const copied = ref(false)
+const error = ref<string | null>(null)
 
-function triggerFileInput() {
-  fileInputRef.value?.click()
-}
-
-async function loadFromFile(file: File) {
+function handleImageUpload(file: File) {
   const url = URL.createObjectURL(file)
   const img = new Image()
   img.onload = async () => {
     try {
       canvas.value = await generateMockup(img)
-      if (fileInputRef.value) fileInputRef.value.value = ''
     } catch (err) {
       console.error('Mockup generation failed:', err)
+      error.value = 'Failed to generate mockup'
     } finally {
       URL.revokeObjectURL(url)
     }
   }
   img.onerror = () => {
     URL.revokeObjectURL(url)
+    error.value = 'Failed to load image'
   }
   img.src = url
 }
 
-function onFileChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (file) loadFromFile(file)
-}
-
-function onDrop(e: DragEvent) {
-  isDragging.value = false
-  const file = e.dataTransfer?.files?.[0]
-  if (file && file.type.startsWith('image/')) loadFromFile(file)
+function handleError(err: string) {
+  error.value = err
 }
 
 // Mirror composited canvas into the <canvas> preview element
@@ -141,36 +116,6 @@ async function copyToClipboard() {
   transition: border-color 0.12s, color 0.12s;
 }
 .gi-back-link:hover { border-color: var(--gi-brand); color: var(--gi-brand); }
-
-.gi-drop-zone {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 3rem 2rem;
-  border: 2px dashed var(--gi-border);
-  border-radius: var(--gi-radius-lg);
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-}
-.gi-drop-zone:hover,
-.gi-drop-zone--active {
-  border-color: var(--gi-brand);
-  background: color-mix(in srgb, var(--gi-brand) 5%, transparent);
-}
-.gi-drop-icon { font-size: 2rem; pointer-events: none; }
-.gi-drop-label { font-size: 0.95rem; color: var(--gi-text-muted); text-align: center; pointer-events: none; }
-.gi-drop-input {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  display: none; /* triggered programmatically */
-}
 
 .gi-mockup-preview {
   display: flex;
