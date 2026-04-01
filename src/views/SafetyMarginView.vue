@@ -9,10 +9,11 @@
       <!-- Controls -->
       <div class="gi-field">
         <!-- Upload -->
-        <div v-if="!imageUrl" class="gi-result" style="border: 2px dashed var(--gi-border); cursor: pointer; text-align: center; padding: 2rem;" @click="fileInput?.click()">
-          <p>📁 {{ t('safetyMargin.upload') }}</p>
-          <input ref="fileInput" type="file" hidden accept="image/*" @change="handleFile" />
-        </div>
+        <GiImageUpload
+          v-if="!imageUrl"
+          @upload="handleImageUpload"
+          @error="handleError"
+        />
 
         <div v-else class="gi-field">
           <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1.5rem" @click="reset">{{ t('imageCropper.reset') }}</button>
@@ -67,25 +68,29 @@
 import { ref, computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { mmToPx, DEFAULT_BLEED_MM, DEFAULT_SAFETY_MM } from '../composables/useSafetyMargin'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
-const fileInput = ref<HTMLInputElement | null>(null)
 const imageUrl = ref('')
 const dpi = ref(300)
 const bleedMm = ref(DEFAULT_BLEED_MM)
 const safetyMm = ref(DEFAULT_SAFETY_MM)
 const imgSize = reactive({ width: 0, height: 0 })
 const previewImg = ref<HTMLImageElement | null>(null)
+const uploadError = ref('')
 
-function handleFile(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
+function handleImageUpload(file: File) {
+  uploadError.value = ''
   const reader = new FileReader()
   reader.onload = (ev) => {
     imageUrl.value = ev.target?.result as string
   }
   reader.readAsDataURL(file)
+}
+
+function handleError(error: string) {
+  uploadError.value = error
 }
 
 function updateImageSize() {
@@ -97,7 +102,7 @@ function updateImageSize() {
 
 function reset() {
   imageUrl.value = ''
-  if (fileInput.value) fileInput.value.value = ''
+  uploadError.value = ''
 }
 
 const bleedPx = computed(() => mmToPx(bleedMm.value, dpi.value))

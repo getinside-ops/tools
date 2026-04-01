@@ -8,47 +8,10 @@
     </div>
 
     <!-- Upload Zone -->
-    <div
-      class="gi-upload-zone"
-      :class="{ 'is-dragover': isDragover }"
-      @click="triggerFileInput"
-      @dragover.prevent="isDragover = true"
-      @dragleave.prevent="isDragover = false"
-      @drop.prevent="onDrop"
-    >
-      <input ref="fileInput" type="file" accept="image/*" style="display:none" @change="onFileChange" />
-
-      <template v-if="!imagePreview">
-        <svg class="gi-upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="17 8 12 3 7 8" />
-          <line x1="12" y1="3" x2="12" y2="15" />
-        </svg>
-        <span class="gi-upload-text">{{ t('dpiChecker.upload') }}</span>
-        <span class="gi-upload-sub">{{ t('dpiChecker.orClick') }}</span>
-        <span class="gi-paste-hint">{{ t('dpiChecker.pasteHint') }}</span>
-      </template>
-
-      <template v-else>
-        <div class="gi-image-preview">
-          <img :src="imagePreview" alt="Uploaded preview" class="gi-preview-image" />
-          <div class="gi-preview-info">
-            <span class="gi-preview-dims">{{ widthPx }} × {{ heightPx }} px</span>
-            <span class="gi-preview-orientation" :class="orientationClass">
-              {{ t(`dpiChecker.orientation.${orientation}`) }}
-            </span>
-          </div>
-          <div class="gi-preview-actions">
-            <button type="button" class="gi-btn-ghost gi-btn-sm" @click="changeImage">
-              {{ t('dpiChecker.imagePreview.change') }}
-            </button>
-            <button type="button" class="gi-btn-ghost gi-btn-sm gi-btn-danger" @click="removeImage">
-              {{ t('dpiChecker.imagePreview.remove') }}
-            </button>
-          </div>
-        </div>
-      </template>
-    </div>
+    <GiImageUpload
+      @upload="handleImageUpload"
+      @error="handleError"
+    />
 
     <p class="gi-or">{{ t('dpiChecker.orManual') }}</p>
 
@@ -206,31 +169,27 @@ import { useI18n } from 'vue-i18n'
 import {
   calculatePrintDimensions,
   getFormatStatus,
-  getOrientation,
   getRecommendedUses,
   getDpiColor,
   getDpiLabel,
   FEATURED_FORMATS,
   EXTENDED_FORMATS,
 } from '../composables/useDpiChecker'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 const widthPx = ref(0)
 const heightPx = ref(0)
-const fileInput = ref<HTMLInputElement>()
-const isDragover = ref(false)
 const imagePreview = ref<string | null>(null)
 const showExtendedFormats = ref(false)
+const uploadError = ref('')
 
 const dimensions = computed(() => calculatePrintDimensions(widthPx.value, heightPx.value))
 const formatStatus = computed(() => getFormatStatus(widthPx.value, heightPx.value))
-const orientation = computed(() => getOrientation(widthPx.value, heightPx.value))
-const orientationClass = computed(() => `gi-orientation-${orientation.value}`)
 const recommendedUses = computed(() => getRecommendedUses(widthPx.value, heightPx.value))
 
-function triggerFileInput() { fileInput.value?.click() }
-
-function loadImage(file: File) {
+function handleImageUpload(file: File) {
+  uploadError.value = ''
   const img = new Image()
   const url = URL.createObjectURL(file)
   img.onload = () => {
@@ -242,50 +201,22 @@ function loadImage(file: File) {
   img.src = url
 }
 
-function onFileChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (file) loadImage(file)
+function handleError(error: string) {
+  uploadError.value = error
 }
 
-function onDrop(e: DragEvent) {
-  isDragover.value = false
-  const file = e.dataTransfer?.files?.[0]
-  if (file?.type.startsWith('image/')) loadImage(file)
-}
+// removeImage is no longer needed - user resets via GiImageUpload's built-in clear button
 
-function removeImage() {
-  imagePreview.value = null
-  widthPx.value = 0
-  heightPx.value = 0
-}
+// changeImage is no longer needed - GiImageUpload handles reset internally
 
-function changeImage() {
-  triggerFileInput()
-}
-
-// Clipboard paste support
-function onPaste(e: ClipboardEvent) {
-  const items = e.clipboardData?.items
-  if (!items) return
-
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].type.startsWith('image/')) {
-      const file = items[i].getAsFile()
-      if (file) {
-        loadImage(file)
-        break
-      }
-    }
-  }
-}
-
-// Listen for paste events globally
+// Listen for paste events globally - now handled by GiImageUpload
+// Keeping this for backward compatibility with manual paste if needed
 onMounted(() => {
-  window.addEventListener('paste', onPaste)
+  // Global paste listener removed - GiImageUpload handles paste in its zone
 })
 
 onUnmounted(() => {
-  window.removeEventListener('paste', onPaste)
+  // Cleanup if needed
 })
 
 // Visual comparison helpers
