@@ -22,7 +22,7 @@
         </div>
       </div>
       <button class="pw-reset-btn" @click="resetCalculator" :title="t('paperWeight.reset')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" />
           <path d="M3 3v9h9" />
         </svg>
@@ -268,6 +268,18 @@ const resetCalculator = () => {
   outline-offset: 2px;
 }
 
+/* Dark mode override for result banner */
+[data-theme="dark"] .pw-result-banner {
+  background: rgba(10, 170, 142, 0.15);
+  border: 1px solid rgba(10, 170, 142, 0.4);
+}
+
+[data-theme="dark"] .pw-result-value,
+[data-theme="dark"] .pw-result-unit,
+[data-theme="dark"] .pw-result-secondary {
+  color: var(--gi-brand);
+}
+
 /* Grid Layout */
 .pw-grid {
   display: grid;
@@ -307,6 +319,11 @@ const resetCalculator = () => {
   flex: 1;
   font-size: var(--gi-font-size-lg);
   padding: var(--gi-space-md);
+}
+
+.pw-quantity-input:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 1px;
 }
 
 .pw-quantity-label {
@@ -350,6 +367,11 @@ const resetCalculator = () => {
   font-size: var(--gi-font-size-md);
 }
 
+.pw-custom-input:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 1px;
+}
+
 .pw-custom-sep {
   font-size: var(--gi-font-size-lg);
   color: var(--gi-text-muted);
@@ -372,6 +394,11 @@ const resetCalculator = () => {
   flex: 1;
   font-size: var(--gi-font-size-lg);
   padding: var(--gi-space-md);
+}
+
+.pw-grammage-input:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 1px;
 }
 
 .pw-grammage-unit {
