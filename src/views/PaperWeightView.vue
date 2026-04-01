@@ -106,39 +106,14 @@
     </div>
 
     <!-- Custom Format Inputs -->
-    <transition name="slide">
-      <template v-if="selectedFormat === 'Custom'">
-        <div class="gi-custom-format">
-          <div class="gi-row">
-            <div class="gi-field">
-              <label class="gi-label">{{ t('paperWeight.customWidth') }}</label>
-              <div class="gi-input-with-unit">
-                <input v-model.number="customWidth" type="number" min="1" class="gi-input" />
-                <span class="gi-unit">mm</span>
-              </div>
-            </div>
-            <div class="gi-field">
-              <label class="gi-label">{{ t('paperWeight.customHeight') }}</label>
-              <div class="gi-input-with-unit">
-                <input v-model.number="customHeight" type="number" min="1" class="gi-input" />
-                <span class="gi-unit">mm</span>
-              </div>
-            </div>
-          </div>
-          <div class="gi-custom-preview">
-            <svg :viewBox="customViewBox" class="gi-custom-svg">
-              <rect
-                :width="customSvgWidth"
-                :height="customSvgHeight"
-                class="gi-format-rect"
-                rx="4"
-              />
-            </svg>
-            <span class="gi-custom-dims">{{ customWidth }} × {{ customHeight }} mm</span>
-          </div>
-        </div>
-      </template>
-    </transition>
+    <div v-if="selectedFormat === 'Custom'" class="gi-custom-format-inline">
+      <div class="gi-custom-inputs">
+        <input v-model.number="customWidth" type="number" min="1" class="gi-custom-input" />
+        <span>×</span>
+        <input v-model.number="customHeight" type="number" min="1" class="gi-custom-input" />
+        <span class="gi-unit">mm</span>
+      </div>
+    </div>
 
     <!-- Paper Weight Section -->
     <div class="gi-field">
@@ -302,26 +277,6 @@ const getFormatSvgHeight = (format: FormatKey) => {
   const scale = 60 / Math.max(dims.width, dims.height)
   return dims.height * scale
 }
-
-const customViewBox = computed(() => {
-  const max = Math.max(customWidth.value, customHeight.value) || 1
-  const scale = 60 / max
-  const w = customWidth.value * scale
-  const h = customHeight.value * scale
-  return `0 0 ${w + 8} ${h + 8}`
-})
-
-const customSvgWidth = computed(() => {
-  const max = Math.max(customWidth.value, customHeight.value) || 1
-  const scale = 60 / max
-  return customWidth.value * scale
-})
-
-const customSvgHeight = computed(() => {
-  const max = Math.max(customWidth.value, customHeight.value) || 1
-  const scale = 60 / max
-  return customHeight.value * scale
-})
 
 const resetCalculator = () => {
   quantity.value = DEFAULT_QUANTITY
@@ -639,60 +594,34 @@ const resetCalculator = () => {
   border-color: rgba(10, 170, 142, 0.6);
 }
 
-/* Custom Format */
-.gi-custom-format {
-  margin-top: var(--gi-space-sm);
-  padding: var(--gi-space-lg);
+/* Custom Format - Inline */
+.gi-custom-format-inline {
+  padding: var(--gi-space-sm);
   background: var(--gi-bg-soft);
-  border-radius: var(--gi-radius-lg);
+  border-radius: var(--gi-radius-md);
+  margin-top: var(--gi-space-xs);
+}
+
+.gi-custom-inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--gi-space-xs);
+  font-size: var(--gi-font-size-sm);
+}
+
+.gi-custom-input {
+  width: 70px;
+  padding: var(--gi-space-xs) var(--gi-space-sm);
   border: 1px solid var(--gi-border);
-}
-
-.gi-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--gi-space-md);
-}
-
-.gi-input-with-unit {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.gi-input-with-unit .gi-input {
-  padding-right: 2.5rem;
-}
-
-.gi-unit {
-  position: absolute;
-  right: var(--gi-space-sm);
-  color: var(--gi-text-muted);
+  border-radius: var(--gi-radius-sm);
+  background: var(--gi-surface);
+  color: var(--gi-text);
   font-size: var(--gi-font-size-sm);
-  font-weight: 500;
-  pointer-events: none;
 }
 
-.gi-custom-preview {
-  display: flex;
-  align-items: center;
-  gap: var(--gi-space-sm);
-  margin-top: var(--gi-space-md);
-  padding-top: var(--gi-space-md);
-  border-top: 1px dashed var(--gi-border);
-}
-
-.gi-custom-svg {
-  width: 50px;
-  height: 50px;
-  flex-shrink: 0;
-}
-
-.gi-custom-dims {
-  font-size: var(--gi-font-size-sm);
-  font-weight: 500;
-  color: var(--gi-text-muted);
-  font-variant-numeric: tabular-nums;
+.gi-custom-input:focus {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 1px;
 }
 
 /* Grammage Hint */
@@ -893,27 +822,6 @@ const resetCalculator = () => {
 .fade-up-leave-to {
   opacity: 0;
   transform: translateY(-10px);
-}
-
-.slide-enter-active,
-.slide-leave-active {
-  transition: all var(--gi-transition-base) var(--gi-ease-out);
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-  max-height: 0;
-  margin: 0;
-  padding: 0;
-}
-
-.slide-enter-to,
-.slide-leave-from {
-  opacity: 1;
-  transform: translateY(0);
-  max-height: 200px;
 }
 
 /* Responsive */
