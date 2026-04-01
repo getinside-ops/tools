@@ -57,18 +57,12 @@
       </div>
     </div>
 
-    <!-- Format Comparison Bar -->
-    <GiFormatComparison
-      :selected-format="selectedFormat"
-      @select="selectedFormat = $event"
-    />
-
     <!-- Format Section -->
     <div class="gi-field">
       <label class="gi-label">{{ t('paperWeight.format') }}</label>
       <div class="gi-format-grid">
         <button
-          v-for="fmt in ['A6', 'A5', 'DL', 'A4', 'Carte'] as const"
+          v-for="fmt in ['A5', 'A6', 'A4'] as const"
           :key="fmt"
           type="button"
           class="gi-format-card"
@@ -169,14 +163,10 @@
           />
         </div>
       </div>
-      <div class="gi-grammage-hint">
-        <span class="gi-hint-icon">💡</span>
-        <span>{{ getGrammageHint() }}</span>
-      </div>
     </div>
       </div>
 
-      <!-- Results Column -->
+      <!-- Custom Format Inputs -->
       <div class="pw-results">
         <!-- Result Section -->
         <transition name="fade-up" mode="out-in">
@@ -199,18 +189,6 @@
             {{ result.grams.toLocaleString() }} g
             <span class="gi-result-divider">•</span>
             {{ totalSheets.toLocaleString() }} {{ t('paperWeight.sheets') }}
-          </div>
-        </div>
-
-        <!-- Weight per 1000 units -->
-        <div class="gi-metric-grid">
-          <div class="gi-metric-card">
-            <div class="gi-metric-label">{{ t('paperWeight.weightPerThousand') }}</div>
-            <div class="gi-metric-value">{{ weightPerThousand }}</div>
-          </div>
-          <div class="gi-metric-card">
-            <div class="gi-metric-label">{{ t('paperWeight.totalSheets') }}</div>
-            <div class="gi-metric-value">{{ totalSheets.toLocaleString() }}</div>
           </div>
         </div>
 
@@ -244,7 +222,6 @@ import {
   DEFAULT_QUANTITY,
   QUANTITY_PRESETS,
 } from '../composables/usePaperWeight'
-import GiFormatComparison from '../components/GiFormatComparison.vue'
 
 const { t } = useI18n()
 
@@ -302,17 +279,6 @@ const displayWeight = computed(() => {
   return { value: Math.round(kg).toLocaleString(), unit: 'kg' }
 })
 
-// Weight per 1000 units
-const weightPerThousand = computed(() => {
-  if (!result.value || quantity.value === 0) return '0 g'
-  const gramsPerUnit = result.value.grams / quantity.value
-  const gramsPerThousand = Math.round(gramsPerUnit * 1000)
-  if (gramsPerThousand >= 1000) {
-    return `${(gramsPerThousand / 1000).toFixed(2)} kg`
-  }
-  return `${gramsPerThousand.toLocaleString()} g`
-})
-
 // Total sheets (same as quantity, but explicit)
 const totalSheets = computed(() => quantity.value)
 
@@ -356,15 +322,6 @@ const customSvgHeight = computed(() => {
   const scale = 60 / max
   return customHeight.value * scale
 })
-
-// Grammage hint
-const getGrammageHint = () => {
-  if (grammage.value <= 90) return t('paperWeight.hints.light')
-  if (grammage.value <= 135) return t('paperWeight.hints.medium')
-  if (grammage.value <= 200) return t('paperWeight.hints.flyer')
-  if (grammage.value <= 300) return t('paperWeight.hints.card')
-  return t('paperWeight.hints.thick')
-}
 
 const resetCalculator = () => {
   quantity.value = DEFAULT_QUANTITY
