@@ -56,20 +56,20 @@
       </div>
 
       <!-- Preview -->
-      <div class="gi-result" style="margin-top: 0">
-        <div class="gi-result-label">Preview (Real-time CSS)</div>
+      <GiResultCard title="Preview (Real-time CSS)">
         <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 300px;">
           <img :src="originalUrl" :style="previewStyle" style="max-width: 100%; transition: filter 0.2s;" />
         </div>
-      </div>
+      </GiResultCard>
     </div>
 
     <!-- Result Result -->
-    <div v-if="filteredUrl" class="gi-result" style="margin-top: 2rem;">
-      <div class="gi-result-label">Result (Flattened)</div>
-      <img :src="filteredUrl" style="max-width: 100%; border-radius: var(--gi-radius); margin-bottom: 1rem;" />
-      <button class="gi-btn-primary" @click="downloadFiltered">⬇️ {{ t('imageFilters.download') }}</button>
-    </div>
+    <GiResultCard v-if="filteredUrl" title="Result (Flattened)">
+      <img :src="filteredUrl" style="max-width: 100%; border-radius: var(--gi-radius);" />
+      <template #actions>
+        <button class="gi-btn-primary" @click="downloadFiltered">⬇️ {{ t('imageFilters.download') }}</button>
+      </template>
+    </GiResultCard>
   </ToolPageLayout>
 </template>
 
@@ -79,6 +79,7 @@ import { useI18n } from 'vue-i18n'
 import { Wand } from 'lucide-vue-next'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { constructFilterString, applyFilters } from '../composables/useImageFilters'
 
