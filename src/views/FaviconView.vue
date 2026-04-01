@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('favicon.title') }}</h1>
-      <p>{{ t('favicon.desc') }}</p>
-    </div>
+  <ToolPageLayout :title="t('favicon.title')" :description="t('favicon.desc')">
+    <template #icon>
+      <Image />
+    </template>
 
     <!-- Upload Area -->
     <div v-if="!originalUrl">
@@ -16,7 +15,7 @@
         <div class="gi-field">
           <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1rem" @click="reset">{{ t('imageCropper.reset') }}</button>
           <div class="gi-result-label">{{ t('favicon.preview') }}</div>
-          
+
           <div class="favicon-previews">
             <div v-for="res in results" :key="res.size" class="favicon-preview-item">
               <div class="favicon-preview-box" :style="{ width: res.size > 64 ? '64px' : res.size + 'px', height: res.size > 64 ? '64px' : res.size + 'px' }">
@@ -35,14 +34,16 @@
         </div>
       </div>
     </div>
-  </div>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Image } from 'lucide-vue-next'
 import { generateFavicons, type FaviconResult } from '../composables/useFavicon'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
 
