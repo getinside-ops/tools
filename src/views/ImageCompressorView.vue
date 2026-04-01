@@ -5,8 +5,8 @@
       <p>{{ t('imageCompressor.desc') }}</p>
     </div>
 
+    <!-- Upload Area -->
     <GiImageUpload
-      v-if="!originalUrl"
       @upload="handleImageUpload"
       @error="handleError"
     />
@@ -69,8 +69,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { compressImage } from '../composables/useImageCompressor'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import { compressImage } from '../composables/useImageCompressor'
 
 const { t } = useI18n()
 
@@ -78,6 +78,7 @@ const originalUrl = ref('')
 const compressedUrl = ref('')
 const originalSize = ref(0)
 const compressedSize = ref(0)
+const uploadError = ref('')
 
 const quality = ref(0.8)
 const format = ref('image/jpeg')
@@ -100,6 +101,7 @@ function formatSize(bytes: number) {
 
 function handleImageUpload(file: File) {
   originalSize.value = file.size
+  uploadError.value = ''
   const reader = new FileReader()
   reader.onload = (ev) => {
     originalUrl.value = ev.target?.result as string
@@ -109,8 +111,7 @@ function handleImageUpload(file: File) {
 }
 
 function handleError(error: string) {
-  console.error(error)
-  alert(error)
+  uploadError.value = error
 }
 
 async function processImage() {
