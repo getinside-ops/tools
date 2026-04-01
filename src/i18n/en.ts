@@ -288,6 +288,8 @@ const en: Messages = {
   pdfX: {
     title: 'PDF to PDF/X Converter',
     desc: 'Convert your PDF to PDF/X-1a format — CMYK, embedded fonts, print-ready.',
+    pasteTitle: 'Paste a PDF',
+    pasteHint: 'Click here and press Ctrl+V / Cmd+V',
     upload: 'Upload a PDF',
     convert: 'Convert to PDF/X-1a',
     converting: 'Converting…',
@@ -849,6 +851,15 @@ const en: Messages = {
         '3.0:1 is sufficient for large text (18px+)',
         'UI components require 3.0:1 minimum',
       ],
+    },
+  },
+  imageUpload: {
+    pasteTitle: 'Paste an image',
+    pasteHint: 'Click here and press Ctrl+V / Cmd+V',
+    uploadText: 'or click to upload from your device',
+    error: {
+      invalidFile: 'Invalid file type or size',
+      noClipboard: 'No clipboard data available',
     },
   },
   pedagogic: {

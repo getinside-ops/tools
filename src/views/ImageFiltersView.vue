@@ -6,9 +6,8 @@
     </div>
 
     <!-- Upload Area -->
-    <div v-if="!originalUrl" class="gi-result" style="border: 2px dashed var(--gi-border); cursor: pointer; text-align: center; padding: 3rem;" @click="fileInput?.click()">
-      <p>📁 {{ t('imageCropper.select') }}</p>
-      <input ref="fileInput" type="file" hidden accept="image/*" @change="handleFileChange" />
+    <div v-if="!originalUrl">
+      <GiImageUpload @upload="handleImageUpload" />
     </div>
 
     <div v-else class="gi-grid">
@@ -60,10 +59,10 @@
 import { ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { constructFilterString, applyFilters } from '../composables/useImageFilters'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
-const fileInput = ref<HTMLInputElement | null>(null)
 const originalUrl = ref('')
 const filteredUrl = ref('')
 
@@ -80,9 +79,7 @@ const previewStyle = computed(() => ({
   filter: constructFilterString(filters)
 }))
 
-function handleFileChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
+function handleImageUpload(file: File) {
   const reader = new FileReader()
   reader.onload = (ev) => {
     originalUrl.value = ev.target?.result as string

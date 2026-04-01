@@ -5,23 +5,13 @@
       <p>{{ t('matteGenerator.desc') }}</p>
     </div>
 
-    <!-- Image Upload Zone -->
-    <div 
-      v-if="!image"
-      @drop.prevent="onDrop"
-      @dragover.prevent="isDragging = true"
-      @dragleave.prevent="isDragging = false"
-      style="border: 2px dashed var(--gi-border); border-radius: var(--gi-radius-lg); padding: 4rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s;"
-      :style="{ borderColor: isDragging ? 'var(--gi-brand)' : 'var(--gi-border)', background: isDragging ? 'var(--gi-bg-soft)' : 'var(--gi-surface)' }"
-      @click="triggerFileInput"
-    >
-      <input type="file" ref="fileInput" @change="onFileSelect" accept="image/*" style="display: none;" />
-      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; color: var(--gi-text-muted)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <p style="font-size: 1.1rem; font-weight: 500;">{{ t('matteGenerator.upload') }}</p>
-    </div>
+    <GiImageUpload
+      @upload="handleImageUpload"
+      @error="handleError"
+    />
 
     <!-- Editor UI -->
-    <div v-else style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: start;">
+    <div v-if="image" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: start;">
       
       <!-- Preview Pane -->
       <div class="gi-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--gi-bg-soft); padding: 2rem;">
@@ -84,13 +74,13 @@
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { applyMatte, type MatteOptions } from '../composables/useMatteGenerator'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
 const image = ref<string | null>(null)
 const previewResult = ref<string | null>(null)
-const isDragging = ref(false)
-const fileInput = ref<HTMLInputElement | null>(null)
+const error = ref<string | null>(null)
 
 // Params
 const targetKey = ref('auto')
@@ -117,30 +107,17 @@ watch([image, targetKey, padding, color, pattern], async () => {
   previewResult.value = await applyMatte(image.value, options)
 }, { immediate: true })
 
-function triggerFileInput() {
-  fileInput.value?.click()
-}
-
-function onFileSelect(e: Event) {
-  const target = e.target as HTMLInputElement
-  if (target.files && target.files[0]) {
-    loadFile(target.files[0])
-  }
-}
-
-function onDrop(e: DragEvent) {
-  isDragging.value = false
-  if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
-    loadFile(e.dataTransfer.files[0])
-  }
-}
-
-function loadFile(file: File) {
+function handleImageUpload(file: File) {
   const reader = new FileReader()
   reader.onload = (e) => {
     image.value = e.target?.result as string
+    error.value = null
   }
   reader.readAsDataURL(file)
+}
+
+function handleError(err: string) {
+  error.value = err
 }
 
 function download() {

@@ -8,19 +8,20 @@
     <div class="gi-grid">
       <!-- Controls -->
       <div class="gi-field">
-        <div v-if="!imageUrl" class="gi-result" style="border: 2px dashed var(--gi-border); cursor: pointer; text-align: center; padding: 3rem;" @click="fileInput?.click()">
-          <p>📁 {{ t('colorblind.upload') }}</p>
-          <input ref="fileInput" type="file" hidden accept="image/*" @change="handleFile" />
-        </div>
+        <GiImageUpload
+          v-if="!imageUrl"
+          @upload="handleImageUpload"
+          @error="handleError"
+        />
 
         <div v-else>
           <button class="gi-btn-ghost" style="width: 100%; margin-bottom: 1.5rem" @click="reset">{{ t('imageCropper.reset') }}</button>
-          
+
           <div class="gi-field">
             <label class="gi-label">{{ t('colorblind.types.normal') }}</label>
             <div class="type-selector">
-              <button 
-                v-for="type in types" 
+              <button
+                v-for="type in types"
                 :key="type"
                 class="gi-btn-ghost"
                 :class="{ active: selectedType === type }"
@@ -55,19 +56,17 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getColorMatrix, type ColorBlindType } from '../composables/useColorblind'
+import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 
-const fileInput = ref<HTMLInputElement | null>(null)
 const imageUrl = ref('')
 const selectedType = ref<ColorBlindType>('normal')
 const types: ColorBlindType[] = ['normal', 'protanopia', 'deuteranopia', 'tritanopia', 'achromatopsia']
 
 const currentMatrix = computed(() => getColorMatrix(selectedType.value))
 
-function handleFile(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
+function handleImageUpload(file: File) {
   const reader = new FileReader()
   reader.onload = (ev) => {
     imageUrl.value = ev.target?.result as string
@@ -75,10 +74,14 @@ function handleFile(e: Event) {
   reader.readAsDataURL(file)
 }
 
+function handleError(error: string) {
+  console.error(error)
+  alert(error)
+}
+
 function reset() {
   imageUrl.value = ''
   selectedType.value = 'normal'
-  if (fileInput.value) fileInput.value.value = ''
 }
 </script>
 

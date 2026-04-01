@@ -286,6 +286,8 @@ const fr = {
   pdfX: {
     title: 'Convertisseur PDF → PDF/X',
     desc: "Convertissez votre PDF en PDF/X-1a — CMJN, polices embarquées, prêt pour l'impression.",
+    pasteTitle: 'Coller un PDF',
+    pasteHint: 'Cliquez ici et appuyez sur Ctrl+V / Cmd+V',
     upload: 'Charger un PDF',
     convert: 'Convertir en PDF/X-1a',
     converting: 'Conversion en cours…',
@@ -847,6 +849,15 @@ const fr = {
         '3.0:1 suffit pour les textes de grande taille (18px+)',
         'Les composants UI nécessitent 3.0:1 minimum',
       ],
+    },
+  },
+  imageUpload: {
+    pasteTitle: 'Coller une image',
+    pasteHint: 'Cliquez ici et appuyez sur Ctrl+V / Cmd+V',
+    uploadText: 'ou cliquez pour télécharger depuis votre appareil',
+    error: {
+      invalidFile: 'Type ou taille de fichier invalide',
+      noClipboard: 'Aucune donnée dans le presse-papiers',
     },
   },
   pedagogic: {

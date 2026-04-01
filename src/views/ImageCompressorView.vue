@@ -6,21 +6,10 @@
     </div>
 
     <!-- Upload Area -->
-    <div 
-      class="gi-result" 
-      style="border: 2px dashed var(--gi-border); cursor: pointer; text-align: center; padding: 3rem;"
-      @click="fileInput?.click()"
-    >
-      <p v-if="!originalUrl">📁 {{ t('imageCompressor.select') }}</p>
-      <img v-else :src="originalUrl" style="max-width: 100%; max-height: 200px; border-radius: var(--gi-radius);" />
-      <input 
-        ref="fileInput" 
-        type="file" 
-        hidden 
-        accept="image/*" 
-        @change="handleFileChange" 
-      />
-    </div>
+    <GiImageUpload
+      @upload="handleImageUpload"
+      @error="handleError"
+    />
 
     <div v-if="originalUrl" style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
       <!-- Controls -->
@@ -80,15 +69,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import GiImageUpload from '../components/GiImageUpload.vue'
 import { compressImage } from '../composables/useImageCompressor'
 
 const { t } = useI18n()
 
-const fileInput = ref<HTMLInputElement | null>(null)
 const originalUrl = ref('')
 const compressedUrl = ref('')
 const originalSize = ref(0)
 const compressedSize = ref(0)
+const uploadError = ref('')
 
 const quality = ref(0.8)
 const format = ref('image/jpeg')
@@ -109,17 +99,19 @@ function formatSize(bytes: number) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
-function handleFileChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
-
+function handleImageUpload(file: File) {
   originalSize.value = file.size
+  uploadError.value = ''
   const reader = new FileReader()
   reader.onload = (ev) => {
     originalUrl.value = ev.target?.result as string
     processImage()
   }
   reader.readAsDataURL(file)
+}
+
+function handleError(error: string) {
+  uploadError.value = error
 }
 
 async function processImage() {
