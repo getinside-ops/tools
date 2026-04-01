@@ -40,30 +40,33 @@ export function useImageUpload(options: UseImageUploadOptions = {}): UseImageUpl
   /**
    * Validates a file against the accept types and max size criteria
    */
-  function isValidFile(file: File): boolean {
-    // Check file type
+  function isValidFile(inputFile: File): boolean {
     if (accept.length > 0) {
       const isAccepted = accept.some(type => {
-        if (type === 'image/*') {
-          return file.type.startsWith('image/')
+        // Wildcard pattern (e.g., image/*)
+        if (type.endsWith('/*')) {
+          const baseType = type.slice(0, -2)
+          return inputFile.type.startsWith(baseType + '/')
         }
-        if (type === '.pdf') {
-          return file.type === 'application/pdf'
+        // MIME type (e.g., application/pdf)
+        if (type.includes('/') && !type.startsWith('.')) {
+          return inputFile.type === type
         }
-        // Check if it's a MIME type (contains '/')
-        if (type.includes('/')) {
-          return file.type === type
+        // File extension (e.g., .png, .pdf)
+        if (type.startsWith('.')) {
+          return inputFile.name.toLowerCase().endsWith(type.toLowerCase())
         }
-        // Check file extension
-        return file.name.toLowerCase().endsWith(type.toLowerCase())
+        // Fallback: exact match
+        return inputFile.type === type
       })
       if (!isAccepted) {
+        error.value = `File type "${inputFile.type}" is not accepted`
         return false
       }
     }
 
-    // Check file size
-    if (maxSizeMB !== undefined && file.size > maxSizeMB * 1024 * 1024) {
+    if (maxSizeMB && inputFile.size > maxSizeMB * 1024 * 1024) {
+      error.value = `File size exceeds ${maxSizeMB}MB limit`
       return false
     }
 
@@ -73,17 +76,16 @@ export function useImageUpload(options: UseImageUploadOptions = {}): UseImageUpl
   /**
    * Processes a file: validates and sets it as the current file
    */
-  async function processFile(fileToProcess: File): Promise<void> {
+  async function processFile(inputFile: File): Promise<void> {
     isProcessing.value = true
     error.value = null
 
-    if (!isValidFile(fileToProcess)) {
-      error.value = 'Invalid file type or size'
+    if (!isValidFile(inputFile)) {
       isProcessing.value = false
       return
     }
 
-    file.value = fileToProcess
+    file.value = inputFile
     isProcessing.value = false
   }
 

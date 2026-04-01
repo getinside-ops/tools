@@ -92,7 +92,60 @@ describe('useImageUpload', () => {
   it('should handle PDF files with application/pdf type', () => {
     const { isValidFile } = useImageUpload({ accept: ['.pdf', 'application/pdf'] })
     const pdfFile = new File(['test'], 'test.pdf', { type: 'application/pdf' })
-    
+
     expect(isValidFile(pdfFile)).toBe(true)
+  })
+
+  it('should handle extension-based accept types', () => {
+    const { isValidFile } = useImageUpload({ accept: ['.png', '.jpg'] })
+    const pngFile = new File(['test'], 'test.png', { type: 'image/png' })
+    const jpgFile = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
+    const gifFile = new File(['test'], 'test.gif', { type: 'image/gif' })
+
+    expect(isValidFile(pngFile)).toBe(true)
+    expect(isValidFile(jpgFile)).toBe(true)
+    expect(isValidFile(gifFile)).toBe(false)
+  })
+
+  it('should handle mixed accept types with wildcards and extensions', () => {
+    const { isValidFile } = useImageUpload({ accept: ['image/*', '.pdf'] })
+    const pngFile = new File(['test'], 'test.png', { type: 'image/png' })
+    const jpgFile = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
+    const pdfFile = new File(['test'], 'test.pdf', { type: 'application/pdf' })
+    const txtFile = new File(['test'], 'test.txt', { type: 'text/plain' })
+
+    expect(isValidFile(pngFile)).toBe(true)
+    expect(isValidFile(jpgFile)).toBe(true)
+    expect(isValidFile(pdfFile)).toBe(true)
+    expect(isValidFile(txtFile)).toBe(false)
+  })
+
+  it('should handle case-insensitive extension matching', () => {
+    const { isValidFile } = useImageUpload({ accept: ['.png', '.jpg'] })
+    const upperCasePng = new File(['test'], 'test.PNG', { type: 'image/png' })
+    const upperCaseJpg = new File(['test'], 'test.JPG', { type: 'image/jpeg' })
+    const mixedCasePng = new File(['test'], 'test.Png', { type: 'image/png' })
+
+    expect(isValidFile(upperCasePng)).toBe(true)
+    expect(isValidFile(upperCaseJpg)).toBe(true)
+    expect(isValidFile(mixedCasePng)).toBe(true)
+  })
+
+  it('should set specific error message for invalid file type', async () => {
+    const { processFile, error } = useImageUpload({ accept: ['image/*'] })
+    const pdfFile = new File(['test'], 'test.pdf', { type: 'application/pdf' })
+
+    await processFile(pdfFile)
+
+    expect(error.value).toBe('File type "application/pdf" is not accepted')
+  })
+
+  it('should set specific error message for file size exceeding limit', async () => {
+    const { processFile, error } = useImageUpload({ accept: ['image/*'], maxSizeMB: 1 })
+    const largeFile = new File([new ArrayBuffer(2 * 1024 * 1024)], 'test.png', { type: 'image/png' })
+
+    await processFile(largeFile)
+
+    expect(error.value).toBe('File size exceeds 1MB limit')
   })
 })
