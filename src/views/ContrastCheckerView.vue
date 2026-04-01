@@ -52,12 +52,17 @@
     <!-- Results Data Grid -->
     <div class="gi-grid">
       <!-- WCAG 2.1 Block -->
-      <div class="gi-card">
-        <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-          <span>WCAG 2.1</span>
-          <span class="gi-data-value" style="font-size: 1.5rem; font-weight: 700;">{{ wcagRatio.toFixed(2) }}:1</span>
-        </h3>
-        
+      <GiResultCard
+        title="WCAG 2.1"
+        :variant="allWcagPass ? 'success' : 'error'"
+      >
+        <template #header>
+          <h3 class="gi-result-card-title">
+            WCAG 2.1
+            <span class="gi-data-value" style="font-size: 1.5rem; font-weight: 700; margin-left: 0.5rem;">{{ wcagRatio.toFixed(2) }}:1</span>
+          </h3>
+        </template>
+
         <div style="display: flex; flex-direction: column; gap: 1rem;">
           <div v-for="(level, key) in wcagChecks" :key="key" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--gi-border);">
             <span style="font-size: 0.95rem;">{{ level.label }}</span>
@@ -66,20 +71,24 @@
             </span>
           </div>
         </div>
-      </div>
+      </GiResultCard>
 
       <!-- APCA Block -->
-      <div class="gi-card">
-        <div style="margin-bottom: 1.5rem;">
-          <h3 style="font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center;">
-            <span>APCA (WCAG 3.0)</span>
-            <span class="gi-data-value" style="font-size: 1.5rem; font-weight: 700;" :style="{ color: Math.abs(apcaScore) > 60 ? 'var(--gi-tint-green-text)' : 'var(--gi-text)'}">
+      <GiResultCard
+        title="APCA (WCAG 3.0)"
+        variant="info"
+      >
+        <template #header>
+          <h3 class="gi-result-card-title">
+            APCA (WCAG 3.0)
+            <span class="gi-data-value" style="font-size: 1.5rem; font-weight: 700; margin-left: 0.5rem;" :style="{ color: Math.abs(apcaScore) > 60 ? 'var(--gi-tint-green-text)' : 'var(--gi-text)'}">
               Lc {{ Math.round(apcaScore) }}
             </span>
           </h3>
-          <p style="font-size: 0.8rem; color: var(--gi-text-muted); margin-top: 0.25rem;">Advanced Perceptual Contrast Algorithm</p>
-        </div>
-        
+        </template>
+
+        <p style="font-size: 0.8rem; color: var(--gi-text-muted); margin-bottom: 1rem;">Advanced Perceptual Contrast Algorithm</p>
+
         <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; color: var(--gi-text-muted);">
           <div style="display: flex; justify-content: space-between;">
             <span>Lc 90+</span> <span style="font-weight: 500;">Preferred for body text</span>
@@ -94,7 +103,7 @@
             <span>Lc 45+</span> <span style="font-weight: 500;">Minimum for UI components</span>
           </div>
         </div>
-      </div>
+      </GiResultCard>
     </div>
   </ToolPageLayout>
 </template>
@@ -104,6 +113,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { Contrast } from 'lucide-vue-next'
 import { getWcagContrast, getApcaContrast, meetsWcagLevel } from '../composables/useContrast'
 
@@ -135,6 +145,8 @@ const wcagChecks = computed(() => [
   { label: t('contrastChecker.levels.aaaLarge'), pass: meetsWcagLevel(wcagRatio.value, 'AAA_Large') },
   { label: t('contrastChecker.levels.uiComponent'), pass: meetsWcagLevel(wcagRatio.value, 'UI_Component') },
 ])
+
+const allWcagPass = computed(() => wcagChecks.value.every(check => check.pass))
 
 function swapColors() {
   const temp = textHex.value
