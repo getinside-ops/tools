@@ -50,25 +50,24 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="analyzing" class="gi-result gi-result-loading">
-      <div class="gi-status gi-status-warning">{{ t('qrDecoder.decoding') }}</div>
-    </div>
+    <GiResultCard v-if="analyzing" variant="warning" :title="t('qrDecoder.decoding')">
+      <p>{{ t('qrDecoder.decoding') }}</p>
+    </GiResultCard>
 
     <!-- Error State -->
-    <div v-if="decodeError" class="gi-result gi-result-error">
-      <div class="gi-status gi-status-error">{{ decodeError }}</div>
-    </div>
+    <GiResultCard v-if="decodeError" variant="error" :title="t('qrDecoder.noQrFound')">
+      <p>{{ decodeError }}</p>
+    </GiResultCard>
 
     <!-- Result -->
-    <div v-if="decodedResult !== null" class="gi-result">
-      <div class="gi-result-label">{{ t('qrDecoder.resultTitle') }}</div>
-      <div class="gi-qr-result">
-        <div class="gi-qr-data">{{ decodedResult }}</div>
+    <GiResultCard v-if="decodedResult !== null" :title="t('qrDecoder.resultTitle')">
+      <div class="gi-qr-data">{{ decodedResult }}</div>
+      <div class="gi-qr-actions">
         <button class="gi-btn-ghost" @click="copyResult" :disabled="isCopying">
           {{ isCopying ? t('qrDecoder.copied') : t('qrDecoder.copy') }}
         </button>
       </div>
-    </div>
+    </GiResultCard>
 
     <!-- Hidden Canvas for Pixel Data -->
     <canvas ref="hiddenCanvas" style="display: none;"></canvas>
@@ -95,6 +94,7 @@ import { QrCode } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiPedagogic from '../components/GiPedagogic.vue'
 import GiImageUpload from '../components/GiImageUpload.vue'
+import GiResultCard from '../components/GiResultCard.vue'
 import { decodeQrFromBlob, decodeQrFromImageData, decodeQrFromPasteEvent } from '../composables/useQrDecoder'
 
 const { t } = useI18n()
@@ -267,27 +267,7 @@ function reset() {
   margin: 0;
 }
 
-/* Results */
-.gi-result {
-  background: var(--gi-surface);
-  border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius-lg);
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-}
-.gi-result-label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--gi-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
-}
-.gi-qr-result {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
+/* QR Result */
 .gi-qr-data {
   font-family: 'Monaco', 'Consolas', monospace;
   font-size: 0.9rem;
@@ -297,6 +277,13 @@ function reset() {
   border: 1px solid var(--gi-border);
   word-break: break-all;
   color: var(--gi-text);
+}
+.gi-qr-actions {
+  display: flex;
+  gap: var(--gi-space-sm);
+  margin-top: var(--gi-space-md);
+  padding-top: var(--gi-space-sm);
+  border-top: 1px solid var(--gi-border);
 }
 .gi-btn-ghost {
   align-self: flex-start;
@@ -357,25 +344,6 @@ function reset() {
   max-height: 400px;
   border-radius: var(--gi-radius);
   display: block;
-}
-
-/* Status messages */
-.gi-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--gi-radius);
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-.gi-status-error {
-  background: var(--gi-tint-red-bg);
-  color: var(--gi-tint-red-text);
-}
-.gi-status-warning {
-  background: var(--gi-tint-yellow-bg);
-  color: var(--gi-tint-yellow-text);
 }
 
 .gi-grid {
