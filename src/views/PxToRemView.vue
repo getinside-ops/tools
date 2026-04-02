@@ -1,60 +1,54 @@
 <template>
-  <div>
-    <div class="gi-tool-header">
-      <h1>{{ t('pxToRem.title') }}</h1>
-      <p>{{ t('pxToRem.desc') }}</p>
-    </div>
+  <ToolPageLayout
+    :title="t('pxToRem.title')"
+    :description="t('pxToRem.desc')"
+    category="design"
+  >
+    <template #icon>
+      <Ruler :size="22" />
+    </template>
 
     <!-- Base Size Setting -->
-    <div class="gi-card" style="margin-bottom: 2rem; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; background: var(--gi-surface);">
-      <span style="font-weight: 500;">{{ t('pxToRem.baseSize') }}</span>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <input v-model.number="base" type="number" class="gi-input" min="1" style="width: 80px; text-align: center;" />
-        <span style="color: var(--gi-text-muted);">px</span>
+    <div class="px-base-row">
+      <span class="px-base-label">{{ t('pxToRem.baseSize') }}</span>
+      <div class="px-base-input">
+        <input v-model.number="base" type="number" class="gi-input" min="1" />
+        <span class="px-base-unit">px</span>
       </div>
     </div>
 
     <!-- Conversion Grid Header -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr 50px; gap: 1rem; margin-bottom: 0.5rem; padding: 0 1rem; color: var(--gi-text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">
+    <div class="px-grid-header">
       <div>Pixel (px)</div>
       <div>Rem</div>
       <div></div>
     </div>
 
     <!-- Dynamic Rows -->
-    <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
-      <div 
-        v-for="(row, index) in rows" 
-        :key="row.id" 
-        class="gi-card" 
-        style="padding: 0.75rem 1rem; display: grid; grid-template-columns: 1fr 1fr 50px; gap: 1rem; align-items: center;"
+    <div class="px-rows">
+      <div
+        v-for="(row, index) in rows"
+        :key="row.id"
+        class="gi-card px-row"
       >
-        <!-- Pixels Input -->
-        <input 
-          v-model.number="row.px" 
-          type="number" 
-          class="gi-input gi-data-value" 
+        <input
+          v-model.number="row.px"
+          type="number"
+          class="gi-input px-value-input"
           step="1"
-          style="background: transparent; border-color: transparent; font-size: 1.25rem;" 
           @input="onPxInput(index)"
         />
-
-        <!-- REMs Input -->
-        <input 
-          v-model.number="row.rem" 
-          type="number" 
-          class="gi-input gi-data-value" 
+        <input
+          v-model.number="row.rem"
+          type="number"
+          class="gi-input px-value-input px-value-input--rem"
           step="0.125"
-          style="background: transparent; border-color: transparent; font-size: 1.25rem; color: var(--gi-brand);" 
           @input="onRemInput(index)"
         />
-
-        <!-- Remove Row -->
-        <button 
+        <button
           v-if="rows.length > 1"
-          @click="removeRow(index)" 
-          class="gi-btn-ghost" 
-          style="padding: 0.4rem; border: none; color: var(--gi-tint-red-text);"
+          @click="removeRow(index)"
+          class="gi-btn-ghost px-remove-btn"
           title="Remove row"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
@@ -63,15 +57,19 @@
       </div>
     </div>
 
-    <button @click="addRow" class="gi-btn-ghost" style="width: 100%; justify-content: center; border-style: dashed;">
+    <button @click="addRow" class="gi-btn-ghost px-add-btn">
       + {{ t('pxToRem.addRow') }}
     </button>
-  </div>
+
+    <template #about>{{ t('pxToRem.about') }}</template>
+  </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Ruler } from 'lucide-vue-next'
+import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { pxToRem, remToPx } from '../composables/usePxToRem'
 
 const { t } = useI18n()
@@ -89,29 +87,20 @@ const rows = ref<RowData[]>([
   { id: crypto.randomUUID(), px: 32, rem: 2 },
 ])
 
-// Re-calculate all when base changes
 watch(base, () => {
   rows.value.forEach((_, i) => onPxInput(i))
 })
 
 function onPxInput(index: number) {
   const row = rows.value[index]
-  if (row.px === '') {
-    row.rem = ''
-    return
-  }
-  const calculated = pxToRem(Number(row.px), base.value)
-  row.rem = Number(calculated.toFixed(4))
+  if (row.px === '') { row.rem = ''; return }
+  row.rem = Number(pxToRem(Number(row.px), base.value).toFixed(4))
 }
 
 function onRemInput(index: number) {
   const row = rows.value[index]
-  if (row.rem === '') {
-    row.px = ''
-    return
-  }
-  const calculated = remToPx(Number(row.rem), base.value)
-  row.px = Number(calculated.toFixed(2))
+  if (row.rem === '') { row.px = ''; return }
+  row.px = Number(remToPx(Number(row.rem), base.value).toFixed(2))
 }
 
 function addRow() {
@@ -124,8 +113,88 @@ function removeRow(index: number) {
 </script>
 
 <style scoped>
-.gi-input:focus {
+.px-base-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-md);
+}
+
+.px-base-label {
+  font-weight: 500;
+  color: var(--gi-text);
+}
+
+.px-base-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.px-base-input .gi-input {
+  width: 80px;
+  text-align: center;
+}
+
+.px-base-unit {
+  color: var(--gi-text-muted);
+}
+
+.px-grid-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 50px;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  padding: 0 1rem;
+  color: var(--gi-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.px-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.px-row {
+  padding: 0.75rem 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 50px;
+  gap: 1rem;
+  align-items: center;
+}
+
+.px-value-input {
+  background: transparent;
+  border-color: transparent;
+  font-size: 1.25rem;
+}
+
+.px-value-input--rem {
+  color: var(--gi-brand);
+}
+
+.px-value-input:focus {
   background: var(--gi-bg-soft) !important;
   border-color: var(--gi-brand) !important;
+}
+
+.px-remove-btn {
+  padding: 0.4rem;
+  border: none;
+  color: var(--gi-tint-red-text);
+}
+
+.px-add-btn {
+  width: 100%;
+  justify-content: center;
+  border-style: dashed;
 }
 </style>
