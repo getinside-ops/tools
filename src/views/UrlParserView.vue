@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout :title="t('urlParser.title')" :subtitle="t('urlParser.desc')">
+  <ToolPageLayout :title="t('urlParser.title')" :subtitle="t('urlParser.desc')" category="digital">
     <template #icon>
       <Link class="tool-page-icon" />
     </template>
@@ -202,6 +202,7 @@
 
     <!-- Educational Guide (Collapsible) -->
     <template #about>
+    <p>{{ t('urlParser.about') }}</p>
     <div class="gi-guide-section">
       <button class="gi-guide-toggle" @click="showGuide = !showGuide">
         <ChevronDown :class="['gi-guide-icon', { 'gi-guide-expanded': showGuide }]" />

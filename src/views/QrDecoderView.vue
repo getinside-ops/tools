@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('qrDecoder.title')"
     :description="t('qrDecoder.desc')"
+    category="digital"
   >
     <template #icon>
       <QrCode :size="24" />
@@ -72,18 +73,7 @@
     <!-- Hidden Canvas for Pixel Data -->
     <canvas ref="hiddenCanvas" style="display: none;"></canvas>
 
-    <!-- Pedagogic Section -->
-    <template #about>
-      <GiPedagogic
-        :title="t('qrDecoder.pedagogic.title')"
-        :description="t('qrDecoder.pedagogic.description')"
-        :tips="[
-          t('qrDecoder.pedagogic.tip1'),
-          t('qrDecoder.pedagogic.tip2'),
-          t('qrDecoder.pedagogic.tip3'),
-        ]"
-      />
-    </template>
+    <template #about>{{ t('qrDecoder.about') }}</template>
   </ToolPageLayout>
 </template>
 
@@ -92,7 +82,6 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { QrCode } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
-import GiPedagogic from '../components/GiPedagogic.vue'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import GiResultCard from '../components/GiResultCard.vue'
 import { decodeQrFromBlob, decodeQrFromImageData, decodeQrFromPasteEvent } from '../composables/useQrDecoder'
