@@ -1,7 +1,8 @@
 <template>
   <ToolPageLayout
     :title="t('matteGenerator.title')"
-    :subtitle="t('matteGenerator.desc')"
+    :description="t('matteGenerator.desc')"
+    category="design"
   >
     <template #icon>
       <FrameIcon />
@@ -13,16 +14,16 @@
     />
 
     <!-- Editor UI -->
-    <div v-if="image" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: start;">
+    <div v-if="image" class="matte-editor">
 
       <!-- Preview Pane -->
-      <div class="gi-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--gi-bg-soft); padding: 2rem;">
-        <img v-if="previewResult" :src="previewResult" style="max-width: 100%; max-height: 500px; box-shadow: var(--gi-shadow-lg); border-radius: 4px;" />
-        <p v-else style="color: var(--gi-text-muted)">Generating preview...</p>
+      <div class="gi-card matte-preview-card">
+        <img v-if="previewResult" :src="previewResult" />
+        <p v-else>Generating preview...</p>
       </div>
 
       <!-- Controls -->
-      <div class="gi-grid" style="grid-template-columns: 1fr; gap: 1.25rem;">
+      <div class="matte-controls">
 
         <GiFormField :label="t('matteGenerator.targetSize')">
           <template #input>
@@ -62,17 +63,19 @@
           </template>
         </GiFormField>
 
-        <button @click="download" class="gi-btn" style="width: 100%; justify-content: center; margin-top: 1rem;">
+        <button @click="download" class="gi-btn matte-btn-full">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           {{ t('matteGenerator.apply') }}
         </button>
 
-        <button @click="image = null" class="gi-btn-ghost" style="width: 100%; justify-content: center;">
+        <button @click="image = null" class="gi-btn-ghost matte-btn-full">
           Annuler
         </button>
 
       </div>
     </div>
+
+    <template #about>{{ t('matteGenerator.about') }}</template>
   </ToolPageLayout>
 </template>
 
@@ -137,3 +140,49 @@ function download() {
   a.click()
 }
 </script>
+
+<style scoped>
+.matte-editor {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.matte-preview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--gi-bg-soft);
+  padding: 2rem;
+}
+
+.matte-preview-card img {
+  max-width: 100%;
+  max-height: 500px;
+  box-shadow: var(--gi-shadow-lg);
+  border-radius: 4px;
+}
+
+.matte-preview-card p {
+  color: var(--gi-text-muted);
+}
+
+.matte-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.matte-btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .matte-editor {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
