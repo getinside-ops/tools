@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('imageResizer.title')"
     :description="t('imageResizer.desc')"
+    category="design"
   >
     <template #icon>
       <Maximize2 :size="24" />
@@ -17,12 +18,12 @@
       <!-- Controls -->
       <div class="gi-field">
         <label class="gi-label">{{ t('imageResizer.preserveRatio') }}</label>
-        <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1.5rem">
+        <div class="resizer-ratio-toggle">
           <input id="ratio-toggle" v-model="preserveAspectRatio" type="checkbox" />
           <label for="ratio-toggle" style="cursor: pointer">Auto</label>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+        <div class="resizer-dimensions">
           <GiFormField
             :label="t('imageResizer.width')"
             type="number"
@@ -42,14 +43,14 @@
           <input v-model.number="percentage" type="range" min="1" max="200" class="gi-input" @input="onPercentageInput" />
         </div>
 
-        <button class="gi-btn-primary" style="width: 100%; margin-top: 1rem" @click="handleResize">{{ t('imageResizer.resize') }}</button>
+        <button class="gi-btn-primary resizer-btn-full" @click="handleResize">{{ t('imageResizer.resize') }}</button>
       </div>
 
       <!-- Preview -->
       <GiResultCard title="Preview">
-        <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 200px; position: relative;">
-          <img :src="originalUrl" style="max-width: 100%; opacity: 0.5" />
-          <div style="position: absolute; color: var(--gi-text); background: rgba(0,0,0,0.7); padding: 0.5rem; border-radius: 4px; pointer-events: none;">
+        <div class="resizer-preview-area">
+          <img :src="originalUrl" class="resizer-preview-img" />
+          <div class="resizer-preview-dims">
             {{ originalWidth }} x {{ originalHeight }}
           </div>
         </div>
@@ -58,11 +59,13 @@
 
     <!-- Result -->
     <GiResultCard v-if="resizedUrl" :title="`Result (${width} x ${height})`">
-      <img :src="resizedUrl" style="max-width: 100%; border-radius: var(--gi-radius); margin-bottom: 1rem;" />
+      <img :src="resizedUrl" class="resizer-result-img" />
       <template #actions>
         <button class="gi-btn-primary" @click="downloadResized">⬇️ {{ t('imageResizer.download') }}</button>
       </template>
     </GiResultCard>
+
+    <template #about>{{ t('imageResizer.about') }}</template>
   </ToolPageLayout>
 </template>
 
@@ -151,3 +154,56 @@ function downloadResized() {
   link.click()
 }
 </script>
+
+<style scoped>
+.resizer-ratio-toggle {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.resizer-dimensions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.resizer-btn-full {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.resizer-preview-area {
+  background: var(--gi-bg);
+  border-radius: var(--gi-radius-md);
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  position: relative;
+}
+
+.resizer-preview-img {
+  max-width: 100%;
+  opacity: 0.5;
+}
+
+.resizer-preview-dims {
+  position: absolute;
+  color: var(--gi-text-inverse);
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.5rem;
+  border-radius: 4px;
+  pointer-events: none;
+  font-size: 0.875rem;
+}
+
+.resizer-result-img {
+  max-width: 100%;
+  border-radius: var(--gi-radius-md);
+  margin-bottom: 1rem;
+}
+</style>
