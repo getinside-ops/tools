@@ -30,7 +30,7 @@ const fr = {
     colorblind: 'Simulateur Daltonisme',
     qrDecoder: 'Décodeur QR Code',
     palette: 'Palette Couleurs',
-    back: '← Retour aux outils',
+    back: 'Retour aux outils',
     search: 'Rechercher un outil…',
     copy: 'Copier',
   },

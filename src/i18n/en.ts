@@ -32,7 +32,7 @@ const en: Messages = {
     colorblind: 'Colorblind Simulator',
     qrDecoder: 'QR Code Decoder',
     palette: 'Color Palette',
-    back: '← Back to tools',
+    back: 'Back to tools',
     search: 'Search tools…',
     copy: 'Copy',
   },
