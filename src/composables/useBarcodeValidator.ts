@@ -133,8 +133,8 @@ export function useBarcodeValidator() {
   function calculateChecksum(digits: string): number {
     const nums = digits.split('').map(Number)
     let sum = 0
-    for (let i = nums.length - 1; i >= 0; i--) {
-      const weight = (nums.length - 1 - i) % 2 === 0 ? 3 : 1
+    for (let i = 0; i < nums.length; i++) {
+      const weight = i % 2 === 0 ? 1 : 3  // Even indices (0,2,4) = weight 1
       sum += nums[i] * weight
     }
     return (10 - (sum % 10)) % 10
@@ -143,7 +143,9 @@ export function useBarcodeValidator() {
   function detectCountry(code: string): { country: string; code: string } | null {
     const prefix = parseInt(code.slice(0, 3))
     for (const range of COUNTRY_RANGES) {
-      const [start, end] = range.range.split('-').map(Number)
+      const parts = range.range.split('-').map(Number)
+      const start = parts[0]
+      const end = parts[1] ?? start  // Fix: Handle single-value ranges (e.g., '380')
       if (prefix >= start && prefix <= end) {
         return { country: range.country, code: range.range }
       }
@@ -177,17 +179,17 @@ export function useBarcodeValidator() {
       return
     }
 
-    // Non-numeric check
-    if (cleanCode !== code || !/^\d+$/.test(cleanCode)) {
+    // Too many digits
+    if (cleanCode.length > 13) {
       state.value = {
         isValid: false,
-        error: 'Chiffres uniquement',
+        error: '13 chiffres maximum',
         isCalculating: false,
         checksum: null,
         checksumValid: false,
         country: null,
         countryCode: null,
-        formatted: '',
+        formatted: cleanCode.slice(0, 13),
       }
       return
     }
