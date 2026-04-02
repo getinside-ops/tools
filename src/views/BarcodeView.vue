@@ -6,19 +6,36 @@
 
     <div class="gi-grid">
       <!-- Controls -->
-      <GiFormField
-        v-model="inputCode"
-        :label="t('barcode.label')"
-        type="text"
-        placeholder="4006381333931"
-      />
+      <div class="gi-field">
+        <label class="gi-label" for="barcode-input">
+          {{ t('barcode.label') }}
+        </label>
+        <input
+          id="barcode-input"
+          v-model="inputCode"
+          type="text"
+          :placeholder="t('barcode.placeholder')"
+          class="gi-input"
+          :class="{
+            'gi-input-success': validationState.isValid,
+            'gi-input-error': validationState.error && !validationState.isValid,
+          }"
+          maxlength="13"
+        />
 
-      <div v-if="checksum !== null && inputCode.length === 12" class="gi-hint" style="margin-top: 0.5rem">
-        {{ t('barcode.checksum', { n: checksum }) }}
-      </div>
+        <!-- Validation Feedback -->
+        <div v-if="validationState.error" class="gi-text-error gi-validation-message">
+          {{ validationState.error }}
+        </div>
+        <div v-else-if="validationState.country" class="gi-hint gi-validation-message">
+          {{ t('barcode.country', { country: validationState.country, code: validationState.countryCode }) }}
+        </div>
 
-      <div v-if="error" class="gi-text-error" style="margin-top: 0.5rem; font-size: 0.8rem">
-        {{ error }}
+        <!-- Checksum Display -->
+        <div v-if="validationState.checksum !== null" class="gi-hint">
+          {{ t('barcode.checksum', { n: validationState.checksum }) }}
+          <span v-if="validationState.checksumValid" class="gi-text-success"> ✓</span>
+        </div>
       </div>
 
       <!-- Result Area -->
@@ -27,13 +44,13 @@
           <div v-if="binary" ref="barcodeSvgContainer" class="barcode-container">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="200"
-              height="120"
-              viewBox="0 0 95 60"
+              :width="settings.width"
+              :height="settings.height + 20"
+              :viewBox="`0 0 95 ${60 + 20}`"
               preserveAspectRatio="xMidYMid meet"
             >
               <!-- Background -->
-              <rect width="95" height="60" fill="white" />
+              <rect width="95" :height="60 + 20" fill="white" />
 
               <!-- Bars -->
               <rect
@@ -43,13 +60,13 @@
                 y="0"
                 width="1"
                 :height="isGuard(idx) ? 55 : 50"
-                :fill="bit === '1' ? 'black' : 'transparent'"
+                :fill="bit === '1' ? settings.barColor : 'transparent'"
               />
 
               <!-- Text -->
-              <text x="0" y="58" font-size="6" font-family="monospace">{{ fullCode[0] }}</text>
-              <text x="25" y="58" font-size="6" font-family="monospace" text-anchor="middle">{{ fullCode.slice(1, 7) }}</text>
-              <text x="70" y="58" font-size="6" font-family="monospace" text-anchor="middle">{{ fullCode.slice(7) }}</text>
+              <text v-if="settings.showText" x="0" y="58" font-size="6" font-family="monospace" :fill="settings.barColor">{{ fullCode[0] }}</text>
+              <text v-if="settings.showText" x="25" y="58" font-size="6" font-family="monospace" text-anchor="middle" :fill="settings.barColor">{{ fullCode.slice(1, 7) }}</text>
+              <text v-if="settings.showText" x="70" y="58" font-size="6" font-family="monospace" text-anchor="middle" :fill="settings.barColor">{{ fullCode.slice(7) }}</text>
             </svg>
           </div>
           <div v-else class="gi-text-muted">{{ t('barcode.invalid') }}</div>
@@ -58,7 +75,7 @@
           <button class="gi-btn-ghost" style="flex: 1" @click="copyCode">
             {{ copied ? t('utmBuilder.copied') : t('barcode.copy') }}
           </button>
-          <button class="gi-btn" style="flex: 1" @click="downloadSvg">
+          <button class="gi-btn" style="flex: 1" @click="downloadBarcode">
             {{ t('barcode.download') }}
           </button>
         </template>
@@ -71,15 +88,22 @@
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Barcode } from 'lucide-vue-next'
-import { calculateEanChecksum, generateEanBinary } from '../composables/useBarcode'
+import { generateEanBinary } from '../composables/useBarcode'
+import { useBarcodeValidator } from '../composables/useBarcodeValidator'
+import { useBarcodeExporter } from '../composables/useBarcodeExporter'
+import { useBarcodeCustomization } from '../composables/useBarcodeCustomization'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
-import GiFormField from '../components/GiFormField.vue'
 import GiResultCard from '../components/GiResultCard.vue'
 
 const { t } = useI18n()
 
+// Initialize composables
+const { state: validationState, validate } = useBarcodeValidator()
+const { exportSvg, exportPng, exportJpeg, downloadBlob } = useBarcodeExporter()
+const { settings } = useBarcodeCustomization()
+
+// Local state
 const inputCode = ref('400638133393')
-const error = ref('')
 const copied = ref(false)
 const barcodeSvgContainer = ref<HTMLElement | null>(null)
 
@@ -89,18 +113,12 @@ watch(inputCode, () => {
   if (inputCode.value.length > 13) {
     inputCode.value = inputCode.value.slice(0, 13)
   }
-})
-
-const checksum = computed(() => {
-  if (inputCode.value.length === 12 && /^\d+$/.test(inputCode.value)) {
-    return calculateEanChecksum(inputCode.value)
-  }
-  return null
+  validate(inputCode.value)
 })
 
 const fullCode = computed(() => {
-  if (inputCode.value.length === 12 && checksum.value !== null) {
-    return inputCode.value + checksum.value
+  if (inputCode.value.length === 12 && validationState.value.checksum !== null) {
+    return inputCode.value + validationState.value.checksum
   }
   return inputCode.value
 })
@@ -130,18 +148,31 @@ async function copyCode() {
   setTimeout(() => (copied.value = false), 2000)
 }
 
-function downloadSvg() {
+async function downloadBarcode() {
   if (!barcodeSvgContainer.value) return
-  const svgData = barcodeSvgContainer.value.querySelector('svg')?.outerHTML
-  if (!svgData) return
-  
-  const blob = new Blob([svgData], { type: 'image/svg+xml' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `barcode-${fullCode.value}.svg`
-  link.click()
-  URL.revokeObjectURL(url)
+  const svgElement = barcodeSvgContainer.value.querySelector('svg')
+  if (!svgElement) return
+
+  const svgData = svgElement.outerHTML
+  const filename = `barcode-${fullCode.value}`
+
+  try {
+    if (settings.value.exportFormat === 'svg') {
+      const blob = await exportSvg(svgData)
+      downloadBlob(blob, `${filename}.svg`)
+    } else if (settings.value.exportFormat === 'png') {
+      const blob = await exportPng(svgData, {
+        scale: 2,
+        transparent: settings.value.transparentBackground,
+      })
+      downloadBlob(blob, `${filename}.png`)
+    } else if (settings.value.exportFormat === 'jpg') {
+      const blob = await exportJpeg(svgData, { scale: 2, quality: 0.9 })
+      downloadBlob(blob, `${filename}.jpg`)
+    }
+  } catch (error) {
+    console.error('Export failed:', error)
+  }
 }
 </script>
 
