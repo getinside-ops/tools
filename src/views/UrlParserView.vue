@@ -201,7 +201,7 @@
     </div>
 
     <!-- Educational Guide (Collapsible) -->
-    <template #pedagogic>
+    <template #about>
     <div class="gi-guide-section">
       <button class="gi-guide-toggle" @click="showGuide = !showGuide">
         <ChevronDown :class="['gi-guide-icon', { 'gi-guide-expanded': showGuide }]" />

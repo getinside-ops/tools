@@ -73,7 +73,7 @@
     <canvas ref="hiddenCanvas" style="display: none;"></canvas>
 
     <!-- Pedagogic Section -->
-    <template #pedagogic>
+    <template #about>
       <GiPedagogic
         :title="t('qrDecoder.pedagogic.title')"
         :description="t('qrDecoder.pedagogic.description')"
