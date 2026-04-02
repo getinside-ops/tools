@@ -6,7 +6,8 @@
 npm run dev        # Local dev server at http://localhost:5173/tools/
 npm run build      # Build to dist/ (base: /tools/)
 npm run preview    # Preview built site locally
-npm test           # Run Vitest (42 tests, 6 composables)
+npm test           # Run Vitest (227 tests, 39 test files)
+npm run test:watch # Watch mode
 ```
 
 ## Architecture
@@ -23,23 +24,20 @@ npm test           # Run Vitest (42 tests, 6 composables)
 src/
 ├── assets/styles/global.css    # Brand tokens --gi-* + utility classes
 ├── components/
-│   ├── AppHeader.vue            # Logo → getinside.fr, nav links, FR/EN toggle
-│   └── AppFooter.vue            # Two CTAs: getinside.fr + app.getinside.media
-├── composables/                 # Pure logic, fully unit-tested
-│   ├── usePaperWeight.ts        # calculatePaperWeight() + FORMATS constant
-│   ├── useUtmBuilder.ts         # buildUtmUrl()
-│   ├── useDpiChecker.ts         # calculatePrintDimensions() + getFormatStatus()
-│   ├── useRedirectChecker.ts    # checkRedirect() — async, allorigins.win proxy
-│   ├── usePromoCode.ts          # validatePromoCode() — 5-rule checklist
-│   ├── useWordCounter.ts        # analyzeText() — words, chars, sentences, paragraphs, reading time
-│   ├── useColorPalette.ts       # initPalette() + generatePalette() + toggleLock() — HSL color gen
+│   ├── AppHeader.vue            # Logo → getinside.fr, nav links, FR/EN + dark mode toggle
+│   ├── AppFooter.vue            # Two CTAs: getinside.fr + app.getinside.media
+│   ├── GiImageUpload.vue        # Reusable upload: paste / drag-drop / click (emits `upload`, `error`)
+│   ├── ToolPageLayout.vue       # Standard page wrapper used by all tool views (props: title, description, category; slots: #icon, #default, #about)
+│   └── Gi*.vue                  # Shared UI: GiResultCard, GiStatusBadge, GiInfoBox, GiFormField, etc.
+├── composables/                 # Pure logic, fully unit-tested (34 composables)
+│   ├── useTheme.ts              # Dark mode toggle — sets data-theme="dark" on <html>
 │   ├── useMockupGenerator.ts    # generateMockup(img) → canvas — NOT unit-testable (canvas stub in jsdom); manual browser test only
 │   ├── usePdfXConverter.ts      # convertToPdfX() — POST to VITE_PDFX_API_URL (backend not yet deployed)
-│   └── __tests__/               # Vitest tests for the 6 pure composables
+│   └── __tests__/               # Vitest tests (39 test files)
 ├── i18n/
 │   ├── fr.ts                    # Source of truth; exports `type Messages`
 │   └── en.ts                    # Imports `type Messages` from fr.ts for type safety
-├── router/index.ts              # Hash history, 8 routes (pdf-x commented out — coming soon)
+├── router/index.ts              # Hash history, 30 active routes
 ├── views/                       # One view per tool + HomeView
 └── main.ts                      # App bootstrap: createI18n with localStorage locale detection
 ```
@@ -48,18 +46,44 @@ src/
 
 Key variables: `--gi-brand: #0aaa8e`, `--gi-mint: #6AE7C8`, `--gi-bg: #F7F6F3`, `--gi-surface: #fff`
 
+Token families: `--gi-brand-*`, `--gi-bg-*`, `--gi-surface-*`, `--gi-border-*`, `--gi-text-*`, `--gi-tint-{green,red,yellow,blue,purple,orange}-*`, `--gi-shadow-{sm,md,lg,xl}`, `--gi-space-{xs,sm,md,lg,xl,2xl,3xl}`, `--gi-radius-{sm,md,lg,xl,pill}`, `--gi-transition-{fast,base,slow}`, `--gi-ease-{in,out,in-out,bounce}`
+
 Utility classes: `.gi-field`, `.gi-label`, `.gi-input`, `.gi-select`, `.gi-btn`, `.gi-btn-ghost`, `.gi-result`, `.gi-code`, `.gi-tool-header`, `.gi-table`, `.gi-status-ok/warning/error`
 
-Color tints: `--gi-tint-green-*`, `--gi-tint-red-*`, `--gi-tint-yellow-*` (bg + text variants)
+Dark mode: `useTheme()` toggles `data-theme="dark"` on `<html>`. Override tokens in `[data-theme="dark"] { }`.
+
+## ToolPageLayout.vue
+
+All tool views use `ToolPageLayout`. Structure:
+
+```vue
+<ToolPageLayout
+  :title="t('myTool.title')"
+  :description="t('myTool.desc')"
+  category="print|digital|design"
+>
+  <template #icon><MyIcon :size="24" /></template>
+
+  <!-- tool content -->
+
+  <template #about>{{ t('myTool.about') }}</template>
+</ToolPageLayout>
+```
+
+**Props:** `title` (required), `description` (required), `category` (`'print'|'digital'|'design'`)
+
+**Category badge colours:** print → `--gi-brand` (green), digital → `--gi-tint-blue-text` (blue), design → `--gi-tint-purple-text` (purple)
+
+**`#about` slot** renders a styled panel at the bottom with an accent-bar header ("About this tool" / "À propos de cet outil"). Always present when the slot is filled.
 
 ## Adding a New Tool
 
 1. Add composable to `src/composables/` + tests in `__tests__/`
-2. Add translations to `src/i18n/fr.ts` (in `nav`, `home.tools`, and tool-specific section) + `src/i18n/en.ts` — `nav.back` already exists, don't re-add
-3. Create view in `src/views/` — include `<router-link to="/" class="gi-back-link">{{ t('nav.back') }}</router-link>` at top
+2. Add translations to `src/i18n/fr.ts` (in `nav`, `home.tools`, and tool-specific section — include an `about` key with 2–3 sentence description) + `src/i18n/en.ts` — `nav.back` already exists, don't re-add
+3. Create view in `src/views/` using `ToolPageLayout` with `category` prop and `#about` slot
 4. Add route in `src/router/index.ts`
 5. Add nav link in `src/components/AppHeader.vue`
-6. Add entry to `allTools` array in `src/views/HomeView.vue` with `category` (`print`/`digital`/`design`) and `isNew` flag
+6. Add entry to `allTools` array in `src/views/HomeView.vue` with `category` (`print`/`digital`/`design`), `isNew`, and optionally `isPopular` flag
 
 ## Canvas Device Mockup Pattern (useMockupGenerator.ts)
 
