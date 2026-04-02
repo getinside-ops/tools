@@ -33,6 +33,7 @@ const fr = {
     back: 'Retour aux outils',
     search: 'Rechercher un outil…',
     copy: 'Copier',
+    about: 'À propos de cet outil',
   },
   footer: {
     discover: 'Découvrir getinside',
@@ -95,6 +96,7 @@ const fr = {
   paperWeight: {
     title: 'Calculateur poids papier',
     desc: 'Estimez le poids total de votre commande de flyers en fonction du format et du grammage.',
+    about: "Le grammage du papier influence le coût d'affranchissement et la qualité perçue de votre imprimé. Cet outil calcule le poids total d'un tirage de flyers en fonction du format, du grammage et de la quantité — utile pour estimer les frais postaux ou comparer les papiers.",
     quantity: 'Nombre de flyers',
     format: 'Format',
     grammage: 'Grammage (g/m²)',
@@ -147,6 +149,7 @@ const fr = {
   utmBuilder: {
     title: "Créateur d'URL UTM",
     desc: 'Construisez des URLs trackées avec les paramètres UTM pour Google Analytics.',
+    about: "Les paramètres UTM sont des balises ajoutées à une URL que les outils d'analytics utilisent pour attribuer le trafic à des campagnes spécifiques. Cet outil construit des URLs UTM propres et correctement formatées pour ne jamais taper les paramètres à la main — ni confondre source, medium et campagne.",
     destinationUrl: 'URL de destination',
     source: 'Source (utm_source)',
     medium: 'Medium (utm_medium)',
@@ -173,6 +176,7 @@ const fr = {
   dpiChecker: {
     title: 'DPI Checker',
     desc: "Calculez les dimensions d'impression maximum de votre image à différentes résolutions.",
+    about: "Le DPI (points par pouce) détermine la netteté d'une image à l'impression. À 300 DPI, les détails sont nets ; en dessous de 150 DPI, la pixelisation devient visible. Cet outil analyse la résolution de votre image et vous indique si elle est prête pour une impression professionnelle à la taille souhaitée.",
     upload: 'Glissez-déposez une image ici',
     orClick: 'ou cliquez pour parcourir',
     orManual: 'ou saisir les dimensions manuellement',
@@ -239,6 +243,7 @@ const fr = {
   redirectChecker: {
     title: 'Redirect Checker',
     desc: 'Découvrez vers quelle URL finale pointe une adresse après ses redirections.',
+    about: "Une chaîne de redirections ajoute de la latence et peut casser le tracking. Cet outil suit chaque étape depuis votre URL de départ jusqu'à la destination finale, en révélant chaque intermédiaire, le code HTTP correspondant et l'URL résolue — utile pour diagnostiquer des problèmes de référencement ou vérifier des liens de campagne.",
     label: 'URL à vérifier',
     check: 'Vérifier',
     checking: 'Vérification…',
@@ -264,6 +269,7 @@ const fr = {
   promoCode: {
     title: 'Validateur de code promo',
     desc: 'Vérifiez si votre code promotionnel respecte les bonnes pratiques avant diffusion.',
+    about: "Un bon code promo est court, mémorisable et sans ambiguïté. Cet outil évalue votre code selon les erreurs classiques — caractères confus (0/O, 1/I), longueur excessive, lisibilité — pour détecter les problèmes avant la diffusion.",
     label: 'Votre code promo',
     score: 'Score',
     checks: {
@@ -287,6 +293,7 @@ const fr = {
   pdfX: {
     title: 'Convertisseur PDF → PDF/X',
     desc: "Convertissez votre PDF en PDF/X-1a — CMJN, polices embarquées, prêt pour l'impression.",
+    about: "Le PDF/X est une norme ISO garantissant que les fichiers PDF sont conformes aux exigences de l'impression professionnelle. Cet outil convertit votre PDF en PDF/X-1a, en intégrant les polices, aplatissant la transparence et convertissant les couleurs en CMJN.",
     pasteTitle: 'Coller un PDF',
     pasteHint: 'Cliquez ici et appuyez sur Ctrl+V / Cmd+V',
     upload: 'Charger un PDF',
@@ -314,6 +321,7 @@ const fr = {
   wordCounter: {
     title: 'Compteur de mots',
     desc: 'Analysez votre texte : mots, caractères, phrases, paragraphes et temps de lecture estimé.',
+    about: "Le nombre de mots et le temps de lecture sont des métriques pratiques pour la planification éditoriale, qu'il s'agisse d'un email, d'une landing page ou d'un communiqué de presse. Cet outil vous donne en temps réel le compte de mots, caractères, phrases et paragraphes, avec une estimation du temps de lecture.",
     placeholder: 'Collez ou saisissez votre texte ici…',
     stats: {
       words: 'Mots',
@@ -338,6 +346,7 @@ const fr = {
   colorPalette: {
     title: 'Générateur de palette de couleurs',
     desc: 'Générez des palettes harmonieuses. Appuyez sur espace ou cliquez sur Générer pour une nouvelle palette. Cliquez sur une couleur pour la verrouiller.',
+    about: "L'harmonie des couleurs est le fondement de toute identité visuelle cohérente. Cet outil génère des palettes équilibrées selon des modèles de théorie des couleurs établis, et vous permet de verrouiller des couleurs individuelles tout en régénérant le reste — idéal pour explorer des variations autour d'une couleur de marque fixe.",
     generate: 'Générer',
     pressSpace: 'ou appuyez sur espace',
     lock: 'Verrouiller',
@@ -357,6 +366,7 @@ const fr = {
   mockupGenerator: {
     title: 'Mockup iPhone 15',
     desc: "Intégrez votre capture d'écran dans un mockup iPhone 15 en un clic.",
+    about: "Un mockup de device met votre capture ou design en contexte, le rendant immédiatement plus présentable pour des clients, présentations ou réseaux sociaux. Cet outil intègre votre image dans un cadre iPhone 15 directement dans le navigateur — sans Photoshop.",
     dropZone: 'Déposez votre capture ici ou cliquez pour importer',
     download: 'Télécharger en PNG',
     copy: 'Copier dans le presse-papiers',
@@ -375,6 +385,7 @@ const fr = {
   urlParser: {
     title: 'Analyseur d\'URL',
     desc: 'Décortiquez une URL pour comprendre ses paramètres, son chemin et ses composants.',
+    about: "Une URL est composée d'éléments distincts — protocole, hôte, chemin, chaîne de requête, fragment — chacun avec un rôle précis. Cet outil décortique n'importe quelle URL en ses composantes, pour déboguer des liens cassés, comprendre des cibles de redirection ou auditer des paramètres de campagne.",
     label: 'URL à analyser',
     placeholder: 'https://example.com/path?param=value#hash',
     result: 'Analyse de l\'URL',
@@ -439,6 +450,7 @@ const fr = {
   pxToRem: {
     title: 'Convertisseur PX ↔ REM',
     desc: 'Convertissez des pixels en unités rem et inversement en fonction de la taille de police de base.',
+    about: "Les unités rem s'adaptent à la taille de police du navigateur, ce qui les rend essentielles pour un design accessible et responsive. Cet outil convertit des valeurs px en rem (et vice versa) en masse, pour migrer une liste de valeurs pixel d'un fichier de design vers du CSS scalable en quelques secondes.",
     baseSize: 'Taille de base (px)',
     pxLabel: 'Pixels (px)',
     remLabel: 'REM (rem)',
@@ -458,6 +470,7 @@ const fr = {
   typeScale: {
     title: 'Générateur de Type Scale',
     desc: 'Créez une échelle typographique harmonieuse basée sur des ratios musicaux ou mathématiques.',
+    about: "Une échelle typographique crée une hiérarchie visuelle en espaçant les tailles de police selon un ratio constant. Cet outil génère une échelle complète depuis votre taille de base et votre ratio, et vous donne un ensemble de valeurs à copier directement dans vos propriétés CSS.",
     baseSize: 'Taille de base (px)',
     ratio: 'Ratio / Échelle',
     ratios: {
@@ -488,6 +501,7 @@ const fr = {
   colorConverter: {
     title: 'Convertisseur de Couleur',
     desc: 'Convertissez des couleurs entre les formats HEX, RGB, HSL et CMYK.',
+    about: "Les valeurs de couleur se présentent différemment selon les contextes — hex en CSS, RGB dans les outils de design, CMJN pour l'impression. Cet outil convertit instantanément n'importe quelle couleur entre les formats HEX, RGB, HSL et CMJN, pour toujours avoir la bonne notation selon le contexte.",
     hex: 'HEX',
     rgb: 'RGB',
     hsl: 'HSL',
@@ -511,6 +525,7 @@ const fr = {
   imageCompressor: {
     title: 'Compresseur d\'Image',
     desc: 'Optimisez vos images en réduisant leur poids tout en préservant la qualité.',
+    about: "Les images surdimensionnées ralentissent le chargement des pages et consomment de la bande passante. Cet outil compresse vos images dans le navigateur avec des algorithmes avec ou sans perte, en affichant les tailles avant/après et un aperçu visuel avant téléchargement.",
     stats: 'Statistiques',
     select: 'Choisir une image',
     quality: 'Qualité',
@@ -535,6 +550,7 @@ const fr = {
   imageCropper: {
     title: 'Recadreur d\'Image',
     desc: 'Recadrez vos images manuellement ou selon des ratios prédéfinis.',
+    about: "Le recadrage selon un ratio fixe est une tâche courante lors de la préparation d'images pour les réseaux sociaux, l'e-commerce ou l'impression. Cet outil permet de recadrer selon des presets standard ou un ratio personnalisé, avec un aperçu en temps réel — entièrement dans le navigateur.",
     select: 'Choisir une image',
     aspectRatio: 'Ratio d\'aspect',
     free: 'Libre',
@@ -559,6 +575,7 @@ const fr = {
   imageResizer: {
     title: 'Redimensionneur d\'Image',
     desc: 'Changez les dimensions de vos images par pixels ou par pourcentage.',
+    about: "Redimensionner des images à des dimensions précises ou en pourcentage est une étape fréquente avant de les télécharger sur un site ou les envoyer à des clients. Cet outil redimensionne n'importe quelle image dans le navigateur, avec un verrouillage optionnel du ratio et un aperçu avant téléchargement.",
     width: 'Largeur (px)',
     height: 'Hauteur (px)',
     percentage: 'Pourcentage (%)',
@@ -579,6 +596,7 @@ const fr = {
   imageFilters: {
     title: 'Filtres d\'Image',
     desc: 'Appliquez des filtres visuels à vos images instantanément.',
+    about: "Les filtres visuels permettent de créer une ambiance cohérente sur un ensemble d'images sans ouvrir un éditeur dédié. Cet outil applique des filtres CSS — niveaux de gris, sépia, flou, luminosité, etc. — avec un aperçu en temps réel et un téléchargement immédiat.",
     grayscale: 'Niveaux de gris',
     sepia: 'Sépia',
     invert: 'Inverser',
@@ -601,6 +619,7 @@ const fr = {
   placeholder: {
     title: 'Générateur de Placeholder',
     desc: 'Créez des images de remplacement personnalisées pour vos maquettes.',
+    about: "Les images placeholder remplissent l'espace dans les wireframes et maquettes pendant que le contenu réel est en préparation. Cet outil génère des images placeholder à n'importe quelle dimension et couleur, prêtes à utiliser comme URL dans une balise img ou à télécharger.",
     width: 'Largeur (px)',
     height: 'Hauteur (px)',
     text: 'Texte (optionnel)',
@@ -622,6 +641,7 @@ const fr = {
   matteGenerator: {
     title: 'Générateur de Matte (Seamless)',
     desc: 'Bordez vos visuels de contours unis ou de motifs seamless (Social Media ready).',
+    about: "Un matte coloré encadre une image et lui donne de l'espace visuel — courant en direction artistique, e-commerce et contenu pour les réseaux sociaux. Cet outil ajoute une bordure de couleur unie autour de votre image avec un contrôle précis de la taille et de la couleur.",
     upload: 'Choisir une image',
     padding: 'Marge globale (px)',
     color: 'Couleur de fond',
@@ -656,6 +676,7 @@ const fr = {
   favicon: {
     title: 'Générateur de Favicon',
     desc: 'Générez toutes les tailles d\'icônes standard pour votre site web (16px, 32px, 48px, 180px).',
+    about: "Un favicon est la petite icône qui identifie votre site dans les onglets du navigateur, les favoris et les lanceurs d'applications. Cet outil génère toutes les tailles standard (16×16, 32×32, 180×180, etc.) depuis n'importe quelle image, pour un jeu de favicons complet sans outil de design dédié.",
     upload: 'Choisir un logo (PNG, JPG, SVG)',
     download: 'Télécharger les icônes',
     preview: 'Aperçu des tailles',
@@ -673,6 +694,7 @@ const fr = {
   lorem: {
     title: 'Générateur de Lorem Ipsum',
     desc: 'Générez du texte de remplissage pour vos maquettes.',
+    about: "Le Lorem Ipsum est le texte de remplissage standard pour les wireframes et mises en page. Cet outil génère des paragraphes ou un nombre de mots à la demande, avec une option pour commencer par la phrase d'ouverture classique pour plus d'authenticité.",
     paragraphs: 'Nombre de paragraphes',
     words: 'Nombre de mots',
     type: 'Mode de génération',
@@ -695,6 +717,7 @@ const fr = {
   barcode: {
     title: 'Générateur de Code-barres EAN',
     desc: 'Générez des codes-barres EAN-13 conformes aux standards retail pour vos maquettes.',
+    about: "L'EAN-13 est le code-barres international utilisé sur les produits de grande distribution. Cet outil génère un code-barres EAN-13 valide à partir de n'importe quel numéro de base à 12 chiffres, avec détection du pays d'origine et personnalisation complète des couleurs et de la taille.",
     label: 'Code EAN-13 (12 ou 13 chiffres)',
     placeholder: '4006381333931',
     checksum: 'Clé de contrôle : {n}',
@@ -743,6 +766,7 @@ const fr = {
   safetyMargin: {
     title: 'Vérification Marges & Fond Perdu',
     desc: 'Visualisez les zones de sécurité (5mm) et le fond perdu (3mm) sur votre visuel en fonction du DPI.',
+    about: "Le fond perdu et les marges de sécurité sont les zones invisibles qui protègent votre design des erreurs de découpe. Cet outil superpose votre image avec les repères d'impression standard — zone de débordement, trait de coupe et zone de sécurité — pour vérifier votre mise en page avant envoi à l'imprimeur.",
     dpi: 'Résolution de l\'image (DPI)',
     bleed: 'Fond perdu (mm)',
     safety: 'Zone de sécurité (mm)',
@@ -767,6 +791,7 @@ const fr = {
   imageConverter: {
     title: 'Convertisseur d\'Image (Universal)',
     desc: 'Changez le format de vos images (SVG, PNG, JPG, WebP) instantanément dans votre navigateur.',
+    about: "Différentes plateformes requièrent différents formats d'image — WebP pour le web, PNG pour la transparence, SVG pour les vecteurs. Cet outil convertit entre SVG, PNG, JPG et WebP directement dans le navigateur, sans envoi sur un serveur.",
     upload: 'Choisir une image (PNG, JPG, WebP, SVG, GIF)',
     inputFormat: 'Format détecté : {f}',
     outputFormat: 'Format de sortie souhaité',
@@ -787,6 +812,7 @@ const fr = {
   metadata: {
     title: 'Informations de l\'Image (Metadata)',
     desc: 'Visualisez les propriétés et les métadonnées de n\'importe quelle image instantanément.',
+    about: "Les fichiers image contiennent des métadonnées cachées — dimensions, profil colorimétrique, taille de fichier, données EXIF — qui influencent leur traitement et affichage. Cet outil lit et affiche ces informations directement dans le navigateur, sans envoi sur un serveur.",
     upload: 'Analyser une image (Faites glisser ici)',
     technicalProperties: 'Propriétés Techniques',
     name: 'Nom du fichier',
@@ -807,6 +833,7 @@ const fr = {
   colorblind: {
     title: 'Simulateur Colorblind',
     desc: 'Visualisez comment vos designs apparaissent avec différents types de daltonisme.',
+    about: "Environ 8 % des hommes et 0,5 % des femmes présentent une forme de déficience de la vision des couleurs. Cet outil simule l'apparence de votre image pour les types les plus courants — protanopie, deutéranopie et tritanopie — pour vérifier l'accessibilité avant publication.",
     upload: 'Choisir une image pour simuler (Faites glisser ici)',
     types: {
       normal: 'Vision Normale',
@@ -829,6 +856,7 @@ const fr = {
   qrDecoder: {
     title: 'Décodeur QR Code',
     desc: 'Extrayez instantanément le contenu d\'un QR code à partir d\'une image.',
+    about: "Les QR codes sont largement utilisés pour des liens, des cartes de contact ou des étiquettes produit, mais leur contenu n'est pas visible à l'œil nu. Cet outil décode n'importe quelle image de QR code et affiche les données intégrées instantanément — utile pour la vérification, les tests ou l'inspection rapide.",
     pasteTitle: 'Collez un QR code ici',
     pasteHint: 'Appuyez sur Ctrl/Cmd+V ou cliquez pour coller',
     upload: 'ou importer une image',
@@ -849,6 +877,7 @@ const fr = {
   palette: {
     title: 'Extracteur de Palette',
     desc: 'Récupérez les couleurs dominantes d\'une image pour créer une charte graphique.',
+    about: "Extraire les couleurs d'une image existante aide à correspondre à une palette de marque, analyser l'identité visuelle d'un concurrent ou créer un schéma de couleurs complémentaire. Cet outil identifie les couleurs dominantes de n'importe quelle image et vous donne leurs valeurs hexadécimales.",
     upload: 'Extraire les couleurs (Faites glisser ici)',
     colors: 'Palette extraite',
     copy: 'Copié !',
@@ -866,6 +895,7 @@ const fr = {
   contrastChecker: {
     title: 'Vérificateur de Contraste',
     desc: 'Vérifiez la lisibilité et l\'accessibilité (WCAG 2.1 / APCA) des combinaisons de couleurs.',
+    about: "Un contraste suffisant est requis par les normes d'accessibilité WCAG et améliore la lisibilité pour tous les utilisateurs. Cet outil vérifie votre combinaison couleur de premier plan / arrière-plan selon les seuils WCAG AA et AAA, avec un aperçu en temps réel de la combinaison.",
     textColor: 'Couleur du texte',
     bgColor: 'Couleur de fond',
     swap: 'Inverser les couleurs',

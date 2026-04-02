@@ -35,6 +35,7 @@ const en: Messages = {
     back: 'Back to tools',
     search: 'Search tools…',
     copy: 'Copy',
+    about: 'About this tool',
   },
   footer: {
     discover: 'Discover getinside',
@@ -97,6 +98,7 @@ const en: Messages = {
   paperWeight: {
     title: 'Paper Weight Calculator',
     desc: 'Estimate the total weight of your flyer order based on format and paper weight.',
+    about: "Paper weight affects both postage costs and the physical feel of your printed piece. This tool calculates the total weight of a flyer run based on format, grammage, and quantity — useful when estimating postal rates or comparing paper stocks.",
     quantity: 'Number of flyers',
     format: 'Format',
     grammage: 'Paper weight (g/m²)',
@@ -149,6 +151,7 @@ const en: Messages = {
   utmBuilder: {
     title: 'UTM URL Builder',
     desc: 'Build tracked URLs with UTM parameters for Google Analytics.',
+    about: "UTM parameters are tags appended to a URL that analytics platforms use to attribute traffic to specific campaigns. This tool builds clean, correctly formatted UTM URLs so you never manually type parameters — and never mix up source, medium, and campaign.",
     destinationUrl: 'Destination URL',
     source: 'Source (utm_source)',
     medium: 'Medium (utm_medium)',
@@ -175,6 +178,7 @@ const en: Messages = {
   dpiChecker: {
     title: 'DPI Checker',
     desc: 'Calculate the maximum print dimensions of your image at different resolutions.',
+    about: "DPI (dots per inch) determines how sharp an image looks when printed. At 300 DPI, details are crisp; below 150 DPI, pixelation becomes visible. This tool analyses your image's resolution and tells you whether it's ready for professional printing at your target size.",
     upload: 'Drag and drop an image here',
     orClick: 'or click to browse',
     orManual: 'or enter dimensions manually',
@@ -241,6 +245,7 @@ const en: Messages = {
   redirectChecker: {
     title: 'Redirect Checker',
     desc: 'Find out which final URL a link points to after its redirects.',
+    about: "A chain of redirects adds latency and can break tracking. This tool follows every hop from your starting URL to the final destination, revealing each intermediate step, HTTP status code, and the resolved URL — useful for diagnosing SEO redirect issues or verifying campaign links.",
     label: 'URL to check',
     check: 'Check',
     checking: 'Checking…',
@@ -266,6 +271,7 @@ const en: Messages = {
   promoCode: {
     title: 'Promo Code Validator',
     desc: 'Check whether your promotional code follows best practices before publishing.',
+    about: "A good promo code is short, memorable, and unambiguous. This tool scores your code against common pitfalls — confusing characters (0/O, 1/I), excessive length, and readability — so you can catch problems before you publish.",
     label: 'Your promo code',
     score: 'Score',
     checks: {
@@ -289,6 +295,7 @@ const en: Messages = {
   pdfX: {
     title: 'PDF to PDF/X Converter',
     desc: 'Convert your PDF to PDF/X-1a format — CMYK, embedded fonts, print-ready.',
+    about: "PDF/X is an ISO standard ensuring PDF files conform to professional printing requirements. This tool converts your PDF to PDF/X-1a, embedding fonts, flattening transparency, and converting colours to CMYK.",
     pasteTitle: 'Paste a PDF',
     pasteHint: 'Click here and press Ctrl+V / Cmd+V',
     upload: 'Upload a PDF',
@@ -316,6 +323,7 @@ const en: Messages = {
   wordCounter: {
     title: 'Word & Character Counter',
     desc: 'Analyze your text: words, characters, sentences, paragraphs and estimated reading time.',
+    about: "Word count and reading time are practical metrics for content planning — whether you're writing an email, a landing page, or a press release. This tool gives you live counts for words, characters, sentences, and paragraphs, plus an estimated reading time.",
     placeholder: 'Paste or type your text here…',
     stats: {
       words: 'Words',
@@ -340,6 +348,7 @@ const en: Messages = {
   colorPalette: {
     title: 'Color Palette Generator',
     desc: 'Generate harmonious palettes. Press space or click Generate for a new palette. Click a color to lock it.',
+    about: "Colour harmony is the foundation of any cohesive visual identity. This tool generates balanced palettes using established colour theory models, and lets you lock individual colours while regenerating the rest — making it easy to explore variations around a fixed brand colour.",
     generate: 'Generate',
     pressSpace: 'or press space',
     lock: 'Lock',
@@ -359,6 +368,7 @@ const en: Messages = {
   mockupGenerator: {
     title: 'iPhone Mockup',
     desc: 'Drop your screenshot into an iPhone 15 frame and export it in one click.',
+    about: "A device mockup puts your screenshot or design into context, making it instantly more presentable for clients, presentations, or social media. This tool composites your image into an iPhone 15 frame directly in the browser — no Photoshop required.",
     dropZone: 'Drop your screenshot here or click to upload',
     download: 'Download PNG',
     copy: 'Copy to clipboard',
@@ -377,6 +387,7 @@ const en: Messages = {
   urlParser: {
     title: 'URL Parser',
     desc: 'Parse and analyze URL parameters, path, and components.',
+    about: "A URL is made of distinct components — protocol, host, pathname, query string, fragment — each with a specific role. This tool deconstructs any URL into its parts, making it easy to debug broken links, understand redirect targets, or audit campaign parameters.",
     label: 'URL to analyze',
     placeholder: 'https://example.com/path?param=value#hash',
     result: 'URL Analysis',
@@ -441,6 +452,7 @@ const en: Messages = {
   pxToRem: {
     title: 'PX ↔ REM Converter',
     desc: 'Convert pixels to rem units and vice-versa based on the base font size.',
+    about: "Rem units scale with the user's browser font size, making them essential for accessible, responsive design. This tool converts between px and rem values in bulk, so you can migrate a list of fixed pixel values from a design file to scalable CSS in seconds.",
     baseSize: 'Base size (px)',
     pxLabel: 'Pixels (px)',
     remLabel: 'REM (rem)',
@@ -460,6 +472,7 @@ const en: Messages = {
   typeScale: {
     title: 'Type Scale Generator',
     desc: 'Create harmonious typographic scales based on musical or math ratios.',
+    about: "A type scale creates visual hierarchy by spacing font sizes at a consistent ratio. This tool generates a complete scale from your base size and ratio, giving you a set of sizes you can copy directly into your CSS custom properties.",
     baseSize: 'Base size (px)',
     ratio: 'Ratio / Scale',
     ratios: {
@@ -490,6 +503,7 @@ const en: Messages = {
   colorConverter: {
     title: 'Color Converter',
     desc: 'Convert colors between HEX, RGB, HSL, and CMYK formats.',
+    about: "Colour values look different in different contexts — hex in CSS, RGB in design tools, CMYK for print. This tool converts any colour between HEX, RGB, HSL, and CMYK formats instantly, so you always have the right notation for the right context.",
     hex: 'HEX',
     rgb: 'RGB',
     hsl: 'HSL',
@@ -513,6 +527,7 @@ const en: Messages = {
   imageCompressor: {
     title: 'Image Compressor',
     desc: 'Optimize your images by reducing their size while maintaining quality.',
+    about: "Oversized images slow down page loads and waste bandwidth. This tool compresses your images in the browser using lossy or lossless algorithms, showing you the before/after file size and a visual preview before you download.",
     stats: 'Statistics',
     select: 'Select an image',
     quality: 'Quality',
@@ -537,6 +552,7 @@ const en: Messages = {
   imageCropper: {
     title: 'Image Cropper',
     desc: 'Crop your images manually or using predefined aspect ratios.',
+    about: "Cropping to a fixed ratio is a common task when preparing images for social media, e-commerce, or print. This tool lets you crop to standard presets or a custom ratio, with a live preview — entirely in your browser.",
     select: 'Select an image',
     aspectRatio: 'Aspect Ratio',
     free: 'Free',
@@ -561,6 +577,7 @@ const en: Messages = {
   imageResizer: {
     title: 'Image Resizer',
     desc: 'Change the dimensions of your images by pixels or percentage.',
+    about: "Resizing images to exact dimensions or percentages is a frequent step before uploading to websites or sending to clients. This tool resizes any image in the browser, with optional aspect ratio lock and a preview before download.",
     width: 'Width (px)',
     height: 'Height (px)',
     percentage: 'Percentage (%)',
@@ -581,6 +598,7 @@ const en: Messages = {
   imageFilters: {
     title: 'Image Filters',
     desc: 'Apply visual filters to your images instantly.',
+    about: "Visual filters can create a consistent mood across a set of images without opening an image editor. This tool applies CSS-based filters — greyscale, sepia, blur, brightness, and more — with a live preview and instant download.",
     grayscale: 'Grayscale',
     sepia: 'Sepia',
     invert: 'Invert',
@@ -603,6 +621,7 @@ const en: Messages = {
   placeholder: {
     title: 'Placeholder Generator',
     desc: 'Create custom placeholder images for your mockups.',
+    about: "Placeholder images fill space in wireframes and mockups while real content is being prepared. This tool generates placeholder images at any size and colour, ready to use as an img src URL or download.",
     width: 'Width (px)',
     height: 'Height (px)',
     text: 'Text (optional)',
@@ -624,6 +643,7 @@ const en: Messages = {
   matteGenerator: {
     title: 'Seamless Matte Generator',
     desc: 'Add solid or seamless pattern borders to your images. Ready for social media.',
+    about: "A colour matte frames an image and gives it visual breathing room — common in art direction, e-commerce, and social media content. This tool adds a solid-colour border around your image with precise control over size and colour.",
     upload: 'Select an image',
     padding: 'Global Padding (px)',
     color: 'Background Color',
@@ -658,6 +678,7 @@ const en: Messages = {
   favicon: {
     title: 'Favicon Generator',
     desc: 'Generate all standard icon sizes for your website (16px, 32px, 48px, 180px).',
+    about: "A favicon is the small icon that identifies your site in browser tabs, bookmarks, and app launchers. This tool generates all standard sizes (16×16, 32×32, 180×180, and more) from any image, so you can ship a complete favicon set without a separate design tool.",
     upload: 'Select a logo (PNG, JPG, SVG)',
     download: 'Download bundle',
     preview: 'Size preview',
@@ -675,6 +696,7 @@ const en: Messages = {
   lorem: {
     title: 'Lorem Ipsum Generator',
     desc: 'Generate placeholder text for your mockups.',
+    about: "Lorem Ipsum is the standard placeholder text for wireframes and layouts. This tool generates paragraphs or word counts on demand, with an option to start with the classic opening line for authenticity.",
     paragraphs: 'Number of paragraphs',
     words: 'Number of words',
     type: 'Generation mode',
@@ -697,6 +719,7 @@ const en: Messages = {
   barcode: {
     title: 'EAN Barcode Generator',
     desc: 'Generate retail-compliant EAN-13 barcodes for your mockups.',
+    about: "EAN-13 is the international standard barcode used on retail products worldwide. This tool generates a valid EAN-13 barcode from any 12-digit base number, with country-of-origin detection and full customisation of colours and size.",
     label: 'EAN-13 Code (12 or 13 digits)',
     placeholder: '4006381333931',
     checksum: 'Check digit: {n}',
@@ -745,6 +768,7 @@ const en: Messages = {
   safetyMargin: {
     title: 'Safety Margin & Bleed Checker',
     desc: 'Visualize safety zones (5mm) and bleed (3mm) on your artwork based on DPI.',
+    about: "Bleed and safety margins are the invisible zones that protect your design from trimming errors. This tool overlays your image with standard print guides — showing the bleed area, trim line, and safe zone — so you can check your layout before sending it to print.",
     dpi: 'Image Resolution (DPI)',
     bleed: 'Bleed (mm)',
     safety: 'Safety Zone (mm)',
@@ -769,6 +793,7 @@ const en: Messages = {
   imageConverter: {
     title: 'Universal Image Converter',
     desc: 'Convert your images between SVG, PNG, JPG, and WebP formats instantly in your browser.',
+    about: "Different platforms require different image formats — WebP for the web, PNG for transparency, SVG for vectors. This tool converts between SVG, PNG, JPG, and WebP directly in the browser, without any server upload.",
     upload: 'Select an image (PNG, JPG, WebP, SVG, GIF)',
     inputFormat: 'Detected format: {f}',
     outputFormat: 'Desired output format',
@@ -789,6 +814,7 @@ const en: Messages = {
   metadata: {
     title: 'Image Metadata Viewer',
     desc: 'View technical properties and metadata for any image file instantly.',
+    about: "Image files carry hidden metadata — dimensions, colour profile, file size, EXIF data — that affect how they're processed and displayed. This tool reads and surfaces that information directly in the browser, with no upload to any server.",
     upload: 'Analyze an image (Drag & drop here)',
     technicalProperties: 'Technical Properties',
     name: 'Filename',
@@ -809,6 +835,7 @@ const en: Messages = {
   colorblind: {
     title: 'Colorblind Simulator',
     desc: 'Visualize how your designs appear with different types of colorblindness.',
+    about: "About 8% of men and 0.5% of women have some form of colour vision deficiency. This tool simulates how your image appears under the most common types — protanopia, deuteranopia, and tritanopia — so you can check accessibility before publishing.",
     upload: 'Select an image to simulate (Drag & drop here)',
     types: {
       normal: 'Normal Vision',
@@ -831,6 +858,7 @@ const en: Messages = {
   qrDecoder: {
     title: 'QR Code Decoder',
     desc: 'Instantly extract the content of any QR code from an image file.',
+    about: "QR codes are widely used for links, contact cards, and product labels, but their content isn't visible at a glance. This tool decodes any QR code image and shows you the embedded data instantly — useful for verification, testing, or quick inspection.",
     pasteTitle: 'Paste a QR code here',
     pasteHint: 'Press Ctrl/Cmd+V or click to paste',
     upload: 'or upload an image',
@@ -851,6 +879,7 @@ const en: Messages = {
   palette: {
     title: 'Image Palette Extractor',
     desc: 'Extract dominant colors from an image to create a brand color palette.',
+    about: "Extracting colours from an existing image helps you match a brand palette, analyse a competitor's visual identity, or create a complementary colour scheme. This tool identifies the dominant colours in any image and gives you their hex values.",
     upload: 'Extract colors (Drag & drop here)',
     colors: 'Extracted Palette',
     copy: 'Copied!',
@@ -868,6 +897,7 @@ const en: Messages = {
   contrastChecker: {
     title: 'Contrast Checker',
     desc: 'Verify the readability and accessibility (WCAG 2.1 / APCA) of your color combinations.',
+    about: "Sufficient colour contrast is required by WCAG accessibility standards and improves readability for all users. This tool checks your foreground/background colour pair against WCAG AA and AAA thresholds, and shows you a live preview of the combination.",
     textColor: 'Text Color',
     bgColor: 'Background Color',
     swap: 'Swap colors',
