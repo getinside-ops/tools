@@ -39,4 +39,32 @@ describe('useBarcodeCustomization', () => {
     reset()
     expect(settings.value.barColor).toBe('#000000')
   })
+
+  it('should toggle transparent background', () => {
+    const { settings, toggleTransparentBackground } = useBarcodeCustomization()
+    expect(settings.value.transparentBackground).toBe(false)
+    toggleTransparentBackground()
+    expect(settings.value.transparentBackground).toBe(true)
+    toggleTransparentBackground()
+    expect(settings.value.transparentBackground).toBe(false)
+  })
+
+  it('should set export format', () => {
+    const { settings, setExportFormat } = useBarcodeCustomization()
+    setExportFormat('png')
+    expect(settings.value.exportFormat).toBe('png')
+    setExportFormat('jpg')
+    expect(settings.value.exportFormat).toBe('jpg')
+    setExportFormat('svg')
+    expect(settings.value.exportFormat).toBe('svg')
+  })
+
+  it('should maintain multiple changes simultaneously', () => {
+    const { settings, setBarColor, setDimensions } = useBarcodeCustomization()
+    setBarColor('#ff0000')
+    setDimensions({ width: 300, height: 60 })
+    expect(settings.value.barColor).toBe('#ff0000')
+    expect(settings.value.width).toBe(300)
+    expect(settings.value.height).toBe(60)
+  })
 })
