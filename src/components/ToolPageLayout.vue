@@ -9,35 +9,38 @@
       {{ t('nav.back') }}
     </router-link>
 
-    <!-- Tool Header -->
-    <div class="tool-header">
-      <div class="tool-header-top">
-        <div class="tool-icon" v-if="$slots.icon">
-          <slot name="icon"></slot>
-        </div>
-        <div class="tool-title-section">
+    <!-- Tool Header Card -->
+    <div class="tool-header-card">
+      <div class="tool-icon" v-if="$slots.icon">
+        <slot name="icon"></slot>
+      </div>
+      <div class="tool-title-section">
+        <div class="tool-title-row">
           <h1 class="tool-title">
             <slot name="title">{{ title }}</slot>
           </h1>
-          <p v-if="subtitle" class="tool-subtitle">{{ subtitle }}</p>
+          <span v-if="category" class="tool-category-badge" :class="`tool-category-badge--${category}`">
+            {{ t(`home.categories.${category}`) }}
+          </span>
         </div>
+        <p v-if="subtitle" class="tool-subtitle">{{ subtitle }}</p>
+        <p class="tool-description">
+          <slot name="description">{{ description }}</slot>
+        </p>
       </div>
-      <p class="tool-description">
-        <slot name="description">{{ description }}</slot>
-      </p>
     </div>
-
-    <!-- Divider -->
-    <div class="tool-divider"></div>
 
     <!-- Tool Content -->
     <div class="tool-content">
       <slot></slot>
     </div>
 
-    <!-- Pedagogic Section -->
-    <div v-if="$slots.pedagogic" class="tool-pedagogic">
-      <slot name="pedagogic"></slot>
+    <!-- About Panel -->
+    <div v-if="$slots.about" class="tool-about">
+      <div class="tool-about-label">
+        <span>{{ t('nav.about') }}</span>
+      </div>
+      <slot name="about"></slot>
     </div>
   </div>
 </template>
@@ -49,6 +52,7 @@ defineProps<{
   title?: string
   subtitle?: string
   description?: string
+  category?: 'print' | 'digital' | 'design'
 }>()
 
 const { t } = useI18n()
@@ -61,6 +65,7 @@ const { t } = useI18n()
   padding: 2rem 1.5rem 4rem;
 }
 
+/* Back Link */
 .tool-back-link {
   display: inline-flex;
   align-items: center;
@@ -92,20 +97,21 @@ const { t } = useI18n()
   background: rgba(10, 170, 142, 0.15);
 }
 
-.tool-header {
-  margin-bottom: 2rem;
-}
-
-.tool-header-top {
+/* Header Card */
+.tool-header-card {
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  padding: 1.125rem 1.25rem;
+  margin-bottom: 1.5rem;
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.875rem;
 }
 
 .tool-icon {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   background: var(--gi-brand-fade);
   color: var(--gi-brand);
   border-radius: var(--gi-radius-md);
@@ -116,7 +122,7 @@ const { t } = useI18n()
   transition: all var(--gi-transition-base) var(--gi-ease-bounce);
 }
 
-.tool-header:hover .tool-icon {
+.tool-header-card:hover .tool-icon {
   transform: scale(1.05);
   background: var(--gi-brand);
   color: white;
@@ -124,6 +130,15 @@ const { t } = useI18n()
 
 .tool-title-section {
   flex: 1;
+  min-width: 0;
+}
+
+.tool-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
 }
 
 .tool-title {
@@ -131,13 +146,39 @@ const { t } = useI18n()
   font-size: var(--gi-font-size-xl);
   font-weight: 700;
   color: var(--gi-text);
-  margin: 0 0 0.25rem 0;
+  margin: 0;
+}
+
+.tool-category-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  border-radius: var(--gi-radius-pill);
+  padding: 2px 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.tool-category-badge--print {
+  background: var(--gi-brand-fade);
+  color: var(--gi-brand);
+}
+
+.tool-category-badge--digital {
+  background: var(--gi-tint-blue-bg);
+  color: var(--gi-tint-blue-text);
+}
+
+.tool-category-badge--design {
+  background: var(--gi-tint-purple-bg);
+  color: var(--gi-tint-purple-text);
 }
 
 .tool-subtitle {
   font-size: var(--gi-font-size-sm);
   color: var(--gi-text-muted);
-  margin: 0;
+  margin: 0 0 0.25rem;
 }
 
 .tool-description {
@@ -147,17 +188,49 @@ const { t } = useI18n()
   margin: 0;
 }
 
-.tool-divider {
-  height: 1px;
-  background: var(--gi-border);
-  margin: 2rem 0;
-}
-
+/* Content */
 .tool-content {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
-.tool-pedagogic {
-  margin-top: 3rem;
+/* About Panel */
+.tool-about {
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  padding: 1.25rem;
+  margin-top: 2rem;
+}
+
+.tool-about-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.tool-about-label::before {
+  content: '';
+  display: block;
+  width: 3px;
+  height: 1rem;
+  background: var(--gi-brand);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.tool-about-label span {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--gi-text);
+}
+
+.tool-about :deep(p) {
+  font-size: var(--gi-font-size-sm);
+  color: var(--gi-text-muted);
+  line-height: 1.7;
+  margin: 0;
 }
 </style>
