@@ -43,46 +43,88 @@
     </GiResultCard>
 
     <GiResultCard
-      v-if="error"
-      :title="t('redirectChecker.fallbackTitle')"
+      v-if="errorMessage"
+      :title="errorTitle"
       variant="error"
-      style="margin-top: 1.5rem"
+      class="gi-error-card"
     >
-      <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--gi-text-muted)">
+      <p class="gi-error-message">{{ errorMessage }}</p>
+      <p v-if="errorCode === 'MISSING_API_URL'" class="gi-error-missing-api-desc">
+        {{ t('redirectChecker.error.missingApiDesc') }}
+      </p>
+      <p v-else class="gi-error-fallback-desc">
         {{ t('redirectChecker.fallbackDesc') }}
       </p>
       <code class="gi-code">curl -IL {{ inputUrl }}</code>
     </GiResultCard>
+
     <template #about>{{ t('redirectChecker.about') }}</template>
   </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Link } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiResultCard from '../components/GiResultCard.vue'
 import GiStatusBadge from '../components/GiStatusBadge.vue'
-import { checkRedirect, type RedirectResult } from '../composables/useRedirectChecker'
+import { checkRedirect, RedirectCheckerError, type RedirectResult } from '../composables/useRedirectChecker'
 
 const { t } = useI18n()
 const inputUrl = ref('')
 const loading = ref(false)
 const result = ref<RedirectResult | null>(null)
-const error = ref(false)
+const errorCode = ref<string | null>(null)
+
+const errorMessage = computed(() => {
+  if (!errorCode.value) return ''
+  switch (errorCode.value) {
+    case 'MISSING_API_URL':
+      return t('redirectChecker.error.missingApi')
+    case 'API_ERROR':
+      return t('redirectChecker.error.apiError')
+    case 'INVALID_RESPONSE':
+      return t('redirectChecker.error.invalidResponse')
+    case 'NETWORK_ERROR':
+      return t('redirectChecker.error.networkError')
+    default:
+      return t('redirectChecker.error.defaultError')
+  }
+})
+
+const errorTitle = computed(() => {
+  if (!errorCode.value) return ''
+  switch (errorCode.value) {
+    case 'MISSING_API_URL':
+      return t('redirectChecker.error.missingApi')
+    case 'API_ERROR':
+      return t('redirectChecker.error.apiError')
+    case 'INVALID_RESPONSE':
+      return t('redirectChecker.error.invalidResponse')
+    case 'NETWORK_ERROR':
+      return t('redirectChecker.error.networkError')
+    default:
+      return t('redirectChecker.error.defaultError')
+  }
+})
+
 const copiedIndex = ref<number | null>(null)
 
 async function check() {
   if (!inputUrl.value) return
   loading.value = true
   result.value = null
-  error.value = false
+  errorCode.value = null
   copiedIndex.value = null
   try {
     result.value = await checkRedirect(inputUrl.value)
-  } catch {
-    error.value = true
+  } catch (error) {
+    if (error instanceof RedirectCheckerError) {
+      errorCode.value = error.code
+    } else {
+      errorCode.value = 'NETWORK_ERROR'
+    }
   } finally {
     loading.value = false
   }
@@ -151,5 +193,26 @@ async function copyUrl(url: string, index: number) {
   padding: 0.2rem 0.6rem;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+/* Error card */
+.gi-error-card {
+  margin-top: 1.5rem;
+}
+
+.gi-error-message {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--gi-text-muted);
+}
+
+.gi-error-missing-api-desc {
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.gi-error-fallback-desc {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
 }
 </style>
