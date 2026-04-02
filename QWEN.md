@@ -1,5 +1,15 @@
 # getinside Tools — Project Context
 
+## Commands
+
+```bash
+npm run dev        # Local dev server at http://localhost:5173/tools/
+npm run build      # Build to dist/ (base: /tools/)
+npm run preview    # Preview built site locally
+npm test           # Run Vitest (227 tests, 39 test files)
+npm run test:watch # Watch mode
+```
+
 ## Project Overview
 
 **getinside Tools** is a collection of free, client-side web tools for print, digital, and design workflows. It's a **Vue 3 + Vite SPA** deployed to GitHub Pages at `https://getinside-ops.github.io/tools/`.
@@ -153,7 +163,7 @@ browser_console_messages
 | Category | Technology |
 |----------|------------|
 | Framework | Vue 3.5.13 (Composition API, `<script setup>`) |
-| Build Tool | Vite 6.2.0 |
+| Build Tool | Vite 5 |
 | Routing | vue-router 4.6.4 (hash mode for GitHub Pages) |
 | i18n | vue-i18n v9 (legacy: false) |
 | Testing | Vitest 4.1.2 + jsdom + @vue/test-utils |
@@ -161,41 +171,36 @@ browser_console_messages
 | Icons | lucide-vue-next |
 | Utilities | culori, jsqr, apca-w3, colorparsley |
 
-## Project Structure
+## Architecture
+
+**Vite 5 + Vue 3 SPA** deployed to `https://getinside-ops.github.io/tools/` via GitHub Actions.
+
+- **Routing**: `vue-router` in hash mode (`createWebHashHistory`) — avoids GitHub Pages 404 on direct URLs
+- **i18n**: `vue-i18n` v9, `legacy: false` — locale auto-detected from `localStorage` → `navigator.language`, FR/EN toggle in header
+- **Base path**: `/tools/` — configured in `vite.config.ts`; all asset URLs are `/tools/assets/...`
+
+## File Structure
 
 ```
-tools/
-├── src/
-│   ├── assets/styles/global.css    # Brand tokens, utility classes
-│   ├── components/
-│   │   ├── AppHeader.vue           # Logo, language toggle
-│   │   └── AppFooter.vue           # CTAs to getinside.fr
-│   ├── composables/                # Pure logic (29 composables)
-│   │   ├── useQrDecoder.ts         # QR code decoding with clipboard support
-│   │   ├── usePaperWeight.ts       # Paper weight calculator
-│   │   ├── useUtmBuilder.ts        # UTM URL builder
-│   │   ├── useDpiChecker.ts        # DPI/print dimensions
-│   │   ├── useColorPalette.ts      # Color palette generator
-│   │   ├── useImageCompressor.ts   # Image compression
-│   │   ├── useContrastChecker.ts   # WCAG contrast checking
-│   │   └── __tests__/              # Vitest tests (121 tests)
-│   ├── i18n/
-│   │   ├── fr.ts                   # Source of truth (exports `type Messages`)
-│   │   └── en.ts                   # Imports `Messages` type from fr.ts
-│   ├── router/index.ts             # 38 routes (hash history)
-│   ├── views/                      # One view per tool (29 views)
-│   │   ├── HomeView.vue            # Tool grid with search/filter
-│   │   ├── QrDecoderView.vue       # QR decoder with paste support
-│   │   └── ...
-│   ├── main.ts                     # App bootstrap
-│   └── App.vue
-├── public/                         # Static assets (mockup frames, logos)
-├── backend/                        # PDF/X converter backend (not deployed)
-├── .github/workflows/
-│   └── deploy.yml                  # CI/CD to GitHub Pages
-├── package.json
-├── vite.config.ts                  # base: '/tools/', vitest config
-└── tsconfig.json                   # Strict TypeScript
+src/
+├── assets/styles/global.css    # Brand tokens --gi-* + utility classes
+├── components/
+│   ├── AppHeader.vue            # Logo → getinside.fr, nav links, FR/EN + dark mode toggle
+│   ├── AppFooter.vue            # Two CTAs: getinside.fr + app.getinside.media
+│   ├── GiImageUpload.vue        # Reusable upload: paste / drag-drop / click (emits `upload`, `error`)
+│   ├── ToolPageLayout.vue       # Standard page wrapper used by all tool views (props: title, description, category; slots: #icon, #default, #about)
+│   └── Gi*.vue                  # Shared UI: GiResultCard, GiStatusBadge, GiInfoBox, GiFormField, etc.
+├── composables/                 # Pure logic, fully unit-tested (34 composables)
+│   ├── useTheme.ts              # Dark mode toggle — sets data-theme="dark" on <html>
+│   ├── useMockupGenerator.ts    # generateMockup(img) → canvas — NOT unit-testable (canvas stub in jsdom); manual browser test only
+│   ├── usePdfXConverter.ts      # convertToPdfX() — POST to VITE_PDFX_API_URL (backend not yet deployed)
+│   └── __tests__/               # Vitest tests (39 test files)
+├── i18n/
+│   ├── fr.ts                    # Source of truth; exports `type Messages`
+│   └── en.ts                    # Imports `type Messages` from fr.ts for type safety
+├── router/index.ts              # Hash history, 30 active routes
+├── views/                       # One view per tool + HomeView
+└── main.ts                      # App bootstrap: createI18n with localStorage locale detection
 ```
 
 ## Building and Running
@@ -223,9 +228,9 @@ npm run test:watch       # Watch mode
 
 ### Deployment
 
-- **Trigger:** Push to `main` branch
-- **Process:** GitHub Actions → `npm ci` → `npm run build` → deploy `dist/` to GitHub Pages
-- **Required setting:** Pages source must be "GitHub Actions" (not "Deploy from a branch")
+**GitHub Actions** (`.github/workflows/deploy.yml`): push to `main` → `npm ci` → `npm run build` → deploy `dist/` to GitHub Pages.
+
+**Required repo setting**: Pages source must be set to **"GitHub Actions"** (not "Deploy from a branch") in `https://github.com/getinside-ops/tools/settings/pages`.
 
 ## Tool Categories
 
@@ -296,14 +301,46 @@ Global styles provide consistent UI components:
 - `.gi-status-ok/warning/error` — status badges
 - `.gi-tint-green-*`, `.gi-tint-red-*`, `.gi-tint-yellow-*` — color tints
 
+## Brand Tokens (global.css)
+
+Key variables: `--gi-brand: #0aaa8e`, `--gi-mint: #6AE7C8`, `--gi-bg: #F7F6F3`, `--gi-surface: #fff`
+
+Token families: `--gi-brand-*`, `--gi-bg-*`, `--gi-surface-*`, `--gi-border-*`, `--gi-text-*`, `--gi-tint-{green,red,yellow,blue,purple,orange}-*`, `--gi-shadow-{sm,md,lg,xl}`, `--gi-space-{xs,sm,md,lg,xl,2xl,3xl}`, `--gi-radius-{sm,md,lg,xl,pill}`, `--gi-transition-{fast,base,slow}`, `--gi-ease-{in,out,in-out,bounce}`
+
+Dark mode: `useTheme()` toggles `data-theme="dark"` on `<html>`. Override tokens in `[data-theme="dark"] { }`.
+
+## ToolPageLayout.vue
+
+All tool views use `ToolPageLayout`. Structure:
+
+```vue
+<ToolPageLayout
+  :title="t('myTool.title')"
+  :description="t('myTool.desc')"
+  category="print|digital|design"
+>
+  <template #icon><MyIcon :size="24" /></template>
+
+  <!-- tool content -->
+
+  <template #about>{{ t('myTool.about') }}</template>
+</ToolPageLayout>
+```
+
+**Props:** `title` (required), `description` (required), `category` (`'print'|'digital'|'design'`)
+
+**Category badge colours:** print → `--gi-brand` (green), digital → `--gi-tint-blue-text` (blue), design → `--gi-tint-purple-text` (purple)
+
+**`#about` slot** renders a styled panel at the bottom with an accent-bar header ("About this tool" / "À propos de cet outil"). Always present when the slot is filled.
+
 ## Adding a New Tool
 
-1. **Create composable** — `src/composables/useNewTool.ts` + tests in `__tests__/`
-2. **Add translations** — `fr.ts` (nav, home.tools, tool section) + `en.ts`
-3. **Create view** — `src/views/NewToolView.vue` with back link
-4. **Add route** — `src/router/index.ts`
-5. **Add to HomeView** — entry in `allTools` array with `category` and `isNew` flag
-6. **Update nav** — add link in `AppHeader.vue` (if needed)
+1. Add composable to `src/composables/` + tests in `__tests__/`
+2. Add translations to `src/i18n/fr.ts` (in `nav`, `home.tools`, and tool-specific section — include an `about` key with 2–3 sentence description) + `src/i18n/en.ts` — `nav.back` already exists, don't re-add
+3. Create view in `src/views/` using `ToolPageLayout` with `category` prop and `#about` slot
+4. Add route in `src/router/index.ts`
+5. Add nav link in `src/components/AppHeader.vue`
+6. Add entry to `allTools` array in `src/views/HomeView.vue` with `category` (`print`/`digital`/`design`), `isNew`, and optionally `isPopular` flag
 
 ## Environment Variables
 
@@ -313,6 +350,22 @@ Global styles provide consistent UI components:
 | `VITE_REDIRECT_API_URL` | Redirect checker proxy (optional) |
 
 Set as GitHub Actions secrets for deployment.
+
+## Canvas Device Mockup Pattern (useMockupGenerator.ts)
+
+Screen rect for `public/apple-iphone-15-black-portrait.png` (1419×2796): `{ x: 120, y: 120, w: 1179, h: 2556 }` — symmetric 120px borders, full display including behind notch.
+
+Compositing order: clip to `ctx.roundRect(SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, 130)` → draw user image → `ctx.restore()` → draw frame on top. Corner radius ~130px; adjust if bleed reappears.
+
+`public/` assets: use `` `${import.meta.env.BASE_URL}filename.png` `` (not hardcoded `/tools/`).
+
+## PDF/X Tool (coming soon)
+
+The `usePdfXConverter.ts` and `PdfXView.vue` are implemented but hidden. The backend (Node.js + Ghostscript + Docker) is in `backend/`. To re-enable:
+1. Deploy `backend/` to a Docker host (e.g. Hugging Face Spaces — free, no credit card)
+2. Set `VITE_PDFX_API_URL` as a GitHub Actions secret in repo settings
+3. Uncomment the route in `src/router/index.ts` and the nav link in `src/components/AppHeader.vue`
+4. Add PDF/X entry to `allTools` in `src/views/HomeView.vue` with `category: 'print'`
 
 ## Testing Strategy
 
@@ -949,3 +1002,335 @@ error.value = `File type "${file.type}" is not accepted`
 
 **Documentation:**
 - `docs/plans/2026-04-01-image-upload-standardization.md` — Full implementation plan
+
+## Redirect Checker Refactoring (April 2026)
+
+### Problem
+
+The Redirect Checker tool was broken in production because `VITE_REDIRECT_API_URL` environment variable was not set, causing silent failures with no user feedback.
+
+### Solution: Graceful Error Handling Pattern
+
+**1. Custom Error Class with Error Codes**
+
+Create a custom error class with discriminated union for error codes:
+
+```typescript
+export class RedirectCheckerError extends Error {
+  constructor(
+    message: string,
+    public code: 'MISSING_API_URL' | 'API_ERROR' | 'INVALID_RESPONSE' | 'NETWORK_ERROR'
+  ) {
+    super(message)
+    this.name = 'RedirectCheckerError'
+  }
+}
+```
+
+**2. Helper Function for API Configuration Check**
+
+```typescript
+export function isApiUrlConfigured(): boolean {
+  return !!import.meta.env.VITE_REDIRECT_API_URL
+}
+```
+
+**3. Comprehensive Error Handling in Composable**
+
+```typescript
+export async function checkRedirect(inputUrl: string): Promise<RedirectResult> {
+  const normalized = inputUrl.startsWith('http://') || inputUrl.startsWith('https://')
+    ? inputUrl
+    : `https://${inputUrl}`
+  
+  const apiUrl = import.meta.env.VITE_REDIRECT_API_URL
+  
+  if (!apiUrl) {
+    throw new RedirectCheckerError(
+      'Redirect checker API is not configured. Please set VITE_REDIRECT_API_URL environment variable.',
+      'MISSING_API_URL'
+    )
+  }
+  
+  try {
+    const res = await fetch(`${apiUrl}?url=${encodeURIComponent(normalized)}`)
+    
+    if (!res.ok) {
+      throw new RedirectCheckerError(
+        `API returned status ${res.status}`,
+        'API_ERROR'
+      )
+    }
+    
+    const data = await res.json() as { hops?: RedirectHop[] }
+    
+    if (!data.hops || data.hops.length === 0) {
+      throw new RedirectCheckerError(
+        'API returned empty hop list',
+        'INVALID_RESPONSE'
+      )
+    }
+    
+    return {
+      inputUrl: normalized,
+      finalUrl: data.hops[data.hops.length - 1].url,
+      hops: data.hops,
+      redirected: data.hops.length > 1,
+    }
+  } catch (error) {
+    if (error instanceof RedirectCheckerError) {
+      throw error
+    }
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new RedirectCheckerError(
+        'Network error: unable to reach the redirect checker API',
+        'NETWORK_ERROR'
+      )
+    }
+    throw new RedirectCheckerError(
+      error instanceof Error ? error.message : 'Unknown error occurred',
+      'NETWORK_ERROR'
+    )
+  }
+}
+```
+
+**4. View with Computed Error Messages**
+
+```typescript
+const errorCode = ref<string | null>(null)
+
+const errorMessage = computed(() => {
+  if (!errorCode.value) return ''
+  switch (errorCode.value) {
+    case 'MISSING_API_URL':
+      return t('redirectChecker.error.missingApi')
+    case 'API_ERROR':
+      return t('redirectChecker.error.apiError')
+    case 'INVALID_RESPONSE':
+      return t('redirectChecker.error.invalidResponse')
+    case 'NETWORK_ERROR':
+      return t('redirectChecker.error.networkError')
+    default:
+      return t('redirectChecker.error.defaultError')
+  }
+})
+
+const errorTitle = computed(() => {
+  if (!errorCode.value) return ''
+  switch (errorCode.value) {
+    case 'MISSING_API_URL':
+      return t('redirectChecker.error.missingApi')
+    case 'API_ERROR':
+      return t('redirectChecker.error.apiError')
+    case 'INVALID_RESPONSE':
+      return t('redirectChecker.error.invalidResponse')
+    case 'NETWORK_ERROR':
+      return t('redirectChecker.error.networkError')
+    default:
+      return t('redirectChecker.error.defaultError')
+  }
+})
+
+async function check() {
+  if (!inputUrl.value) return
+  loading.value = true
+  result.value = null
+  errorCode.value = null
+  try {
+    result.value = await checkRedirect(inputUrl.value)
+  } catch (error) {
+    if (error instanceof RedirectCheckerError) {
+      errorCode.value = error.code
+    } else {
+      errorCode.value = 'NETWORK_ERROR'
+    }
+  } finally {
+    loading.value = false
+  }
+}
+```
+
+**5. i18n Translations for All Error States**
+
+```typescript
+// fr.ts
+redirectChecker: {
+  // ...
+  error: {
+    missingApi: 'API non configurée',
+    missingApiDesc: "Le Redirect Checker nécessite une configuration serveur. Contactez l'administrateur pour activer cette fonctionnalité.",
+    apiError: 'Erreur API',
+    invalidResponse: 'Réponse invalide',
+    networkError: 'Erreur réseau',
+    defaultError: 'Une erreur est survenue',
+  },
+}
+
+// en.ts
+redirectChecker: {
+  // ...
+  error: {
+    missingApi: 'API Not Configured',
+    missingApiDesc: 'The Redirect Checker requires server configuration. Contact the administrator to enable this feature.',
+    apiError: 'API Error',
+    invalidResponse: 'Invalid Response',
+    networkError: 'Network Error',
+    defaultError: 'An error occurred',
+  },
+}
+```
+
+**6. Comprehensive Test Coverage**
+
+Test all error scenarios:
+
+```typescript
+import { 
+  checkRedirect, 
+  RedirectCheckerError, 
+  isApiUrlConfigured 
+} from '../useRedirectChecker'
+
+describe('isApiUrlConfigured', () => {
+  it('returns true when VITE_REDIRECT_API_URL is set', () => {
+    vi.stubEnv('VITE_REDIRECT_API_URL', 'https://api.test.workers.dev')
+    expect(isApiUrlConfigured()).toBe(true)
+  })
+
+  it('returns false when VITE_REDIRECT_API_URL is not set', () => {
+    vi.stubEnv('VITE_REDIRECT_API_URL', undefined)
+    expect(isApiUrlConfigured()).toBe(false)
+  })
+})
+
+describe('checkRedirect', () => {
+  it('throws RedirectCheckerError with MISSING_API_URL when API URL is not configured', async () => {
+    vi.stubEnv('VITE_REDIRECT_API_URL', undefined)
+    
+    await expect(checkRedirect('https://example.com'))
+      .rejects
+      .toThrow(RedirectCheckerError)
+    
+    try {
+      await checkRedirect('https://example.com')
+    } catch (error) {
+      expect(error).toBeInstanceOf(RedirectCheckerError)
+      expect((error as RedirectCheckerError).code).toBe('MISSING_API_URL')
+      expect((error as RedirectCheckerError).message).toContain('not configured')
+    }
+  })
+
+  it('throws RedirectCheckerError with API_ERROR when API returns error status', async () => {
+    vi.stubEnv('VITE_REDIRECT_API_URL', 'https://redirect-checker.test.workers.dev')
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 500 }))
+
+    try {
+      await checkRedirect('https://example.com')
+    } catch (error) {
+      expect(error).toBeInstanceOf(RedirectCheckerError)
+      expect((error as RedirectCheckerError).code).toBe('API_ERROR')
+    }
+  })
+
+  it('throws RedirectCheckerError with INVALID_RESPONSE when API returns empty hops', async () => {
+    vi.stubEnv('VITE_REDIRECT_API_URL', 'https://redirect-checker.test.workers.dev')
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ hops: [] }),
+    }))
+    
+    try {
+      await checkRedirect('https://example.com')
+    } catch (error) {
+      expect(error).toBeInstanceOf(RedirectCheckerError)
+      expect((error as RedirectCheckerError).code).toBe('INVALID_RESPONSE')
+    }
+  })
+
+  it('throws RedirectCheckerError with NETWORK_ERROR on network failure', async () => {
+    vi.stubEnv('VITE_REDIRECT_API_URL', 'https://redirect-checker.test.workers.dev')
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
+
+    try {
+      await checkRedirect('https://example.com')
+    } catch (error) {
+      expect(error).toBeInstanceOf(RedirectCheckerError)
+      expect((error as RedirectCheckerError).code).toBe('NETWORK_ERROR')
+    }
+  })
+})
+```
+
+### Critical Bug: Missing Component Import
+
+**Symptom:** Input field not rendering on production site, only button visible.
+
+**Root Cause:** Component used in template but not imported in `<script setup>`:
+
+```vue
+<template>
+  <!-- ❌ This was in the template -->
+  <GiFormField
+    v-model="inputUrl"
+    type="url"
+    :label="t('redirectChecker.label')"
+  />
+</template>
+
+<script setup lang="ts">
+// ❌ But this import was missing!
+import GiFormField from '../components/GiFormField.vue'
+</script>
+```
+
+**Fix:** Add the missing import statement.
+
+**Verification:** After deployment, users may need to hard refresh (Ctrl+Shift+R / Cmd+Shift+R) to clear browser cache.
+
+### Files Modified
+
+- `src/composables/useRedirectChecker.ts` — Error class and handling
+- `src/composables/__tests__/useRedirectChecker.test.ts` — 11 tests for error scenarios
+- `src/views/RedirectCheckerView.vue` — Error state UI with computed messages
+- `src/i18n/fr.ts` — French error translations
+- `src/i18n/en.ts` — English error translations
+
+### Deployment Checklist
+
+1. ✅ Commit and push changes
+2. ✅ GitHub Actions builds with `VITE_REDIRECT_API_URL` secret injected
+3. ✅ Deploy to GitHub Pages
+4. ⚠️ Users may need hard refresh to see fix (browser cache)
+
+### Environment Variables
+
+**Required for Redirect Checker to work:**
+- `VITE_REDIRECT_API_URL` — Cloudflare Worker URL (e.g., `https://gi-redirect-checker.<subdomain>.workers.dev`)
+
+**To configure:**
+1. Deploy Cloudflare Worker from `workers/redirect-checker/`
+2. Add worker URL as GitHub secret: Settings → Secrets and variables → Actions → `VITE_REDIRECT_API_URL`
+3. Trigger new deployment (push commit or manual workflow run)
+
+### Pattern Reusability
+
+This error handling pattern can be applied to any tool that depends on external APIs:
+- `usePdfXConverter.ts` (PDF/X converter)
+- Any future tool with backend dependencies
+
+**Key principles:**
+1. Custom error class with specific error codes
+2. Check configuration before making API calls
+3. Wrap fetch errors in typed error classes
+4. Display contextual error messages in UI
+5. Provide actionable fallback (e.g., curl command)
+6. Test all error scenarios
+
+## RTK (Token-Optimized CLI)
+
+Always prefix commands with `rtk` for token savings:
+```bash
+rtk git status / log / diff / add / commit / push
+rtk npm run <script>
+```
