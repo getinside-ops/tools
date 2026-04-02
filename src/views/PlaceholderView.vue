@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout :title="t('placeholder.title')" :subtitle="t('placeholder.desc')">
+  <ToolPageLayout :title="t('placeholder.title')" :subtitle="t('placeholder.desc')" category="design">
     <template #icon>
       <Image />
     </template>
@@ -61,6 +61,8 @@
         </div>
       </GiResultCard>
     </div>
+
+    <template #about>{{ t('placeholder.about') }}</template>
   </ToolPageLayout>
 </template>
 

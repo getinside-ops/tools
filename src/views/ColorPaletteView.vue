@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('colorPalette.title')"
     :subtitle="t('colorPalette.desc')"
+    category="design"
   >
     <template #icon>
       <Palette />
@@ -30,6 +31,8 @@
         </div>
       </div>
     </div>
+
+    <template #about>{{ t('colorPalette.about') }}</template>
   </ToolPageLayout>
 </template>
 

@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('imageCropper.title')"
     :description="t('imageCropper.desc')"
+    category="design"
     @mousemove="onMouseMove"
     @mouseup="onMouseUp"
     @mouseleave="onMouseUp"
@@ -78,6 +79,8 @@
         </template>
       </GiResultCard>
     </div>
+
+    <template #about>{{ t('imageCropper.about') }}</template>
   </ToolPageLayout>
 </template>
 

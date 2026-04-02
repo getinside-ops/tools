@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout :title="t('favicon.title')" :description="t('favicon.desc')">
+  <ToolPageLayout :title="t('favicon.title')" :description="t('favicon.desc')" category="digital">
     <template #icon>
       <Image />
     </template>
@@ -32,6 +32,7 @@
         </GiResultCard>
       </div>
     </div>
+    <template #about>{{ t('favicon.about') }}</template>
   </ToolPageLayout>
 </template>
 

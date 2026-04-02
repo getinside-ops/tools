@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('imageFilters.title')"
     :description="t('imageFilters.desc')"
+    category="design"
   >
     <template #icon>
       <Wand :size="24" />
@@ -70,6 +71,8 @@
         <button class="gi-btn-primary" @click="downloadFiltered">⬇️ {{ t('imageFilters.download') }}</button>
       </template>
     </GiResultCard>
+
+    <template #about>{{ t('imageFilters.about') }}</template>
   </ToolPageLayout>
 </template>
 

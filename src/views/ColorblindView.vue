@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('colorblind.title')"
     :description="t('colorblind.desc')"
+    category="design"
   >
     <template #icon>
       <Eye :size="24" />
@@ -51,6 +52,8 @@
         <feColorMatrix type="matrix" :values="currentMatrix" />
       </filter>
     </svg>
+
+    <template #about>{{ t('colorblind.about') }}</template>
   </ToolPageLayout>
 </template>
 

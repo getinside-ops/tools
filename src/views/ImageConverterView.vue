@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('imageConverter.title')"
     :description="t('imageConverter.desc')"
+    category="design"
   >
     <template #icon>
       <Image :size="24" />
@@ -66,6 +67,8 @@
         </div>
       </GiResultCard>
     </div>
+
+    <template #about>{{ t('imageConverter.about') }}</template>
   </ToolPageLayout>
 </template>
 

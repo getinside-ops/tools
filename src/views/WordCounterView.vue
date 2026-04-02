@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout :title="t('wordCounter.title')" :description="t('wordCounter.desc')">
+  <ToolPageLayout :title="t('wordCounter.title')" :description="t('wordCounter.desc')" category="digital">
     <template #icon>
       <FileText />
     </template>
@@ -40,6 +40,7 @@
         <div class="gi-stat-label">{{ t('wordCounter.stats.readingTime') }}</div>
       </div>
     </div>
+    <template #about>{{ t('wordCounter.about') }}</template>
   </ToolPageLayout>
 </template>
 

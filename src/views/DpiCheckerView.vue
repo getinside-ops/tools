@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('dpiChecker.title')"
     :description="t('dpiChecker.desc')"
+    category="print"
   >
     <template #icon>
       <Ruler :size="24" />
@@ -155,6 +156,8 @@
         </div>
       </GiResultCard>
     </template>
+
+    <template #about>{{ t('dpiChecker.about') }}</template>
   </ToolPageLayout>
 </template>
 

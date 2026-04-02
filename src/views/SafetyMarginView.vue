@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout :title="t('safetyMargin.title')" :description="t('safetyMargin.desc')">
+  <ToolPageLayout :title="t('safetyMargin.title')" :description="t('safetyMargin.desc')" category="print">
     <template #icon>
       <Ruler />
     </template>
@@ -75,6 +75,8 @@
         </div>
       </GiResultCard>
     </div>
+
+    <template #about>{{ t('safetyMargin.about') }}</template>
   </ToolPageLayout>
 </template>
 

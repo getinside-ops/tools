@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('typeScale.title')"
     :description="t('typeScale.desc')"
+    category="design"
   >
     <template #icon>
       <Type :size="24" />
@@ -61,6 +62,8 @@
         </table>
       </div>
     </GiResultCard>
+
+    <template #about>{{ t('typeScale.about') }}</template>
   </ToolPageLayout>
 </template>
 

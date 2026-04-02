@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('metadata.title')"
     :description="t('metadata.desc')"
+    category="digital"
   >
     <template #icon>
       <FileText :size="24" />
@@ -41,6 +42,7 @@
         <img :src="previewUrl" class="preview-thumb" />
       </div>
     </GiResultCard>
+    <template #about>{{ t('metadata.about') }}</template>
   </ToolPageLayout>
 </template>
 

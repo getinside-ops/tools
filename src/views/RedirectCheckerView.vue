@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout :title="t('redirectChecker.title')" :description="t('redirectChecker.desc')">
+  <ToolPageLayout :title="t('redirectChecker.title')" :description="t('redirectChecker.desc')" category="digital">
     <template #icon>
       <Link class="tool-page-icon" />
     </template>
@@ -53,6 +53,7 @@
       </p>
       <code class="gi-code">curl -IL {{ inputUrl }}</code>
     </GiResultCard>
+    <template #about>{{ t('redirectChecker.about') }}</template>
   </ToolPageLayout>
 </template>
 

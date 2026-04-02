@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('utmBuilder.title')"
     :description="t('utmBuilder.desc')"
+    category="digital"
   >
     <template #icon>
       <Link />
@@ -48,6 +49,7 @@
         </button>
       </template>
     </GiResultCard>
+    <template #about>{{ t('utmBuilder.about') }}</template>
   </ToolPageLayout>
 </template>
 

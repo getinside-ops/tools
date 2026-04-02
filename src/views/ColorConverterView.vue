@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('colorConverter.title')"
     :description="t('colorConverter.desc')"
+    category="design"
   >
     <template #icon>
       <Palette />
@@ -63,6 +64,8 @@
         </template>
       </GiResultCard>
     </div>
+
+    <template #about>{{ t('colorConverter.about') }}</template>
   </ToolPageLayout>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout>
+  <ToolPageLayout category="design">
     <template #icon>
       <Palette />
     </template>
@@ -48,6 +48,8 @@
 
     <!-- Hidden Canvas -->
     <canvas ref="hiddenCanvas" style="display: none;"></canvas>
+
+    <template #about>{{ t('palette.about') }}</template>
   </ToolPageLayout>
 </template>
 

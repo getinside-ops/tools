@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('paperWeight.title')"
     :subtitle="t('paperWeight.desc')"
+    category="print"
   >
     <template #icon>
       <Weight />
@@ -98,6 +99,8 @@
         {{ t('paperWeight.reset') }}
       </button>
     </div>
+
+    <template #about>{{ t('paperWeight.about') }}</template>
   </ToolPageLayout>
 </template>
 

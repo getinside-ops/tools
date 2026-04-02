@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout :title="t('barcode.title')" :description="t('barcode.desc')">
+  <ToolPageLayout :title="t('barcode.title')" :description="t('barcode.desc')" category="print">
     <template #icon>
       <Barcode />
     </template>
@@ -281,6 +281,8 @@
         </GiResultCard>
       </div>
     </div>
+
+    <template #about>{{ t('barcode.about') }}</template>
   </ToolPageLayout>
 </template>
 

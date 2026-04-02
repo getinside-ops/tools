@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('imageCompressor.title')"
     :description="t('imageCompressor.desc')"
+    category="design"
   >
     <template #icon>
       <Image :size="24" />
@@ -74,6 +75,8 @@
         </template>
       </GiResultCard>
     </div>
+
+    <template #about>{{ t('imageCompressor.about') }}</template>
   </ToolPageLayout>
 </template>
 

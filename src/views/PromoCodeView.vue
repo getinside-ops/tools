@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout :title="t('promoCode.title')" :description="t('promoCode.desc')">
+  <ToolPageLayout :title="t('promoCode.title')" :description="t('promoCode.desc')" category="digital">
     <template #icon>
       <Tag />
     </template>
@@ -25,6 +25,7 @@
         </li>
       </ul>
     </template>
+    <template #about>{{ t('promoCode.about') }}</template>
   </ToolPageLayout>
 </template>
 

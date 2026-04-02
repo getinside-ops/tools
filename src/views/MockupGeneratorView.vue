@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('mockupGenerator.title')"
     :description="t('mockupGenerator.desc')"
+    category="design"
   >
     <template #icon>
       <Monitor />
@@ -24,6 +25,8 @@
         {{ copied ? t('mockupGenerator.copied') : t('mockupGenerator.copy') }}
       </button>
     </div>
+
+    <template #about>{{ t('mockupGenerator.about') }}</template>
   </ToolPageLayout>
 </template>
 
