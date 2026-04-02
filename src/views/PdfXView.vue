@@ -2,6 +2,7 @@
   <ToolPageLayout
     :title="t('pdfX.title')"
     :description="t('pdfX.desc')"
+    category="print"
   >
     <template #icon>
       <FileText :size="24" />
@@ -51,6 +52,7 @@
       </a>
       <p class="gi-disclaimer">{{ t('pdfX.disclaimer') }}</p>
     </GiResultCard>
+    <template #about>{{ t('pdfX.about') }}</template>
   </ToolPageLayout>
 </template>
 
