@@ -11,10 +11,14 @@
 
     <!-- Tool Header Card -->
     <div class="tool-header-card">
+      <div class="tool-header-sheen" aria-hidden="true"></div>
       <div class="tool-icon" v-if="$slots.icon">
         <slot name="icon"></slot>
       </div>
       <div class="tool-title-section">
+        <div class="tool-header-eyebrow">
+          {{ category ? t(`home.categories.${category}`) : t('nav.about') }}
+        </div>
         <div class="tool-title-row">
           <h1 class="tool-title">
             <slot name="title">{{ title }}</slot>
@@ -107,6 +111,28 @@ const { t } = useI18n()
   display: flex;
   align-items: flex-start;
   gap: 0.875rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-header-sheen {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), transparent 42%);
+  pointer-events: none;
+}
+
+.tool-header-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gi-brand);
 }
 
 .tool-icon {
