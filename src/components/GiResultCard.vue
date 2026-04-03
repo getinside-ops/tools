@@ -7,9 +7,9 @@
     ]"
   >
     <div class="gi-result-card-header">
-      <div class="gi-result-card-heading">
+      <div :id="headingId" class="gi-result-card-heading">
         <slot name="header">
-          <h3 v-if="title" :id="headingId" class="gi-result-card-title">{{ title }}</h3>
+          <h3 v-if="title" class="gi-result-card-title">{{ title }}</h3>
         </slot>
       </div>
       <button

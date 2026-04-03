@@ -62,4 +62,21 @@ describe('GiResultCard', () => {
     await wrapper.find('button').trigger('click')
     expect(wrapper.emitted('update:collapsed')).toEqual([[true]])
   })
+
+  it('keeps the collapsible toggle named when using a custom header slot', () => {
+    const wrapper = mount(GiResultCard, {
+      props: { collapsible: true, collapsed: false },
+      slots: {
+        header: '<span class="custom-heading">Custom header</span>',
+        default: 'Content'
+      }
+    })
+
+    const heading = wrapper.find('.gi-result-card-heading')
+    const toggle = wrapper.find('.gi-result-card-toggle')
+
+    expect(heading.attributes('id')).toBeDefined()
+    expect(toggle.attributes('aria-labelledby')).toBe(heading.attributes('id'))
+    expect(heading.text()).toContain('Custom header')
+  })
 })
