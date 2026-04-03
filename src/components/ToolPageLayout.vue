@@ -122,6 +122,7 @@ const { t } = useI18n()
   height: 100%;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), transparent 42%);
   pointer-events: none;
+  z-index: 0;
 }
 
 .tool-header-eyebrow {
@@ -146,6 +147,8 @@ const { t } = useI18n()
   justify-content: center;
   flex-shrink: 0;
   transition: all var(--gi-transition-base) var(--gi-ease-bounce);
+  position: relative;
+  z-index: 1;
 }
 
 .tool-header-card:hover .tool-icon {
@@ -157,6 +160,8 @@ const { t } = useI18n()
 .tool-title-section {
   flex: 1;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .tool-title-row {

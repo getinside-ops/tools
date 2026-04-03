@@ -52,12 +52,13 @@ describe('GiResultCard', () => {
 
   it('adds a collapsible modifier and emits updates when toggled', async () => {
     const wrapper = mount(GiResultCard, {
-      props: { collapsible: true, collapsed: false },
-      slots: { header: 'Title', default: 'Content' }
+      props: { title: 'Title', collapsible: true, collapsed: false },
+      slots: { default: 'Content' }
     })
 
     expect(wrapper.classes()).toContain('gi-result-card--collapsible')
-    expect(wrapper.find('button[aria-expanded]').exists()).toBe(true)
+    expect(wrapper.find('.gi-result-card-toggle').attributes('aria-expanded')).toBe('true')
+    expect(wrapper.find('.gi-result-card-toggle').attributes('aria-labelledby')).toBeDefined()
     await wrapper.find('button').trigger('click')
     expect(wrapper.emitted('update:collapsed')).toEqual([[true]])
   })

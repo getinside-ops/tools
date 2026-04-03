@@ -9,13 +9,14 @@
     <div class="gi-result-card-header">
       <div class="gi-result-card-heading">
         <slot name="header">
-          <h3 v-if="title" class="gi-result-card-title">{{ title }}</h3>
+          <h3 v-if="title" :id="headingId" class="gi-result-card-title">{{ title }}</h3>
         </slot>
       </div>
       <button
         v-if="collapsible"
         class="gi-result-card-toggle"
         :aria-expanded="!collapsed"
+        :aria-labelledby="headingId"
         @click="$emit('update:collapsed', !collapsed)"
       >
         <ChevronDown :class="{ 'is-collapsed': collapsed }" />
@@ -31,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed, getCurrentInstance } from 'vue'
 import { ChevronDown } from 'lucide-vue-next'
 
 export interface GiResultCardProps {
@@ -45,6 +47,9 @@ withDefaults(defineProps<GiResultCardProps>(), {
   collapsible: false,
   collapsed: false
 })
+
+const instance = getCurrentInstance()
+const headingId = computed(() => `gi-result-card-heading-${instance?.uid ?? 'static'}`)
 
 defineEmits<{
   'update:collapsed': [value: boolean]
