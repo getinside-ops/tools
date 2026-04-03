@@ -39,7 +39,10 @@
 
         <div
           class="gi-upload-zone"
+          role="button"
+          tabindex="0"
           @click="fileInputRef?.click()"
+          @keydown="handleKeydown"
           @dragover.prevent
           @drop.prevent="handleDrop"
         >
@@ -150,8 +153,11 @@ async function handlePaste(e: ClipboardEvent) {
     return
   }
 
+  let hasImageItem = false
+
   for (const item of items) {
     if (item.type.startsWith('image/')) {
+      hasImageItem = true
       const blob = item.getAsFile()
       if (blob) {
         const file = new File([blob], 'pasted-image.png', { type: blob.type })
@@ -159,6 +165,11 @@ async function handlePaste(e: ClipboardEvent) {
       }
       break
     }
+  }
+
+  if (!hasImageItem) {
+    localError.value = noClipboardError.value
+    emit('error', localError.value)
   }
 }
 

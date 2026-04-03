@@ -929,7 +929,7 @@ const fr = {
     },
   },
   imageUpload: {
-    kicker: 'Import image',
+    kicker: "Import d'image",
     intro: 'Collez depuis le presse-papiers ou importez depuis votre appareil au même endroit.',
     pasteTitle: 'Coller une image',
     pasteHint: 'Cliquez ici et appuyez sur Ctrl+V / Cmd+V',
