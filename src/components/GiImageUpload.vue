@@ -2,9 +2,9 @@
   <div class="gi-image-upload-wrapper">
     <div class="gi-image-upload-panel">
       <div class="gi-image-upload-header">
-        <p class="gi-image-upload-kicker">Image intake</p>
+        <p class="gi-image-upload-kicker">{{ uploadKickerText }}</p>
         <p class="gi-image-upload-intro">
-          Paste from your clipboard or drop a file into the same editorial-mint upload surface.
+          {{ uploadIntroText }}
         </p>
       </div>
 
@@ -34,7 +34,7 @@
         </div>
 
         <div v-if="pasteZone" class="gi-upload-divider" aria-hidden="true">
-          <span>or</span>
+          <span>{{ uploadDividerText }}</span>
         </div>
 
         <div
@@ -60,7 +60,7 @@
               </svg>
             </div>
             <p class="gi-upload-title">{{ uploadTextValue }}</p>
-            <p class="gi-upload-hint">Click to browse or drag an image into this panel.</p>
+            <p class="gi-upload-hint">{{ uploadHintText }}</p>
           </div>
         </div>
       </div>
@@ -120,6 +120,10 @@ const computedAccept = computed(() => props.accept.join(','))
 const pasteTitleText = computed(() => props.pasteTitle || t('imageUpload.pasteTitle'))
 const pasteHintText = computed(() => props.pasteHint || t('imageUpload.pasteHint'))
 const uploadTextValue = computed(() => props.uploadText || t('imageUpload.uploadText'))
+const uploadKickerText = computed(() => t('imageUpload.kicker'))
+const uploadIntroText = computed(() => t('imageUpload.intro'))
+const uploadHintText = computed(() => t('imageUpload.hint'))
+const uploadDividerText = computed(() => t('imageUpload.divider'))
 const invalidFileError = computed(() => t('imageUpload.error.invalidFile'))
 const noClipboardError = computed(() => t('imageUpload.error.noClipboard'))
 

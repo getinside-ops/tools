@@ -931,9 +931,13 @@ const en: Messages = {
     },
   },
   imageUpload: {
+    kicker: 'Image input',
+    intro: 'Paste from your clipboard or upload from your device in one place.',
     pasteTitle: 'Paste an image',
     pasteHint: 'Click here and press Ctrl+V / Cmd+V',
     uploadText: 'or click to upload from your device',
+    hint: 'Click to browse or drag an image into this panel.',
+    divider: 'or',
     error: {
       invalidFile: 'Invalid file type or size',
       noClipboard: 'No clipboard data available',

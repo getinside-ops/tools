@@ -33,11 +33,6 @@
         </div>
       </div>
       <div class="tool-title-section">
-        <div class="tool-header-microcopy">
-          <span class="tool-header-brief">Editorial utility</span>
-          <span class="tool-header-dot" aria-hidden="true"></span>
-          <span class="tool-header-brief">Premium shared primitive</span>
-        </div>
         <p class="tool-description">
           <slot name="description">{{ description }}</slot>
         </p>
@@ -199,31 +194,6 @@ const { t } = useI18n()
   z-index: 1;
 }
 
-.tool-header-microcopy {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.6rem;
-  padding: 0.3rem 0.7rem;
-  border-radius: var(--gi-radius-pill);
-  background: color-mix(in srgb, var(--gi-brand-fade) 75%, var(--gi-surface));
-  color: var(--gi-brand-dark);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.tool-header-brief {
-  white-space: nowrap;
-}
-
-.tool-header-dot {
-  width: 0.28rem;
-  height: 0.28rem;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.45;
-}
-
 .tool-title-row {
   display: flex;
   align-items: center;
@@ -338,10 +308,6 @@ const { t } = useI18n()
 
   .tool-header-topline {
     gap: 0.8rem;
-  }
-
-  .tool-header-microcopy {
-    flex-wrap: wrap;
   }
 }
 </style>

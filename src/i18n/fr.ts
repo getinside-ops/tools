@@ -929,9 +929,13 @@ const fr = {
     },
   },
   imageUpload: {
+    kicker: 'Import image',
+    intro: 'Collez depuis le presse-papiers ou importez depuis votre appareil au même endroit.',
     pasteTitle: 'Coller une image',
     pasteHint: 'Cliquez ici et appuyez sur Ctrl+V / Cmd+V',
     uploadText: 'ou cliquez pour télécharger depuis votre appareil',
+    hint: 'Cliquez pour parcourir ou glissez une image dans ce panneau.',
+    divider: 'ou',
     error: {
       invalidFile: 'Type ou taille de fichier invalide',
       noClipboard: 'Aucune donnée dans le presse-papiers',
