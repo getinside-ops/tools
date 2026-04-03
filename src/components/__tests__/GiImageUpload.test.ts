@@ -13,6 +13,15 @@ const i18n = createI18n({
 })
 
 describe('GiImageUpload', () => {
+  it('should render the upgraded upload panel shell', () => {
+    const wrapper = mount(GiImageUpload, {
+      global: { plugins: [i18n] },
+    })
+
+    expect(wrapper.find('.gi-image-upload-panel').exists()).toBe(true)
+    expect(wrapper.find('.gi-upload-divider').exists()).toBe(true)
+  })
+
   it('should render paste zone by default', () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [i18n] },

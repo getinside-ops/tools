@@ -12,22 +12,32 @@
     <!-- Tool Header Card -->
     <div class="tool-header-card">
       <div class="tool-header-sheen" aria-hidden="true"></div>
-      <div class="tool-icon" v-if="$slots.icon">
-        <slot name="icon"></slot>
+      <div class="tool-header-accent" aria-hidden="true"></div>
+      <div class="tool-header-topline">
+        <div class="tool-icon" v-if="$slots.icon">
+          <slot name="icon"></slot>
+        </div>
+        <div class="tool-hero-copy">
+          <div class="tool-header-eyebrow">
+            {{ category ? t(`home.categories.${category}`) : t('nav.about') }}
+          </div>
+          <div class="tool-title-row">
+            <h1 class="tool-title">
+              <slot name="title">{{ title }}</slot>
+            </h1>
+            <span v-if="category" class="tool-category-badge" :class="`tool-category-badge--${category}`">
+              {{ t(`home.categories.${category}`) }}
+            </span>
+          </div>
+          <p v-if="subtitle" class="tool-subtitle">{{ subtitle }}</p>
+        </div>
       </div>
       <div class="tool-title-section">
-        <div class="tool-header-eyebrow">
-          {{ category ? t(`home.categories.${category}`) : t('nav.about') }}
+        <div class="tool-header-microcopy">
+          <span class="tool-header-brief">Editorial utility</span>
+          <span class="tool-header-dot" aria-hidden="true"></span>
+          <span class="tool-header-brief">Premium shared primitive</span>
         </div>
-        <div class="tool-title-row">
-          <h1 class="tool-title">
-            <slot name="title">{{ title }}</slot>
-          </h1>
-          <span v-if="category" class="tool-category-badge" :class="`tool-category-badge--${category}`">
-            {{ t(`home.categories.${category}`) }}
-          </span>
-        </div>
-        <p v-if="subtitle" class="tool-subtitle">{{ subtitle }}</p>
         <p class="tool-description">
           <slot name="description">{{ description }}</slot>
         </p>
@@ -103,16 +113,18 @@ const { t } = useI18n()
 
 /* Header Card */
 .tool-header-card {
-  background: var(--gi-surface);
-  border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius-lg);
-  padding: 1.125rem 1.25rem;
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--gi-mint) 22%, transparent), transparent 36%),
+    linear-gradient(180deg, color-mix(in srgb, var(--gi-surface) 94%, var(--gi-bg-soft)), var(--gi-surface));
+  border: 1px solid color-mix(in srgb, var(--gi-brand) 20%, var(--gi-border));
+  border-radius: var(--gi-radius-xl);
+  padding: 1.25rem;
   margin-bottom: 1.5rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.875rem;
+  display: grid;
+  gap: 1rem;
   position: relative;
   overflow: hidden;
+  box-shadow: var(--gi-shadow-sm);
 }
 
 .tool-header-sheen {
@@ -123,6 +135,30 @@ const { t } = useI18n()
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), transparent 42%);
   pointer-events: none;
   z-index: 0;
+}
+
+.tool-header-accent {
+  position: absolute;
+  inset: auto -4rem -4rem auto;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--gi-mint) 34%, transparent), transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tool-header-topline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.95rem;
+  position: relative;
+  z-index: 1;
+}
+
+.tool-hero-copy {
+  min-width: 0;
+  flex: 1;
 }
 
 .tool-header-eyebrow {
@@ -137,11 +173,12 @@ const { t } = useI18n()
 }
 
 .tool-icon {
-  width: 40px;
-  height: 40px;
-  background: var(--gi-brand-fade);
-  color: var(--gi-brand);
-  border-radius: var(--gi-radius-md);
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand-fade) 75%, #fff), color-mix(in srgb, var(--gi-brand) 16%, var(--gi-brand-fade)));
+  color: var(--gi-brand-dark);
+  border: 1px solid color-mix(in srgb, var(--gi-brand) 30%, transparent);
+  border-radius: var(--gi-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -153,15 +190,38 @@ const { t } = useI18n()
 
 .tool-header-card:hover .tool-icon {
   transform: scale(1.05);
-  background: var(--gi-brand);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand) 88%, #fff), var(--gi-brand));
   color: white;
 }
 
 .tool-title-section {
-  flex: 1;
-  min-width: 0;
   position: relative;
   z-index: 1;
+}
+
+.tool-header-microcopy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--gi-radius-pill);
+  background: color-mix(in srgb, var(--gi-brand-fade) 75%, var(--gi-surface));
+  color: var(--gi-brand-dark);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tool-header-brief {
+  white-space: nowrap;
+}
+
+.tool-header-dot {
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.45;
 }
 
 .tool-title-row {
@@ -174,8 +234,9 @@ const { t } = useI18n()
 
 .tool-title {
   font-family: 'Garnett', 'Inter', system-ui, sans-serif;
-  font-size: var(--gi-font-size-xl);
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
   font-weight: 700;
+  line-height: 1.05;
   color: var(--gi-text);
   margin: 0;
 }
@@ -213,9 +274,10 @@ const { t } = useI18n()
 }
 
 .tool-description {
-  font-size: var(--gi-font-size-base);
-  color: var(--gi-text-muted);
-  line-height: 1.6;
+  max-width: 56ch;
+  font-size: 1rem;
+  color: color-mix(in srgb, var(--gi-text-muted) 92%, var(--gi-text));
+  line-height: 1.7;
   margin: 0;
 }
 
@@ -263,5 +325,23 @@ const { t } = useI18n()
   color: var(--gi-text-muted);
   line-height: 1.7;
   margin: 0;
+}
+
+@media (max-width: 640px) {
+  .tool-page {
+    padding-inline: 1rem;
+  }
+
+  .tool-header-card {
+    padding: 1.1rem;
+  }
+
+  .tool-header-topline {
+    gap: 0.8rem;
+  }
+
+  .tool-header-microcopy {
+    flex-wrap: wrap;
+  }
 }
 </style>
