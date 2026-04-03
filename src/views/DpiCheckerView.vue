@@ -7,35 +7,89 @@
     <template #icon>
       <Ruler :size="24" />
     </template>
-    <!-- Upload Zone -->
-    <GiImageUpload
-      @upload="handleImageUpload"
-      @error="handleError"
-    />
 
-    <p class="gi-or">{{ t('dpiChecker.orManual') }}</p>
+    <section class="dpi-analysis-stage">
+      <div class="dpi-stage-intro">
+        <p class="dpi-stage-kicker">{{ t('dpiChecker.analysisStage.kicker') }}</p>
+        <h2 class="dpi-stage-title">{{ t('dpiChecker.analysisStage.title') }}</h2>
+        <p class="dpi-stage-description">{{ t('dpiChecker.analysisStage.description') }}</p>
+      </div>
 
-    <!-- Manual Input -->
-    <div class="gi-row">
-      <GiFormField
-        :label="t('dpiChecker.widthPx')"
-        v-model="widthPx"
-        type="number"
-        min="1"
-      />
-      <GiFormField
-        :label="t('dpiChecker.heightPx')"
-        v-model="heightPx"
-        type="number"
-        min="1"
-      />
-    </div>
+      <div class="dpi-stage-grid">
+        <div class="dpi-stage-inputs">
+          <GiImageUpload
+            @upload="handleImageUpload"
+            @error="handleError"
+          />
 
-    <!-- Results -->
-    <template v-if="widthPx > 0 && heightPx > 0">
-      <!-- DPI Table -->
+          <div class="dpi-manual-panel">
+            <div class="dpi-manual-header">
+              <h3 class="dpi-panel-title">{{ t('dpiChecker.analysisStage.manualTitle') }}</h3>
+              <p class="dpi-panel-description">{{ t('dpiChecker.analysisStage.manualHint') }}</p>
+            </div>
+
+            <div class="dpi-manual-grid">
+              <GiFormField
+                :label="t('dpiChecker.widthPx')"
+                v-model="widthPx"
+                type="number"
+                min="1"
+              />
+              <GiFormField
+                :label="t('dpiChecker.heightPx')"
+                v-model="heightPx"
+                type="number"
+                min="1"
+              />
+            </div>
+
+            <p v-if="uploadError" class="dpi-stage-error">{{ uploadError }}</p>
+          </div>
+        </div>
+
+        <GiResultCard
+          v-if="hasDimensions"
+          class="dpi-stage-summary"
+          :title="t('dpiChecker.analysisStage.summaryTitle')"
+          :variant="summaryVariant"
+        >
+          <dl class="dpi-summary-grid">
+            <div class="dpi-summary-item">
+              <dt>{{ t('dpiChecker.analysisStage.sourceLabel') }}</dt>
+              <dd>{{ imagePreview ? t('dpiChecker.analysisStage.sourceUploaded') : t('dpiChecker.analysisStage.sourceManual') }}</dd>
+            </div>
+            <div class="dpi-summary-item">
+              <dt>{{ t('dpiChecker.analysisStage.nativeSizeLabel') }}</dt>
+              <dd>{{ numericWidth }} × {{ numericHeight }} px</dd>
+            </div>
+            <div class="dpi-summary-item">
+              <dt>{{ t('dpiChecker.analysisStage.orientationLabel') }}</dt>
+              <dd>{{ orientation ? t(`dpiChecker.orientation.${orientation}`) : '—' }}</dd>
+            </div>
+            <div class="dpi-summary-item">
+              <dt>{{ t('dpiChecker.analysisStage.bestFitLabel') }}</dt>
+              <dd>{{ bestFormat ?? t('dpiChecker.analysisStage.bestFitFallback') }}</dd>
+            </div>
+          </dl>
+
+          <div class="dpi-summary-callout" :class="`dpi-summary-callout--${summaryTone}`">
+            <span class="dpi-summary-callout-label">{{ t('dpiChecker.analysisStage.professionalLabel') }}</span>
+            <strong class="dpi-summary-callout-value">
+              {{ professionalDimensions?.widthCm }} × {{ professionalDimensions?.heightCm }} cm
+            </strong>
+            <span class="dpi-summary-callout-status">{{ t(`dpiChecker.status.${summaryTone}`) }}</span>
+          </div>
+        </GiResultCard>
+
+        <div v-else class="dpi-stage-placeholder">
+          <p class="dpi-stage-placeholder-copy">{{ t('dpiChecker.analysisStage.empty') }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section v-if="hasDimensions" class="dpi-primary-results">
       <GiResultCard :title="t('dpiChecker.resultTitle')">
-        <table class="gi-table gi-dpi-table" style="margin-top:0.75rem">
+        <table class="gi-table dpi-dimensions-table">
           <thead>
             <tr>
               <th>{{ t('dpiChecker.dpiCol') }}</th>
@@ -45,10 +99,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in dimensions" :key="row.dpi" :class="`gi-dpi-row-${getDpiColor(row.dpi)}`">
+            <tr v-for="row in dimensions" :key="row.dpi" :class="`dpi-dimensions-row-${getDpiColor(row.dpi)}`">
               <td>
                 <strong>{{ row.dpi }} dpi</strong>
-                <span class="gi-dpi-label">{{ getDpiLabel(row.dpi) }}</span>
+                <span class="dpi-dimensions-label">{{ getDpiLabel(row.dpi) }}</span>
               </td>
               <td>{{ row.widthCm }} cm</td>
               <td>{{ row.heightCm }} cm</td>
@@ -61,14 +115,15 @@
           </tbody>
         </table>
       </GiResultCard>
+    </section>
 
-      <!-- Format Compatibility -->
-      <GiResultCard :title="t('dpiChecker.formatTitle')" style="margin-top:1rem">
-        <div class="gi-format-section">
-          <h3 class="gi-format-section-title">{{ t('dpiChecker.featuredFormats') }}</h3>
-          <div class="gi-format-grid">
-            <div v-for="fmt in FEATURED_FORMATS" :key="fmt" class="gi-format-card">
-              <span class="gi-format-name">{{ fmt }}</span>
+    <section v-if="hasDimensions" class="dpi-curated-panels">
+      <GiResultCard :title="t('dpiChecker.formatTitle')">
+        <div class="dpi-format-section">
+          <h3 class="dpi-section-title">{{ t('dpiChecker.featuredFormats') }}</h3>
+          <div class="dpi-format-grid">
+            <div v-for="fmt in FEATURED_FORMATS" :key="fmt" class="dpi-format-card">
+              <span class="dpi-format-name">{{ fmt }}</span>
               <span :class="`gi-status gi-status-${formatStatus[fmt]}`">
                 {{ t(`dpiChecker.status.${formatStatus[fmt]}`) }}
               </span>
@@ -76,38 +131,40 @@
           </div>
         </div>
 
-        <div class="gi-format-section">
-          <h3 class="gi-format-section-title">{{ t('dpiChecker.otherFormats') }}</h3>
+        <div class="dpi-format-section">
+          <div class="dpi-section-heading">
+            <h3 class="dpi-section-title">{{ t('dpiChecker.otherFormats') }}</h3>
+            <button
+              type="button"
+              class="gi-btn-ghost dpi-toggle-button"
+              @click="showExtendedFormats = !showExtendedFormats"
+            >
+              {{ t(showExtendedFormats ? 'dpiChecker.showLess' : 'dpiChecker.showMore') }}
+            </button>
+          </div>
+
           <transition name="slide">
-            <div v-if="showExtendedFormats" class="gi-format-grid gi-extended-grid">
-              <div v-for="fmt in EXTENDED_FORMATS" :key="fmt" class="gi-format-card">
-                <span class="gi-format-name">{{ fmt }}</span>
+            <div v-if="showExtendedFormats" class="dpi-format-grid">
+              <div v-for="fmt in EXTENDED_FORMATS" :key="fmt" class="dpi-format-card">
+                <span class="dpi-format-name">{{ fmt }}</span>
                 <span :class="`gi-status gi-status-${formatStatus[fmt]}`">
                   {{ t(`dpiChecker.status.${formatStatus[fmt]}`) }}
                 </span>
               </div>
             </div>
           </transition>
-          <button
-            type="button"
-            class="gi-btn-ghost gi-btn-link"
-            @click="showExtendedFormats = !showExtendedFormats"
-          >
-            {{ t(showExtendedFormats ? 'dpiChecker.showLess' : 'dpiChecker.showMore') }}
-          </button>
         </div>
       </GiResultCard>
 
-      <!-- Recommended Uses -->
-      <GiResultCard :title="t('dpiChecker.recommendedUse.title')" style="margin-top:1rem">
-        <div class="gi-recommended-grid">
-          <div class="gi-recommended-section gi-suitable">
+      <GiResultCard :title="t('dpiChecker.recommendedUse.title')">
+        <div class="dpi-recommended-grid">
+          <div class="dpi-recommended-section dpi-recommended-section--suitable">
             <h4>{{ t('dpiChecker.recommendedUse.suitable') }}</h4>
             <ul>
               <li v-for="use in recommendedUses.suitable" :key="use">{{ use }}</li>
             </ul>
           </div>
-          <div v-if="recommendedUses.notSuitable.length > 0" class="gi-recommended-section gi-not-suitable">
+          <div v-if="recommendedUses.notSuitable.length > 0" class="dpi-recommended-section dpi-recommended-section--not-suitable">
             <h4>{{ t('dpiChecker.recommendedUse.notSuitable') }}</h4>
             <ul>
               <li v-for="use in recommendedUses.notSuitable" :key="use">{{ use }}</li>
@@ -116,68 +173,73 @@
         </div>
       </GiResultCard>
 
-      <!-- Visual Comparison -->
-      <GiResultCard :title="t('dpiChecker.visualComparison.title')" style="margin-top:1rem">
-        <p class="gi-comparison-desc">{{ t('dpiChecker.visualComparison.description') }}</p>
-        <div class="gi-comparison-grid">
-          <div v-for="row in dimensions" :key="row.dpi" class="gi-comparison-item">
-            <div class="gi-comparison-header">
-              <span class="gi-comparison-dpi">{{ row.dpi }} DPI</span>
-              <span class="gi-comparison-label">{{ getDpiLabel(row.dpi) }}</span>
+      <GiResultCard :title="t('dpiChecker.visualComparison.title')" class="dpi-comparison-card">
+        <p class="dpi-comparison-desc">{{ t('dpiChecker.visualComparison.description') }}</p>
+        <div class="dpi-comparison-grid">
+          <div v-for="row in dimensions" :key="row.dpi" class="dpi-comparison-item">
+            <div class="dpi-comparison-header">
+              <span class="dpi-comparison-dpi">{{ row.dpi }} dpi</span>
+              <span class="dpi-comparison-label">{{ getDpiLabel(row.dpi) }}</span>
             </div>
-            <div class="gi-comparison-visual">
-              <svg :viewBox="getComparisonViewBox(row.widthCm, row.heightCm)" class="gi-comparison-svg">
+            <div class="dpi-comparison-visual">
+              <svg :viewBox="getComparisonViewBox(row.widthCm, row.heightCm)" class="dpi-comparison-svg">
                 <rect
                   :width="getComparisonWidth(row.widthCm, row.heightCm)"
                   :height="getComparisonHeight(row.widthCm, row.heightCm)"
-                  :class="`gi-comparison-rect gi-comparison-${getDpiColor(row.dpi)}`"
-                  rx="4"
+                  :class="`dpi-comparison-rect dpi-comparison-${getDpiColor(row.dpi)}`"
+                  rx="10"
                 />
               </svg>
             </div>
-            <div class="gi-comparison-dims">{{ row.widthCm }} × {{ row.heightCm }} cm</div>
+            <div class="dpi-comparison-dims">{{ row.widthCm }} × {{ row.heightCm }} cm</div>
           </div>
         </div>
       </GiResultCard>
+    </section>
 
-      <!-- Educational Section -->
-      <GiResultCard :title="t('dpiChecker.educational.title')" collapsible style="margin-top:1rem">
-        <div class="gi-educational-content">
-          <h3 class="gi-edu-title">{{ t('dpiChecker.educational.whatIsDpi') }}</h3>
-          <p class="gi-edu-text">{{ t('dpiChecker.educational.dpiDefinition') }}</p>
+    <GiResultCard
+      class="dpi-education-card"
+      :title="t('dpiChecker.educational.title')"
+      collapsible
+      :collapsed="educationCollapsed"
+      @update:collapsed="educationCollapsed = $event"
+    >
+      <div class="dpi-educational-content">
+        <h3 class="dpi-education-title">{{ t('dpiChecker.educational.whatIsDpi') }}</h3>
+        <p class="dpi-education-text">{{ t('dpiChecker.educational.dpiDefinition') }}</p>
 
-          <h3 class="gi-edu-title">{{ t('dpiChecker.educational.recommendedValues') }}</h3>
-          <ul class="gi-edu-list">
-            <li>{{ t('dpiChecker.educational.dpiLevels.web') }}</li>
-            <li>{{ t('dpiChecker.educational.dpiLevels.large') }}</li>
-            <li>{{ t('dpiChecker.educational.dpiLevels.print') }}</li>
-            <li>{{ t('dpiChecker.educational.dpiLevels.photo') }}</li>
-          </ul>
-        </div>
-      </GiResultCard>
-    </template>
+        <h3 class="dpi-education-title">{{ t('dpiChecker.educational.recommendedValues') }}</h3>
+        <ul class="dpi-education-list">
+          <li>{{ t('dpiChecker.educational.dpiLevels.web') }}</li>
+          <li>{{ t('dpiChecker.educational.dpiLevels.large') }}</li>
+          <li>{{ t('dpiChecker.educational.dpiLevels.print') }}</li>
+          <li>{{ t('dpiChecker.educational.dpiLevels.photo') }}</li>
+        </ul>
+      </div>
+    </GiResultCard>
 
     <template #about>{{ t('dpiChecker.about') }}</template>
   </ToolPageLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Ruler } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 import GiResultCard from '../components/GiResultCard.vue'
+import GiImageUpload from '../components/GiImageUpload.vue'
 import {
   calculatePrintDimensions,
   getFormatStatus,
   getRecommendedUses,
   getDpiColor,
   getDpiLabel,
+  getOrientation,
   FEATURED_FORMATS,
   EXTENDED_FORMATS,
 } from '../composables/useDpiChecker'
-import GiImageUpload from '../components/GiImageUpload.vue'
 
 const { t } = useI18n()
 const widthPx = ref(0)
@@ -185,10 +247,31 @@ const heightPx = ref(0)
 const imagePreview = ref<string | null>(null)
 const showExtendedFormats = ref(false)
 const uploadError = ref('')
+const educationCollapsed = ref(true)
 
-const dimensions = computed(() => calculatePrintDimensions(widthPx.value, heightPx.value))
-const formatStatus = computed(() => getFormatStatus(widthPx.value, heightPx.value))
-const recommendedUses = computed(() => getRecommendedUses(widthPx.value, heightPx.value))
+const numericWidth = computed(() => Number(widthPx.value) || 0)
+const numericHeight = computed(() => Number(heightPx.value) || 0)
+const hasDimensions = computed(() => numericWidth.value > 0 && numericHeight.value > 0)
+const orientation = computed(() => (
+  hasDimensions.value ? getOrientation(numericWidth.value, numericHeight.value) : null
+))
+const dimensions = computed(() => calculatePrintDimensions(numericWidth.value, numericHeight.value))
+const formatStatus = computed(() => getFormatStatus(numericWidth.value, numericHeight.value))
+const recommendedUses = computed(() => getRecommendedUses(numericWidth.value, numericHeight.value))
+const bestFormat = computed(() => recommendedUses.value.suitable[0] ?? null)
+const professionalDimensions = computed(() => dimensions.value.find(row => row.dpi === 300) ?? null)
+const summaryTone = computed<'ok' | 'warning' | 'error'>(() => {
+  const featuredStatuses = FEATURED_FORMATS.map(format => formatStatus.value[format])
+
+  if (featuredStatuses.includes('ok')) return 'ok'
+  if (featuredStatuses.includes('warning')) return 'warning'
+  return 'error'
+})
+const summaryVariant = computed<'success' | 'warning' | 'error'>(() => {
+  if (summaryTone.value === 'ok') return 'success'
+  if (summaryTone.value === 'warning') return 'warning'
+  return 'error'
+})
 
 function handleImageUpload(file: File) {
   uploadError.value = ''
@@ -207,18 +290,13 @@ function handleError(error: string) {
   uploadError.value = error
 }
 
-// removeImage is no longer needed - user resets via GiImageUpload's built-in clear button
-
-// changeImage is no longer needed - GiImageUpload handles reset internally
-
-// Visual comparison helpers
-const MAX_SIZE = 120 // max dimension in pixels for comparison SVG
+const MAX_SIZE = 120
 
 function getComparisonViewBox(wCm: number, hCm: number) {
   const max = Math.max(wCm, hCm)
   const scale = MAX_SIZE / max
-  const w = wCm * scale + 16
-  const h = hCm * scale + 16
+  const w = wCm * scale + 24
+  const h = hCm * scale + 24
   return `0 0 ${w} ${h}`
 }
 
@@ -236,413 +314,519 @@ function getComparisonHeight(wCm: number, hCm: number) {
 </script>
 
 <style scoped>
-/* Upload Zone */
-.gi-upload-zone {
-  border: 2px dashed var(--gi-border);
-  border-radius: var(--gi-radius-lg);
-  padding: 2.5rem 2rem;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.15s, background-color 0.15s;
-  margin-bottom: 1rem;
-  background: var(--gi-bg-alt);
-}
-.gi-upload-zone:hover {
-  border-color: var(--gi-brand);
-  background: rgba(10, 170, 142, 0.03);
-}
-.gi-upload-zone.is-dragover {
-  border-color: var(--gi-brand);
-  background: rgba(10, 170, 142, 0.08);
-  transform: scale(1.01);
-}
-.gi-upload-icon {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 0.75rem;
-  color: var(--gi-brand);
-  opacity: 0.8;
-}
-.gi-upload-text {
-  display: block;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--gi-text);
-  margin-bottom: 0.25rem;
-}
-.gi-upload-sub {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  margin-bottom: 0.5rem;
-}
-.gi-paste-hint {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--gi-text-muted);
-  background: var(--gi-bg);
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--gi-radius);
-  border: 1px solid var(--gi-border);
-}
-
-/* Image Preview */
-.gi-image-preview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-.gi-preview-image {
-  max-width: 100%;
-  max-height: 200px;
-  object-fit: contain;
-  border-radius: var(--gi-radius);
-  border: 1px solid var(--gi-border);
-}
-.gi-preview-info {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.gi-preview-dims {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--gi-text);
-}
-.gi-preview-orientation {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: var(--gi-radius);
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-.gi-orientation-portrait {
-  background: var(--gi-tint-blue-2);
-  color: var(--gi-tint-blue-12);
-}
-.gi-orientation-landscape {
-  background: var(--gi-tint-purple-2);
-  color: var(--gi-tint-purple-12);
-}
-.gi-orientation-square {
-  background: var(--gi-tint-gray-2);
-  color: var(--gi-tint-gray-12);
-}
-.gi-preview-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* Or divider */
-.gi-or {
-  text-align: center;
-  color: var(--gi-text-muted);
-  font-size: 0.85rem;
-  margin: 0.5rem 0 1rem;
+.dpi-analysis-stage {
   position: relative;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--gi-brand) 18%, var(--gi-border));
+  border-radius: var(--gi-radius-xl);
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--gi-mint) 20%, transparent), transparent 38%),
+    linear-gradient(180deg, color-mix(in srgb, var(--gi-surface) 94%, var(--gi-bg-soft)), var(--gi-surface));
+  box-shadow: var(--gi-shadow-sm);
+  overflow: hidden;
 }
-.gi-or::before,
-.gi-or::after {
+
+.dpi-analysis-stage::before {
   content: '';
   position: absolute;
-  top: 50%;
-  width: 30%;
-  height: 1px;
-  background: var(--gi-border);
-}
-.gi-or::before { left: 0; }
-.gi-or::after { right: 0; }
-
-/* Manual Input Row */
-.gi-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), transparent 40%);
+  pointer-events: none;
 }
 
-/* DPI Table */
-.gi-dpi-table th {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--gi-text-muted);
-  font-weight: 600;
-}
-.gi-dpi-table td {
-  padding: 0.75rem 0.5rem;
-  vertical-align: middle;
-}
-.gi-dpi-label {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--gi-text-muted);
-  margin-top: 0.15rem;
-}
-.gi-dpi-row-ok {
-  background: rgba(10, 170, 142, 0.04);
-}
-.gi-dpi-row-warning {
-  background: rgba(255, 196, 0, 0.04);
-}
-.gi-dpi-row-error {
-  background: rgba(255, 0, 0, 0.03);
+.dpi-stage-intro,
+.dpi-stage-grid {
+  position: relative;
+  z-index: 1;
 }
 
-/* Format Section */
-.gi-format-section {
+.dpi-stage-intro {
+  max-width: 44rem;
   margin-bottom: 1.25rem;
 }
-.gi-format-section:last-child {
-  margin-bottom: 0;
+
+.dpi-stage-kicker {
+  margin: 0 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--gi-brand-dark);
 }
-.gi-format-section-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--gi-text);
-  margin-bottom: 0.75rem;
-}
-.gi-format-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-.gi-extended-grid {
-  animation: slideDown 0.2s ease-out;
-}
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.gi-format-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-  background: var(--gi-bg);
-  border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-  gap: 0.75rem;
-}
-.gi-format-name {
-  font-weight: 600;
-  font-size: 0.95rem;
+
+.dpi-stage-title {
+  margin: 0 0 0.5rem;
+  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  line-height: 1.05;
   color: var(--gi-text);
 }
 
-/* Recommended Uses */
-.gi-recommended-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-top: 0.75rem;
-}
-@media (min-width: 640px) {
-  .gi-recommended-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-.gi-recommended-section h4 {
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-.gi-recommended-section ul {
-  list-style: none;
-  padding: 0;
+.dpi-stage-description {
   margin: 0;
-}
-.gi-recommended-section li {
-  font-size: 0.85rem;
-  padding: 0.4rem 0.6rem;
-  margin-bottom: 0.25rem;
-  background: var(--gi-bg);
-  border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius);
-}
-.gi-suitable h4 {
-  color: var(--gi-brand);
-}
-.gi-suitable li {
-  border-color: var(--gi-tint-green-8);
-  background: var(--gi-tint-green-1);
-}
-.gi-not-suitable h4 {
-  color: var(--gi-tint-red-11);
-}
-.gi-not-suitable li {
-  border-color: var(--gi-tint-red-6);
-  background: var(--gi-tint-red-1);
+  max-width: 52ch;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--gi-text-muted);
 }
 
-/* Visual Comparison */
-.gi-comparison-desc {
-  font-size: 0.85rem;
-  color: var(--gi-text-muted);
-  margin-bottom: 1rem;
-}
-.gi-comparison-grid {
+.dpi-stage-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 1rem;
-  margin-top: 0.75rem;
 }
-.gi-comparison-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-  background: var(--gi-bg);
+
+.dpi-stage-inputs {
+  min-width: 0;
+}
+
+.dpi-manual-panel,
+.dpi-stage-placeholder {
   border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius-lg);
+  border-radius: var(--gi-radius-xl);
+  padding: 1rem;
+  background: color-mix(in srgb, var(--gi-surface) 82%, white);
 }
-.gi-comparison-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  margin-bottom: 0.75rem;
+
+.dpi-manual-header {
+  margin-bottom: 0.9rem;
 }
-.gi-comparison-dpi {
-  font-size: 0.9rem;
+
+.dpi-panel-title {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--gi-text);
 }
-.gi-comparison-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+
+.dpi-panel-description,
+.dpi-stage-placeholder-copy {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
   color: var(--gi-text-muted);
 }
-.gi-comparison-visual {
+
+.dpi-manual-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.dpi-manual-grid :deep(.gi-field) {
+  margin-bottom: 0;
+}
+
+.dpi-stage-error {
+  margin: 0.85rem 0 0;
+  font-size: 0.85rem;
+  color: var(--gi-tint-red-text);
+}
+
+.dpi-stage-summary {
+  margin-bottom: 0;
+  align-self: start;
+}
+
+.dpi-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 0;
+}
+
+.dpi-summary-item {
+  padding: 0.8rem;
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  background: var(--gi-bg-soft);
+}
+
+.dpi-summary-item dt {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gi-text-muted);
+}
+
+.dpi-summary-item dd {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--gi-text);
+}
+
+.dpi-summary-callout {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: var(--gi-radius-lg);
+  border: 1px solid transparent;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.dpi-summary-callout--ok {
+  background: var(--gi-tint-green-bg);
+  border-color: color-mix(in srgb, var(--gi-tint-green-text) 18%, var(--gi-border));
+}
+
+.dpi-summary-callout--warning {
+  background: var(--gi-tint-yellow-bg);
+  border-color: color-mix(in srgb, var(--gi-tint-yellow-text) 18%, var(--gi-border));
+}
+
+.dpi-summary-callout--error {
+  background: var(--gi-tint-red-bg);
+  border-color: color-mix(in srgb, var(--gi-tint-red-text) 18%, var(--gi-border));
+}
+
+.dpi-summary-callout-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gi-text-muted);
+}
+
+.dpi-summary-callout-value {
+  font-size: 1.2rem;
+  line-height: 1.1;
+  color: var(--gi-text);
+}
+
+.dpi-summary-callout-status {
+  font-size: 0.85rem;
+  color: var(--gi-text-muted);
+}
+
+.dpi-primary-results,
+.dpi-curated-panels {
+  margin-bottom: 1.5rem;
+}
+
+.dpi-primary-results :deep(.gi-result-card) {
+  margin-bottom: 0;
+}
+
+.dpi-dimensions-table {
+  margin-top: 0.25rem;
+}
+
+.dpi-dimensions-table th {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gi-text-muted);
+}
+
+.dpi-dimensions-table td {
+  padding: 0.85rem 0.65rem;
+  vertical-align: middle;
+}
+
+.dpi-dimensions-row-ok {
+  background: color-mix(in srgb, var(--gi-tint-green-bg) 72%, white);
+}
+
+.dpi-dimensions-row-warning {
+  background: color-mix(in srgb, var(--gi-tint-yellow-bg) 74%, white);
+}
+
+.dpi-dimensions-row-error {
+  background: color-mix(in srgb, var(--gi-tint-red-bg) 72%, white);
+}
+
+.dpi-dimensions-label {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: var(--gi-text-muted);
+}
+
+.dpi-curated-panels {
+  display: grid;
+  gap: 1rem;
+}
+
+.dpi-curated-panels :deep(.gi-result-card) {
+  margin-bottom: 0;
+}
+
+.dpi-format-section + .dpi-format-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gi-border);
+}
+
+.dpi-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.dpi-section-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--gi-text);
+}
+
+.dpi-section-heading .dpi-section-title {
+  margin-bottom: 0;
+}
+
+.dpi-format-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.75rem;
+}
+
+.dpi-format-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  background: var(--gi-bg-soft);
+}
+
+.dpi-format-name {
+  font-weight: 700;
+  color: var(--gi-text);
+}
+
+.dpi-toggle-button {
+  flex-shrink: 0;
+}
+
+.dpi-recommended-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.dpi-recommended-section h4 {
+  margin: 0 0 0.65rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.dpi-recommended-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.dpi-recommended-section li {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  background: var(--gi-bg-soft);
+  font-size: 0.9rem;
+}
+
+.dpi-recommended-section--suitable h4 {
+  color: var(--gi-brand-dark);
+}
+
+.dpi-recommended-section--suitable li {
+  border-color: color-mix(in srgb, var(--gi-brand) 22%, var(--gi-border));
+  background: var(--gi-brand-fade);
+}
+
+.dpi-recommended-section--not-suitable h4 {
+  color: var(--gi-tint-red-text);
+}
+
+.dpi-recommended-section--not-suitable li {
+  border-color: color-mix(in srgb, var(--gi-tint-red-text) 18%, var(--gi-border));
+  background: var(--gi-tint-red-bg);
+}
+
+.dpi-comparison-card {
+  grid-column: 1 / -1;
+}
+
+.dpi-comparison-desc {
+  margin: 0 0 0.95rem;
+  font-size: 0.9rem;
+  color: var(--gi-text-muted);
+}
+
+.dpi-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.9rem;
+}
+
+.dpi-comparison-item {
+  padding: 1rem;
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  background: var(--gi-bg-soft);
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+}
+
+.dpi-comparison-header {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+}
+
+.dpi-comparison-dpi {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--gi-text);
+}
+
+.dpi-comparison-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gi-text-muted);
+}
+
+.dpi-comparison-visual {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: 0.5rem;
 }
-.gi-comparison-svg {
+
+.dpi-comparison-svg {
   max-width: 100%;
   height: auto;
 }
-.gi-comparison-rect {
-  transition: fill 0.2s;
+
+.dpi-comparison-rect {
+  transition: fill 0.2s ease;
 }
-.gi-comparison-ok {
-  fill: var(--gi-tint-green-9);
+
+.dpi-comparison-ok {
+  fill: color-mix(in srgb, var(--gi-brand) 26%, white);
   stroke: var(--gi-brand);
   stroke-width: 2;
 }
-.gi-comparison-warning {
-  fill: var(--gi-tint-yellow-8);
-  stroke: var(--gi-tint-yellow-11);
+
+.dpi-comparison-warning {
+  fill: color-mix(in srgb, var(--gi-tint-yellow-text) 22%, white);
+  stroke: var(--gi-tint-yellow-text);
   stroke-width: 2;
 }
-.gi-comparison-error {
-  fill: var(--gi-tint-red-6);
-  stroke: var(--gi-tint-red-10);
+
+.dpi-comparison-error {
+  fill: color-mix(in srgb, var(--gi-tint-red-text) 16%, white);
+  stroke: var(--gi-tint-red-text);
   stroke-width: 2;
 }
-.gi-comparison-dims {
-  font-size: 0.8rem;
+
+.dpi-comparison-dims {
+  font-size: 0.82rem;
   color: var(--gi-text-muted);
   text-align: center;
 }
 
-/* Educational Section */
-.gi-educational-content {
-  margin-top: 0.75rem;
+.dpi-education-card {
+  margin-bottom: 0;
 }
-.gi-edu-title {
+
+.dpi-education-card :deep(.gi-result-card) {
+  margin-bottom: 0;
+  background: color-mix(in srgb, var(--gi-surface) 90%, var(--gi-bg-soft));
+}
+
+.dpi-educational-content {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.dpi-education-title {
+  margin: 0;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--gi-text);
-  margin-bottom: 0.5rem;
-  margin-top: 1rem;
-}
-.gi-edu-title:first-child {
-  margin-top: 0;
-}
-.gi-edu-text {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: var(--gi-text);
-}
-.gi-edu-list {
-  font-size: 0.9rem;
-  line-height: 1.8;
-  color: var(--gi-text);
-  padding-left: 1.25rem;
-}
-.gi-edu-list li {
-  margin-bottom: 0.25rem;
 }
 
-/* Button variants */
-.gi-btn-sm {
-  padding: 0.35rem 0.65rem;
-  font-size: 0.8rem;
-}
-.gi-btn-danger {
-  color: var(--gi-tint-red-11);
-}
-.gi-btn-danger:hover {
-  background: var(--gi-tint-red-2);
-  border-color: var(--gi-tint-red-8);
-}
-.gi-btn-link {
-  display: inline;
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--gi-brand);
-  font-size: 0.85rem;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.gi-btn-link:hover {
-  color: var(--gi-text);
-  background: none;
+.dpi-education-text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--gi-text-muted);
 }
 
-/* Slide transition */
+.dpi-education-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--gi-text-muted);
+}
+
 .slide-enter-active,
 .slide-leave-active {
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
+
 .slide-enter-from,
 .slide-leave-to {
   opacity: 0;
   transform: translateY(-8px);
 }
 
-/* Reduced Motion */
+@media (min-width: 900px) {
+  .dpi-stage-grid {
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.8fr);
+    align-items: start;
+  }
+
+  .dpi-manual-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dpi-curated-panels {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dpi-recommended-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .dpi-analysis-stage {
+    padding: 1rem;
+  }
+
+  .dpi-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dpi-dimensions-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .slide-enter-active,
-  .slide-leave-active {
+  .slide-leave-active,
+  .dpi-comparison-rect {
     transition: none;
   }
+
   .slide-enter-from,
   .slide-leave-to {
     transform: none;
-  }
-  .gi-upload-zone.is-dragover {
-    transform: none;
-  }
-  .gi-upload-zone,
-  .gi-comparison-rect {
-    transition: none;
   }
 }
 </style>
