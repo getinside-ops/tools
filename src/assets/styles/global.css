@@ -302,29 +302,24 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.7rem 1.25rem;
-  background: linear-gradient(180deg, var(--gi-brand-light) 0%, var(--gi-brand) 100%);
+  padding: 0.625rem 1.25rem;
+  background: var(--gi-brand);
   color: #fff;
-  border: 1px solid color-mix(in srgb, var(--gi-brand-dark) 72%, #000 8%);
-  border-radius: var(--gi-radius-pill);
+  border: 1px solid transparent;
+  border-radius: var(--gi-radius-md);
   font-size: 0.9375rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  transition:
-    transform var(--gi-transition-fast) var(--gi-ease-out),
-    box-shadow var(--gi-transition-fast) var(--gi-ease-out),
-    background var(--gi-transition-fast) var(--gi-ease-out),
-    border-color var(--gi-transition-fast) var(--gi-ease-out);
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
   text-decoration: none;
-  box-shadow: 0 10px 22px -16px rgba(8, 147, 123, 0.9), var(--gi-shadow-sm);
+  box-shadow: var(--gi-shadow-sm);
 }
 
 .gi-btn:hover {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand-light) 80%, var(--gi-brand)) 0%, var(--gi-brand-dark) 100%);
+  background: var(--gi-brand-dark);
   transform: translateY(-1px);
-  box-shadow: 0 14px 28px -18px rgba(8, 147, 123, 0.95), var(--gi-shadow);
+  box-shadow: var(--gi-shadow);
 }
 
 .gi-btn:active {
