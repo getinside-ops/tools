@@ -225,6 +225,14 @@
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
 }
 
+/* Dark mode ghost button active state */
+[data-theme="dark"] .gi-btn-ghost.is-active {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand-fade) 60%, var(--gi-surface)), color-mix(in srgb, var(--gi-brand-fade) 30%, var(--gi-surface)));
+  color: var(--gi-brand-light);
+  border-color: color-mix(in srgb, var(--gi-brand) 50%, var(--gi-border-strong));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 1px color-mix(in srgb, var(--gi-brand) 20%, transparent);
+}
+
 /* Dark mode focus ring adjustment for inputs */
 [data-theme="dark"] .gi-input:focus,
 [data-theme="dark"] .gi-select:focus {
@@ -294,28 +302,34 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
-  background: var(--gi-brand);
+  padding: 0.7rem 1.25rem;
+  background: linear-gradient(180deg, var(--gi-brand-light) 0%, var(--gi-brand) 100%);
   color: #fff;
-  border: 1px solid transparent;
-  border-radius: var(--gi-radius-md);
+  border: 1px solid color-mix(in srgb, var(--gi-brand-dark) 72%, #000 8%);
+  border-radius: var(--gi-radius-pill);
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   font-family: inherit;
   cursor: pointer;
-  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+  transition:
+    transform var(--gi-transition-fast) var(--gi-ease-out),
+    box-shadow var(--gi-transition-fast) var(--gi-ease-out),
+    background var(--gi-transition-fast) var(--gi-ease-out),
+    border-color var(--gi-transition-fast) var(--gi-ease-out);
   text-decoration: none;
-  box-shadow: var(--gi-shadow-sm);
+  box-shadow: 0 10px 22px -16px rgba(8, 147, 123, 0.9), var(--gi-shadow-sm);
 }
 
 .gi-btn:hover {
-  background: var(--gi-brand-dark);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand-light) 80%, var(--gi-brand)) 0%, var(--gi-brand-dark) 100%);
   transform: translateY(-1px);
-  box-shadow: var(--gi-shadow);
+  box-shadow: 0 14px 28px -18px rgba(8, 147, 123, 0.95), var(--gi-shadow);
 }
 
 .gi-btn:active {
   transform: translateY(0);
+  box-shadow: var(--gi-shadow-sm);
 }
 
 .gi-btn:focus-visible {
@@ -324,20 +338,29 @@ body {
 }
 
 .gi-btn-ghost {
-  background: transparent;
-  color: var(--gi-brand);
-  border: 1px solid var(--gi-brand);
-  box-shadow: none;
+  background: color-mix(in srgb, var(--gi-surface) 82%, var(--gi-brand-fade));
+  color: color-mix(in srgb, var(--gi-brand-dark) 72%, var(--gi-text));
+  border: 1px solid color-mix(in srgb, var(--gi-brand) 32%, var(--gi-border));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 .gi-btn-ghost:hover {
-  background: var(--gi-brand-fade);
+  background: color-mix(in srgb, var(--gi-brand-fade) 75%, var(--gi-surface));
+  border-color: color-mix(in srgb, var(--gi-brand) 55%, var(--gi-border));
   transform: translateY(-1px);
+  box-shadow: var(--gi-shadow-sm);
 }
 
 .gi-btn-ghost:focus-visible {
   outline: 2px solid var(--gi-brand);
   outline-offset: 2px;
+}
+
+.gi-btn-ghost.is-active {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand-fade) 80%, var(--gi-surface)), color-mix(in srgb, var(--gi-brand-fade) 40%, var(--gi-surface)));
+  color: var(--gi-brand-dark);
+  border-color: color-mix(in srgb, var(--gi-brand) 72%, var(--gi-border));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 0 0 1px color-mix(in srgb, var(--gi-brand) 12%, transparent);
 }
 
 .gi-result {

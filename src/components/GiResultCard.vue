@@ -1,13 +1,22 @@
 <template>
-  <div class="gi-result-card" :class="[`gi-result-card--${variant}`]">
+  <div
+    class="gi-result-card"
+    :class="[
+      `gi-result-card--${variant}`,
+      { 'gi-result-card--collapsible': collapsible }
+    ]"
+  >
     <div class="gi-result-card-header">
-      <slot name="header">
-        <h3 class="gi-result-card-title">{{ title }}</h3>
-      </slot>
+      <div :id="headingId" class="gi-result-card-heading">
+        <slot name="header">
+          <h3 v-if="title" class="gi-result-card-title">{{ title }}</h3>
+        </slot>
+      </div>
       <button
         v-if="collapsible"
         class="gi-result-card-toggle"
         :aria-expanded="!collapsed"
+        :aria-labelledby="headingId"
         @click="$emit('update:collapsed', !collapsed)"
       >
         <ChevronDown :class="{ 'is-collapsed': collapsed }" />
@@ -23,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed, getCurrentInstance } from 'vue'
 import { ChevronDown } from 'lucide-vue-next'
 
 export interface GiResultCardProps {
@@ -38,6 +48,9 @@ withDefaults(defineProps<GiResultCardProps>(), {
   collapsed: false
 })
 
+const instance = getCurrentInstance()
+const headingId = computed(() => `gi-result-card-heading-${instance?.uid ?? 'static'}`)
+
 defineEmits<{
   'update:collapsed': [value: boolean]
 }>()
@@ -51,39 +64,57 @@ defineOptions({
 .gi-result-card {
   background: var(--gi-surface);
   border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius-lg);
-  padding: var(--gi-space-md);
+  border-radius: var(--gi-radius-xl);
+  padding: var(--gi-space-lg);
   margin-bottom: var(--gi-space-md);
-  box-shadow: var(--gi-shadow-sm);
+  box-shadow: var(--gi-shadow);
+  position: relative;
+  overflow: hidden;
 }
 
 .gi-result-card-header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--gi-space-md);
+  margin-bottom: var(--gi-space-md);
+}
+
+.gi-result-card-heading {
+  display: flex;
+  flex: 1;
+  min-width: 0;
   align-items: center;
-  margin-bottom: var(--gi-space-sm);
 }
 
 .gi-result-card-title {
   font-size: var(--gi-font-size-md);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--gi-text);
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .gi-result-card-toggle {
-  background: none;
-  border: none;
+  background: var(--gi-bg-soft);
+  border: 1px solid var(--gi-border);
   padding: var(--gi-space-xs);
   cursor: pointer;
-  color: var(--gi-text-muted);
-  transition: transform var(--gi-transition-fast) var(--gi-ease-out);
-  border-radius: var(--gi-radius-sm);
+  color: var(--gi-text);
+  transition:
+    transform var(--gi-transition-fast) var(--gi-ease-out),
+    border-color var(--gi-transition-fast) var(--gi-ease-out),
+    background var(--gi-transition-fast) var(--gi-ease-out);
+  border-radius: var(--gi-radius-pill);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .gi-result-card-toggle:hover {
-  color: var(--gi-text);
-  background: var(--gi-bg-soft);
+  background: var(--gi-brand-fade);
+  border-color: color-mix(in srgb, var(--gi-brand) 24%, var(--gi-border));
 }
 
 .gi-result-card-toggle:focus-visible {
@@ -122,5 +153,9 @@ defineOptions({
 
 .gi-result-card--info {
   border-left: 4px solid var(--gi-brand);
+}
+
+.gi-result-card--collapsible .gi-result-card-header {
+  margin-bottom: var(--gi-space-sm);
 }
 </style>

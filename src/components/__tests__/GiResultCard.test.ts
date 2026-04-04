@@ -3,7 +3,22 @@ import { describe, it, expect } from 'vitest'
 import GiResultCard from '../GiResultCard.vue'
 
 describe('GiResultCard', () => {
-  it('renders title and content slots', () => {
+  it('renders title prop inside the refined heading shell', () => {
+    const wrapper = mount(GiResultCard, {
+      props: {
+        title: 'Result Title'
+      },
+      slots: {
+        default: 'Result content here'
+      }
+    })
+
+    expect(wrapper.find('.gi-result-card-heading').exists()).toBe(true)
+    expect(wrapper.find('.gi-result-card-title').text()).toBe('Result Title')
+    expect(wrapper.text()).toContain('Result content here')
+  })
+
+  it('still renders custom header slot content', () => {
     const wrapper = mount(GiResultCard, {
       slots: {
         header: 'Result Title',
@@ -22,8 +37,9 @@ describe('GiResultCard', () => {
         actions: '<button>Download</button>'
       }
     })
-    expect(wrapper.find('button').exists()).toBe(true)
-    expect(wrapper.find('button').text()).toBe('Download')
+    expect(wrapper.find('.gi-result-card-actions').exists()).toBe(true)
+    expect(wrapper.find('.gi-result-card-actions button').exists()).toBe(true)
+    expect(wrapper.find('.gi-result-card-actions').text()).toContain('Download')
   })
 
   it('applies variant classes', () => {
@@ -34,13 +50,33 @@ describe('GiResultCard', () => {
     expect(wrapper.classes()).toContain('gi-result-card--success')
   })
 
-  it('is collapsible when collapsible prop is true', async () => {
+  it('adds a collapsible modifier and emits updates when toggled', async () => {
     const wrapper = mount(GiResultCard, {
-      props: { collapsible: true, collapsed: false },
-      slots: { header: 'Title', default: 'Content' }
+      props: { title: 'Title', collapsible: true, collapsed: false },
+      slots: { default: 'Content' }
     })
-    expect(wrapper.find('button[aria-expanded]').exists()).toBe(true)
+
+    expect(wrapper.classes()).toContain('gi-result-card--collapsible')
+    expect(wrapper.find('.gi-result-card-toggle').attributes('aria-expanded')).toBe('true')
+    expect(wrapper.find('.gi-result-card-toggle').attributes('aria-labelledby')).toBeDefined()
     await wrapper.find('button').trigger('click')
     expect(wrapper.emitted('update:collapsed')).toEqual([[true]])
+  })
+
+  it('keeps the collapsible toggle named when using a custom header slot', () => {
+    const wrapper = mount(GiResultCard, {
+      props: { collapsible: true, collapsed: false },
+      slots: {
+        header: '<span class="custom-heading">Custom header</span>',
+        default: 'Content'
+      }
+    })
+
+    const heading = wrapper.find('.gi-result-card-heading')
+    const toggle = wrapper.find('.gi-result-card-toggle')
+
+    expect(heading.attributes('id')).toBeDefined()
+    expect(toggle.attributes('aria-labelledby')).toBe(heading.attributes('id'))
+    expect(heading.text()).toContain('Custom header')
   })
 })
