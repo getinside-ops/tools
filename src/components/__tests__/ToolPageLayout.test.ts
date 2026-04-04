@@ -15,7 +15,7 @@ function createTestI18n(locale: 'fr' | 'en' = 'en') {
 }
 
 describe('ToolPageLayout', () => {
-  it('renders the editorial hero shell', () => {
+  it('renders the hero section with icon, title, and description', () => {
     const wrapper = mount(ToolPageLayout, {
       global: {
         plugins: [createTestI18n()],
@@ -28,15 +28,20 @@ describe('ToolPageLayout', () => {
         subtitle: 'Image resolution',
         description: 'Check whether artwork is ready for print.',
         category: 'print'
+      },
+      slots: {
+        icon: '<span class="test-icon">📷</span>'
       }
     })
 
     expect(wrapper.find('.tool-header-card').exists()).toBe(true)
-    expect(wrapper.find('.tool-header-eyebrow').exists()).toBe(true)
-    expect(wrapper.find('.tool-header-sheen').exists()).toBe(true)
+    expect(wrapper.find('.tool-icon').exists()).toBe(true)
+    expect(wrapper.find('.tool-title').text()).toBe('DPI Checker')
+    expect(wrapper.find('.tool-description').text()).toBe('Check whether artwork is ready for print.')
+    expect(wrapper.find('.tool-category-badge').text()).toBe('Print')
   })
 
-  it('renders shared header labels from i18n without hardcoded microcopy', () => {
+  it('renders shared header labels from i18n', () => {
     const wrapper = mount(ToolPageLayout, {
       global: {
         plugins: [createTestI18n('fr')],
@@ -52,8 +57,7 @@ describe('ToolPageLayout', () => {
     })
 
     expect(wrapper.find('.tool-back-link').text()).toContain('Retour aux outils')
-    expect(wrapper.find('.tool-header-eyebrow').text()).toBe('Print')
+    expect(wrapper.find('.tool-title').text()).toBe('Barcode')
     expect(wrapper.find('.tool-category-badge').text()).toBe('Print')
-    expect(wrapper.find('.tool-header-microcopy').exists()).toBe(false)
   })
 })

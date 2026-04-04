@@ -11,28 +11,19 @@
 
     <!-- Tool Header Card -->
     <div class="tool-header-card">
-      <div class="tool-header-sheen" aria-hidden="true"></div>
-      <div class="tool-header-accent" aria-hidden="true"></div>
-      <div class="tool-header-topline">
-        <div class="tool-icon" v-if="$slots.icon">
-          <slot name="icon"></slot>
-        </div>
-        <div class="tool-hero-copy">
-          <div class="tool-header-eyebrow">
-            {{ category ? t(`home.categories.${category}`) : t('nav.about') }}
-          </div>
-          <div class="tool-title-row">
-            <h1 class="tool-title">
-              <slot name="title">{{ title }}</slot>
-            </h1>
-            <span v-if="category" class="tool-category-badge" :class="`tool-category-badge--${category}`">
-              {{ t(`home.categories.${category}`) }}
-            </span>
-          </div>
-          <p v-if="subtitle" class="tool-subtitle">{{ subtitle }}</p>
-        </div>
+      <div class="tool-icon" v-if="$slots.icon">
+        <slot name="icon"></slot>
       </div>
       <div class="tool-title-section">
+        <div class="tool-title-row">
+          <h1 class="tool-title">
+            <slot name="title">{{ title }}</slot>
+          </h1>
+          <span v-if="category" class="tool-category-badge" :class="`tool-category-badge--${category}`">
+            {{ t(`home.categories.${category}`) }}
+          </span>
+        </div>
+        <p v-if="subtitle" class="tool-subtitle">{{ subtitle }}</p>
         <p class="tool-description">
           <slot name="description">{{ description }}</slot>
         </p>
@@ -108,90 +99,32 @@ const { t } = useI18n()
 
 /* Header Card */
 .tool-header-card {
-  background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--gi-mint) 22%, transparent), transparent 36%),
-    linear-gradient(180deg, color-mix(in srgb, var(--gi-surface) 94%, var(--gi-bg-soft)), var(--gi-surface));
-  border: 1px solid color-mix(in srgb, var(--gi-brand) 20%, var(--gi-border));
-  border-radius: var(--gi-radius-xl);
-  padding: 1.25rem;
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
-  display: grid;
-  gap: 1rem;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--gi-shadow-sm);
-}
-
-.tool-header-sheen {
-  position: absolute;
-  inset: 0 auto auto 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), transparent 42%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.tool-header-accent {
-  position: absolute;
-  inset: auto -4rem -4rem auto;
-  width: 10rem;
-  height: 10rem;
-  border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--gi-mint) 34%, transparent), transparent 68%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.tool-header-topline {
   display: flex;
+  gap: 1rem;
   align-items: flex-start;
-  gap: 0.95rem;
-  position: relative;
-  z-index: 1;
-}
-
-.tool-hero-copy {
-  min-width: 0;
-  flex: 1;
-}
-
-.tool-header-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--gi-brand);
+  box-shadow: var(--gi-shadow-sm);
 }
 
 .tool-icon {
   width: 48px;
   height: 48px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand-fade) 75%, #fff), color-mix(in srgb, var(--gi-brand) 16%, var(--gi-brand-fade)));
-  color: var(--gi-brand-dark);
-  border: 1px solid color-mix(in srgb, var(--gi-brand) 30%, transparent);
-  border-radius: var(--gi-radius-lg);
+  background: var(--gi-brand-fade);
+  color: var(--gi-brand);
+  border-radius: var(--gi-radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all var(--gi-transition-base) var(--gi-ease-bounce);
-  position: relative;
-  z-index: 1;
-}
-
-.tool-header-card:hover .tool-icon {
-  transform: scale(1.05);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand) 88%, #fff), var(--gi-brand));
-  color: white;
 }
 
 .tool-title-section {
-  position: relative;
-  z-index: 1;
+  min-width: 0;
+  flex: 1;
 }
 
 .tool-title-row {
@@ -203,10 +136,9 @@ const { t } = useI18n()
 }
 
 .tool-title {
-  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
-  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  font-size: var(--gi-font-size-xl);
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.2;
   color: var(--gi-text);
   margin: 0;
 }
@@ -303,11 +235,8 @@ const { t } = useI18n()
   }
 
   .tool-header-card {
-    padding: 1.1rem;
-  }
-
-  .tool-header-topline {
-    gap: 0.8rem;
+    padding: 1.25rem;
+    flex-direction: column;
   }
 }
 </style>
