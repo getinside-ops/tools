@@ -225,12 +225,23 @@
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
 }
 
-/* Dark mode ghost button active state */
+/* Dark mode ghost button styles */
+[data-theme="dark"] .gi-btn-ghost {
+  background: var(--gi-surface);
+  border-color: var(--gi-border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .gi-btn-ghost:hover {
+  background: var(--gi-bg-soft);
+  border-color: var(--gi-border-hover);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 [data-theme="dark"] .gi-btn-ghost.is-active {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand-fade) 60%, var(--gi-surface)), color-mix(in srgb, var(--gi-brand-fade) 30%, var(--gi-surface)));
-  color: var(--gi-brand-light);
-  border-color: color-mix(in srgb, var(--gi-brand) 50%, var(--gi-border-strong));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 1px color-mix(in srgb, var(--gi-brand) 20%, transparent);
+  background: var(--gi-brand-fade);
+  border-color: var(--gi-brand);
+  box-shadow: 0 0 0 1px var(--gi-brand), 0 2px 4px rgba(10, 170, 142, 0.2);
 }
 
 /* Dark mode focus ring adjustment for inputs */
@@ -333,17 +344,21 @@ body {
 }
 
 .gi-btn-ghost {
-  background: color-mix(in srgb, var(--gi-surface) 82%, var(--gi-brand-fade));
-  color: color-mix(in srgb, var(--gi-brand-dark) 72%, var(--gi-text));
-  border: 1px solid color-mix(in srgb, var(--gi-brand) 32%, var(--gi-border));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  background: var(--gi-surface);
+  color: var(--gi-text);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-md);
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
 }
 
 .gi-btn-ghost:hover {
-  background: color-mix(in srgb, var(--gi-brand-fade) 75%, var(--gi-surface));
-  border-color: color-mix(in srgb, var(--gi-brand) 55%, var(--gi-border));
+  background: var(--gi-bg-soft);
+  border-color: var(--gi-border-hover);
+  color: var(--gi-text);
   transform: translateY(-1px);
-  box-shadow: var(--gi-shadow-sm);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .gi-btn-ghost:focus-visible {
@@ -352,10 +367,10 @@ body {
 }
 
 .gi-btn-ghost.is-active {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--gi-brand-fade) 80%, var(--gi-surface)), color-mix(in srgb, var(--gi-brand-fade) 40%, var(--gi-surface)));
+  background: var(--gi-brand-fade);
   color: var(--gi-brand-dark);
-  border-color: color-mix(in srgb, var(--gi-brand) 72%, var(--gi-border));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 0 0 1px color-mix(in srgb, var(--gi-brand) 12%, transparent);
+  border-color: var(--gi-brand);
+  box-shadow: 0 0 0 1px var(--gi-brand), 0 2px 4px rgba(10, 170, 142, 0.12);
 }
 
 .gi-result {
