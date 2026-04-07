@@ -46,6 +46,7 @@ const en: Messages = {
     toggleLanguage: 'Toggle language',
     toggleTheme: 'Toggle theme',
     copyright: '© 2026 getinside. All rights reserved.',
+    quickAccess: 'Quick Access',
   },
   home: {
     title: 'getinside toolbox',
@@ -53,6 +54,7 @@ const en: Messages = {
     heroText: 'A collection of useful tools, all running directly in your browser. No installs, no dependencies, just click and go.',
     featured: 'Featured tools',
     new: 'New',
+    popular: 'Popular',
     exploreTools: 'Explore tools →',
     tryNow: 'Try it now →',
     browse: {

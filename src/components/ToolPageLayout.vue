@@ -33,7 +33,7 @@
     </div>
 
     <!-- About Panel -->
-    <div v-if="$slots.about" class="tool-about">
+    <div v-if="$slots.about" class="tool-about" :class="`tool-about--${category}`">
       <div class="tool-about-label">
         <span>{{ t('nav.about') }}</span>
       </div>
@@ -188,11 +188,26 @@ const { t } = useI18n()
 
 /* About Panel */
 .tool-about {
-  background: var(--gi-surface);
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
   padding: 1.25rem;
   margin-top: 2rem;
+  background: var(--gi-surface);
+}
+
+.tool-about--print {
+  background: var(--gi-tint-green-bg);
+  border-color: var(--gi-tint-green-border);
+}
+
+.tool-about--digital {
+  background: var(--gi-tint-blue-bg);
+  border-color: var(--gi-tint-blue-border);
+}
+
+.tool-about--design {
+  background: var(--gi-tint-purple-bg);
+  border-color: var(--gi-tint-purple-border);
 }
 
 .tool-about-label {

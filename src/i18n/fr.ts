@@ -44,6 +44,7 @@ const fr = {
     toggleLanguage: 'Changer de langue',
     toggleTheme: 'Changer de thème',
     copyright: '© 2026 getinside. Tous droits réservés.',
+    quickAccess: 'Accès rapide',
   },
   home: {
     title: 'getinside toolbox',
@@ -51,6 +52,7 @@ const fr = {
     heroText: "Une collection d'outils utiles, tous exécutés directement dans ton navigateur. Sans installation, sans dépendance — juste un clic.",
     featured: 'Outils mis en avant',
     new: 'Nouveau',
+    popular: 'Populaire',
     exploreTools: 'Explorer les outils →',
     tryNow: 'Essayer maintenant →',
     browse: {

@@ -22,14 +22,17 @@
         <p>{{ t('home.browse.subtitle') }}</p>
       </div>
 
-      <input
-        v-model="searchQuery"
-        type="search"
-        class="gi-input home-search"
-        :placeholder="t('nav.search')"
-      />
+      <div class="home-search-wrap">
+        <Search :size="18" class="home-search-icon" aria-hidden="true" />
+        <input
+          v-model="searchQuery"
+          type="search"
+          class="gi-input home-search home-search--icon"
+          :placeholder="t('nav.search')"
+        />
+      </div>
 
-      <div class="home-tab-bar" role="tablist" aria-label="Tool categories">
+      <div class="home-tab-bar" :class="{ 'home-tab-bar--scrolled': showBackToTop }" role="tablist" aria-label="Tool categories">
         <button
           v-for="cat in categories"
           :key="cat"
@@ -92,17 +95,28 @@
         </div>
       </template>
     </section>
+
+    <!-- Back to top -->
+    <button
+      v-show="showBackToTop"
+      class="home-back-to-top"
+      :class="{ visible: showBackToTop }"
+      @click="scrollToTop"
+      aria-label="Retour en haut"
+    >
+      <ArrowUp :size="20" />
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 const base = import.meta.env.BASE_URL
 import type { Component } from 'vue'
 import {
   Scale, Link2, Printer, CornerDownRight, Tag, FileText, Palette, Smartphone,
-  Globe, Ruler, Type, Eye, Pipette, FileDown, Crop, Maximize, Sparkles, ImagePlus, Square, Compass, AlignLeft, Barcode, Frame, Repeat, Info, QrCode
+  Globe, Ruler, Type, Eye, Pipette, FileDown, Crop, Maximize, Sparkles, ImagePlus, Square, Compass, AlignLeft, Barcode, Frame, Repeat, Info, QrCode, Search, ArrowUp
 } from 'lucide-vue-next'
 
 const { t } = useI18n()
@@ -112,6 +126,17 @@ const activeCategory = ref('all')
 const categories = ['all', 'print', 'digital', 'design'] as const
 const contentCategories = ['print', 'digital', 'design'] as const
 type ContentCategory = 'print' | 'digital' | 'design'
+
+// Back to top
+const showBackToTop = ref(false)
+function handleScroll() {
+  showBackToTop.value = window.scrollY > 600
+}
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+onMounted(() => window.addEventListener('scroll', handleScroll, { passive: true }))
+onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 
 interface Tool {
   route: string
@@ -133,7 +158,7 @@ const allTools: Tool[] = [
   { route: '/word-counter',     icon: FileText,        titleKey: 'home.tools.wordCounter.title',     descKey: 'home.tools.wordCounter.desc',     category: 'digital', isNew: true  },
   { route: '/color-palette',    icon: Palette,         titleKey: 'home.tools.colorPalette.title',    descKey: 'home.tools.colorPalette.desc',    category: 'design',  isNew: true  },
   { route: '/mockup',           icon: Smartphone,      titleKey: 'home.tools.mockupGenerator.title', descKey: 'home.tools.mockupGenerator.desc', category: 'design',  isNew: true  },
-  
+
   // New tools from Batch 1 & 2
   { route: '/url-parser',       icon: Globe,           titleKey: 'home.tools.urlParser.title',       descKey: 'home.tools.urlParser.desc',       category: 'digital', isNew: true  },
   { route: '/px-to-rem',        icon: Ruler,           titleKey: 'home.tools.pxToRem.title',        descKey: 'home.tools.pxToRem.desc',        category: 'design',  isNew: true  },
@@ -193,7 +218,7 @@ function setCategory(cat: string) {
 /* Hero */
 .home-hero {
   padding: var(--gi-space-3xl) 1.5rem var(--gi-space-2xl);
-  max-width: var(--gi-container-hero); /* 1400px */
+  max-width: var(--gi-container-hero);
   margin: 0 auto;
 }
 .home-hero-inner {
@@ -215,24 +240,26 @@ function setCategory(cat: string) {
 }
 .home-hero-title {
   font-family: 'Garnett', 'Inter', system-ui, sans-serif;
-  font-size: var(--gi-font-size-3xl); /* 2.5rem */
+  font-size: var(--gi-font-size-3xl);
   font-weight: 700;
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
   color: var(--gi-text);
 }
 .home-hero-tagline {
-  font-size: 1rem; /* ~0.95rem */
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--gi-text);
-  margin-bottom: 0.75rem;
+  color: var(--gi-brand);
+  margin-bottom: 1.25rem;
   line-height: 1.5;
 }
 .home-hero-body {
-  font-size: var(--gi-font-size-sm); /* 0.875rem */
+  font-size: var(--gi-font-size-sm);
   color: var(--gi-text-muted);
   line-height: 1.65;
   margin-bottom: 2rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--gi-brand);
 }
 .home-hero-cta {
   font-size: var(--gi-font-size-md);
@@ -252,6 +279,7 @@ function setCategory(cat: string) {
   }
   .home-hero-body {
     font-size: 1rem;
+    text-align: left;
   }
 }
 
@@ -279,7 +307,22 @@ function setCategory(cat: string) {
 }
 
 /* Search */
-.home-search { margin-bottom: 1.25rem; }
+.home-search-wrap {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+.home-search-icon {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gi-text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+.home-search--icon {
+  padding-left: 2.5rem;
+}
 
 /* Zerokit-style pill tabs */
 .home-tab-bar {
@@ -287,6 +330,17 @@ function setCategory(cat: string) {
   gap: var(--gi-space-sm);
   margin-bottom: var(--gi-space-lg);
   flex-wrap: wrap;
+  position: sticky;
+  top: 56px;
+  z-index: 40;
+  padding: 0.75rem 0;
+  background: var(--gi-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: box-shadow var(--gi-transition-fast) var(--gi-ease-out);
+}
+.home-tab-bar--scrolled {
+  box-shadow: var(--gi-shadow-sm);
 }
 .home-tab {
   padding: 0.5rem 1rem;
@@ -362,11 +416,16 @@ function setCategory(cat: string) {
 .home-card:focus-visible {
   outline: 2px solid var(--gi-brand);
   outline-offset: 2px;
+  box-shadow: var(--gi-shadow-md);
 }
 
 [data-theme="dark"] .home-card:hover {
   box-shadow: var(--gi-shadow-glow);
   border-color: rgba(10, 170, 142, 0.6);
+}
+
+.home-card:hover .home-card-title {
+  color: var(--gi-brand);
 }
 
 .home-card-top {
@@ -409,15 +468,23 @@ function setCategory(cat: string) {
 }
 
 .home-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   font-size: var(--gi-font-size-xs);
   font-weight: 500;
   color: var(--gi-brand);
+  background: var(--gi-brand-fade);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--gi-radius-sm);
   margin-top: auto;
-  transition: color var(--gi-transition-fast);
+  width: fit-content;
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
 }
 
 .home-card:hover .home-card-cta {
-  color: var(--gi-brand-dark);
+  background: var(--gi-brand);
+  color: var(--gi-text-inverse);
 }
 
 /* Badges */
@@ -444,5 +511,53 @@ function setCategory(cat: string) {
 [data-theme="dark"] .gi-badge-popular {
   background: var(--gi-tint-orange-text);
   color: var(--gi-text-inverse);
+}
+
+/* Back to top */
+.home-back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gi-brand);
+  color: var(--gi-text-inverse);
+  border: none;
+  border-radius: var(--gi-radius-pill);
+  box-shadow: var(--gi-shadow-lg);
+  cursor: pointer;
+  z-index: 50;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
+  pointer-events: none;
+}
+.home-back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.home-back-to-top:hover {
+  background: var(--gi-brand-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--gi-shadow-xl);
+}
+.home-back-to-top:active {
+  transform: scale(0.95);
+}
+.home-back-to-top:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+@media (max-width: 768px) {
+  .home-back-to-top {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 44px;
+    height: 44px;
+  }
 }
 </style>
