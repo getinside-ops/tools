@@ -46,9 +46,19 @@
             <span v-if="mode === 'flyers'" class="pw-result-detail">
               {{ formatNumber(quantity) }} {{ t('paperWeight.sheets') }}
             </span>
-            <span v-else class="pw-result-detail">
-              {{ formatNumber(bookletCopies) }} {{ t('paperWeight.copies') }} × {{ formatNumber(bookletPages) }} {{ t('paperWeight.pages') }}
-            </span>
+            <template v-else>
+              <span class="pw-result-detail">
+                {{ formatNumber(bookletCopies) }} {{ t('paperWeight.copies') }}
+              </span>
+              <span class="pw-result-divider" aria-hidden="true">•</span>
+              <span class="pw-result-detail">
+                {{ formatNumber(bookletPages) }} {{ t('paperWeight.pages') }}
+              </span>
+              <span v-if="bookletWeightPerUnit" class="pw-result-divider" aria-hidden="true">•</span>
+              <span v-if="bookletWeightPerUnit" class="pw-result-detail">
+                {{ bookletWeightPerUnit }} / {{ t('paperWeight.modeBooklet').toLowerCase() }}
+              </span>
+            </template>
           </div>
         </div>
         <button
@@ -89,14 +99,13 @@
               </template>
             </GiFormField>
           </div>
-          <input
-            v-model.number="quantity"
-            type="range"
+          <GiLogSlider
+            v-model="quantity"
             :min="1"
             :max="MAX_QUANTITY"
-            step="1000"
-            class="pw-slider"
-            aria-label="Quantity slider"
+            :step="quantityStep"
+            :marks="quantityMarks"
+            :label="t('paperWeight.quantity')"
           />
           <span v-if="quantityError" class="pw-error" role="alert">{{ quantityError }}</span>
         </div>
@@ -166,14 +175,13 @@
               </div>
             </template>
           </GiFormField>
-          <input
-            v-model.number="grammage"
-            type="range"
-            min="30"
-            max="500"
-            step="5"
-            class="pw-slider"
-            aria-label="Grammage slider"
+          <GiLogSlider
+            v-model="grammage"
+            :min="30"
+            :max="500"
+            :step="() => 5"
+            :marks="grammageMarks"
+            :label="t('paperWeight.grammage')"
           />
           <p class="pw-helper-text">{{ grammageHelper }}</p>
           <span v-if="grammageError" class="pw-error" role="alert">{{ grammageError }}</span>
@@ -203,14 +211,13 @@
               </div>
             </template>
           </GiFormField>
-          <input
-            v-model.number="bookletCopies"
-            type="range"
+          <GiLogSlider
+            v-model="bookletCopies"
             :min="1"
             :max="MAX_QUANTITY"
-            step="10"
-            class="pw-slider"
-            aria-label="Copies slider"
+            :step="quantityStep"
+            :marks="quantityMarks.slice(0, 12)"
+            :label="t('paperWeight.bookletCopies')"
           />
         </div>
 
@@ -303,14 +310,13 @@
               </div>
             </template>
           </GiFormField>
-          <input
-            v-model.number="bookletCoverGrammage"
-            type="range"
-            min="30"
-            max="500"
-            step="5"
-            class="pw-slider"
-            aria-label="Cover grammage slider"
+          <GiLogSlider
+            v-model="bookletCoverGrammage"
+            :min="30"
+            :max="500"
+            :step="() => 5"
+            :marks="grammageMarks"
+            :label="t('paperWeight.bookletCoverGrammage')"
           />
         </div>
 
@@ -335,14 +341,13 @@
               </div>
             </template>
           </GiFormField>
-          <input
-            v-model.number="bookletInnerGrammage"
-            type="range"
-            min="30"
-            max="500"
-            step="5"
-            class="pw-slider"
-            aria-label="Inner pages grammage slider"
+          <GiLogSlider
+            v-model="bookletInnerGrammage"
+            :min="30"
+            :max="500"
+            :step="() => 5"
+            :marks="grammageMarks"
+            :label="t('paperWeight.bookletInnerGrammage')"
           />
           <p class="pw-helper-text">{{ grammageHelper }}</p>
         </div>
@@ -365,6 +370,7 @@ import { useI18n } from 'vue-i18n'
 import { Weight, RotateCcw, Layers, BookOpen } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
+import GiLogSlider from '../components/GiLogSlider.vue'
 import {
   calculatePaperWeight,
   FORMATS,
@@ -395,6 +401,55 @@ const bookletCopies = ref(1000)
 const bookletPages = ref(16)
 const bookletCoverGrammage = ref(250)
 const bookletInnerGrammage = ref(135)
+
+// Quantity step function: varies based on current value
+function quantityStep(value: number): number {
+  if (value < 2500) return 50
+  if (value < 5000) return 100
+  if (value < 25000) return 500
+  if (value < 100000) return 1000
+  if (value < 500000) return 5000
+  if (value < 1000000) return 10000
+  return 50000
+}
+
+// Quantity marks for slider
+const quantityMarks = computed(() => [
+  { value: 50, label: '50' },
+  { value: 100, label: '100' },
+  { value: 250, label: '250' },
+  { value: 500, label: '500' },
+  { value: 1000, label: '1k' },
+  { value: 2500, label: '2.5k' },
+  { value: 5000, label: '5k' },
+  { value: 10000, label: '10k' },
+  { value: 25000, label: '25k' },
+  { value: 50000, label: '50k' },
+  { value: 100000, label: '100k' },
+  { value: 250000, label: '250k' },
+  { value: 500000, label: '500k' },
+  { value: 1000000, label: '1M' },
+  { value: 5000000, label: '5M' },
+  { value: 10000000, label: '10M' },
+  { value: 50000000, label: '50M' },
+  { value: MAX_QUANTITY, label: '100M' },
+])
+
+// Grammage marks for slider
+const grammageMarks = [
+  { value: 30, label: '30' },
+  { value: 60, label: '60' },
+  { value: 80, label: '80' },
+  { value: 115, label: '115' },
+  { value: 135, label: '135' },
+  { value: 170, label: '170' },
+  { value: 200, label: '200' },
+  { value: 250, label: '250' },
+  { value: 300, label: '300' },
+  { value: 350, label: '350' },
+  { value: 400, label: '400' },
+  { value: 500, label: '500' },
+]
 
 // Helper text for grammage
 const grammageHelper = computed(() => {
@@ -434,9 +489,9 @@ const flyersResult = computed(() => {
 })
 
 // Booklet result
-// Formula: cover (2 pages) + inner (pages - 2) pages per booklet
-// Cover weight = surface × coverGrammage × 2 (front+back of cover sheet)
-// Inner weight = surface × innerGrammage × (pages - 2)
+// Booklet: cover is 2 pages (front+back = 1 sheet), inner pages = (pages - 2) pages
+// Cover weight per booklet = surface × coverGrammage × 2 (both sides of cover sheet)
+// Inner weight per booklet = surface × innerGrammage × (pages - 2)
 // Total = (coverWeight + innerWeight) × copies
 const bookletResult = computed(() => {
   if (mode.value !== 'booklet') return null
@@ -452,8 +507,9 @@ const bookletResult = computed(() => {
   const gramsPerBooklet = coverGramsPerBooklet + innerGramsPerBooklet
   const totalGrams = Math.round(gramsPerBooklet * bookletCopies.value)
   const kg = Math.round(totalGrams / 1000 * 100) / 100
+  const bookletKg = Math.round(gramsPerBooklet / 1000 * 100) / 100
 
-  return { grams: totalGrams, kg }
+  return { grams: totalGrams, kg, gramsPerBooklet: Math.round(gramsPerBooklet), kgPerBooklet: bookletKg }
 })
 
 // Combined result
@@ -468,6 +524,14 @@ const displayWeight = computed(() => {
     return { value: tonnes, unit: 't' }
   }
   return { value: Math.round(kg).toLocaleString(), unit: 'kg' }
+})
+
+// Booklet per-unit weight display
+const bookletWeightPerUnit = computed(() => {
+  if (mode.value !== 'booklet' || !result.value) return null
+  const g = (result.value as any).gramsPerBooklet
+  if (g < 1000) return `${g} g`
+  return `${(g / 1000).toFixed(2)} kg`
 })
 
 // Format number with thousand separators
