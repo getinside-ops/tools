@@ -91,7 +91,9 @@ function toggleLocale() {
 }
 
 .gi-lang-toggle {
-  padding: 0.3rem 0.65rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
   border: 1.5px solid var(--gi-border);
   border-radius: 6px;
   background: transparent;
