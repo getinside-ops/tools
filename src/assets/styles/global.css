@@ -323,7 +323,7 @@ body {
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
   background: var(--gi-brand);
-  color: #fff;
+  color: var(--gi-text-inverse);
   border: 1px solid transparent;
   border-radius: var(--gi-radius-md);
   font-size: 0.9375rem;
