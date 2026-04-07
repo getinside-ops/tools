@@ -8,54 +8,167 @@
       <Type :size="24" />
     </template>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-      <GiFormField
-        :label="t('typeScale.baseSize')"
-        type="number"
-        :model-value="baseSize"
-        @update:model-value="baseSize = Number($event)"
-      >
-        <template #input>
-          <input
-            v-model.number="baseSize"
-            type="number"
-            class="gi-input"
-            min="1"
-          />
-        </template>
-      </GiFormField>
+    <!-- Controls Section -->
+    <div class="ts-controls">
+      <div class="ts-control-row">
+        <GiFormField :label="t('typeScale.baseSize')">
+          <template #input>
+            <div class="ts-field-with-slider">
+              <input
+                v-model.number="baseSize"
+                type="number"
+                class="gi-input"
+                min="8"
+                max="64"
+                step="1"
+                @blur="baseSize = clampNumber(baseSize, 8, 64)"
+              />
+              <input
+                v-model.number="baseSize"
+                type="range"
+                class="ts-slider"
+                min="8"
+                max="64"
+                step="1"
+                :aria-label="t('typeScale.baseSize')"
+              />
+            </div>
+          </template>
+        </GiFormField>
 
-      <GiFormField :label="t('typeScale.ratio')">
-        <template #input>
-          <select v-model.number="ratio" class="gi-select">
-            <option v-for="(value, key) in TYPE_SCALE_RATIOS" :key="key" :value="value">
-              {{ t(`typeScale.ratios.${key}`) }}
-            </option>
-          </select>
-        </template>
-      </GiFormField>
+        <GiFormField :label="t('typeScale.ratio')">
+          <template #input>
+            <select v-model.number="ratio" class="gi-select">
+              <option v-for="(value, key) in TYPE_SCALE_RATIOS" :key="key" :value="value">
+                {{ t(`typeScale.ratios.${key}`) }}
+              </option>
+            </select>
+          </template>
+        </GiFormField>
+      </div>
+
+      <div class="ts-control-row">
+        <GiFormField :label="t('typeScale.stepsDown')">
+          <template #input>
+            <div class="ts-field-with-slider">
+              <input
+                v-model.number="stepsDown"
+                type="number"
+                class="gi-input"
+                min="0"
+                max="6"
+                step="1"
+                @blur="stepsDown = clampNumber(stepsDown, 0, 6)"
+              />
+              <input
+                v-model.number="stepsDown"
+                type="range"
+                class="ts-slider"
+                min="0"
+                max="6"
+                step="1"
+                :aria-label="t('typeScale.stepsDown')"
+              />
+            </div>
+          </template>
+        </GiFormField>
+
+        <GiFormField :label="t('typeScale.stepsUp')">
+          <template #input>
+            <div class="ts-field-with-slider">
+              <input
+                v-model.number="stepsUp"
+                type="number"
+                class="gi-input"
+                min="2"
+                max="12"
+                step="1"
+                @blur="stepsUp = clampNumber(stepsUp, 2, 12)"
+              />
+              <input
+                v-model.number="stepsUp"
+                type="range"
+                class="ts-slider"
+                min="2"
+                max="12"
+                step="1"
+                :aria-label="t('typeScale.stepsUp')"
+              />
+            </div>
+          </template>
+        </GiFormField>
+      </div>
     </div>
 
-    <GiResultCard :title="t('typeScale.preview')">
-      <div class="gi-table-wrapper" style="overflow-x: auto;">
-        <table class="gi-table">
+    <!-- Visual Preview Section -->
+    <GiResultCard :title="t('typeScale.preview')" :subtitle="t('typeScale.previewSubtitle')">
+      <div class="ts-visual-preview">
+        <div
+          v-for="entry in previewEntries"
+          :key="entry.step"
+          class="ts-preview-item"
+          :style="{ fontSize: entry.px + 'px' }"
+        >
+          <span class="ts-preview-label">{{ entry.label }}</span>
+          <span class="ts-preview-value">{{ t('typeScale.sampleText.sample') }}</span>
+        </div>
+      </div>
+    </GiResultCard>
+
+    <!-- CSS Output Section -->
+    <GiResultCard :title="t('typeScale.cssOutput')" :subtitle="t('typeScale.cssOutputSubtitle')">
+      <div class="ts-css-output">
+        <button
+          class="ts-copy-btn"
+          :class="{ 'ts-copy-btn--success': copiedFlash !== null }"
+          @click="copyAllCSS"
+          :aria-label="t('typeScale.copyAll')"
+        >
+          <Check v-if="copiedFlash !== null" :size="16" />
+          <Copy v-else :size="16" />
+          {{ copiedFlash !== null ? t('typeScale.copied') : t('typeScale.copyAll') }}
+        </button>
+        <pre class="ts-code"><code>{{ cssOutput }}</code></pre>
+      </div>
+    </GiResultCard>
+
+    <!-- Detailed Table Section -->
+    <GiResultCard :title="t('typeScale.table')" :subtitle="t('typeScale.tableSubtitle')">
+      <div class="ts-table-wrapper">
+        <table class="gi-table ts-table">
           <thead>
             <tr>
               <th>{{ t('typeScale.step') }}</th>
-              <th>{{ t('typeScale.size') }} (px)</th>
-              <th>{{ t('typeScale.size') }} (rem)</th>
-              <th style="width: 60%">Preview</th>
+              <th>{{ t('typeScale.size') }} ({{ t('typeScale.px') }})</th>
+              <th>{{ t('typeScale.size') }} ({{ t('typeScale.rem') }})</th>
+              <th>{{ t('typeScale.previewLabel') }}</th>
+              <th class="ts-table-actions">{{ t('typeScale.copy') }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="s in scale" :key="s.step" :style="{ fontWeight: s.step === 0 ? '700' : '400', background: s.step === 0 ? 'rgba(10,170,142,0.05)' : 'transparent' }">
-              <td>{{ s.step }}</td>
-              <td>{{ s.px }}px</td>
-              <td>{{ s.rem }}rem</td>
+            <tr v-for="s in scale" :key="s.step" :class="{ 'ts-table-row--base': s.step === 0 }">
               <td>
-                <div :style="{ fontSize: s.px + 'px', lineHeight: '1.2', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">
-                  The quick brown fox
+                <span class="ts-step" :class="{ 'ts-step--base': s.step === 0 }">
+                  {{ s.step }}
+                </span>
+              </td>
+              <td class="ts-table-value">{{ s.px }}<span class="ts-unit">{{ t('typeScale.px') }}</span></td>
+              <td class="ts-table-value">{{ s.rem }}<span class="ts-unit">{{ t('typeScale.rem') }}</span></td>
+              <td>
+                <div class="ts-table-preview" :style="{ fontSize: Math.min(s.px, 24) + 'px' }">
+                  {{ t('typeScale.sampleText.sampleShort') }}
                 </div>
+              </td>
+              <td class="ts-table-actions">
+                <button
+                  class="ts-copy-icon-btn"
+                  :class="{ 'ts-copy-icon-btn--success': copiedIndex === s.step }"
+                  @click="copyValue(s)"
+                  :aria-label="`${t('typeScale.copy')} ${s.px}${t('typeScale.px')}`"
+                >
+                  <Check v-if="copiedIndex === s.step" :size="16" />
+                  <Copy v-else :size="16" />
+                </button>
               </td>
             </tr>
           </tbody>
@@ -70,7 +183,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Type } from 'lucide-vue-next'
+import { Type, Copy, Check } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 import GiResultCard from '../components/GiResultCard.vue'
@@ -79,18 +192,367 @@ import { generateTypeScale, TYPE_SCALE_RATIOS } from '../composables/useTypeScal
 const { t } = useI18n()
 
 const baseSize = ref(16)
-const ratio = ref(TYPE_SCALE_RATIOS.majorSecond)
+const ratio = ref(TYPE_SCALE_RATIOS.majorThird)
+const stepsUp = ref(6)
+const stepsDown = ref(2)
+
+const copiedIndex = ref<number | null>(null)
+const copiedFlash = ref<number | null>(null)
 
 const scale = computed(() => {
-  return generateTypeScale(baseSize.value, ratio.value, 2, 8)
+  return generateTypeScale(baseSize.value, ratio.value, stepsDown.value, stepsUp.value)
 })
+
+// Preview entries: map steps to semantic labels
+const previewEntries = computed(() => {
+  const entries = scale.value
+  const baseIndex = stepsDown.value
+
+  // Map to semantic labels based on position relative to base
+  const labels = [
+    { offset: -6, key: 'display' },
+    { offset: -4, key: 'heading1' },
+    { offset: -2, key: 'heading2' },
+    { offset: -1, key: 'heading3' },
+    { offset: 0, key: 'body' },
+    { offset: 1, key: 'caption' },
+  ]
+
+  return labels
+    .map(({ offset, key }) => {
+      const index = baseIndex + offset
+      if (index >= 0 && index < entries.length) {
+        return {
+          ...entries[index],
+          label: t(`typeScale.sampleText.${key}`),
+        }
+      }
+      return null
+    })
+    .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
+})
+
+// Generate CSS custom properties output
+const cssOutput = computed(() => {
+  const lines = [':root {']
+  lines.push(`  --font-size-base: ${baseSize.value}px;`)
+  lines.push(`  --font-scale-ratio: ${ratio.value};`)
+  lines.push('')
+
+  scale.value.forEach((s) => {
+    const stepName = s.step === 0 ? 'base' : `step-${s.step}`
+    lines.push(`  --font-size-${stepName}: ${s.px}px; /* ${s.rem}rem */`)
+  })
+
+  lines.push('}')
+  return lines.join('\n')
+})
+
+function clampNumber(value: number, min: number, max: number): number {
+  if (isNaN(value)) return min
+  return Math.max(min, Math.min(max, value))
+}
+
+async function copyValue(entry: { step: number; px: number; rem: number }) {
+  const cssVar = `--font-size-${entry.step === 0 ? 'base' : `step-${entry.step}`}`
+  const text = `${cssVar}: ${entry.px}px;`
+  await navigator.clipboard.writeText(text)
+  copiedIndex.value = entry.step
+  setTimeout(() => { copiedIndex.value = null }, 2000)
+}
+
+async function copyAllCSS() {
+  await navigator.clipboard.writeText(cssOutput.value)
+  copiedFlash.value = Date.now()
+  setTimeout(() => { copiedFlash.value = null }, 2000)
+}
 </script>
 
 <style scoped>
-.gi-table-wrapper {
-  margin-top: 1rem;
+/* Controls Section */
+.ts-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-lg);
+  margin-bottom: var(--gi-space-xl);
+}
+
+.ts-control-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gi-space-lg);
+}
+
+@media (max-width: 640px) {
+  .ts-control-row {
+    grid-template-columns: 1fr;
+    gap: var(--gi-space-md);
+  }
+}
+
+.ts-field-with-slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-sm);
+}
+
+.ts-field-with-slider .gi-input {
+  width: 100%;
+  min-height: 44px;
+}
+
+.ts-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: var(--gi-radius-pill);
+  background: var(--gi-border-soft);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.ts-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gi-brand);
+  cursor: pointer;
+  border: 2px solid var(--gi-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.ts-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.ts-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gi-brand);
+  cursor: pointer;
+  border: 2px solid var(--gi-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.ts-slider:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+/* Visual Preview Section */
+.ts-visual-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-md);
+  padding: var(--gi-space-md) 0;
+}
+
+.ts-preview-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-xs);
+  padding: var(--gi-space-sm) 0;
+  border-bottom: 1px solid var(--gi-border-soft);
+}
+
+.ts-preview-item:last-child {
+  border-bottom: none;
+}
+
+.ts-preview-label {
+  font-size: var(--gi-font-size-xs);
+  font-weight: 600;
+  color: var(--gi-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ts-preview-value {
+  color: var(--gi-text);
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+/* CSS Output Section */
+.ts-css-output {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-md);
+}
+
+.ts-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gi-space-xs);
+  padding: 0.5rem 1rem;
+  min-height: 44px;
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-md);
+  color: var(--gi-text);
+  font-size: var(--gi-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+  align-self: flex-end;
+}
+
+.ts-copy-btn:hover {
+  background: var(--gi-surface-hover);
+  border-color: var(--gi-brand);
+}
+
+.ts-copy-btn:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+.ts-copy-btn:active {
+  transform: scale(0.98);
+}
+
+.ts-copy-btn--success {
+  background: rgba(10, 170, 142, 0.1);
+  border-color: var(--gi-brand);
+  color: var(--gi-brand);
+}
+
+.ts-code {
+  background: var(--gi-bg-soft);
+  border: 1px solid var(--gi-border-soft);
+  border-radius: var(--gi-radius-md);
+  padding: var(--gi-space-md);
+  overflow-x: auto;
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+  font-size: var(--gi-font-size-sm);
+  line-height: 1.6;
+  color: var(--gi-text);
+  margin: 0;
+}
+
+[data-theme="dark"] .ts-code {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Table Section */
+.ts-table-wrapper {
+  overflow-x: auto;
+  margin-top: var(--gi-space-md);
   border-radius: var(--gi-radius);
   border: 1px solid var(--gi-border);
 }
-.gi-table tr:last-child td { border-bottom: none; }
+
+.ts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ts-table th,
+.ts-table td {
+  padding: var(--gi-space-sm) var(--gi-space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--gi-border-soft);
+  vertical-align: middle;
+}
+
+.ts-table thead th {
+  font-weight: 600;
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--gi-bg-soft);
+}
+
+.ts-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ts-table-row--base {
+  background: rgba(10, 170, 142, 0.05);
+}
+
+.ts-table-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ts-unit {
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-text-muted);
+  margin-left: 2px;
+}
+
+.ts-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--gi-radius-pill);
+  font-weight: 600;
+  font-size: var(--gi-font-size-sm);
+  color: var(--gi-text-muted);
+  background: var(--gi-bg-soft);
+}
+
+.ts-step--base {
+  color: var(--gi-surface);
+  background: var(--gi-brand);
+}
+
+.ts-table-preview {
+  color: var(--gi-text);
+  line-height: 1.3;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ts-table-actions {
+  width: 60px;
+  text-align: center;
+}
+
+.ts-copy-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--gi-text-muted);
+  border-radius: var(--gi-radius-md);
+  cursor: pointer;
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.ts-copy-icon-btn:hover {
+  background: var(--gi-bg-soft);
+  color: var(--gi-text);
+}
+
+.ts-copy-icon-btn:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+.ts-copy-icon-btn--success {
+  color: var(--gi-brand);
+  background: rgba(10, 170, 142, 0.1);
+}
+
+@media (max-width: 768px) {
+  .ts-table-preview {
+    max-width: 120px;
+  }
+}
 </style>
