@@ -40,35 +40,26 @@
           </div>
           <div class="pw-result-secondary">
             <span class="pw-result-detail">
-              {{ formatNumber(result.grams) }} g
+              {{ formatNumber(result.grams) }} g total
             </span>
-            <span class="pw-result-divider" aria-hidden="true">•</span>
-            <span v-if="mode === 'flyers'" class="pw-result-detail">
-              {{ formatNumber(quantity) }} {{ t('paperWeight.sheets') }}
-            </span>
-            <template v-else>
+            <template v-if="mode === 'flyers'">
+              <span class="pw-result-divider" aria-hidden="true">•</span>
+              <span class="pw-result-detail">
+                {{ flyersWeightPerUnit }} / flyer
+              </span>
+            </template>
+            <template v-if="mode === 'booklet'">
+              <span class="pw-result-divider" aria-hidden="true">•</span>
               <span class="pw-result-detail">
                 {{ formatNumber(bookletCopies) }} {{ t('paperWeight.copies') }}
               </span>
               <span class="pw-result-divider" aria-hidden="true">•</span>
               <span class="pw-result-detail">
-                {{ formatNumber(bookletPages) }} {{ t('paperWeight.pages') }}
-              </span>
-              <span v-if="bookletWeightPerUnit" class="pw-result-divider" aria-hidden="true">•</span>
-              <span v-if="bookletWeightPerUnit" class="pw-result-detail">
                 {{ bookletWeightPerUnit }} / {{ t('paperWeight.modeBooklet').toLowerCase() }}
               </span>
             </template>
           </div>
         </div>
-        <button
-          class="pw-reset-btn"
-          @click="resetCalculator"
-          :title="t('paperWeight.reset')"
-          aria-label="Reset calculator"
-        >
-          <RotateCcw :size="16" aria-hidden="true" />
-        </button>
       </div>
     </Transition>
 
@@ -93,6 +84,7 @@
                     type="number"
                     class="gi-input pw-quantity-input"
                     :aria-label="t('paperWeight.quantity')"
+                    @blur="quantity = clampNumber(quantity, 1, MAX_QUANTITY)"
                   />
                   <span class="pw-quantity-label">{{ t('paperWeight.sheets') }}</span>
                 </div>
@@ -107,19 +99,129 @@
             :marks="quantityMarks"
             :label="t('paperWeight.quantity')"
           />
-          <span v-if="quantityError" class="pw-error" role="alert">{{ quantityError }}</span>
+          <div class="pw-presets" role="group" :aria-label="t('paperWeight.quantityPresets')">
+            <button
+              v-for="preset in quantityPresets"
+              :key="preset"
+              class="pw-preset-btn"
+              :class="{ 'pw-preset-active': quantity === preset }"
+              @click="quantity = preset"
+              :aria-pressed="quantity === preset"
+            >
+              {{ formatPresetNumber(preset) }}
+            </button>
+          </div>
         </div>
 
         <!-- Format -->
         <div class="pw-input-group">
           <GiFormField :label="t('paperWeight.format')">
             <template #input>
-              <select v-model="selectedFormat" class="gi-select pw-format-select">
-                <option v-for="(dims, key) in FORMATS" :key="key" :value="key">
-                  {{ t(`paperWeight.formats.${key}`) }} - {{ dims.width }} × {{ dims.height }} mm
-                </option>
-                <option value="Custom">{{ t('paperWeight.formats.Custom') }}...</option>
-              </select>
+              <div class="pw-format-grid" role="radiogroup" :aria-label="t('paperWeight.format')">
+                <!-- A5: A5 inside dashed A4 -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'A5' }"
+                  @click="selectedFormat = 'A5'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'A5'"
+                  :aria-label="`${t('paperWeight.formats.A5')} - 148 × 210 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="10" y="5" width="60" height="85" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="20" y="15" width="40" height="57" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="48" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A5</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.A5') }}</span>
+                  <span class="pw-format-dims">14,8 × 21 cm</span>
+                </button>
+                <!-- A6: A6 inside dashed A5 -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'A6' }"
+                  @click="selectedFormat = 'A6'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'A6'"
+                  :aria-label="`${t('paperWeight.formats.A6')} - 105 × 148 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="15" y="10" width="50" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="25" y="22" width="30" height="42" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="47" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A6</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.A6') }}</span>
+                  <span class="pw-format-dims">10,5 × 14,8 cm</span>
+                </button>
+                <!-- Carte: same as A6 -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'Carte' }"
+                  @click="selectedFormat = 'Carte'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'Carte'"
+                  :aria-label="`${t('paperWeight.formats.Carte')} - 105 × 148 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="15" y="10" width="50" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="25" y="22" width="30" height="42" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="47" text-anchor="middle" font-size="8" font-weight="700" fill="currentColor" opacity="0.9">Carte</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.Carte') }}</span>
+                  <span class="pw-format-dims">10,5 × 14,8 cm</span>
+                </button>
+                <!-- DL: tall narrow inside dashed A4 -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'DL' }"
+                  @click="selectedFormat = 'DL'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'DL'"
+                  :aria-label="`${t('paperWeight.formats.DL')} - 110 × 220 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="10" y="5" width="60" height="85" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="30" y="10" width="20" height="75" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor" opacity="0.9">DL</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.DL') }}</span>
+                  <span class="pw-format-dims">11 × 22 cm</span>
+                </button>
+                <!-- A4: A4 inside dashed A3 -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'A4' }"
+                  @click="selectedFormat = 'A4'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'A4'"
+                  :aria-label="`${t('paperWeight.formats.A4')} - 210 × 297 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="5" y="2" width="70" height="92" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="15" y="10" width="50" height="66" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="48" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A4</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.A4') }}</span>
+                  <span class="pw-format-dims">21 × 29,7 cm</span>
+                </button>
+                <!-- Custom: compass icon -->
+                <button
+                  class="pw-format-card pw-format-card--custom"
+                  :class="{ 'pw-format-active': selectedFormat === 'Custom' }"
+                  @click="selectedFormat = 'Custom'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'Custom'"
+                  :aria-label="t('paperWeight.formats.Custom')"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="15" y="20" width="50" height="50" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+                    <line x1="15" y1="70" x2="65" y2="20" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+                    <circle cx="15" cy="70" r="3" fill="currentColor" opacity="0.5"/>
+                    <circle cx="65" cy="20" r="3" fill="currentColor" opacity="0.5"/>
+                    <text x="40" y="90" text-anchor="middle" font-size="8" font-weight="600" fill="currentColor" opacity="0.7">↔</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.Custom') }}</span>
+                </button>
+              </div>
             </template>
           </GiFormField>
 
@@ -160,7 +262,7 @@
             :label="t('paperWeight.grammage')"
             type="number"
             :model-value="grammage"
-            @update:model-value="grammage = clampNumber(Number($event), 30, 500)"
+            @update:model-value="grammage = clampNumber(Number($event), 1, 500)"
           >
             <template #input>
               <div class="pw-grammage-row">
@@ -175,14 +277,18 @@
               </div>
             </template>
           </GiFormField>
-          <GiLogSlider
-            v-model="grammage"
-            :min="30"
-            :max="500"
-            :step="() => 5"
-            :marks="grammageMarks"
-            :label="t('paperWeight.grammage')"
-          />
+          <div class="pw-presets" role="group" :aria-label="t('paperWeight.grammagePresets')">
+            <button
+              v-for="preset in grammagePresets"
+              :key="preset"
+              class="pw-preset-btn"
+              :class="{ 'pw-preset-active': grammage === preset }"
+              @click="grammage = preset"
+              :aria-pressed="grammage === preset"
+            >
+              {{ preset }} g/m²
+            </button>
+          </div>
           <p class="pw-helper-text">{{ grammageHelper }}</p>
           <span v-if="grammageError" class="pw-error" role="alert">{{ grammageError }}</span>
         </div>
@@ -210,6 +316,7 @@
                     inputmode="numeric"
                     class="gi-input pw-quantity-input"
                     :aria-label="t('paperWeight.bookletCopies')"
+                    @blur="bookletCopies = clampNumber(bookletCopies, 1, MAX_QUANTITY)"
                   />
                   <span class="pw-quantity-label">{{ t('paperWeight.copies') }}</span>
                 </div>
@@ -227,26 +334,38 @@
 
           <!-- Pages per booklet -->
           <div class="pw-input-group">
-            <GiFormField
-              :label="t('paperWeight.bookletPages')"
-              type="number"
-              :model-value="bookletPages"
-              @update:model-value="bookletPages = clampNumber(Number($event), 4, 9999)"
-            >
+            <GiFormField :label="t('paperWeight.bookletPages')">
               <template #input>
-                <div class="pw-quantity-row">
-                  <input
-                    v-model.number="bookletPages"
-                    type="text"
-                    inputmode="numeric"
-                    class="gi-input pw-quantity-input"
-                    :aria-label="t('paperWeight.bookletPages')"
-                  />
-                  <span class="pw-quantity-label">{{ t('paperWeight.pages') }}</span>
-                </div>
+                <select v-model.number="bookletPages" class="gi-select pw-pages-select">
+                  <option v-for="pageCount in bookletPagesOptions" :key="pageCount" :value="pageCount">
+                    {{ pageCount }} {{ t('paperWeight.pages') }}
+                  </option>
+                  <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
+                </select>
               </template>
             </GiFormField>
             <p class="pw-helper-text">{{ t('paperWeight.bookletPagesHint') }}</p>
+
+            <!-- Custom Pages Input -->
+            <Transition name="expand">
+              <div v-if="bookletPages === 'custom'" class="pw-custom-pages">
+                <GiFormField :label="t('paperWeight.customPages')">
+                  <template #input>
+                    <div class="pw-custom-pages-row">
+                      <input
+                        v-model.number="customBookletPages"
+                        type="text"
+                        inputmode="numeric"
+                        class="gi-input pw-custom-input"
+                        :placeholder="t('paperWeight.customPagesPlaceholder')"
+                        :aria-label="t('paperWeight.customPages')"
+                      />
+                      <span class="pw-custom-unit">{{ t('paperWeight.pages') }}</span>
+                    </div>
+                  </template>
+                </GiFormField>
+              </div>
+            </Transition>
           </div>
         </div>
 
@@ -254,12 +373,111 @@
         <div class="pw-input-group">
           <GiFormField :label="t('paperWeight.format')">
             <template #input>
-              <select v-model="selectedFormat" class="gi-select pw-format-select">
-                <option v-for="(dims, key) in FORMATS" :key="key" :value="key">
-                  {{ t(`paperWeight.formats.${key}`) }} - {{ dims.width }} × {{ dims.height }} mm
-                </option>
-                <option value="Custom">{{ t('paperWeight.formats.Custom') }}...</option>
-              </select>
+              <div class="pw-format-grid" role="radiogroup" :aria-label="t('paperWeight.format')">
+                <!-- A5 -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'A5' }"
+                  @click="selectedFormat = 'A5'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'A5'"
+                  :aria-label="`${t('paperWeight.formats.A5')} - 148 × 210 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="10" y="5" width="60" height="85" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="20" y="15" width="40" height="57" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="48" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A5</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.A5') }}</span>
+                  <span class="pw-format-dims">14,8 × 21 cm</span>
+                </button>
+                <!-- A6 -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'A6' }"
+                  @click="selectedFormat = 'A6'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'A6'"
+                  :aria-label="`${t('paperWeight.formats.A6')} - 105 × 148 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="15" y="10" width="50" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="25" y="22" width="30" height="42" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="47" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A6</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.A6') }}</span>
+                  <span class="pw-format-dims">10,5 × 14,8 cm</span>
+                </button>
+                <!-- Carte -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'Carte' }"
+                  @click="selectedFormat = 'Carte'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'Carte'"
+                  :aria-label="`${t('paperWeight.formats.Carte')} - 105 × 148 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="15" y="10" width="50" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="25" y="22" width="30" height="42" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="47" text-anchor="middle" font-size="8" font-weight="700" fill="currentColor" opacity="0.9">Carte</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.Carte') }}</span>
+                  <span class="pw-format-dims">10,5 × 14,8 cm</span>
+                </button>
+                <!-- DL -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'DL' }"
+                  @click="selectedFormat = 'DL'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'DL'"
+                  :aria-label="`${t('paperWeight.formats.DL')} - 110 × 220 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="10" y="5" width="60" height="85" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="30" y="10" width="20" height="75" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor" opacity="0.9">DL</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.DL') }}</span>
+                  <span class="pw-format-dims">11 × 22 cm</span>
+                </button>
+                <!-- A4 -->
+                <button
+                  class="pw-format-card"
+                  :class="{ 'pw-format-active': selectedFormat === 'A4' }"
+                  @click="selectedFormat = 'A4'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'A4'"
+                  :aria-label="`${t('paperWeight.formats.A4')} - 210 × 297 mm`"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="5" y="2" width="70" height="92" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
+                    <rect x="15" y="10" width="50" height="66" rx="1" fill="currentColor" opacity="0.25"/>
+                    <text x="40" y="48" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A4</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.A4') }}</span>
+                  <span class="pw-format-dims">21 × 29,7 cm</span>
+                </button>
+                <!-- Custom -->
+                <button
+                  class="pw-format-card pw-format-card--custom"
+                  :class="{ 'pw-format-active': selectedFormat === 'Custom' }"
+                  @click="selectedFormat = 'Custom'"
+                  role="radio"
+                  :aria-checked="selectedFormat === 'Custom'"
+                  :aria-label="t('paperWeight.formats.Custom')"
+                >
+                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
+                    <rect x="15" y="20" width="50" height="50" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+                    <line x1="15" y1="70" x2="65" y2="20" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+                    <circle cx="15" cy="70" r="3" fill="currentColor" opacity="0.5"/>
+                    <circle cx="65" cy="20" r="3" fill="currentColor" opacity="0.5"/>
+                    <text x="40" y="90" text-anchor="middle" font-size="8" font-weight="600" fill="currentColor" opacity="0.7">↔</text>
+                  </svg>
+                  <span class="pw-format-name">{{ t('paperWeight.formats.Custom') }}</span>
+                </button>
+              </div>
             </template>
           </GiFormField>
 
@@ -301,12 +519,12 @@
           <!-- Cover Grammage -->
           <div class="pw-input-group pw-cover-group">
             <div class="pw-subsection-header">
-              <span class="pw-subsection-icon" aria-hidden="true">📄</span>
+              <FileText :size="18" class="pw-subsection-icon" aria-hidden="true" />
               <GiFormField
                 :label="t('paperWeight.bookletCoverGrammage')"
                 type="number"
                 :model-value="bookletCoverGrammage"
-                @update:model-value="bookletCoverGrammage = clampNumber(Number($event), 30, 500)"
+                @update:model-value="bookletCoverGrammage = clampNumber(Number($event), 1, 500)"
               >
                 <template #input>
                   <div class="pw-grammage-row">
@@ -322,26 +540,30 @@
                 </template>
               </GiFormField>
             </div>
-            <GiLogSlider
-              v-model="bookletCoverGrammage"
-              :min="30"
-              :max="500"
-              :step="() => 5"
-              :marks="grammageMarks"
-              :label="t('paperWeight.bookletCoverGrammage')"
-            />
+            <div class="pw-presets pw-presets--grammage" role="group" :aria-label="t('paperWeight.grammagePresets')">
+              <button
+                v-for="preset in grammagePresets"
+                :key="'cover-' + preset"
+                class="pw-preset-btn"
+                :class="{ 'pw-preset-active': bookletCoverGrammage === preset }"
+                @click="bookletCoverGrammage = preset"
+                :aria-pressed="bookletCoverGrammage === preset"
+              >
+                {{ preset }}
+              </button>
+            </div>
             <p class="pw-helper-text pw-cover-hint">{{ t('paperWeight.coverHint') }}</p>
           </div>
 
           <!-- Inner Pages Grammage -->
           <div class="pw-input-group pw-inner-group">
             <div class="pw-subsection-header">
-              <span class="pw-subsection-icon" aria-hidden="true">📑</span>
+              <FileStack :size="18" class="pw-subsection-icon" aria-hidden="true" />
               <GiFormField
                 :label="t('paperWeight.bookletInnerGrammage')"
                 type="number"
                 :model-value="bookletInnerGrammage"
-                @update:model-value="bookletInnerGrammage = clampNumber(Number($event), 30, 500)"
+                @update:model-value="bookletInnerGrammage = clampNumber(Number($event), 1, 500)"
               >
                 <template #input>
                   <div class="pw-grammage-row">
@@ -357,24 +579,22 @@
                 </template>
               </GiFormField>
             </div>
-            <GiLogSlider
-              v-model="bookletInnerGrammage"
-              :min="30"
-              :max="500"
-              :step="() => 5"
-              :marks="grammageMarks"
-              :label="t('paperWeight.bookletInnerGrammage')"
-            />
+            <div class="pw-presets pw-presets--grammage" role="group" :aria-label="t('paperWeight.grammagePresets')">
+              <button
+                v-for="preset in grammagePresets"
+                :key="'inner-' + preset"
+                class="pw-preset-btn"
+                :class="{ 'pw-preset-active': bookletInnerGrammage === preset }"
+                @click="bookletInnerGrammage = preset"
+                :aria-pressed="bookletInnerGrammage === preset"
+              >
+                {{ preset }}
+              </button>
+            </div>
             <p class="pw-helper-text">{{ t('paperWeight.innerHint') }}</p>
           </div>
         </div>
       </template>
-
-      <!-- Reset Button (mobile only) -->
-      <button class="gi-btn gi-btn-ghost pw-reset-btn-mobile" @click="resetCalculator">
-        <RotateCcw :size="16" aria-hidden="true" style="margin-right: var(--gi-space-sm)" />
-        {{ t('paperWeight.reset') }}
-      </button>
     </div>
 
     <template #about>{{ t('paperWeight.about') }}</template>
@@ -384,7 +604,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Weight, RotateCcw, Layers, BookOpen } from 'lucide-vue-next'
+import { Weight, Layers, BookOpen, FileText, FileStack } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 import GiLogSlider from '../components/GiLogSlider.vue'
@@ -415,9 +635,13 @@ const grammage = ref(250)
 
 // Booklet mode state
 const bookletCopies = ref(1000)
-const bookletPages = ref(16)
+const bookletPages = ref<number | 'custom'>(16)
+const customBookletPages = ref(20)
 const bookletCoverGrammage = ref(250)
 const bookletInnerGrammage = ref(135)
+
+// Booklet pages options (common multiples of 4)
+const bookletPagesOptions = [4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96, 112, 128]
 
 // Quantity step function: varies based on current value
 function quantityStep(value: number): number {
@@ -442,16 +666,16 @@ const quantityMarks = computed(() => [
   { value: MAX_QUANTITY, label: '100M' },
 ])
 
-// Grammage marks for slider (reduced to key values)
-const grammageMarks = [
-  { value: 80, label: '80' },
-  { value: 115, label: '115' },
-  { value: 135, label: '135' },
-  { value: 170, label: '170' },
-  { value: 250, label: '250' },
-  { value: 350, label: '350' },
-  { value: 500, label: '500' },
-]
+// Quick presets
+const quantityPresets = [1000, 5000, 10000, 25000, 50000, 100000]
+const grammagePresets = [80, 115, 135, 170, 250, 350]
+
+// Format preset number with suffix
+function formatPresetNumber(n: number): string {
+  if (n >= 1000000) return `${n / 1000000}M`
+  if (n >= 1000) return `${n / 1000}k`
+  return String(n)
+}
 
 // Helper text for grammage
 const grammageHelper = computed(() => {
@@ -463,16 +687,9 @@ const grammageHelper = computed(() => {
 })
 
 // Validation errors
-const quantityError = computed(() => {
-  const val = mode.value === 'flyers' ? quantity.value : bookletCopies.value
-  if (val <= 0) return t('paperWeight.error.minQuantity')
-  if (val > MAX_QUANTITY) return t('paperWeight.error.maxQuantity')
-  return null
-})
-
 const grammageError = computed(() => {
   const g = mode.value === 'booklet' ? bookletInnerGrammage.value : grammage.value
-  if (g < 30) return t('paperWeight.error.minGrammage')
+  if (g < 1) return t('paperWeight.error.minGrammage')
   if (g > 500) return t('paperWeight.error.maxGrammage')
   return null
 })
@@ -481,6 +698,12 @@ const grammageError = computed(() => {
 const activeDims = computed(() => {
   if (selectedFormat.value === 'Custom') return { width: customWidth.value, height: customHeight.value }
   return FORMATS[selectedFormat.value as keyof typeof FORMATS]
+})
+
+// Actual booklet pages (handles 'custom' case)
+const actualPages = computed(() => {
+  if (mode.value !== 'booklet') return 0
+  return bookletPages.value === 'custom' ? customBookletPages.value : bookletPages.value
 })
 
 // Flyers result
@@ -498,13 +721,14 @@ const flyersResult = computed(() => {
 const bookletResult = computed(() => {
   if (mode.value !== 'booklet') return null
   const { width, height } = activeDims.value
+  const pages = actualPages.value
   if (bookletCopies.value <= 0 || width <= 0 || height <= 0) return null
-  if (bookletPages.value < 4) return null
+  if (pages < 4) return null
   if (bookletCoverGrammage.value <= 0 || bookletInnerGrammage.value <= 0) return null
 
   const surfaceM2 = (width / 1000) * (height / 1000)
   const coverGramsPerBooklet = surfaceM2 * bookletCoverGrammage.value * 2
-  const innerPagesCount = Math.max(bookletPages.value - 2, 0)
+  const innerPagesCount = Math.max(pages - 2, 0)
   const innerGramsPerBooklet = surfaceM2 * bookletInnerGrammage.value * innerPagesCount
   const gramsPerBooklet = coverGramsPerBooklet + innerGramsPerBooklet
   const totalGrams = Math.round(gramsPerBooklet * bookletCopies.value)
@@ -536,6 +760,16 @@ const bookletWeightPerUnit = computed(() => {
   return `${(g / 1000).toFixed(2)} kg`
 })
 
+// Flyers per-unit weight display
+const flyersWeightPerUnit = computed(() => {
+  if (mode.value !== 'flyers' || !result.value) return null
+  // Weight per single flyer
+  const gramsPerFlyer = result.value.grams / quantity.value
+  if (gramsPerFlyer < 1) return `${(gramsPerFlyer * 1000).toFixed(1)} mg`
+  if (gramsPerFlyer < 1000) return `${gramsPerFlyer.toFixed(1)} g`
+  return `${(gramsPerFlyer / 1000).toFixed(2)} kg`
+})
+
 // Format number with thousand separators
 const formatNumber = (num: number): string => {
   return Math.round(num).toLocaleString()
@@ -546,20 +780,6 @@ const clampNumber = (val: number, min: number, max: number): number => {
   if (isNaN(val) || val < min) return min
   if (val > max) return max
   return val
-}
-
-// Reset calculator
-const resetCalculator = () => {
-  mode.value = 'flyers'
-  quantity.value = 50000
-  selectedFormat.value = 'A6'
-  customWidth.value = 100
-  customHeight.value = 100
-  grammage.value = 250
-  bookletCopies.value = 1000
-  bookletPages.value = 16
-  bookletCoverGrammage.value = 250
-  bookletInnerGrammage.value = 135
 }
 
 // Reset custom dimensions when format changes
@@ -578,8 +798,8 @@ watch(selectedFormat, (newFormat) => {
 /* Mode Toggle */
 .pw-mode-toggle {
   display: flex;
-  gap: var(--gi-space-sm);
-  margin-bottom: var(--gi-space-lg);
+  gap: var(--gi-space-xs);
+  margin-bottom: var(--gi-space-md);
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -590,9 +810,9 @@ watch(selectedFormat, (newFormat) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--gi-space-sm);
-  padding: var(--gi-space-md) var(--gi-space-lg);
-  min-height: 48px;
+  gap: var(--gi-space-xs);
+  padding: var(--gi-space-sm) var(--gi-space-md);
+  min-height: 44px;
   border: 1px solid var(--gi-border);
   background: var(--gi-surface);
   color: var(--gi-text);
@@ -627,13 +847,15 @@ watch(selectedFormat, (newFormat) => {
 
 /* Result Banner */
 .pw-result-banner {
-  position: relative;
+  position: sticky;
+  top: 80px;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gi-space-md);
-  padding: var(--gi-space-lg) var(--gi-space-xl);
-  margin-bottom: var(--gi-space-xl);
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-md) var(--gi-space-lg);
+  margin-bottom: var(--gi-space-lg);
   background: linear-gradient(135deg, var(--gi-brand) 0%, var(--gi-brand-dark, var(--gi-brand)) 100%);
   color: white;
   border-radius: var(--gi-radius-lg);
@@ -642,13 +864,13 @@ watch(selectedFormat, (newFormat) => {
 }
 
 .pw-result-banner:hover {
-  box-shadow: var(--gi-shadow-lg);
+  box-shadow: var(--gi-shadow-md);
 }
 
 .pw-result-content {
   display: flex;
   flex-direction: column;
-  gap: var(--gi-space-sm);
+  gap: var(--gi-space-xs);
   flex: 1;
 }
 
@@ -659,14 +881,14 @@ watch(selectedFormat, (newFormat) => {
 }
 
 .pw-result-value {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;
 }
 
 .pw-result-unit {
-  font-size: var(--gi-font-size-lg);
+  font-size: var(--gi-font-size-md);
   font-weight: 600;
   opacity: 0.9;
 }
@@ -674,10 +896,11 @@ watch(selectedFormat, (newFormat) => {
 .pw-result-secondary {
   display: flex;
   align-items: center;
-  gap: var(--gi-space-sm);
-  font-size: var(--gi-font-size-sm);
+  gap: var(--gi-space-xs);
+  font-size: var(--gi-font-size-xs);
   font-weight: 500;
   opacity: 0.9;
+  flex-wrap: wrap;
 }
 
 .pw-result-detail {
@@ -686,36 +909,6 @@ watch(selectedFormat, (newFormat) => {
 
 .pw-result-divider {
   opacity: 0.5;
-}
-
-.pw-reset-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--gi-space-sm);
-  min-width: 44px;
-  min-height: 44px;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  cursor: pointer;
-  border-radius: var(--gi-radius-md);
-  transition: all var(--gi-transition-fast) var(--gi-ease-out);
-  flex-shrink: 0;
-}
-
-.pw-reset-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
-}
-
-.pw-reset-btn:active {
-  transform: scale(0.95);
-}
-
-.pw-reset-btn:focus-visible {
-  outline: 3px solid white;
-  outline-offset: 2px;
 }
 
 /* Animations */
@@ -759,23 +952,24 @@ watch(selectedFormat, (newFormat) => {
 .pw-inputs {
   display: flex;
   flex-direction: column;
-  gap: var(--gi-space-lg);
+  gap: var(--gi-space-md);
   max-width: 600px;
   margin: 0 auto;
+  padding-top: calc(80px + var(--gi-space-xl));
 }
 
 .pw-input-group {
   display: flex;
   flex-direction: column;
-  gap: var(--gi-space-sm);
+  gap: var(--gi-space-xs);
 }
 
 /* Booklet sections */
 .pw-booklet-section {
   display: flex;
   flex-direction: column;
-  gap: var(--gi-space-md);
-  padding: var(--gi-space-lg);
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-md);
   background: var(--gi-surface);
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
@@ -786,7 +980,7 @@ watch(selectedFormat, (newFormat) => {
 }
 
 .pw-section-title {
-  font-size: var(--gi-font-size-sm);
+  font-size: var(--gi-font-size-xs);
   font-weight: 600;
   color: var(--gi-text);
   margin: 0 0 var(--gi-space-xs) 0;
@@ -831,9 +1025,9 @@ watch(selectedFormat, (newFormat) => {
 .pw-quantity-input,
 .pw-grammage-input {
   flex: 1;
-  font-size: var(--gi-font-size-lg);
-  padding: var(--gi-space-md);
-  min-height: 48px;
+  font-size: var(--gi-font-size-md);
+  padding: var(--gi-space-sm) var(--gi-space-md);
+  min-height: 44px;
 }
 
 .pw-quantity-input:focus-visible,
@@ -855,11 +1049,83 @@ watch(selectedFormat, (newFormat) => {
   min-width: 40px;
 }
 
-/* Format Select */
-.pw-format-select {
+/* Format Cards */
+.pw-format-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: var(--gi-space-sm);
+}
+
+.pw-format-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gi-space-xs);
+  padding: var(--gi-space-sm) var(--gi-space-xs);
+  min-height: 44px;
+  border: 2px solid var(--gi-border);
+  background: var(--gi-surface);
+  color: var(--gi-text);
+  border-radius: var(--gi-radius-md);
+  cursor: pointer;
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+  font-size: var(--gi-font-size-xs);
+  font-weight: 500;
+}
+
+.pw-format-card:hover {
+  border-color: var(--gi-brand);
+  background: var(--gi-tint-green-50, rgba(10, 170, 142, 0.05));
+}
+
+.pw-format-card:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+.pw-format-active {
+  border-color: var(--gi-brand);
+  background: var(--gi-tint-green-100, rgba(10, 170, 142, 0.1));
+  color: var(--gi-brand);
+  box-shadow: 0 0 0 1px var(--gi-brand);
+}
+
+.pw-format-active:hover {
+  background: var(--gi-tint-green-100, rgba(10, 170, 142, 0.1));
+  color: var(--gi-brand);
+}
+
+.pw-format-illustration {
+  width: 72px;
+  height: 72px;
+  color: var(--gi-brand);
+  flex-shrink: 0;
+}
+
+.pw-format-active .pw-format-illustration {
+  color: var(--gi-brand);
+}
+
+.pw-format-name {
+  font-weight: 700;
+  font-size: var(--gi-font-size-xs);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.pw-format-dims {
+  font-size: 10px;
+  color: var(--gi-text-muted);
+  opacity: 0.8;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Pages Select */
+.pw-pages-select {
   width: 100%;
-  padding: var(--gi-space-md);
-  min-height: 48px;
+  padding: var(--gi-space-sm) var(--gi-space-md);
+  min-height: 44px;
   font-size: var(--gi-font-size-md);
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-md);
@@ -869,13 +1135,24 @@ watch(selectedFormat, (newFormat) => {
   transition: all var(--gi-transition-base) var(--gi-ease-out);
 }
 
-.pw-format-select:hover {
+.pw-pages-select:hover {
   border-color: var(--gi-brand);
 }
 
-.pw-format-select:focus {
+.pw-pages-select:focus {
   outline: 2px solid var(--gi-brand);
   outline-offset: 1px;
+}
+
+/* Custom Pages */
+.pw-custom-pages {
+  margin-top: var(--gi-space-sm);
+}
+
+.pw-custom-pages-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gi-space-sm);
 }
 
 /* Custom Format */
@@ -891,8 +1168,8 @@ watch(selectedFormat, (newFormat) => {
 
 .pw-custom-input {
   flex: 1;
-  padding: var(--gi-space-md);
-  min-height: 48px;
+  padding: var(--gi-space-sm) var(--gi-space-md);
+  min-height: 44px;
   font-size: var(--gi-font-size-md);
 }
 
@@ -921,23 +1198,78 @@ watch(selectedFormat, (newFormat) => {
 
 /* Helper Text */
 .pw-helper-text {
-  font-size: var(--gi-font-size-xs);
+  font-size: 11px;
   color: var(--gi-text-muted);
   margin: var(--gi-space-xs) 0 0 0;
-  line-height: 1.5;
+  line-height: 1.4;
   font-style: italic;
+}
+
+/* Preset Buttons */
+.pw-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gi-space-xs);
+  margin-top: var(--gi-space-xs);
+}
+
+.pw-preset-btn {
+  padding: 4px 12px;
+  min-height: 32px;
+  border: 1px solid var(--gi-border);
+  background: var(--gi-surface);
+  color: var(--gi-text-muted);
+  font-size: var(--gi-font-size-xs);
+  font-weight: 500;
+  border-radius: var(--gi-radius-pill);
+  cursor: pointer;
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+  white-space: nowrap;
+}
+
+.pw-preset-btn:hover {
+  border-color: var(--gi-brand);
+  color: var(--gi-brand);
+  background: var(--gi-tint-green-50, rgba(10, 170, 142, 0.05));
+}
+
+.pw-preset-btn:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+.pw-preset-active {
+  border-color: var(--gi-brand);
+  background: var(--gi-brand);
+  color: white;
+}
+
+.pw-preset-active:hover {
+  background: var(--gi-brand);
+  color: white;
+}
+
+/* Grammage presets inside booklet section */
+.pw-presets--grammage {
+  margin-top: var(--gi-space-sm);
+}
+
+.pw-presets--grammage .pw-preset-btn {
+  padding: 3px 10px;
+  font-size: 11px;
+  min-height: 28px;
 }
 
 /* Reset Button Mobile */
 .pw-reset-btn-mobile {
   display: none;
-  margin-top: var(--gi-space-md);
-  min-height: 48px;
+  margin-top: var(--gi-space-sm);
+  min-height: 44px;
 }
 
 /* Error Messages */
 .pw-error {
-  font-size: var(--gi-font-size-xs);
+  font-size: 11px;
   color: var(--gi-error-text, #dc2626);
   margin-top: var(--gi-space-xs);
   font-weight: 500;
@@ -948,12 +1280,12 @@ watch(selectedFormat, (newFormat) => {
   .pw-result-banner {
     flex-direction: column;
     align-items: stretch;
-    padding: var(--gi-space-md);
-    gap: var(--gi-space-md);
+    padding: var(--gi-space-sm);
+    gap: var(--gi-space-sm);
   }
 
   .pw-result-content {
-    gap: var(--gi-space-sm);
+    gap: var(--gi-space-xs);
   }
 
   .pw-result-main {
@@ -965,21 +1297,12 @@ watch(selectedFormat, (newFormat) => {
     flex-wrap: wrap;
   }
 
-  .pw-reset-btn {
-    align-self: center;
-    width: 100%;
-    max-width: 200px;
-  }
-
-  .pw-reset-btn-mobile {
-    display: inline-flex;
-  }
-
   .pw-result-value {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
 
-  .pw-custom-row {
+  .pw-custom-row,
+  .pw-custom-pages-row {
     flex-wrap: wrap;
   }
 
@@ -995,7 +1318,27 @@ watch(selectedFormat, (newFormat) => {
 
 @media (max-width: 480px) {
   .pw-result-value {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+  }
+
+  .pw-format-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pw-format-illustration {
+    width: 56px;
+    height: 56px;
+  }
+
+  .pw-presets {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: var(--gi-space-xs);
+  }
+
+  .pw-preset-btn {
+    flex-shrink: 0;
   }
 }
 
@@ -1012,7 +1355,6 @@ watch(selectedFormat, (newFormat) => {
     transition: none;
   }
 
-  .pw-reset-btn:hover,
   .pw-mode-btn:hover {
     transform: none;
   }
@@ -1021,12 +1363,16 @@ watch(selectedFormat, (newFormat) => {
 /* High Contrast */
 @media (prefers-contrast: more) {
   .pw-mode-btn,
-  .pw-format-select {
+  .pw-format-card {
     border-width: 2px;
   }
 
   .pw-mode-active {
     border-width: 2px;
+  }
+
+  .pw-format-active {
+    border-width: 3px;
   }
 
   .pw-result-banner {

@@ -159,6 +159,8 @@ const en: Messages = {
     bookletCopies: 'Number of booklets',
     bookletPages: 'Pages per booklet',
     bookletPagesHint: 'Page count should be a multiple of 4 for a folded booklet.',
+    customPages: 'Custom page count',
+    customPagesPlaceholder: 'Enter number of pages',
     bookletCoverGrammage: 'Cover weight (g/m²)',
     bookletInnerGrammage: 'Inner pages weight (g/m²)',
     bookletConfig: 'Booklet Configuration',
@@ -174,6 +176,8 @@ const en: Messages = {
       minGrammage: 'Minimum 30 g/m²',
       maxGrammage: 'Maximum 500 g/m²',
     },
+    quantityPresets: 'Quantity presets',
+    grammagePresets: 'Grammage presets',
   },
   utmBuilder: {
     title: 'UTM URL Builder',

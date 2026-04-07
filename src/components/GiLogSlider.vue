@@ -43,9 +43,11 @@ const props = withDefaults(defineProps<{
   marks: { value: number; label: string }[]
   label?: string
   ariaLabel?: string
+  snapTo?: number[]
 }>(), {
   label: '',
   ariaLabel: '',
+  snapTo: undefined,
 })
 
 const emit = defineEmits<{
@@ -77,6 +79,23 @@ function onSliderInput(event: Event) {
 
 function roundToStep(value: number, min: number, max: number, stepFn: (v: number) => number): number {
   const clamped = Math.max(min, Math.min(max, value))
+  
+  // If snapTo is provided, snap to the nearest value in the array
+  if (props.snapTo && props.snapTo.length > 0) {
+    let nearest = props.snapTo[0]
+    let minDist = Math.abs(clamped - nearest)
+    
+    for (let i = 1; i < props.snapTo.length; i++) {
+      const dist = Math.abs(clamped - props.snapTo[i])
+      if (dist < minDist) {
+        minDist = dist
+        nearest = props.snapTo[i]
+      }
+    }
+    return nearest
+  }
+  
+  // Otherwise, use the step function
   const step = stepFn(clamped)
   return Math.round(clamped / step) * step
 }
@@ -168,8 +187,8 @@ function isProminentMark(value: number): boolean {
 /* Marks */
 .gi-log-slider-marks {
   position: relative;
-  height: 28px;
-  margin-top: 4px;
+  height: 24px;
+  margin-top: 2px;
 }
 
 .gi-log-slider-mark {
@@ -182,23 +201,23 @@ function isProminentMark(value: number): boolean {
 
 .gi-log-slider-mark-tick {
   width: 1px;
-  height: 6px;
+  height: 5px;
   background: var(--gi-border);
   border-radius: 1px;
 }
 
 .gi-log-slider-mark-prominent .gi-log-slider-mark-tick {
   width: 2px;
-  height: 10px;
+  height: 8px;
   background: var(--gi-text-muted);
 }
 
 .gi-log-slider-mark-label {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--gi-text-muted);
   opacity: 0.7;
   white-space: nowrap;
-  margin-top: 2px;
+  margin-top: 1px;
   transition: opacity var(--gi-transition-fast) var(--gi-ease-out);
 }
 

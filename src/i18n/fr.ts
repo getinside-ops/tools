@@ -157,6 +157,8 @@ const fr = {
     bookletCopies: 'Nombre de brochures',
     bookletPages: 'Pages par brochure',
     bookletPagesHint: 'Le nombre de pages doit être un multiple de 4 pour une brochure pliée.',
+    customPages: 'Nombre de pages personnalisé',
+    customPagesPlaceholder: 'Entrez le nombre de pages',
     bookletCoverGrammage: 'Grammage couverture (g/m²)',
     bookletInnerGrammage: 'Grammage intérieur (g/m²)',
     bookletConfig: 'Configuration de la brochure',
@@ -172,6 +174,8 @@ const fr = {
       minGrammage: 'Minimum 30 g/m²',
       maxGrammage: 'Maximum 500 g/m²',
     },
+    quantityPresets: 'Préréglages de quantité',
+    grammagePresets: 'Préréglages de grammage',
   },
   utmBuilder: {
     title: "Créateur d'URL UTM",
