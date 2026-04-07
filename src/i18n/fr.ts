@@ -145,6 +145,12 @@ const fr = {
     weightPerThousand: 'Poids pour 1000 ex.',
     totalSheets: 'Nombre total d\'exemplaires',
     sheets: 'ex.',
+    error: {
+      minQuantity: 'Minimum 1 feuille',
+      maxQuantity: 'Maximum 99 999 feuilles',
+      minGrammage: 'Minimum 1 g/m²',
+      maxGrammage: 'Maximum 500 g/m²',
+    },
   },
   utmBuilder: {
     title: "Créateur d'URL UTM",

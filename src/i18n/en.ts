@@ -147,6 +147,12 @@ const en: Messages = {
     weightPerThousand: 'Weight per 1000 sheets',
     totalSheets: 'Total number of sheets',
     sheets: 'sheets',
+    error: {
+      minQuantity: 'Minimum 1 sheet',
+      maxQuantity: 'Maximum 99,999 sheets',
+      minGrammage: 'Minimum 1 g/m²',
+      maxGrammage: 'Maximum 500 g/m²',
+    },
   },
   utmBuilder: {
     title: 'UTM URL Builder',

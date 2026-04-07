@@ -49,6 +49,7 @@
           </div>
         </template>
       </GiFormField>
+      <span v-if="quantityError" class="pw-error" role="alert">{{ quantityError }}</span>
 
       <!-- Format Section -->
       <GiFormField :label="t('paperWeight.format')">
@@ -91,6 +92,7 @@
           </div>
         </template>
       </GiFormField>
+      <span v-if="grammageError" class="pw-error" role="alert">{{ grammageError }}</span>
 
       <!-- Reset Button (mobile only) -->
       <button class="gi-btn gi-btn-ghost pw-reset-btn-mobile" @click="resetCalculator">
@@ -126,6 +128,18 @@ const selectedFormat = ref<FormatKey>('A6')
 const customWidth = ref(100)
 const customHeight = ref(100)
 const grammage = ref(250)
+
+const quantityError = computed(() => {
+  if (quantity.value <= 0) return t('paperWeight.error.minQuantity')
+  if (quantity.value > 99999) return t('paperWeight.error.maxQuantity')
+  return null
+})
+
+const grammageError = computed(() => {
+  if (grammage.value <= 0) return t('paperWeight.error.minGrammage')
+  if (grammage.value > 500) return t('paperWeight.error.maxGrammage')
+  return null
+})
 
 const activeDims = computed(() => {
   if (selectedFormat.value === 'Custom') return { width: customWidth.value, height: customHeight.value }
@@ -365,6 +379,13 @@ const resetCalculator = () => {
 .pw-reset-btn-mobile {
   display: none;
   margin-top: var(--gi-space-sm);
+}
+
+/* Error Messages */
+.pw-error {
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-error);
+  margin-top: var(--gi-space-xs);
 }
 
 /* Responsive */
