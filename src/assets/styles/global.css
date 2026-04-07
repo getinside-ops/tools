@@ -294,6 +294,7 @@ body {
   border-radius: var(--gi-radius-md);
   font-size: 0.9375rem;
   font-family: inherit;
+  line-height: 1.5;
   background: var(--gi-surface);
   color: var(--gi-text);
   transition: all var(--gi-transition-fast) var(--gi-ease-out);
@@ -404,7 +405,10 @@ body {
 .gi-table th, .gi-table td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--gi-border); }
 .gi-table th { font-weight: 600; color: var(--gi-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
-.gi-code { font-family: 'Menlo', 'Monaco', monospace; font-size: 0.85rem; background: var(--gi-bg-soft); padding: 0.75rem 1rem; border-radius: var(--gi-radius-md); color: var(--gi-text); word-break: break-all; }
+.gi-code {
+  font-family: ui-monospace, 'SF Mono', 'Menlo', 'Monaco', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.85rem; background: var(--gi-bg-soft); padding: 0.75rem 1rem; border-radius: var(--gi-radius-md); color: var(--gi-text); word-break: break-all;
+}
 
 .gi-back-link:hover { color: var(--gi-brand); }
 
