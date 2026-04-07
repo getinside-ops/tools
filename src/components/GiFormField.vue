@@ -14,6 +14,7 @@
         :disabled="disabled"
         class="gi-input"
         :class="{ 'gi-input--error': error }"
+        :aria-describedby="error && errorId ? errorId : undefined"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
       <textarea
@@ -24,15 +25,16 @@
         :disabled="disabled"
         class="gi-input gi-input--textarea"
         :class="{ 'gi-input--error': error }"
+        :aria-describedby="error && errorId ? errorId : undefined"
         @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
       />
     </slot>
-    <span v-if="error" class="gi-field-error">{{ error }}</span>
+    <span v-if="error" :id="errorId" class="gi-field-error" role="alert">{{ error }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 export interface GiFormFieldProps {
   label?: string
@@ -53,6 +55,7 @@ defineEmits<{
 }>()
 
 const inputId = ref('')
+const errorId = computed(() => inputId.value ? `${inputId.value}-error` : '')
 
 onMounted(() => {
   inputId.value = `gi-field-${Math.random().toString(36).slice(2, 9)}`
