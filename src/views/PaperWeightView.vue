@@ -8,7 +8,29 @@
       <Weight />
     </template>
 
-    <!-- Result Banner (improved with animation and comparisons) -->
+    <!-- Mode Toggle -->
+    <div class="pw-mode-toggle" role="group" :aria-label="t('paperWeight.modeLabel')">
+      <button
+        class="pw-mode-btn"
+        :class="{ 'pw-mode-active': mode === 'flyers' }"
+        @click="mode = 'flyers'"
+        :aria-pressed="mode === 'flyers'"
+      >
+        <Layers :size="16" aria-hidden="true" />
+        {{ t('paperWeight.modeFlyers') }}
+      </button>
+      <button
+        class="pw-mode-btn"
+        :class="{ 'pw-mode-active': mode === 'booklet' }"
+        @click="mode = 'booklet'"
+        :aria-pressed="mode === 'booklet'"
+      >
+        <BookOpen :size="16" aria-hidden="true" />
+        {{ t('paperWeight.modeBooklet') }}
+      </button>
+    </div>
+
+    <!-- Result Banner -->
     <Transition name="result-fade">
       <div v-if="result" class="pw-result-banner" role="status" aria-live="polite">
         <div class="pw-result-content">
@@ -18,22 +40,20 @@
           </div>
           <div class="pw-result-secondary">
             <span class="pw-result-detail">
-              {{ result.grams.toLocaleString() }} g
+              {{ formatNumber(result.grams) }} g
             </span>
             <span class="pw-result-divider" aria-hidden="true">•</span>
-            <span class="pw-result-detail">
-              {{ totalSheets.toLocaleString() }} {{ t('paperWeight.sheets') }}
+            <span v-if="mode === 'flyers'" class="pw-result-detail">
+              {{ formatNumber(quantity) }} {{ t('paperWeight.sheets') }}
+            </span>
+            <span v-else class="pw-result-detail">
+              {{ formatNumber(bookletCopies) }} {{ t('paperWeight.copies') }} × {{ formatNumber(bookletPages) }} {{ t('paperWeight.pages') }}
             </span>
           </div>
-          <!-- Real-world comparison for context -->
-          <div v-if="comparison" class="pw-result-comparison">
-            <Package :size="16" aria-hidden="true" />
-            <span>≈ {{ comparison }}</span>
-          </div>
         </div>
-        <button 
-          class="pw-reset-btn" 
-          @click="resetCalculator" 
+        <button
+          class="pw-reset-btn"
+          @click="resetCalculator"
           :title="t('paperWeight.reset')"
           aria-label="Reset calculator"
         >
@@ -42,142 +62,291 @@
       </div>
     </Transition>
 
-    <!-- Input Section (improved layout with presets) -->
+    <!-- Input Section -->
     <div class="pw-inputs">
-      <!-- Quantity Section with presets -->
-      <div class="pw-input-group">
-        <GiFormField
-          :label="t('paperWeight.quantity')"
-          type="number"
-          :model-value="quantity"
-          @update:model-value="quantity = Number($event)"
-        >
-          <template #input>
-            <div class="pw-quantity-row">
-              <input
-                v-model.number="quantity"
-                type="number"
-                min="1"
-                max="999999"
-                step="1"
-                class="gi-input pw-quantity-input"
-                aria-label="Quantity"
-              />
-              <span class="pw-quantity-label">{{ t('paperWeight.sheets') }}</span>
-            </div>
-          </template>
-        </GiFormField>
-        
-        <!-- Quick quantity presets -->
-        <div class="pw-presets" role="group" aria-label="Quick quantity selection">
-          <button
-            v-for="preset in quantityPresets"
-            :key="preset"
-            class="pw-preset-btn"
-            :class="{ 'pw-preset-active': quantity === preset }"
-            @click="quantity = preset"
-            :aria-pressed="quantity === preset"
-          >
-            {{ formatNumber(preset) }}
-          </button>
-        </div>
-        <span v-if="quantityError" class="pw-error" role="alert">{{ quantityError }}</span>
-      </div>
 
-      <!-- Format Section -->
-      <div class="pw-input-group">
-        <GiFormField :label="t('paperWeight.format')">
-          <template #input>
-            <select v-model="selectedFormat" class="gi-select pw-format-select">
-              <option v-for="(dims, key) in FORMATS" :key="key" :value="key">
-                {{ t(`paperWeight.formats.${key}`) }} - {{ dims.width }} × {{ dims.height }} mm
-              </option>
-              <option value="Custom">{{ t('paperWeight.formats.Custom') }}...</option>
-            </select>
-          </template>
-        </GiFormField>
-
-        <!-- Custom Format Inputs -->
-        <Transition name="expand">
-          <div v-if="selectedFormat === 'Custom'" class="pw-custom-format">
+      <!-- ==================== FLYERS MODE ==================== -->
+      <template v-if="mode === 'flyers'">
+        <!-- Quantity with Slider -->
+        <div class="pw-input-group">
+          <div class="pw-slider-header">
             <GiFormField
-              :label="t('paperWeight.customDimensions')"
+              :label="t('paperWeight.quantity')"
+              type="number"
+              :model-value="quantity"
+              @update:model-value="quantity = clampNumber(Number($event), 1, MAX_QUANTITY)"
             >
               <template #input>
-                <div class="pw-custom-row">
-                  <input 
-                    v-model.number="customWidth" 
-                    type="number" 
-                    min="1" 
-                    max="1000"
-                    step="1" 
-                    class="gi-input pw-custom-input" 
-                    placeholder="Width"
-                    aria-label="Custom width in millimeters"
+                <div class="pw-quantity-row">
+                  <input
+                    v-model.number="quantity"
+                    type="number"
+                    class="gi-input pw-quantity-input"
+                    :aria-label="t('paperWeight.quantity')"
                   />
-                  <span class="pw-custom-sep" aria-hidden="true">×</span>
-                  <input 
-                    v-model.number="customHeight" 
-                    type="number" 
-                    min="1" 
-                    max="1000"
-                    step="1" 
-                    class="gi-input pw-custom-input" 
-                    placeholder="Height"
-                    aria-label="Custom height in millimeters"
-                  />
-                  <span class="pw-custom-unit">mm</span>
+                  <span class="pw-quantity-label">{{ t('paperWeight.sheets') }}</span>
                 </div>
               </template>
             </GiFormField>
           </div>
-        </Transition>
-      </div>
-
-      <!-- Grammage Section with presets and info -->
-      <div class="pw-input-group">
-        <GiFormField
-          :label="t('paperWeight.grammage')"
-          type="number"
-          :model-value="grammage"
-          @update:model-value="grammage = Number($event)"
-        >
-          <template #input>
-            <div class="pw-grammage-row">
-              <input 
-                v-model.number="grammage" 
-                type="number" 
-                min="30" 
-                max="500"
-                step="5" 
-                class="gi-input pw-grammage-input"
-                aria-label="Paper weight in grams per square meter"
-              />
-              <span class="pw-grammage-unit">g/m²</span>
-            </div>
-          </template>
-        </GiFormField>
-        
-        <!-- Grammage helper text -->
-        <p class="pw-helper-text">
-          {{ grammageHelper }}
-        </p>
-
-        <!-- Quick grammage presets -->
-        <div class="pw-presets" role="group" aria-label="Quick paper weight selection">
-          <button
-            v-for="preset in grammagePresets"
-            :key="preset"
-            class="pw-preset-btn"
-            :class="{ 'pw-preset-active': grammage === preset }"
-            @click="grammage = preset"
-            :aria-pressed="grammage === preset"
-          >
-            {{ preset }} g/m²
-          </button>
+          <input
+            v-model.number="quantity"
+            type="range"
+            :min="1"
+            :max="MAX_QUANTITY"
+            step="1000"
+            class="pw-slider"
+            aria-label="Quantity slider"
+          />
+          <span v-if="quantityError" class="pw-error" role="alert">{{ quantityError }}</span>
         </div>
-        <span v-if="grammageError" class="pw-error" role="alert">{{ grammageError }}</span>
-      </div>
+
+        <!-- Format -->
+        <div class="pw-input-group">
+          <GiFormField :label="t('paperWeight.format')">
+            <template #input>
+              <select v-model="selectedFormat" class="gi-select pw-format-select">
+                <option v-for="(dims, key) in FORMATS" :key="key" :value="key">
+                  {{ t(`paperWeight.formats.${key}`) }} - {{ dims.width }} × {{ dims.height }} mm
+                </option>
+                <option value="Custom">{{ t('paperWeight.formats.Custom') }}...</option>
+              </select>
+            </template>
+          </GiFormField>
+
+          <!-- Custom Format Inputs -->
+          <Transition name="expand">
+            <div v-if="selectedFormat === 'Custom'" class="pw-custom-format">
+              <GiFormField :label="t('paperWeight.customDimensions')">
+                <template #input>
+                  <div class="pw-custom-row">
+                    <input
+                      v-model.number="customWidth"
+                      type="text"
+                      inputmode="numeric"
+                      class="gi-input pw-custom-input"
+                      :placeholder="t('paperWeight.customWidth')"
+                      :aria-label="t('paperWeight.customWidth')"
+                    />
+                    <span class="pw-custom-sep" aria-hidden="true">×</span>
+                    <input
+                      v-model.number="customHeight"
+                      type="text"
+                      inputmode="numeric"
+                      class="gi-input pw-custom-input"
+                      :placeholder="t('paperWeight.customHeight')"
+                      :aria-label="t('paperWeight.customHeight')"
+                    />
+                    <span class="pw-custom-unit">mm</span>
+                  </div>
+                </template>
+              </GiFormField>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- Grammage with Slider -->
+        <div class="pw-input-group">
+          <GiFormField
+            :label="t('paperWeight.grammage')"
+            type="number"
+            :model-value="grammage"
+            @update:model-value="grammage = clampNumber(Number($event), 30, 500)"
+          >
+            <template #input>
+              <div class="pw-grammage-row">
+                <input
+                  v-model.number="grammage"
+                  type="text"
+                  inputmode="numeric"
+                  class="gi-input pw-grammage-input"
+                  :aria-label="t('paperWeight.grammage')"
+                />
+                <span class="pw-grammage-unit">g/m²</span>
+              </div>
+            </template>
+          </GiFormField>
+          <input
+            v-model.number="grammage"
+            type="range"
+            min="30"
+            max="500"
+            step="5"
+            class="pw-slider"
+            aria-label="Grammage slider"
+          />
+          <p class="pw-helper-text">{{ grammageHelper }}</p>
+          <span v-if="grammageError" class="pw-error" role="alert">{{ grammageError }}</span>
+        </div>
+      </template>
+
+      <!-- ==================== BOOKLET MODE ==================== -->
+      <template v-else>
+        <!-- Number of copies with Slider -->
+        <div class="pw-input-group">
+          <GiFormField
+            :label="t('paperWeight.bookletCopies')"
+            type="number"
+            :model-value="bookletCopies"
+            @update:model-value="bookletCopies = clampNumber(Number($event), 1, MAX_QUANTITY)"
+          >
+            <template #input>
+              <div class="pw-quantity-row">
+                <input
+                  v-model.number="bookletCopies"
+                  type="text"
+                  inputmode="numeric"
+                  class="gi-input pw-quantity-input"
+                  :aria-label="t('paperWeight.bookletCopies')"
+                />
+                <span class="pw-quantity-label">{{ t('paperWeight.copies') }}</span>
+              </div>
+            </template>
+          </GiFormField>
+          <input
+            v-model.number="bookletCopies"
+            type="range"
+            :min="1"
+            :max="MAX_QUANTITY"
+            step="10"
+            class="pw-slider"
+            aria-label="Copies slider"
+          />
+        </div>
+
+        <!-- Pages per booklet -->
+        <div class="pw-input-group">
+          <GiFormField
+            :label="t('paperWeight.bookletPages')"
+            type="number"
+            :model-value="bookletPages"
+            @update:model-value="bookletPages = clampNumber(Number($event), 4, 9999)"
+          >
+            <template #input>
+              <div class="pw-quantity-row">
+                <input
+                  v-model.number="bookletPages"
+                  type="text"
+                  inputmode="numeric"
+                  class="gi-input pw-quantity-input"
+                  :aria-label="t('paperWeight.bookletPages')"
+                />
+                <span class="pw-quantity-label">{{ t('paperWeight.pages') }}</span>
+              </div>
+            </template>
+          </GiFormField>
+          <p class="pw-helper-text">{{ t('paperWeight.bookletPagesHint') }}</p>
+        </div>
+
+        <!-- Format -->
+        <div class="pw-input-group">
+          <GiFormField :label="t('paperWeight.format')">
+            <template #input>
+              <select v-model="selectedFormat" class="gi-select pw-format-select">
+                <option v-for="(dims, key) in FORMATS" :key="key" :value="key">
+                  {{ t(`paperWeight.formats.${key}`) }} - {{ dims.width }} × {{ dims.height }} mm
+                </option>
+                <option value="Custom">{{ t('paperWeight.formats.Custom') }}...</option>
+              </select>
+            </template>
+          </GiFormField>
+
+          <!-- Custom Format Inputs -->
+          <Transition name="expand">
+            <div v-if="selectedFormat === 'Custom'" class="pw-custom-format">
+              <GiFormField :label="t('paperWeight.customDimensions')">
+                <template #input>
+                  <div class="pw-custom-row">
+                    <input
+                      v-model.number="customWidth"
+                      type="text"
+                      inputmode="numeric"
+                      class="gi-input pw-custom-input"
+                      :placeholder="t('paperWeight.customWidth')"
+                      :aria-label="t('paperWeight.customWidth')"
+                    />
+                    <span class="pw-custom-sep" aria-hidden="true">×</span>
+                    <input
+                      v-model.number="customHeight"
+                      type="text"
+                      inputmode="numeric"
+                      class="gi-input pw-custom-input"
+                      :placeholder="t('paperWeight.customHeight')"
+                      :aria-label="t('paperWeight.customHeight')"
+                    />
+                    <span class="pw-custom-unit">mm</span>
+                  </div>
+                </template>
+              </GiFormField>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- Cover Grammage -->
+        <div class="pw-input-group">
+          <GiFormField
+            :label="t('paperWeight.bookletCoverGrammage')"
+            type="number"
+            :model-value="bookletCoverGrammage"
+            @update:model-value="bookletCoverGrammage = clampNumber(Number($event), 30, 500)"
+          >
+            <template #input>
+              <div class="pw-grammage-row">
+                <input
+                  v-model.number="bookletCoverGrammage"
+                  type="text"
+                  inputmode="numeric"
+                  class="gi-input pw-grammage-input"
+                  :aria-label="t('paperWeight.bookletCoverGrammage')"
+                />
+                <span class="pw-grammage-unit">g/m²</span>
+              </div>
+            </template>
+          </GiFormField>
+          <input
+            v-model.number="bookletCoverGrammage"
+            type="range"
+            min="30"
+            max="500"
+            step="5"
+            class="pw-slider"
+            aria-label="Cover grammage slider"
+          />
+        </div>
+
+        <!-- Inner Pages Grammage -->
+        <div class="pw-input-group">
+          <GiFormField
+            :label="t('paperWeight.bookletInnerGrammage')"
+            type="number"
+            :model-value="bookletInnerGrammage"
+            @update:model-value="bookletInnerGrammage = clampNumber(Number($event), 30, 500)"
+          >
+            <template #input>
+              <div class="pw-grammage-row">
+                <input
+                  v-model.number="bookletInnerGrammage"
+                  type="text"
+                  inputmode="numeric"
+                  class="gi-input pw-grammage-input"
+                  :aria-label="t('paperWeight.bookletInnerGrammage')"
+                />
+                <span class="pw-grammage-unit">g/m²</span>
+              </div>
+            </template>
+          </GiFormField>
+          <input
+            v-model.number="bookletInnerGrammage"
+            type="range"
+            min="30"
+            max="500"
+            step="5"
+            class="pw-slider"
+            aria-label="Inner pages grammage slider"
+          />
+          <p class="pw-helper-text">{{ grammageHelper }}</p>
+        </div>
+      </template>
 
       <!-- Reset Button (mobile only) -->
       <button class="gi-btn gi-btn-ghost pw-reset-btn-mobile" @click="resetCalculator">
@@ -191,17 +360,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Weight, RotateCcw, Package } from 'lucide-vue-next'
+import { Weight, RotateCcw, Layers, BookOpen } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 import {
   calculatePaperWeight,
   FORMATS,
   type FormatKey,
-  DEFAULT_QUANTITY,
-  QUANTITY_PRESETS,
 } from '../composables/usePaperWeight'
 
 defineOptions({
@@ -210,56 +377,87 @@ defineOptions({
 
 const { t } = useI18n()
 
-const quantity = ref(DEFAULT_QUANTITY)
+// Maximum values
+const MAX_QUANTITY = 99999999
+
+// Calculator mode
+const mode = ref<'flyers' | 'booklet'>('flyers')
+
+// Flyers mode state
+const quantity = ref(50000)
 const selectedFormat = ref<FormatKey>('A6')
 const customWidth = ref(100)
 const customHeight = ref(100)
 const grammage = ref(250)
 
-// Preset values for quick selection
-const quantityPresets = QUANTITY_PRESETS
-const grammagePresets = [80, 115, 135, 170, 250, 350]
+// Booklet mode state
+const bookletCopies = ref(1000)
+const bookletPages = ref(16)
+const bookletCoverGrammage = ref(250)
+const bookletInnerGrammage = ref(135)
 
 // Helper text for grammage
 const grammageHelper = computed(() => {
-  if (grammage.value <= 80) return t('paperWeight.helpers.light')
-  if (grammage.value <= 135) return t('paperWeight.helpers.medium')
-  if (grammage.value <= 200) return t('paperWeight.helpers.heavy')
+  const g = mode.value === 'booklet' ? bookletInnerGrammage.value : grammage.value
+  if (g <= 80) return t('paperWeight.helpers.light')
+  if (g <= 135) return t('paperWeight.helpers.medium')
+  if (g <= 200) return t('paperWeight.helpers.heavy')
   return t('paperWeight.helpers.veryHeavy')
 })
 
-// Real-world comparison for context
-const comparison = computed(() => {
-  if (!result.value) return null
-  const kg = result.value.kg
-  if (kg < 1) return t('paperWeight.comparisons.lightPackage')
-  if (kg < 5) return t('paperWeight.comparisons.mediumPackage')
-  if (kg < 15) return t('paperWeight.comparisons.heavyPackage')
-  if (kg < 50) return t('paperWeight.comparisons.bowlingBall')
-  return t('paperWeight.comparisons.veryHeavy')
-})
-
+// Validation errors
 const quantityError = computed(() => {
-  if (quantity.value <= 0) return t('paperWeight.error.minQuantity')
-  if (quantity.value > 999999) return t('paperWeight.error.maxQuantity')
+  const val = mode.value === 'flyers' ? quantity.value : bookletCopies.value
+  if (val <= 0) return t('paperWeight.error.minQuantity')
+  if (val > MAX_QUANTITY) return t('paperWeight.error.maxQuantity')
   return null
 })
 
 const grammageError = computed(() => {
-  if (grammage.value < 30) return t('paperWeight.error.minGrammage')
-  if (grammage.value > 500) return t('paperWeight.error.maxGrammage')
+  const g = mode.value === 'booklet' ? bookletInnerGrammage.value : grammage.value
+  if (g < 30) return t('paperWeight.error.minGrammage')
+  if (g > 500) return t('paperWeight.error.maxGrammage')
   return null
 })
 
+// Active dimensions
 const activeDims = computed(() => {
   if (selectedFormat.value === 'Custom') return { width: customWidth.value, height: customHeight.value }
   return FORMATS[selectedFormat.value as keyof typeof FORMATS]
 })
 
-const result = computed(() => {
+// Flyers result
+const flyersResult = computed(() => {
+  if (mode.value !== 'flyers') return null
   if (quantity.value <= 0 || activeDims.value.width <= 0 || activeDims.value.height <= 0 || grammage.value <= 0) return null
   return calculatePaperWeight(quantity.value, activeDims.value.width, activeDims.value.height, grammage.value)
 })
+
+// Booklet result
+// Formula: cover (2 pages) + inner (pages - 2) pages per booklet
+// Cover weight = surface × coverGrammage × 2 (front+back of cover sheet)
+// Inner weight = surface × innerGrammage × (pages - 2)
+// Total = (coverWeight + innerWeight) × copies
+const bookletResult = computed(() => {
+  if (mode.value !== 'booklet') return null
+  const { width, height } = activeDims.value
+  if (bookletCopies.value <= 0 || width <= 0 || height <= 0) return null
+  if (bookletPages.value < 4) return null
+  if (bookletCoverGrammage.value <= 0 || bookletInnerGrammage.value <= 0) return null
+
+  const surfaceM2 = (width / 1000) * (height / 1000)
+  const coverGramsPerBooklet = surfaceM2 * bookletCoverGrammage.value * 2
+  const innerPagesCount = Math.max(bookletPages.value - 2, 0)
+  const innerGramsPerBooklet = surfaceM2 * bookletInnerGrammage.value * innerPagesCount
+  const gramsPerBooklet = coverGramsPerBooklet + innerGramsPerBooklet
+  const totalGrams = Math.round(gramsPerBooklet * bookletCopies.value)
+  const kg = Math.round(totalGrams / 1000 * 100) / 100
+
+  return { grams: totalGrams, kg }
+})
+
+// Combined result
+const result = computed(() => mode.value === 'flyers' ? flyersResult.value : bookletResult.value)
 
 // Display weight with auto-scaling
 const displayWeight = computed(() => {
@@ -272,27 +470,96 @@ const displayWeight = computed(() => {
   return { value: Math.round(kg).toLocaleString(), unit: 'kg' }
 })
 
-// Total sheets (same as quantity, but explicit)
-const totalSheets = computed(() => quantity.value)
-
-// Format large numbers for display
+// Format number with thousand separators
 const formatNumber = (num: number): string => {
-  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
-  if (num >= 1000) return `${(num / 1000).toFixed(num >= 10000 ? 0 : 1)}k`
-  return num.toString()
+  return Math.round(num).toLocaleString()
 }
 
+// Clamp number within range
+const clampNumber = (val: number, min: number, max: number): number => {
+  if (isNaN(val) || val < min) return min
+  if (val > max) return max
+  return val
+}
+
+// Reset calculator
 const resetCalculator = () => {
-  quantity.value = DEFAULT_QUANTITY
+  mode.value = 'flyers'
+  quantity.value = 50000
   selectedFormat.value = 'A6'
   customWidth.value = 100
   customHeight.value = 100
   grammage.value = 250
+  bookletCopies.value = 1000
+  bookletPages.value = 16
+  bookletCoverGrammage.value = 250
+  bookletInnerGrammage.value = 135
 }
+
+// Reset custom dimensions when format changes
+watch(selectedFormat, (newFormat) => {
+  if (newFormat !== 'Custom') {
+    const dims = FORMATS[newFormat as keyof typeof FORMATS]
+    if (dims) {
+      customWidth.value = dims.width
+      customHeight.value = dims.height
+    }
+  }
+})
 </script>
 
 <style scoped>
-/* Result Banner with animation */
+/* Mode Toggle */
+.pw-mode-toggle {
+  display: flex;
+  gap: var(--gi-space-sm);
+  margin-bottom: var(--gi-space-lg);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pw-mode-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-md) var(--gi-space-lg);
+  min-height: 48px;
+  border: 1px solid var(--gi-border);
+  background: var(--gi-surface);
+  color: var(--gi-text);
+  font-size: var(--gi-font-size-sm);
+  font-weight: 500;
+  border-radius: var(--gi-radius-md);
+  cursor: pointer;
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.pw-mode-btn:hover {
+  border-color: var(--gi-brand);
+  background: var(--gi-tint-green-50, rgba(10, 170, 142, 0.05));
+}
+
+.pw-mode-btn:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+.pw-mode-active {
+  background: var(--gi-brand);
+  border-color: var(--gi-brand);
+  color: white;
+  box-shadow: var(--gi-shadow-sm);
+}
+
+.pw-mode-active:hover {
+  background: var(--gi-brand);
+  border-color: var(--gi-brand);
+}
+
+/* Result Banner */
 .pw-result-banner {
   position: relative;
   display: flex;
@@ -355,19 +622,6 @@ const resetCalculator = () => {
   opacity: 0.5;
 }
 
-.pw-result-comparison {
-  display: flex;
-  align-items: center;
-  gap: var(--gi-space-xs);
-  padding: var(--gi-space-xs) var(--gi-space-sm);
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: var(--gi-radius-sm);
-  font-size: var(--gi-font-size-xs);
-  font-weight: 500;
-  width: fit-content;
-  margin-top: var(--gi-space-xs);
-}
-
 .pw-reset-btn {
   display: flex;
   align-items: center;
@@ -398,7 +652,7 @@ const resetCalculator = () => {
   outline-offset: 2px;
 }
 
-/* Animation for result appearance */
+/* Animations */
 .result-fade-enter-active,
 .result-fade-leave-active {
   transition: all var(--gi-transition-base) var(--gi-ease-out);
@@ -410,7 +664,20 @@ const resetCalculator = () => {
   transform: translateY(-10px);
 }
 
-/* Dark mode override for result banner */
+.expand-enter-active,
+.expand-leave-active {
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* Dark mode */
 [data-theme="dark"] .pw-result-banner {
   background: rgba(10, 170, 142, 0.15);
   border: 1px solid rgba(10, 170, 142, 0.3);
@@ -422,12 +689,7 @@ const resetCalculator = () => {
   color: var(--gi-brand);
 }
 
-[data-theme="dark"] .pw-result-comparison {
-  background: rgba(10, 170, 142, 0.1);
-  color: var(--gi-text-secondary);
-}
-
-/* Input Section with better grouping */
+/* Inputs */
 .pw-inputs {
   display: flex;
   flex-direction: column;
@@ -442,69 +704,73 @@ const resetCalculator = () => {
   gap: var(--gi-space-sm);
 }
 
-/* Preset Buttons */
-.pw-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gi-space-xs);
+/* Slider */
+.pw-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--gi-border);
+  outline: none;
+  cursor: pointer;
   margin-top: var(--gi-space-xs);
 }
 
-.pw-preset-btn {
-  padding: var(--gi-space-sm) var(--gi-space-md);
-  min-height: 44px;
-  border: 1px solid var(--gi-border);
-  background: var(--gi-surface);
-  color: var(--gi-text);
-  font-size: var(--gi-font-size-sm);
-  font-weight: 500;
-  border-radius: var(--gi-radius-md);
+.pw-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gi-brand);
   cursor: pointer;
-  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform var(--gi-transition-fast) var(--gi-ease-out), box-shadow var(--gi-transition-fast) var(--gi-ease-out);
 }
 
-.pw-preset-btn:hover {
-  border-color: var(--gi-brand);
-  background: var(--gi-tint-green-50, rgba(10, 170, 142, 0.05));
-  transform: translateY(-1px);
+.pw-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-.pw-preset-btn:active {
-  transform: translateY(0);
+.pw-slider::-webkit-slider-thumb:active {
+  transform: scale(1.05);
 }
 
-.pw-preset-btn:focus-visible {
+.pw-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gi-brand);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.pw-slider:focus-visible {
   outline: 2px solid var(--gi-brand);
   outline-offset: 2px;
 }
 
-.pw-preset-active {
-  background: var(--gi-brand);
-  border-color: var(--gi-brand);
-  color: white;
-  box-shadow: var(--gi-shadow-sm);
-}
-
-.pw-preset-active:hover {
-  background: var(--gi-brand-dark, var(--gi-brand));
-  border-color: var(--gi-brand-dark, var(--gi-brand));
-}
-
-/* Quantity Row */
-.pw-quantity-row {
+/* Quantity/ Grammage input rows */
+.pw-quantity-row,
+.pw-grammage-row {
   display: flex;
   align-items: center;
   gap: var(--gi-space-sm);
 }
 
-.pw-quantity-input {
+.pw-quantity-input,
+.pw-grammage-input {
   flex: 1;
   font-size: var(--gi-font-size-lg);
   padding: var(--gi-space-md);
   min-height: 48px;
 }
 
-.pw-quantity-input:focus-visible {
+.pw-quantity-input:focus-visible,
+.pw-grammage-input:focus-visible {
   outline: 2px solid var(--gi-brand);
   outline-offset: 1px;
 }
@@ -513,6 +779,13 @@ const resetCalculator = () => {
   font-size: var(--gi-font-size-sm);
   color: var(--gi-text-muted);
   white-space: nowrap;
+}
+
+.pw-grammage-unit {
+  font-size: var(--gi-font-size-sm);
+  color: var(--gi-text-muted);
+  white-space: nowrap;
+  min-width: 40px;
 }
 
 /* Format Select */
@@ -538,25 +811,11 @@ const resetCalculator = () => {
   outline-offset: 1px;
 }
 
-/* Custom Format Animation */
-.expand-enter-active,
-.expand-leave-active {
-  transition: all var(--gi-transition-base) var(--gi-ease-out);
-  max-height: 200px;
-  overflow: hidden;
-}
-
-.expand-enter-from,
-.expand-leave-to {
-  max-height: 0;
-  opacity: 0;
-}
-
+/* Custom Format */
 .pw-custom-format {
   margin-top: var(--gi-space-sm);
 }
 
-/* Custom Format Row */
 .pw-custom-row {
   display: flex;
   align-items: center;
@@ -593,32 +852,6 @@ const resetCalculator = () => {
   min-width: 30px;
 }
 
-/* Grammage Row */
-.pw-grammage-row {
-  display: flex;
-  align-items: center;
-  gap: var(--gi-space-sm);
-}
-
-.pw-grammage-input {
-  flex: 1;
-  font-size: var(--gi-font-size-lg);
-  padding: var(--gi-space-md);
-  min-height: 48px;
-}
-
-.pw-grammage-input:focus-visible {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 1px;
-}
-
-.pw-grammage-unit {
-  font-size: var(--gi-font-size-sm);
-  color: var(--gi-text-muted);
-  white-space: nowrap;
-  min-width: 40px;
-}
-
 /* Helper Text */
 .pw-helper-text {
   font-size: var(--gi-font-size-xs);
@@ -643,7 +876,7 @@ const resetCalculator = () => {
   font-weight: 500;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
   .pw-result-banner {
     flex-direction: column;
@@ -665,10 +898,6 @@ const resetCalculator = () => {
     flex-wrap: wrap;
   }
 
-  .pw-result-comparison {
-    align-self: center;
-  }
-
   .pw-reset-btn {
     align-self: center;
     width: 100%;
@@ -683,15 +912,6 @@ const resetCalculator = () => {
     font-size: 2rem;
   }
 
-  .pw-presets {
-    gap: var(--gi-space-xs);
-  }
-
-  .pw-preset-btn {
-    flex: 1 1 calc(50% - var(--gi-space-xs));
-    min-width: 100px;
-  }
-
   .pw-custom-row {
     flex-wrap: wrap;
   }
@@ -699,19 +919,20 @@ const resetCalculator = () => {
   .pw-custom-input {
     flex: 1 1 100px;
   }
+
+  .pw-mode-toggle {
+    flex-direction: column;
+    gap: var(--gi-space-xs);
+  }
 }
 
 @media (max-width: 480px) {
   .pw-result-value {
     font-size: 1.75rem;
   }
-
-  .pw-preset-btn {
-    flex: 1 1 100%;
-  }
 }
 
-/* Reduced Motion Support */
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .result-fade-enter-active,
   .result-fade-leave-active,
@@ -720,33 +941,33 @@ const resetCalculator = () => {
     transition: none;
   }
 
-  .pw-preset-btn,
-  .pw-reset-btn,
-  .pw-format-select,
-  .pw-quantity-input,
-  .pw-grammage-input,
-  .pw-custom-input {
+  .pw-slider::-webkit-slider-thumb {
     transition: none;
   }
 
-  .pw-preset-btn:hover,
-  .pw-reset-btn:hover {
+  .pw-reset-btn:hover,
+  .pw-mode-btn:hover {
     transform: none;
   }
 }
 
-/* High Contrast Mode Support */
+/* High Contrast */
 @media (prefers-contrast: more) {
-  .pw-preset-btn {
+  .pw-mode-btn,
+  .pw-format-select {
     border-width: 2px;
   }
 
-  .pw-preset-active {
+  .pw-mode-active {
     border-width: 2px;
   }
 
   .pw-result-banner {
     border: 2px solid white;
+  }
+
+  .pw-slider {
+    height: 10px;
   }
 }
 </style>
