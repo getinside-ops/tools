@@ -333,6 +333,10 @@ const previewEntries = computed(() => {
 // Generate CSS custom properties output
 const cssOutput = computed(() => {
   const lines = [':root {']
+  lines.push(`  --font-family: ${fontFamily.value};`)
+  lines.push(`  --font-weight: ${fontWeight.value};`)
+  lines.push(`  --line-height: ${lineHeight.value};`)
+  lines.push('')
   lines.push(`  --font-size-base: ${baseSize.value}px;`)
   lines.push(`  --font-scale-ratio: ${ratio.value};`)
   lines.push('')
