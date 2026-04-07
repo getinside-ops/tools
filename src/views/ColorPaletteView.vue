@@ -18,7 +18,7 @@
         v-for="(color, i) in palette"
         :key="i"
         class="gi-swatch"
-        :class="{ 'gi-swatch--locked': color.locked }"
+        :class="{ 'gi-swatch--locked': color.locked, 'gi-swatch--flash': copiedFlash === i }"
         :style="{ background: color.hex }"
         :tabindex="0"
         role="button"
@@ -60,6 +60,7 @@ import type { PaletteColor } from '../composables/useColorPalette'
 const { t } = useI18n()
 const palette = ref<PaletteColor[]>(initPalette())
 const copiedIndex = ref<number | null>(null)
+const copiedFlash = ref<number | null>(null)
 
 function regenerate() {
   palette.value = generatePalette(palette.value)
@@ -73,6 +74,8 @@ async function copy(hex: string, index: number) {
   try {
     await navigator.clipboard.writeText(hex)
     copiedIndex.value = index
+    copiedFlash.value = index
+    setTimeout(() => { copiedFlash.value = null }, 300)
     setTimeout(() => { copiedIndex.value = null }, 2000)
   } catch {
     // clipboard unavailable — silently ignore
@@ -126,6 +129,15 @@ onUnmounted(() => document.removeEventListener('keydown', handleKeydown))
   z-index: 1;
 }
 .gi-swatch--locked { outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -3px; }
+
+.gi-swatch--flash {
+  animation: flash-brightness 0.3s ease-out;
+}
+
+@keyframes flash-brightness {
+  0% { filter: brightness(1.8); }
+  100% { filter: brightness(1); }
+}
 
 .gi-swatch-overlay {
   display: flex;
