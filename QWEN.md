@@ -1629,3 +1629,271 @@ qrDecoder: {
 - `src/views/UtmBuilderView.vue` — Check icon on copy
 - `src/i18n/fr.ts` — clear, swapColors keys
 - `src/i18n/en.ts` — clear, swapColors keys
+
+---
+
+## Session Learnings: UI/UX Audit #2 — Accessibility & Forms (April 2026)
+
+### Audit Methodology
+
+**Used `ui-ux-pro-max` skill + `subagent-driven-development`** to perform comprehensive audit and fix 21 issues across 4 priority phases:
+1. **Critical (5):** Missing CSS tokens, dynamic lang attribute, touch targets, ARIA, focus states
+2. **High (7):** Border standardization, token usage, badge contrast, meta description, form validation
+3. **Medium (6):** Loading states, skip link, font fixes, layout cleanup
+4. **Low (2):** Table wrapper, locked swatch visibility
+
+**Workflow:** `ui-ux-pro-max` audit → `writing-plans` creates plan → `subagent-driven-development` executes task-by-task with code review between each → `finishing-a-development-branch` to merge.
+
+### Critical: Define Semantic CSS Error Tokens
+
+**Problem:** `GiFormField.vue` referenced `var(--gi-error)` but it was never defined in `global.css`.
+
+**Fix pattern — always define tokens before use:**
+```css
+/* Light theme */
+:root {
+  --gi-error: #dc2626;   /* red-600, passes WCAG AA on white */
+  --gi-warning: #d97706; /* amber-600, passes WCAG AA on white */
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --gi-error: #f87171;   /* red-400, passes on dark bg */
+  --gi-warning: #fcd34d; /* amber-300, passes on dark bg */
+}
+```
+
+**Rule:** Never reference CSS variables that aren't defined in both light and dark themes.
+
+### Dynamic HTML Lang Attribute
+
+**Problem:** `<html lang="fr">` hardcoded — screen readers announce wrong language for EN users.
+
+**Fix in `main.ts`:**
+```typescript
+const storedLocale = localStorage.getItem('gi-locale')
+const detectedLocale = storedLocale || navigator.language.slice(0, 2)
+document.documentElement.lang = detectedLocale === 'fr' ? 'fr' : 'en'
+```
+
+**Also update in every locale toggle function:**
+```typescript
+function toggleLocale() {
+  locale.value = locale.value === 'fr' ? 'en' : 'fr'
+  localStorage.setItem('gi-locale', locale.value)
+  document.documentElement.lang = locale.value // ← Always sync
+}
+```
+
+### ARIA: Link Error Messages to Inputs
+
+**Problem:** Error spans existed but screen readers didn't announce them.
+
+**Pattern for `aria-describedby`:**
+```vue
+<script setup>
+const inputId = ref('')
+onMounted(() => {
+  inputId.value = `gi-field-${Math.random().toString(36).slice(2, 9)}`
+})
+const errorId = computed(() => inputId.value ? `${inputId.value}-error` : '')
+</script>
+
+<template>
+  <input :id="inputId" :aria-describedby="error && errorId ? errorId : undefined" />
+  <span v-if="error" :id="errorId" role="alert">{{ error }}</span>
+</template>
+```
+
+**Key:** `role="alert"` ensures immediate announcement, `aria-describedby` links input to error.
+
+### Form Validation: Always Show Error Messages
+
+**Problem:** Number inputs accepted invalid values (negative, zero) with silent failure.
+
+**Pattern for computed validation errors:**
+```typescript
+const quantityError = computed(() => {
+  if (quantity.value <= 0) return t('tool.error.minQuantity')
+  if (quantity.value > 99999) return t('tool.error.maxQuantity')
+  return null
+})
+```
+
+```vue
+<input v-model.number="quantity" type="number" min="1" />
+<span v-if="quantityError" class="pw-error" role="alert">{{ quantityError }}</span>
+```
+
+```css
+.pw-error {
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-error);
+  margin-top: var(--gi-space-xs);
+}
+```
+
+**Same pattern for text validation** (hex codes, email, URLs).
+
+### Async Buttons: Always Show Loading State
+
+**Problem:** Image tool async actions had no disabled/loading feedback — users could double-click.
+
+**Pattern for loading state:**
+```typescript
+const isProcessing = ref(false)
+
+async function handleAction() {
+  if (!input.value || isProcessing.value) return
+  isProcessing.value = true
+  try {
+    const result = await asyncOperation(input.value)
+    output.value = result
+  } catch (err) {
+    handleError(err)
+  } finally {
+    isProcessing.value = false
+  }
+}
+```
+
+```vue
+<button
+  class="gi-btn-primary"
+  :disabled="isProcessing"
+  @click="handleAction"
+>
+  <Loader2 v-if="isProcessing" :size="16" class="animate-spin" />
+  {{ isProcessing ? t('tool.processing') : t('tool.action') }}
+</button>
+```
+
+**Key:** `try/finally` ensures loading state is always cleared, even on error.
+
+### Skip-to-Content Link Pattern
+
+**Create `SkipToContent.vue`:**
+```vue
+<template>
+  <a href="#main-content" class="skip-link">{{ t('nav.skipToContent') }}</a>
+</template>
+
+<style scoped>
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.75rem 1.5rem;
+  background: var(--gi-brand);
+  color: var(--gi-text-inverse);
+  border-radius: var(--gi-radius-md);
+  font-weight: 600;
+  z-index: 1000;
+  transition: top var(--gi-transition-fast) var(--gi-ease-out);
+  text-decoration: none;
+}
+.skip-link:focus { top: 0.5rem; }
+</style>
+```
+
+**Add to app layout** before header, with `id="main-content"` on the `<main>` element.
+
+### Visual Flash Feedback for Copy Actions
+
+**Pattern for immediate visual confirmation:**
+```typescript
+const copiedFlash = ref<number | null>(null)
+
+async function copy(value: string, index: number) {
+  await navigator.clipboard.writeText(value)
+  copiedFlash.value = index
+  setTimeout(() => { copiedFlash.value = null }, 300)
+  setTimeout(() => { copiedIndex.value = null }, 2000)
+}
+```
+
+```css
+.gi-swatch--flash {
+  animation: flash-brightness 0.3s ease-out;
+}
+@keyframes flash-brightness {
+  0% { filter: brightness(1.8); }
+  100% { filter: brightness(1); }
+}
+```
+
+### Border Width Standardization
+
+**Rule:** Use `1px` for all borders. Mixing `1px` and `1.5px` creates visual inconsistency.
+
+**Command to audit:**
+```bash
+grep -rn "1\.5px" src/
+```
+
+### Hardcoded Colors → CSS Tokens
+
+**Always use semantic tokens, never hardcoded hex in styles:**
+```css
+/* ❌ Bad */
+color: #fff;
+
+/* ✅ Good */
+color: var(--gi-text-inverse);
+```
+
+**Audit command:**
+```bash
+grep -rn "#[0-9a-fA-F]\{3,6\}" src/ --include="*.vue" --include="*.css" | grep -v "node_modules"
+```
+
+### Subagent-Driven Development: What Worked
+
+**Pattern:** Dispatch fresh subagent per task → review → fix → next task.
+
+**Why it works:**
+- Each task gets fresh attention
+- Code review between tasks catches issues early
+- Small, focused commits
+- Fast iteration (2-5 min per task)
+
+**Tips:**
+- Give exact file paths and code snippets in prompts
+- Include acceptance criteria (build passes, commit made)
+- Batch independent small tasks together
+- Always run `npm run build` after each change
+
+### Audit Fix Priority Framework (Updated)
+
+| Priority | Category | Examples from this audit |
+|----------|----------|-------------------------|
+| P0 | Accessibility | CSS tokens, lang attr, aria-describedby, focus states, touch targets |
+| P1 | Form Validation | Hex validation, number validation, error display |
+| P2 | UX Feedback | Loading states, copy flash, skip link |
+| P3 | Visual Polish | Border standardization, font stacks, table wrapper, swatch outlines |
+
+### Files Modified in This Audit
+
+**New files:**
+- `src/components/SkipToContent.vue` — Skip-to-content link component
+
+**Modified files:**
+- `src/assets/styles/global.css` — Error/warning tokens, border standardization, monospace font, input line-height
+- `src/main.ts` — Dynamic lang attribute
+- `src/components/AppHeader.vue` — 44px toggle, lang sync, border fix
+- `src/components/AppFooter.vue` — Lang sync
+- `src/components/GiFormField.vue` — aria-describedby linking
+- `src/views/HomeView.vue` — Badge contrast, meta description, mobile font, home-wrap fix, border fix
+- `src/views/ContrastCheckerView.vue` — Hex validation with error display
+- `src/views/PaperWeightView.vue` — Number validation with error display
+- `src/views/ColorPaletteView.vue` — Focus state, copy flash, locked swatch outline
+- `src/views/ImageCompressorView.vue` — Loading state
+- `src/views/ImageCropperView.vue` — Loading state
+- `src/views/ImageResizerView.vue` — Loading state
+- `src/views/ImageFiltersView.vue` — Loading state
+- `src/views/ImageConverterView.vue` — Loading state
+- `src/views/MockupGeneratorView.vue` — Loading state
+- `src/i18n/fr.ts` — Error messages, processing translations
+- `src/i18n/en.ts` — Error messages, processing translations
+- `index.html` — Meta description
