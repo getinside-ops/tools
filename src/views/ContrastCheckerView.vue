@@ -35,8 +35,8 @@
           </template>
         </GiFormField>
 
-        <button @click="swapColors" class="gi-btn-ghost contrast-swap-btn" title="Swap Colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+        <button @click="swapColors" class="gi-btn-ghost contrast-swap-btn" :title="t('contrastChecker.swapColors')" aria-label="Swap colors">
+          <ArrowLeftRight :size="20" aria-hidden="true" />
         </button>
 
         <GiFormField :label="t('contrastChecker.bgColor')" class="contrast-field">
@@ -118,7 +118,7 @@ import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 import GiResultCard from '../components/GiResultCard.vue'
 import GiStatusBadge from '../components/GiStatusBadge.vue'
-import { Contrast } from 'lucide-vue-next'
+import { Contrast, ArrowLeftRight } from 'lucide-vue-next'
 import { getWcagContrast, getApcaContrast, meetsWcagLevel } from '../composables/useContrast'
 
 const { t } = useI18n()
@@ -184,6 +184,7 @@ function swapColors() {
   letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
   text-align: center;
+  word-wrap: break-word;
 }
 
 .contrast-preview-body {
@@ -192,6 +193,7 @@ function swapColors() {
   text-align: center;
   font-weight: 400;
   opacity: 0.9;
+  word-wrap: break-word;
 }
 
 .contrast-controls {
@@ -275,5 +277,15 @@ function swapColors() {
 
 .contrast-ratio-pass {
   color: var(--gi-tint-green-text);
+}
+
+@media (max-width: 480px) {
+  .contrast-preview-large {
+    font-size: 1.5rem;
+  }
+  .contrast-preview {
+    padding: 2rem 1rem;
+    min-height: 180px;
+  }
 }
 </style>

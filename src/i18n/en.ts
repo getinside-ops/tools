@@ -893,6 +893,7 @@ const en: Messages = {
     preview: 'Preview',
     copy: 'Copy',
     copied: 'Copied!',
+    clear: 'Clear',
     pedagogic: {
       title: 'About QR Codes',
       description: 'QR Codes (Quick Response Codes) are 2D barcodes readable by smartphone.',
@@ -936,6 +937,7 @@ const en: Messages = {
     },
     pass: 'Pass',
     fail: 'Fail',
+    swapColors: 'Swap colors',
     pedagogic: {
       title: 'About Contrast and Accessibility',
       description: 'Color contrast is essential for accessibility. WCAG standards define minimum ratios to ensure readability.',

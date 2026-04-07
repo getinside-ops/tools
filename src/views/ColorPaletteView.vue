@@ -13,23 +13,36 @@
       <span class="gi-palette-hint">{{ t('colorPalette.pressSpace') }}</span>
     </div>
 
-    <div class="gi-palette">
+    <div class="gi-palette" role="group" :aria-label="t('colorPalette.title')">
       <div
         v-for="(color, i) in palette"
         :key="i"
         class="gi-swatch"
         :class="{ 'gi-swatch--locked': color.locked }"
         :style="{ background: color.hex }"
+        :tabindex="0"
+        role="button"
+        :aria-label="color.locked ? t('colorPalette.unlock') : t('colorPalette.lock')"
         @click="lock(i)"
+        @keydown.enter="lock(i)"
+        @keydown.space.prevent="lock(i)"
       >
         <div class="gi-swatch-overlay">
-          <span class="gi-swatch-lock-icon">{{ color.locked ? '🔒' : '🔓' }}</span>
+          <span class="gi-swatch-lock-icon">
+            <LockIcon v-if="color.locked" :size="20" />
+            <UnlockIcon v-else :size="20" />
+          </span>
           <span class="gi-swatch-lock-label">{{ color.locked ? t('colorPalette.unlock') : t('colorPalette.lock') }}</span>
         </div>
         <div class="gi-swatch-hex" @click.stop="copy(color.hex, i)">
           <span>{{ copiedIndex === i ? t('colorPalette.copied') : color.hex }}</span>
         </div>
       </div>
+    </div>
+
+    <!-- Accessibility live region for copy feedback -->
+    <div aria-live="polite" aria-atomic="true" class="sr-only">
+      <span v-if="copiedIndex !== null">{{ t('colorPalette.copied') }}: {{ palette[copiedIndex]?.hex }}</span>
     </div>
 
     <template #about>{{ t('colorPalette.about') }}</template>
@@ -39,7 +52,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Palette } from 'lucide-vue-next'
+import { Palette, Lock as LockIcon, Unlock as UnlockIcon } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { initPalette, generatePalette, toggleLock } from '../composables/useColorPalette'
 import type { PaletteColor } from '../composables/useColorPalette'
@@ -106,7 +119,8 @@ onUnmounted(() => document.removeEventListener('keydown', handleKeydown))
   overflow: hidden;
 }
 .gi-swatch:hover { flex: 1.4; }
-.gi-swatch--locked { outline: 3px solid white; outline-offset: -3px; }
+.gi-swatch:active { transform: scale(0.98); }
+.gi-swatch--locked { outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -3px; }
 
 .gi-swatch-overlay {
   display: flex;
@@ -136,5 +150,16 @@ onUnmounted(() => document.removeEventListener('keydown', handleKeydown))
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
   letter-spacing: 0.05em;
   font-family: monospace;
+}
+
+@media (max-width: 640px) {
+  .gi-palette {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .gi-swatch {
+    min-height: 100px;
+    flex: 1 1 calc(50% - 0.25rem);
+  }
 }
 </style>

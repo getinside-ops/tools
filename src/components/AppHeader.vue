@@ -10,7 +10,7 @@
           <router-link to="/" class="gi-header-link">{{ t('nav.home') }}</router-link>
         </nav>
       </div>
-      <button class="gi-lang-toggle" @click="toggleLocale">
+      <button class="gi-lang-toggle" @click="toggleLocale" :aria-pressed="locale === 'fr'">
         {{ locale === 'fr' ? 'EN' : 'FR' }}
       </button>
     </div>

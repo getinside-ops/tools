@@ -16,18 +16,20 @@
       
       <!-- Right: Toggles -->
       <div class="gi-footer-right">
-        <button 
-          class="gi-footer-toggle" 
+        <button
+          class="gi-footer-toggle"
           @click="toggleLocale"
           :aria-label="t('footer.toggleLanguage')"
+          :aria-pressed="locale === 'fr'"
           :title="t('footer.toggleLanguage')"
         >
           {{ locale === 'fr' ? 'EN' : 'FR' }}
         </button>
-        <button 
-          class="gi-footer-toggle" 
+        <button
+          class="gi-footer-toggle"
           @click="toggleTheme"
           :aria-label="t('footer.toggleTheme')"
+          :aria-pressed="theme === 'dark'"
           :title="t('footer.toggleTheme')"
         >
           <SunIcon v-if="theme === 'light'" :size="18" />
@@ -117,8 +119,10 @@ function toggleLocale() {
   gap: 0.5rem;
 }
 .gi-footer-toggle {
-  width: 36px;
-  height: 36px;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--gi-border);
   border-radius: 6px;
   background: var(--gi-surface);

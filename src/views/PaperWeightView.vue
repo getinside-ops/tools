@@ -22,10 +22,7 @@
         </div>
       </div>
       <button class="pw-reset-btn" @click="resetCalculator" :title="t('paperWeight.reset')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" />
-          <path d="M3 3v9h9" />
-        </svg>
+        <RotateCcw :size="16" aria-hidden="true" />
       </button>
     </div>
 
@@ -44,6 +41,7 @@
               v-model.number="quantity"
               type="number"
               min="1"
+              step="1"
               class="gi-input pw-quantity-input"
               aria-label="Quantity"
             />
@@ -71,9 +69,9 @@
       >
         <template #input>
           <div class="pw-custom-row">
-            <input v-model.number="customWidth" type="number" min="1" class="gi-input pw-custom-input" />
+            <input v-model.number="customWidth" type="number" min="1" step="1" class="gi-input pw-custom-input" />
             <span class="pw-custom-sep">×</span>
-            <input v-model.number="customHeight" type="number" min="1" class="gi-input pw-custom-input" />
+            <input v-model.number="customHeight" type="number" min="1" step="1" class="gi-input pw-custom-input" />
             <span class="pw-custom-unit">mm</span>
           </div>
         </template>
@@ -88,7 +86,7 @@
       >
         <template #input>
           <div class="pw-grammage-row">
-            <input v-model.number="grammage" type="number" min="1" class="gi-input pw-grammage-input" />
+            <input v-model.number="grammage" type="number" min="1" step="1" class="gi-input pw-grammage-input" />
             <span class="pw-grammage-unit">g/m²</span>
           </div>
         </template>
@@ -107,7 +105,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Weight } from 'lucide-vue-next'
+import { Weight, RotateCcw } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 import {

@@ -334,7 +334,7 @@ body {
 }
 
 .gi-btn:active {
-  transform: translateY(0);
+  transform: scale(0.98);
   box-shadow: var(--gi-shadow-sm);
 }
 
@@ -403,7 +403,7 @@ body {
 /* Delphi Utility Grid */
 .gi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--gi-grid-gap);
 }
 
@@ -423,7 +423,6 @@ body {
 
 .gi-card {
   background: var(--gi-surface);
-  border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
   padding: 1.5rem;
   box-shadow: var(--gi-shadow);
@@ -433,13 +432,13 @@ body {
 .gi-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--gi-shadow-md);
-  border-color: var(--gi-border-hover);
 }
 
 .gi-card:focus-within {
   transform: translateY(-2px);
   box-shadow: var(--gi-shadow-md);
-  border-color: var(--gi-border-hover);
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 1px;
 }
 
 /* Elevated card variant */
@@ -458,4 +457,17 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+/* Screen reader only utility class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

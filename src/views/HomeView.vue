@@ -29,11 +29,13 @@
         :placeholder="t('nav.search')"
       />
 
-      <div class="home-tab-bar">
+      <div class="home-tab-bar" role="tablist" aria-label="Tool categories">
         <button
           v-for="cat in categories"
           :key="cat"
           class="home-tab"
+          role="tab"
+          :aria-pressed="activeCategory === cat"
           :class="{ active: activeCategory === cat }"
           @click="setCategory(cat)"
         >
@@ -185,7 +187,9 @@ function setCategory(cat: string) {
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  width: 100vw;
+  width: 100%;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
   margin-top: -2rem;
   margin-bottom: -4rem;
 }
@@ -350,6 +354,10 @@ function setCategory(cat: string) {
   transform: translateY(-4px);
   box-shadow: var(--gi-shadow-lg);
   border-color: rgba(10, 170, 142, 0.4);
+}
+
+.home-card:active {
+  transform: scale(0.98);
 }
 
 .home-card:focus-visible {

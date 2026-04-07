@@ -21,10 +21,7 @@
     >
       <div class="gi-paste-zone-content">
         <div class="gi-paste-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-          </svg>
+          <ClipboardPaste :size="32" />
         </div>
         <p class="gi-paste-title">{{ t('qrDecoder.pasteTitle') }}</p>
         <p class="gi-paste-hint">{{ t('qrDecoder.pasteHint') }}</p>
@@ -43,7 +40,7 @@
     <div v-if="imageUrl" class="gi-preview-section">
       <div class="gi-preview-header">
         <span class="gi-preview-label">{{ t('qrDecoder.preview') }}</span>
-        <button class="gi-btn-ghost gi-btn-sm" @click="reset">Clear</button>
+        <button class="gi-btn-ghost gi-btn-sm" @click="reset">{{ t('qrDecoder.clear') }}</button>
       </div>
       <div class="gi-preview-container">
         <img :src="imageUrl" alt="QR Code preview" class="gi-preview-img" ref="previewImg" @load="performDecoding" />
@@ -80,7 +77,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { QrCode } from 'lucide-vue-next'
+import { QrCode, ClipboardPaste } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import GiResultCard from '../components/GiResultCard.vue'

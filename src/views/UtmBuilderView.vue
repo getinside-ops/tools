@@ -45,6 +45,7 @@
       <p v-else class="gi-code">{{ generatedUrl }}</p>
       <template #actions>
         <button v-if="generatedUrl && !urlError" class="gi-btn" @click="copy">
+          <Check v-if="copied" :size="16" />
           {{ copied ? t('utmBuilder.copied') : t('utmBuilder.copy') }}
         </button>
       </template>
@@ -56,7 +57,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Link } from 'lucide-vue-next'
+import { Link, Check } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 import GiResultCard from '../components/GiResultCard.vue'

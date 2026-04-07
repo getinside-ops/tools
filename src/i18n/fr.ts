@@ -891,6 +891,7 @@ const fr = {
     preview: 'Aperçu',
     copy: 'Copier',
     copied: 'Copié !',
+    clear: 'Effacer',
     pedagogic: {
       title: 'À propos des QR Codes',
       description: 'Les QR Codes (Quick Response Codes) sont des codes-barres 2D lisibles par smartphone.',
@@ -934,6 +935,7 @@ const fr = {
     },
     pass: 'Passe',
     fail: 'Échoue',
+    swapColors: 'Inverser les couleurs',
     pedagogic: {
       title: 'À propos du contraste et de l\'accessibilité',
       description: 'Le contraste des couleurs est essentiel pour l\'accessibilité. Les normes WCAG définissent des ratios minimums pour assurer la lisibilité.',
