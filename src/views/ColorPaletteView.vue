@@ -120,6 +120,11 @@ onUnmounted(() => document.removeEventListener('keydown', handleKeydown))
 }
 .gi-swatch:hover { flex: 1.4; }
 .gi-swatch:active { transform: scale(0.98); }
+.gi-swatch:focus-visible {
+  outline: 3px solid var(--gi-brand);
+  outline-offset: -3px;
+  z-index: 1;
+}
 .gi-swatch--locked { outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -3px; }
 
 .gi-swatch-overlay {
