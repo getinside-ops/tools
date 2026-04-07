@@ -6,7 +6,7 @@
 npm run dev        # Local dev server at http://localhost:5173/tools/
 npm run build      # Build to dist/ (base: /tools/)
 npm run preview    # Preview built site locally
-npm test           # Run Vitest (227 tests, 39 test files)
+npm test           # Run Vitest (241 tests, 40 test files)
 npm run test:watch # Watch mode
 ```
 
@@ -358,6 +358,41 @@ Screen rect for `public/apple-iphone-15-black-portrait.png` (1419×2796): `{ x: 
 Compositing order: clip to `ctx.roundRect(SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, 130)` → draw user image → `ctx.restore()` → draw frame on top. Corner radius ~130px; adjust if bleed reappears.
 
 `public/` assets: use `` `${import.meta.env.BASE_URL}filename.png` `` (not hardcoded `/tools/`).
+
+## GiLogSlider Component
+
+**Location:** `src/components/GiLogSlider.vue`
+
+**Purpose:** Logarithmic slider for values spanning wide ranges (e.g., grammage 1-500).
+
+**Props:**
+- `modelValue: number` — Current value (v-model)
+- `min: number` — Minimum value
+- `max: number` — Maximum value
+- `step: number | ((v: number) => number)` — Step size or function
+- `marks?: { value: number; label: string }[]` — Visual marks on slider
+- `snapTo?: number[]` — Optional array to snap to specific values (simple nearest neighbor)
+- `label?: string` — Accessible label
+
+**Key Behavior:**
+- Uses logarithmic scale for positioning (better feel for wide ranges)
+- `snapTo` uses **simple nearest neighbor** (no forced capture zones or sticky behavior)
+- Slider moves smoothly without complex snapping logic
+- Step function rounds to nearest increment: `Math.round(value / step) * step`
+
+**Example:**
+```vue
+<GiLogSlider
+  v-model="grammage"
+  :min="1"
+  :max="500"
+  :step="() => 5"
+  :marks="grammageMarks"
+  :label="t('paperWeight.grammage')"
+/>
+```
+
+**Note:** Avoid complex snapping logic — simple step-based rounding works best. Complex "sticky" behavior was buggy and removed.
 
 ## PDF/X Tool (coming soon)
 
@@ -1897,3 +1932,150 @@ grep -rn "#[0-9a-fA-F]\{3,6\}" src/ --include="*.vue" --include="*.css" | grep -
 - `src/i18n/fr.ts` — Error messages, processing translations
 - `src/i18n/en.ts` — Error messages, processing translations
 - `index.html` — Meta description
+
+---
+
+## Session Learnings: Paper Weight Calculator Improvements (April 2026)
+
+### Weight Per Unit Display
+
+**For flyers mode**, show weight per individual item alongside total:
+```typescript
+const weightPerUnit = computed(() => {
+  if (mode.value === 'flyers') {
+    return totalWeight.value / quantity.value
+  }
+  return null
+})
+```
+
+**Display in result banner:**
+```vue
+<div class="pw-result-banner">
+  <div class="pw-result-main">{{ totalWeight.toFixed(1) }} kg</div>
+  <div class="pw-result-sub">{{ weightPerUnit?.toFixed(2) }} g per flyer</div>
+</div>
+```
+
+### Booklet Pages Dropdown
+
+**Replace number input with scrollable select:**
+- 18 preset multiples of 4 (4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72)
+- "Custom" option at bottom for manual entry
+- Pattern: pages must be multiple of 4 for folded booklets
+
+```vue
+<select v-model="bookletPages" class="pw-select">
+  <option v-for="pages in presetPages" :key="pages" :value="pages">
+    {{ pages }} pages
+  </option>
+  <option value="custom">Custom...</option>
+</select>
+<input
+  v-if="bookletPages === 'custom'"
+  v-model.number="customBookletPages"
+  type="number"
+  min="4"
+  step="4"
+/>
+```
+
+**i18n keys:**
+```typescript
+paperWeight: {
+  customPages: 'Custom number of pages',
+  customPagesPlaceholder: 'Enter multiple of 4',
+}
+```
+
+### Compact Layout Pattern
+
+**Reduce spacing throughout for ~25% more compact layout:**
+
+```css
+/* Reduce gaps */
+.pw-section { gap: var(--gi-space-md); } /* was lg */
+.pw-controls { gap: var(--gi-space-xs); } /* was sm */
+
+/* Reduce padding */
+.pw-card { padding: var(--gi-space-md); } /* was lg */
+
+/* Reduce font sizes */
+.pw-result-value {
+  font-size: clamp(1.75rem, 5vw, 2.5rem); /* was 2-3rem */
+}
+.pw-input {
+  font-size: var(--gi-font-size-md); /* was lg */
+  min-height: 44px; /* was 48px, keep 44px for touch target */
+}
+```
+
+**Rule:** Always maintain 44px minimum touch target for accessibility.
+
+### Silent Clamping Pattern
+
+**Use `@blur` handlers instead of error messages for out-of-range values:**
+
+```vue
+<input
+  v-model.number="quantity"
+  type="number"
+  min="1"
+  max="99999999"
+  @blur="quantity = clampNumber(quantity, 1, 99999999)"
+/>
+```
+
+**Why:** Better UX than validation errors — values silently correct on blur.
+
+**Composable helper:**
+```typescript
+export function clampNumber(value: number, min: number, max: number): number {
+  if (isNaN(value)) return min
+  return Math.max(min, Math.min(max, value))
+}
+```
+
+### Slider Behavior Lesson
+
+**Avoid complex "sticky" snapping logic** — it was buggy and unpredictable.
+
+**What works:**
+- Simple step-based rounding: `Math.round(value / step) * step`
+- If `snapTo` provided, use simple nearest neighbor calculation
+- No forced capture zones or logarithmic distance thresholds
+
+**Implementation:**
+```typescript
+function roundToStep(value: number, min: number, max: number, stepFn: (v: number) => number): number {
+  const clamped = Math.max(min, Math.min(max, value))
+  
+  // Simple nearest neighbor for snapTo
+  if (props.snapTo && props.snapTo.length > 0) {
+    let nearest = props.snapTo[0]
+    let minDist = Math.abs(clamped - nearest)
+    
+    for (let i = 1; i < props.snapTo.length; i++) {
+      const dist = Math.abs(clamped - props.snapTo[i])
+      if (dist < minDist) {
+        minDist = dist
+        nearest = props.snapTo[i]
+      }
+    }
+    return nearest
+  }
+  
+  // Otherwise, use step function
+  const step = stepFn(clamped)
+  return Math.round(clamped / step) * step
+}
+```
+
+**Key lesson:** Simple is better — users prefer predictable slider behavior over "helpful" snapping.
+
+### Files Modified
+
+- `src/components/GiLogSlider.vue` — Simplified snapTo logic, removed complex sticky behavior
+- `src/views/PaperWeightView.vue` — Weight per unit display, booklet pages dropdown, compact layout, silent clamping
+- `src/i18n/fr.ts` — Custom pages translations
+- `src/i18n/en.ts` — Custom pages translations

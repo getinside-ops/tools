@@ -42,154 +42,147 @@
           </div>
         </div>
 
-        <!-- Customization Accordion -->
-        <div class="gi-accordion">
-          <button
-            class="gi-accordion-header"
-            @click="showCustomization = !showCustomization"
-            :aria-expanded="showCustomization"
-          >
-            <span>{{ t('barcode.customize') }}</span>
-            <span class="gi-accordion-icon" :class="{ 'is-open': showCustomization }">▼</span>
-          </button>
+        <!-- Customization Panel (always visible) -->
+        <div class="barcode-customization">
+          <h3 class="barcode-section-title">{{ t('barcode.customize') }}</h3>
 
-          <div v-show="showCustomization" class="gi-accordion-content">
-            <!-- Bar Color -->
-            <div class="gi-field">
-              <label class="gi-label">{{ t('barcode.barColor') }}</label>
-              <div class="barcode-color-swatches">
-                <button
-                  v-for="color in presetColors"
-                  :key="color.value"
-                  class="barcode-color-swatch"
-                  :style="{ backgroundColor: color.value }"
-                  :class="{ 'is-selected': settings.barColor === color.value }"
-                  @click="setBarColor(color.value)"
-                  :aria-label="t(`barcode.colors.${color.name}`)"
-                />
-                <input
-                  type="color"
-                  :value="settings.barColor"
-                  class="barcode-color-picker"
-                  @input="(e) => setBarColor((e.target as HTMLInputElement).value)"
-                  :aria-label="t('barcode.customColor')"
-                />
-              </div>
+          <!-- Bar Color -->
+          <div class="gi-field">
+            <label class="gi-label">{{ t('barcode.barColor') }}</label>
+            <div class="barcode-color-swatches">
+              <button
+                v-for="color in presetColors"
+                :key="color.value"
+                class="barcode-color-swatch"
+                :style="{ backgroundColor: color.value }"
+                :class="{ 'is-selected': settings.barColor === color.value }"
+                @click="setBarColor(color.value)"
+                :aria-label="t(`barcode.colors.${color.name}`)"
+              />
+              <input
+                type="color"
+                :value="settings.barColor"
+                class="barcode-color-picker"
+                @input="(e) => setBarColor((e.target as HTMLInputElement).value)"
+                :aria-label="t('barcode.customColor')"
+              />
             </div>
-
-            <!-- Width Slider -->
-            <div class="gi-field">
-              <label class="gi-label">{{ t('barcode.width') }}</label>
-              <div class="barcode-slider-container">
-                <input
-                  type="range"
-                  min="100"
-                  max="400"
-                  step="10"
-                  :value="settings.width"
-                  class="gi-slider"
-                  @input="(e) => setDimensions({ width: Number((e.target as HTMLInputElement).value), height: settings.height })"
-                />
-                <span class="barcode-slider-value">{{ settings.width }} px</span>
-              </div>
-              <div class="barcode-size-presets">
-                <button
-                  class="gi-btn-ghost gi-btn-sm"
-                  :class="{ 'is-active': settings.width === 100 }"
-                  @click="setDimensions({ width: 100, height: settings.height })"
-                >
-                  {{ t('barcode.size.small') }}
-                </button>
-                <button
-                  class="gi-btn-ghost gi-btn-sm"
-                  :class="{ 'is-active': settings.width === 200 }"
-                  @click="setDimensions({ width: 200, height: settings.height })"
-                >
-                  {{ t('barcode.size.medium') }}
-                </button>
-                <button
-                  class="gi-btn-ghost gi-btn-sm"
-                  :class="{ 'is-active': settings.width === 400 }"
-                  @click="setDimensions({ width: 400, height: settings.height })"
-                >
-                  {{ t('barcode.size.large') }}
-                </button>
-              </div>
-            </div>
-
-            <!-- Height Slider -->
-            <div class="gi-field">
-              <label class="gi-label">{{ t('barcode.height') }}</label>
-              <div class="barcode-slider-container">
-                <input
-                  type="range"
-                  min="30"
-                  max="80"
-                  step="5"
-                  :value="settings.height"
-                  class="gi-slider"
-                  @input="(e) => setDimensions({ width: settings.width, height: Number((e.target as HTMLInputElement).value) })"
-                />
-                <span class="barcode-slider-value">{{ settings.height }} px</span>
-              </div>
-            </div>
-
-            <!-- Toggle Options -->
-            <div class="gi-field">
-              <label class="gi-checkbox">
-                <input
-                  type="checkbox"
-                  :checked="settings.showText"
-                  @change="toggleShowText"
-                />
-                <span>{{ t('barcode.showText') }}</span>
-              </label>
-            </div>
-
-            <div class="gi-field">
-              <label class="gi-checkbox">
-                <input
-                  type="checkbox"
-                  :checked="settings.transparentBackground"
-                  @change="toggleTransparentBackground"
-                />
-                <span>{{ t('barcode.transparentBg') }}</span>
-              </label>
-            </div>
-
-            <!-- Export Format -->
-            <div class="gi-field">
-              <label class="gi-label">{{ t('barcode.exportFormat') }}</label>
-              <div class="barcode-format-selector">
-                <button
-                  class="gi-btn-ghost"
-                  :class="{ 'is-active': settings.exportFormat === 'svg' }"
-                  @click="setExportFormat('svg')"
-                >
-                  SVG {{ t('barcode.format.vector') }}
-                </button>
-                <button
-                  class="gi-btn-ghost"
-                  :class="{ 'is-active': settings.exportFormat === 'png' }"
-                  @click="setExportFormat('png')"
-                >
-                  PNG {{ t('barcode.format.raster') }}
-                </button>
-                <button
-                  class="gi-btn-ghost"
-                  :class="{ 'is-active': settings.exportFormat === 'jpg' }"
-                  @click="setExportFormat('jpg')"
-                >
-                  JPG {{ t('barcode.format.photo') }}
-                </button>
-              </div>
-            </div>
-
-            <!-- Reset Button -->
-            <button class="gi-btn-ghost gi-btn-sm barcode-reset-btn" @click="reset">
-              {{ t('barcode.reset') }}
-            </button>
           </div>
+
+          <!-- Width Slider -->
+          <div class="gi-field">
+            <label class="gi-label">{{ t('barcode.width') }}</label>
+            <div class="barcode-slider-container">
+              <input
+                type="range"
+                min="100"
+                max="400"
+                step="10"
+                :value="settings.width"
+                class="gi-slider"
+                @input="(e) => setDimensions({ width: Number((e.target as HTMLInputElement).value), height: settings.height })"
+              />
+              <span class="barcode-slider-value">{{ settings.width }} px</span>
+            </div>
+            <div class="barcode-size-presets">
+              <button
+                class="gi-btn-ghost gi-btn-sm"
+                :class="{ 'is-active': settings.width === 100 }"
+                @click="setDimensions({ width: 100, height: settings.height })"
+              >
+                {{ t('barcode.size.small') }}
+              </button>
+              <button
+                class="gi-btn-ghost gi-btn-sm"
+                :class="{ 'is-active': settings.width === 200 }"
+                @click="setDimensions({ width: 200, height: settings.height })"
+              >
+                {{ t('barcode.size.medium') }}
+              </button>
+              <button
+                class="gi-btn-ghost gi-btn-sm"
+                :class="{ 'is-active': settings.width === 400 }"
+                @click="setDimensions({ width: 400, height: settings.height })"
+              >
+                {{ t('barcode.size.large') }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Height Slider -->
+          <div class="gi-field">
+            <label class="gi-label">{{ t('barcode.height') }}</label>
+            <div class="barcode-slider-container">
+              <input
+                type="range"
+                min="30"
+                max="80"
+                step="5"
+                :value="settings.height"
+                class="gi-slider"
+                @input="(e) => setDimensions({ width: settings.width, height: Number((e.target as HTMLInputElement).value) })"
+              />
+              <span class="barcode-slider-value">{{ settings.height }} px</span>
+            </div>
+          </div>
+
+          <!-- Toggle Options -->
+          <div class="gi-field">
+            <label class="gi-label gi-checkbox-label">
+              <input
+                type="checkbox"
+                :checked="settings.showText"
+                @change="toggleShowText"
+                class="gi-checkbox"
+              />
+              <span>{{ t('barcode.showText') }}</span>
+            </label>
+          </div>
+
+          <div class="gi-field">
+            <label class="gi-label gi-checkbox-label">
+              <input
+                type="checkbox"
+                :checked="settings.transparentBackground"
+                @change="toggleTransparentBackground"
+                class="gi-checkbox"
+              />
+              <span>{{ t('barcode.transparentBg') }}</span>
+            </label>
+          </div>
+
+          <!-- Export Format -->
+          <div class="gi-field">
+            <label class="gi-label">{{ t('barcode.exportFormat') }}</label>
+            <div class="barcode-format-selector">
+              <button
+                class="gi-btn-ghost"
+                :class="{ 'is-active': settings.exportFormat === 'svg' }"
+                @click="setExportFormat('svg')"
+              >
+                SVG {{ t('barcode.format.vector') }}
+              </button>
+              <button
+                class="gi-btn-ghost"
+                :class="{ 'is-active': settings.exportFormat === 'png' }"
+                @click="setExportFormat('png')"
+              >
+                PNG {{ t('barcode.format.raster') }}
+              </button>
+              <button
+                class="gi-btn-ghost"
+                :class="{ 'is-active': settings.exportFormat === 'jpg' }"
+                @click="setExportFormat('jpg')"
+              >
+                JPG {{ t('barcode.format.photo') }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Reset Button -->
+          <button class="gi-btn-ghost gi-btn-sm barcode-reset-btn" @click="reset">
+            {{ t('barcode.reset') }}
+          </button>
         </div>
       </div>
 
@@ -273,8 +266,9 @@
               <button class="gi-btn-ghost" @click="copyCode">
                 {{ copied ? t('barcode.copied') : t('barcode.copy') }}
               </button>
-              <button class="gi-btn" @click="downloadBarcode">
-                {{ t('barcode.download', { format: settings.exportFormat.toUpperCase() }) }}
+              <button class="gi-btn" :disabled="isExporting" @click="downloadBarcode">
+                <Loader2 v-if="isExporting" :size="16" class="animate-spin" />
+                {{ isExporting ? t('barcode.exporting') : t('barcode.download', { format: settings.exportFormat.toUpperCase() }) }}
               </button>
             </div>
           </template>
@@ -289,7 +283,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Barcode } from 'lucide-vue-next'
+import { Barcode, Loader2 } from 'lucide-vue-next'
 import { generateEanBinary } from '../composables/useBarcode'
 import { useBarcodeValidator } from '../composables/useBarcodeValidator'
 import { useBarcodeExporter } from '../composables/useBarcodeExporter'
@@ -315,16 +309,17 @@ const {
 // Local state
 const inputCode = ref('400638133393')
 const copied = ref(false)
-const showCustomization = ref(false)
+const isExporting = ref(false)
 const barcodeSvgContainer = ref<HTMLElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 
-// Preset colors
+// Preset colors (standard barcode colors, not brand-specific)
 const presetColors = [
   { value: '#000000', name: 'black' },
-  { value: '#666666', name: 'gray' },
-  { value: '#0aaa8e', name: 'brand' },
-  { value: '#1a1a1a', name: 'dark' },
+  { value: '#1e3a5f', name: 'navy' },
+  { value: '#8b0000', name: 'darkred' },
+  { value: '#2f4f4f', name: 'darkslate' },
+  { value: '#4a4a4a', name: 'darkgray' },
 ]
 
 // Handle input changes
@@ -378,7 +373,7 @@ async function copyCode() {
 }
 
 async function downloadBarcode() {
-  if (!barcodeSvgContainer.value || fullCode.value.length !== 13) return
+  if (!barcodeSvgContainer.value || fullCode.value.length !== 13 || isExporting.value) return
 
   const svgElement = barcodeSvgContainer.value.querySelector('svg')
   if (!svgElement) return
@@ -386,6 +381,7 @@ async function downloadBarcode() {
   const svgString = svgElement.outerHTML
   const filename = `barcode-${fullCode.value}`
 
+  isExporting.value = true
   try {
     let blob: Blob
     let exportFilename: string
@@ -413,6 +409,8 @@ async function downloadBarcode() {
     downloadBlob(blob, exportFilename)
   } catch (error) {
     console.error('Export failed:', error)
+  } finally {
+    isExporting.value = false
   }
 }
 </script>
@@ -447,8 +445,8 @@ async function downloadBarcode() {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
+  font-size: var(--gi-font-size-xs);
+  margin-top: var(--gi-space-xs);
 }
 
 /* Input States */
@@ -468,44 +466,24 @@ async function downloadBarcode() {
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
 }
 
-/* Accordion */
-.gi-accordion {
+/* Customization Panel */
+.barcode-customization {
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-md);
-  overflow: hidden;
-}
-
-.gi-accordion-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: var(--gi-space-md);
-  background: var(--gi-surface);
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background var(--gi-transition-fast) var(--gi-ease-out);
-}
-
-.gi-accordion-header:hover {
-  background: var(--gi-surface-hover);
-}
-
-.gi-accordion-icon {
-  transition: transform var(--gi-transition-base) var(--gi-ease-out);
-}
-
-.gi-accordion-icon.is-open {
-  transform: rotate(180deg);
-}
-
-.gi-accordion-content {
-  padding: var(--gi-space-md);
-  border-top: 1px solid var(--gi-border);
   display: flex;
   flex-direction: column;
   gap: var(--gi-space-md);
+  background: var(--gi-surface);
+}
+
+.barcode-section-title {
+  font-size: var(--gi-font-size-sm);
+  font-weight: 600;
+  color: var(--gi-text);
+  margin: 0;
+  padding-bottom: var(--gi-space-sm);
+  border-bottom: 1px solid var(--gi-border);
 }
 
 /* Color Swatches */
@@ -513,11 +491,12 @@ async function downloadBarcode() {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .barcode-color-swatch {
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: var(--gi-radius-sm);
   border: 2px solid var(--gi-border);
   cursor: pointer;
@@ -528,18 +507,41 @@ async function downloadBarcode() {
   transform: scale(1.1);
 }
 
+.barcode-color-swatch:active {
+  transform: scale(0.95);
+}
+
+.barcode-color-swatch:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
 .barcode-color-swatch.is-selected {
   border-color: var(--gi-brand);
   box-shadow: 0 0 0 2px var(--gi-brand-fade);
 }
 
 .barcode-color-picker {
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: var(--gi-radius-sm);
   border: 2px solid var(--gi-border);
   cursor: pointer;
   padding: 0;
+  transition: transform var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.barcode-color-picker:hover {
+  transform: scale(1.05);
+}
+
+.barcode-color-picker:active {
+  transform: scale(0.95);
+}
+
+.barcode-color-picker:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
 }
 
 /* Sliders */
@@ -560,8 +562,8 @@ async function downloadBarcode() {
 
 .gi-slider::-webkit-slider-thumb {
   appearance: none;
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
   background: var(--gi-brand);
   border-radius: var(--gi-radius-pill);
   cursor: pointer;
@@ -572,18 +574,54 @@ async function downloadBarcode() {
   transform: scale(1.2);
 }
 
+.gi-slider::-webkit-slider-thumb:active {
+  transform: scale(1.1);
+}
+
+.gi-slider:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+.gi-slider::-moz-range-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--gi-brand);
+  border: none;
+  border-radius: var(--gi-radius-pill);
+  cursor: pointer;
+  transition: transform var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.gi-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
 .barcode-slider-value {
   min-width: 4rem;
   text-align: right;
   font-weight: 500;
   color: var(--gi-text);
+  font-size: var(--gi-font-size-sm);
 }
 
 /* Size Presets */
 .barcode-size-presets {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  margin-top: var(--gi-space-xs);
+}
+
+.barcode-size-presets .gi-btn-ghost {
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.barcode-size-presets .gi-btn-ghost:active {
+  transform: scale(0.98);
 }
 
 /* Format Selector */
@@ -593,10 +631,51 @@ async function downloadBarcode() {
   flex-wrap: wrap;
 }
 
+.barcode-format-selector .gi-btn-ghost {
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.barcode-format-selector .gi-btn-ghost:active {
+  transform: scale(0.98);
+}
+
+/* Checkbox Styling */
+.gi-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gi-space-sm);
+  cursor: pointer;
+  font-size: var(--gi-font-size-sm);
+  min-height: 44px;
+  padding: var(--gi-space-xs) 0;
+}
+
+.gi-checkbox-label input[type="checkbox"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  cursor: pointer;
+  accent-color: var(--gi-brand);
+}
+
+.gi-checkbox-label input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
 /* Reset Button */
 .barcode-reset-btn {
   margin-top: var(--gi-space-sm);
   align-self: flex-start;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.barcode-reset-btn:active {
+  transform: scale(0.98);
 }
 
 /* Preview Area */
@@ -615,23 +694,60 @@ async function downloadBarcode() {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.barcode-preview svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .barcode-placeholder {
   text-align: center;
   color: var(--gi-text-muted);
+  padding: var(--gi-space-xl);
 }
 
 /* Export Actions */
 .barcode-export-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--gi-space-sm);
   flex-wrap: wrap;
 }
 
 .barcode-export-actions .gi-btn {
   flex: 1;
   min-width: 120px;
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gi-space-xs);
+}
+
+.barcode-export-actions .gi-btn:active {
+  transform: scale(0.98);
+}
+
+.barcode-export-actions .gi-btn-ghost {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.barcode-export-actions .gi-btn-ghost:active {
+  transform: scale(0.98);
+}
+
+/* Disabled State */
+.barcode-export-actions .gi-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Dark Mode Adjustments */
@@ -639,12 +755,81 @@ async function downloadBarcode() {
   background: var(--gi-surface-elevated);
 }
 
-/* Focus States */
-.barcode-color-swatch:focus-visible,
-.barcode-color-picker:focus-visible,
-.gi-slider:focus-visible,
-.gi-accordion-header:focus-visible {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 2px;
+/* Responsive Improvements */
+@media (max-width: 640px) {
+  .barcode-grid {
+    gap: var(--gi-space-md);
+  }
+
+  .barcode-preview-area {
+    min-height: 150px;
+    padding: var(--gi-space-md);
+  }
+
+  .barcode-export-actions {
+    flex-direction: column;
+  }
+
+  .barcode-export-actions .gi-btn {
+    min-width: 100%;
+  }
+
+  .barcode-color-swatches {
+    gap: var(--gi-space-sm);
+  }
+
+  .barcode-size-presets {
+    flex-wrap: wrap;
+  }
+
+  .barcode-format-selector {
+    flex-wrap: wrap;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .barcode-color-swatch,
+  .barcode-color-picker,
+  .gi-slider::-webkit-slider-thumb,
+  .barcode-size-presets .gi-btn-ghost,
+  .barcode-format-selector .gi-btn-ghost,
+  .barcode-export-actions .gi-btn,
+  .barcode-export-actions .gi-btn-ghost,
+  .barcode-reset-btn {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .gi-slider::-webkit-slider-thumb:hover,
+  .gi-slider::-webkit-slider-thumb:active,
+  .barcode-color-swatch:hover,
+  .barcode-color-swatch:active,
+  .barcode-color-picker:hover,
+  .barcode-color-picker:active {
+    transform: none !important;
+  }
+
+  .barcode-size-presets .gi-btn-ghost:active,
+  .barcode-format-selector .gi-btn-ghost:active,
+  .barcode-export-actions .gi-btn:active,
+  .barcode-export-actions .gi-btn-ghost:active,
+  .barcode-reset-btn:active {
+    transform: none !important;
+  }
+}
+
+/* Spinning Animation for Loader */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

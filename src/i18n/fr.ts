@@ -787,6 +787,7 @@ const fr = {
     copy: 'Copier le code',
     copied: 'Copié !',
     download: 'Télécharger en {format}',
+    exporting: 'Téléchargement...',
     country: 'Pays: {country} ({code})',
     customize: 'Personnaliser l\'apparence',
     barColor: 'Couleur des barres',
@@ -798,9 +799,10 @@ const fr = {
     reset: 'Réinitialiser',
     colors: {
       black: 'Noir',
-      gray: 'Gris',
-      brand: 'Vert getinside',
-      dark: 'Gris foncé',
+      navy: 'Bleu marine',
+      darkred: 'Rouge foncé',
+      darkslate: 'Gris ardoise',
+      darkgray: 'Gris foncé',
     },
     customColor: 'Couleur personnalisée',
     size: {

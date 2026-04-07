@@ -789,6 +789,7 @@ const en: Messages = {
     copy: 'Copy Code',
     copied: 'Copied!',
     download: 'Download {format}',
+    exporting: 'Downloading...',
     country: 'Country: {country} ({code})',
     customize: 'Customize Appearance',
     barColor: 'Bar Color',
@@ -800,9 +801,10 @@ const en: Messages = {
     reset: 'Reset',
     colors: {
       black: 'Black',
-      gray: 'Gray',
-      brand: 'getinside Green',
-      dark: 'Dark Gray',
+      navy: 'Navy Blue',
+      darkred: 'Dark Red',
+      darkslate: 'Slate Gray',
+      darkgray: 'Dark Gray',
     },
     customColor: 'Custom Color',
     size: {
