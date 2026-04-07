@@ -128,7 +128,14 @@ onUnmounted(() => document.removeEventListener('keydown', handleKeydown))
   outline-offset: -3px;
   z-index: 1;
 }
-.gi-swatch--locked { outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -3px; }
+.gi-swatch--locked {
+  outline: 3px solid rgba(0, 0, 0, 0.5);
+  outline-offset: -3px;
+}
+
+[data-theme="dark"] .gi-swatch--locked {
+  outline: 3px solid rgba(255, 255, 255, 0.6);
+}
 
 .gi-swatch--flash {
   animation: flash-brightness 0.3s ease-out;

@@ -462,6 +462,16 @@ body {
   box-shadow: var(--gi-shadow-lg);
 }
 
+/* Responsive Table Wrapper */
+.gi-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gi-table-wrapper .gi-table {
+  min-width: 100%;
+}
+
 /* Accessibility: Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
