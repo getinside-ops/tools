@@ -184,12 +184,7 @@ function setCategory(cat: string) {
 <style scoped>
 /* Break out of gi-main's 800px/padding constraint */
 .home-wrap {
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
   width: 100%;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
   margin-top: -2rem;
   margin-bottom: -4rem;
 }
