@@ -1334,3 +1334,298 @@ Always prefix commands with `rtk` for token savings:
 rtk git status / log / diff / add / commit / push
 rtk npm run <script>
 ```
+
+---
+
+## Session Learnings: UI/UX Audit & Accessibility Fixes (April 2026)
+
+### Audit Methodology
+
+**Used `ui-ux-pro-max` skill** to perform comprehensive UI/UX audit across 10 priority categories:
+1. Accessibility (CRITICAL)
+2. Touch & Interaction (CRITICAL)
+3. Performance (HIGH)
+4. Style Selection (HIGH)
+5. Layout & Responsive (HIGH)
+6. Typography & Color (MEDIUM)
+7. Animation (MEDIUM)
+8. Forms & Feedback (MEDIUM)
+9. Navigation Patterns (HIGH)
+10. Charts & Data (LOW)
+
+**Workflow:** Read key files → identify issues by severity → create prioritized plan → implement in batches (P0 → P3) → verify build + tests.
+
+### Critical: Never Use Emoji as Structural Icons
+
+**Problem:** ColorPaletteView used `🔒`/`🔓` emoji for lock/unlock states.
+
+**Why it's bad:**
+- Emoji rendering varies by OS/browser (not consistent)
+- Cannot be styled with CSS tokens
+- Screen readers may read them inconsistently
+- Font-dependent, not vector-based
+
+**Correct pattern:**
+```typescript
+// ✅ Good — Lucide SVG icons
+import { Lock as LockIcon, Unlock as UnlockIcon } from 'lucide-vue-next'
+
+<LockIcon v-if="color.locked" :size="20" />
+<UnlockIcon v-else :size="20" />
+```
+
+**Also replaced inline SVGs with Lucide throughout:**
+- `ToolPageLayout.vue` — back arrow → `<ChevronLeft />`
+- `PaperWeightView.vue` — reset icon → `<RotateCcw />`
+- `QrDecoderView.vue` — paste icon → `<ClipboardPaste />`
+- `ContrastCheckerView.vue` — swap icon → `<ArrowLeftRight />`
+
+### Touch Target Minimum: 44×44px
+
+**Problem:** Footer toggle buttons were 36×36px — below Apple HIG minimum of 44×44pt.
+
+**Fix:**
+```css
+.gi-footer-toggle {
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+}
+```
+
+**Rule:** All interactive elements must be ≥44×44px (iOS) or ≥48×48dp (Android).
+
+### ARIA Attributes for Toggle Buttons
+
+**Pattern for toggle/state buttons:**
+```vue
+<button
+  @click="toggleLocale"
+  :aria-pressed="locale === 'fr'"
+  :aria-label="t('footer.toggleLanguage')"
+>
+  {{ locale === 'fr' ? 'EN' : 'FR' }}
+</button>
+```
+
+**For tab-like controls:**
+```vue
+<div class="home-tab-bar" role="tablist" aria-label="Tool categories">
+  <button
+    role="tab"
+    :aria-pressed="activeCategory === cat"
+  >
+    {{ t(`home.categories.${cat}`) }}
+  </button>
+</div>
+```
+
+### Keyboard Accessibility for Custom Interactive Elements
+
+**Any element with `role="button"` and `tabindex="0"` must have keyboard handlers:**
+```vue
+<div
+  class="gi-swatch"
+  :tabindex="0"
+  role="button"
+  :aria-label="color.locked ? t('colorPalette.unlock') : t('colorPalette.lock')"
+  @click="lock(i)"
+  @keydown.enter="lock(i)"
+  @keydown.space.prevent="lock(i)"
+>
+```
+
+**Key points:**
+- `tabindex="0"` makes element focusable
+- `@keydown.enter` handles Enter key
+- `@keydown.space.prevent` handles Space key (prevent default scroll)
+- `aria-label` provides screen reader context
+
+### Horizontal Scroll Risk: `100vw` Anti-Pattern
+
+**Problem:** `width: 100vw` includes scrollbar width, causing horizontal scroll on some browsers.
+
+**Incorrect:**
+```css
+.home-wrap {
+  width: 100vw;
+}
+```
+
+**Correct:**
+```css
+.home-wrap {
+  width: 100%;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+}
+```
+
+This pattern breaks out of a constrained parent (`max-width: 800px`) without causing horizontal scroll.
+
+### Responsive Fallback for Flex Row Layouts
+
+**Problem:** Color palette used `display: flex` row — collapses on narrow screens.
+
+**Fix:**
+```css
+.gi-palette {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .gi-palette {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .gi-swatch {
+    min-height: 100px;
+    flex: 1 1 calc(50% - 0.25rem);
+  }
+}
+```
+
+### Interactive Feedback: `:active` States
+
+**All tappable elements need press feedback:**
+```css
+.gi-btn:active {
+  transform: scale(0.98);
+}
+
+.home-card:active {
+  transform: scale(0.98);
+}
+
+.gi-swatch:active {
+  transform: scale(0.98);
+}
+```
+
+**Why `scale(0.98)` instead of `translateY(0)`:** Scale provides visual "press" feedback without layout shift.
+
+### Card Focus State: Use Outline, Not Border
+
+**Problem:** `.gi-card` had both `border` and `box-shadow` — redundant visual weight.
+
+**Fix:**
+```css
+.gi-card {
+  background: var(--gi-surface);
+  border-radius: var(--gi-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--gi-shadow);
+  /* No border */
+}
+
+.gi-card:focus-within {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 1px;
+}
+```
+
+**Key:** Use `outline` for focus (doesn't affect layout), not `border`.
+
+### Screen Reader Utility Class (`.sr-only`)
+
+**Add to global.css for accessibility live regions:**
+```css
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+```
+
+**Usage for copy feedback:**
+```vue
+<div aria-live="polite" aria-atomic="true" class="sr-only">
+  <span v-if="copiedIndex !== null">{{ t('colorPalette.copied') }}: {{ palette[copiedIndex]?.hex }}</span>
+</div>
+```
+
+### Number Inputs: Always Add `step="1"`
+
+**Prevents accidental decimal values:**
+```vue
+<input v-model.number="quantity" type="number" min="1" step="1" />
+```
+
+### Google Fonts Performance: Preconnect
+
+**Add to `index.html` before font stylesheet:**
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+```
+
+Reduces font loading latency by establishing early connections.
+
+### Dark Mode: Avoid Pure White Outlines
+
+**Problem:** Locked swatch outline used `white` — too harsh on dark backgrounds.
+
+**Fix:**
+```css
+.gi-swatch--locked {
+  outline: 3px solid rgba(255, 255, 255, 0.4);
+  outline-offset: -3px;
+}
+```
+
+### i18n: Never Hardcode UI Text
+
+**Always use `t()` keys, even for simple words:**
+```vue
+<!-- ❌ Bad -->
+<button @click="reset">Clear</button>
+
+<!-- ✅ Good -->
+<button @click="reset">{{ t('qrDecoder.clear') }}</button>
+```
+
+**Add keys to both `fr.ts` and `en.ts`:**
+```typescript
+// fr.ts
+qrDecoder: {
+  clear: 'Effacer',
+}
+
+// en.ts
+qrDecoder: {
+  clear: 'Clear',
+}
+```
+
+### Audit Fix Priority Framework
+
+| Priority | Category | Examples |
+|----------|----------|----------|
+| P0 | Accessibility | Emoji icons, touch targets, ARIA, keyboard nav |
+| P1 | Layout/Responsive | Horizontal scroll, breakpoints, word-wrap |
+| P2 | Visual/Consistency | Icon standardization, active states, i18n |
+| P3 | Performance/Polish | Preconnect, animation cleanup, dark mode tweaks |
+
+### Files Modified in This Audit
+
+- `index.html` — Google Fonts preconnect
+- `src/assets/styles/global.css` — Card border removal, `.sr-only`, button active state, grid minmax
+- `src/components/AppHeader.vue` — aria-pressed on language toggle
+- `src/components/AppFooter.vue` — 44×44px toggles, aria-pressed
+- `src/components/ToolPageLayout.vue` — ChevronLeft icon
+- `src/views/ColorPaletteView.vue` — Lock/Unlock icons, keyboard support, responsive wrap, aria-live
+- `src/views/ContrastCheckerView.vue` — ArrowLeftRight icon, word-wrap, responsive
+- `src/views/HomeView.vue` — tab ARIA, home-wrap fix, card active state
+- `src/views/PaperWeightView.vue` — RotateCcw icon, step="1"
+- `src/views/QrDecoderView.vue` — ClipboardPaste icon, i18n clear
+- `src/views/UtmBuilderView.vue` — Check icon on copy
+- `src/i18n/fr.ts` — clear, swapColors keys
+- `src/i18n/en.ts` — clear, swapColors keys
