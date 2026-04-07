@@ -190,62 +190,67 @@
 
       <!-- ==================== BOOKLET MODE ==================== -->
       <template v-else>
-        <!-- Number of copies with Slider -->
-        <div class="pw-input-group">
-          <GiFormField
-            :label="t('paperWeight.bookletCopies')"
-            type="number"
-            :model-value="bookletCopies"
-            @update:model-value="bookletCopies = clampNumber(Number($event), 1, MAX_QUANTITY)"
-          >
-            <template #input>
-              <div class="pw-quantity-row">
-                <input
-                  v-model.number="bookletCopies"
-                  type="text"
-                  inputmode="numeric"
-                  class="gi-input pw-quantity-input"
-                  :aria-label="t('paperWeight.bookletCopies')"
-                />
-                <span class="pw-quantity-label">{{ t('paperWeight.copies') }}</span>
-              </div>
-            </template>
-          </GiFormField>
-          <GiLogSlider
-            v-model="bookletCopies"
-            :min="1"
-            :max="MAX_QUANTITY"
-            :step="quantityStep"
-            :marks="quantityMarks.slice(0, 12)"
-            :label="t('paperWeight.bookletCopies')"
-          />
+        <!-- Booklet Configuration Section -->
+        <div class="pw-booklet-section">
+          <h3 class="pw-section-title">{{ t('paperWeight.bookletConfig') }}</h3>
+          
+          <!-- Number of copies with Slider -->
+          <div class="pw-input-group">
+            <GiFormField
+              :label="t('paperWeight.bookletCopies')"
+              type="number"
+              :model-value="bookletCopies"
+              @update:model-value="bookletCopies = clampNumber(Number($event), 1, MAX_QUANTITY)"
+            >
+              <template #input>
+                <div class="pw-quantity-row">
+                  <input
+                    v-model.number="bookletCopies"
+                    type="text"
+                    inputmode="numeric"
+                    class="gi-input pw-quantity-input"
+                    :aria-label="t('paperWeight.bookletCopies')"
+                  />
+                  <span class="pw-quantity-label">{{ t('paperWeight.copies') }}</span>
+                </div>
+              </template>
+            </GiFormField>
+            <GiLogSlider
+              v-model="bookletCopies"
+              :min="1"
+              :max="MAX_QUANTITY"
+              :step="quantityStep"
+              :marks="quantityMarks.slice(0, 6)"
+              :label="t('paperWeight.bookletCopies')"
+            />
+          </div>
+
+          <!-- Pages per booklet -->
+          <div class="pw-input-group">
+            <GiFormField
+              :label="t('paperWeight.bookletPages')"
+              type="number"
+              :model-value="bookletPages"
+              @update:model-value="bookletPages = clampNumber(Number($event), 4, 9999)"
+            >
+              <template #input>
+                <div class="pw-quantity-row">
+                  <input
+                    v-model.number="bookletPages"
+                    type="text"
+                    inputmode="numeric"
+                    class="gi-input pw-quantity-input"
+                    :aria-label="t('paperWeight.bookletPages')"
+                  />
+                  <span class="pw-quantity-label">{{ t('paperWeight.pages') }}</span>
+                </div>
+              </template>
+            </GiFormField>
+            <p class="pw-helper-text">{{ t('paperWeight.bookletPagesHint') }}</p>
+          </div>
         </div>
 
-        <!-- Pages per booklet -->
-        <div class="pw-input-group">
-          <GiFormField
-            :label="t('paperWeight.bookletPages')"
-            type="number"
-            :model-value="bookletPages"
-            @update:model-value="bookletPages = clampNumber(Number($event), 4, 9999)"
-          >
-            <template #input>
-              <div class="pw-quantity-row">
-                <input
-                  v-model.number="bookletPages"
-                  type="text"
-                  inputmode="numeric"
-                  class="gi-input pw-quantity-input"
-                  :aria-label="t('paperWeight.bookletPages')"
-                />
-                <span class="pw-quantity-label">{{ t('paperWeight.pages') }}</span>
-              </div>
-            </template>
-          </GiFormField>
-          <p class="pw-helper-text">{{ t('paperWeight.bookletPagesHint') }}</p>
-        </div>
-
-        <!-- Format -->
+        <!-- Format (shared) -->
         <div class="pw-input-group">
           <GiFormField :label="t('paperWeight.format')">
             <template #input>
@@ -289,67 +294,79 @@
           </Transition>
         </div>
 
-        <!-- Cover Grammage -->
-        <div class="pw-input-group">
-          <GiFormField
-            :label="t('paperWeight.bookletCoverGrammage')"
-            type="number"
-            :model-value="bookletCoverGrammage"
-            @update:model-value="bookletCoverGrammage = clampNumber(Number($event), 30, 500)"
-          >
-            <template #input>
-              <div class="pw-grammage-row">
-                <input
-                  v-model.number="bookletCoverGrammage"
-                  type="text"
-                  inputmode="numeric"
-                  class="gi-input pw-grammage-input"
-                  :aria-label="t('paperWeight.bookletCoverGrammage')"
-                />
-                <span class="pw-grammage-unit">g/m²</span>
-              </div>
-            </template>
-          </GiFormField>
-          <GiLogSlider
-            v-model="bookletCoverGrammage"
-            :min="30"
-            :max="500"
-            :step="() => 5"
-            :marks="grammageMarks"
-            :label="t('paperWeight.bookletCoverGrammage')"
-          />
-        </div>
+        <!-- Paper Weight Section -->
+        <div class="pw-booklet-section pw-paper-section">
+          <h3 class="pw-section-title">{{ t('paperWeight.paperWeights') }}</h3>
+          
+          <!-- Cover Grammage -->
+          <div class="pw-input-group pw-cover-group">
+            <div class="pw-subsection-header">
+              <span class="pw-subsection-icon" aria-hidden="true">📄</span>
+              <GiFormField
+                :label="t('paperWeight.bookletCoverGrammage')"
+                type="number"
+                :model-value="bookletCoverGrammage"
+                @update:model-value="bookletCoverGrammage = clampNumber(Number($event), 30, 500)"
+              >
+                <template #input>
+                  <div class="pw-grammage-row">
+                    <input
+                      v-model.number="bookletCoverGrammage"
+                      type="text"
+                      inputmode="numeric"
+                      class="gi-input pw-grammage-input"
+                      :aria-label="t('paperWeight.bookletCoverGrammage')"
+                    />
+                    <span class="pw-grammage-unit">g/m²</span>
+                  </div>
+                </template>
+              </GiFormField>
+            </div>
+            <GiLogSlider
+              v-model="bookletCoverGrammage"
+              :min="30"
+              :max="500"
+              :step="() => 5"
+              :marks="grammageMarks"
+              :label="t('paperWeight.bookletCoverGrammage')"
+            />
+            <p class="pw-helper-text pw-cover-hint">{{ t('paperWeight.coverHint') }}</p>
+          </div>
 
-        <!-- Inner Pages Grammage -->
-        <div class="pw-input-group">
-          <GiFormField
-            :label="t('paperWeight.bookletInnerGrammage')"
-            type="number"
-            :model-value="bookletInnerGrammage"
-            @update:model-value="bookletInnerGrammage = clampNumber(Number($event), 30, 500)"
-          >
-            <template #input>
-              <div class="pw-grammage-row">
-                <input
-                  v-model.number="bookletInnerGrammage"
-                  type="text"
-                  inputmode="numeric"
-                  class="gi-input pw-grammage-input"
-                  :aria-label="t('paperWeight.bookletInnerGrammage')"
-                />
-                <span class="pw-grammage-unit">g/m²</span>
-              </div>
-            </template>
-          </GiFormField>
-          <GiLogSlider
-            v-model="bookletInnerGrammage"
-            :min="30"
-            :max="500"
-            :step="() => 5"
-            :marks="grammageMarks"
-            :label="t('paperWeight.bookletInnerGrammage')"
-          />
-          <p class="pw-helper-text">{{ grammageHelper }}</p>
+          <!-- Inner Pages Grammage -->
+          <div class="pw-input-group pw-inner-group">
+            <div class="pw-subsection-header">
+              <span class="pw-subsection-icon" aria-hidden="true">📑</span>
+              <GiFormField
+                :label="t('paperWeight.bookletInnerGrammage')"
+                type="number"
+                :model-value="bookletInnerGrammage"
+                @update:model-value="bookletInnerGrammage = clampNumber(Number($event), 30, 500)"
+              >
+                <template #input>
+                  <div class="pw-grammage-row">
+                    <input
+                      v-model.number="bookletInnerGrammage"
+                      type="text"
+                      inputmode="numeric"
+                      class="gi-input pw-grammage-input"
+                      :aria-label="t('paperWeight.bookletInnerGrammage')"
+                    />
+                    <span class="pw-grammage-unit">g/m²</span>
+                  </div>
+                </template>
+              </GiFormField>
+            </div>
+            <GiLogSlider
+              v-model="bookletInnerGrammage"
+              :min="30"
+              :max="500"
+              :step="() => 5"
+              :marks="grammageMarks"
+              :label="t('paperWeight.bookletInnerGrammage')"
+            />
+            <p class="pw-helper-text">{{ t('paperWeight.innerHint') }}</p>
+          </div>
         </div>
       </template>
 
@@ -413,41 +430,26 @@ function quantityStep(value: number): number {
   return 50000
 }
 
-// Quantity marks for slider
+// Quantity marks for slider (reduced to key milestones)
 const quantityMarks = computed(() => [
-  { value: 50, label: '50' },
   { value: 100, label: '100' },
-  { value: 250, label: '250' },
-  { value: 500, label: '500' },
   { value: 1000, label: '1k' },
-  { value: 2500, label: '2.5k' },
-  { value: 5000, label: '5k' },
   { value: 10000, label: '10k' },
-  { value: 25000, label: '25k' },
   { value: 50000, label: '50k' },
   { value: 100000, label: '100k' },
-  { value: 250000, label: '250k' },
-  { value: 500000, label: '500k' },
   { value: 1000000, label: '1M' },
-  { value: 5000000, label: '5M' },
   { value: 10000000, label: '10M' },
-  { value: 50000000, label: '50M' },
   { value: MAX_QUANTITY, label: '100M' },
 ])
 
-// Grammage marks for slider
+// Grammage marks for slider (reduced to key values)
 const grammageMarks = [
-  { value: 30, label: '30' },
-  { value: 60, label: '60' },
   { value: 80, label: '80' },
   { value: 115, label: '115' },
   { value: 135, label: '135' },
   { value: 170, label: '170' },
-  { value: 200, label: '200' },
   { value: 250, label: '250' },
-  { value: 300, label: '300' },
   { value: 350, label: '350' },
-  { value: 400, label: '400' },
   { value: 500, label: '500' },
 ]
 
@@ -768,53 +770,54 @@ watch(selectedFormat, (newFormat) => {
   gap: var(--gi-space-sm);
 }
 
-/* Slider */
-.pw-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 8px;
-  border-radius: 4px;
-  background: var(--gi-border);
-  outline: none;
-  cursor: pointer;
-  margin-top: var(--gi-space-xs);
+/* Booklet sections */
+.pw-booklet-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-md);
+  padding: var(--gi-space-lg);
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
 }
 
-.pw-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--gi-brand);
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: transform var(--gi-transition-fast) var(--gi-ease-out), box-shadow var(--gi-transition-fast) var(--gi-ease-out);
+[data-theme="dark"] .pw-booklet-section {
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.pw-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+.pw-section-title {
+  font-size: var(--gi-font-size-sm);
+  font-weight: 600;
+  color: var(--gi-text);
+  margin: 0 0 var(--gi-space-xs) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
 }
 
-.pw-slider::-webkit-slider-thumb:active {
-  transform: scale(1.05);
+.pw-paper-section {
+  border-color: var(--gi-brand);
+  background: var(--gi-tint-green-50, rgba(10, 170, 142, 0.03));
 }
 
-.pw-slider::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--gi-brand);
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+[data-theme="dark"] .pw-paper-section {
+  background: rgba(10, 170, 142, 0.05);
 }
 
-.pw-slider:focus-visible {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 2px;
+.pw-subsection-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gi-space-sm);
+}
+
+.pw-subsection-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.pw-cover-hint {
+  font-style: italic;
+  opacity: 0.8;
 }
 
 /* Quantity/ Grammage input rows */

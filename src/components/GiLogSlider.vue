@@ -22,16 +22,12 @@
         v-for="mark in visibleMarks"
         :key="mark.value"
         class="gi-log-slider-mark"
+        :class="{ 'gi-log-slider-mark-prominent': isProminentMark(mark.value) }"
         :style="{ left: `${getMarkPercent(mark.value)}%` }"
       >
         <span class="gi-log-slider-mark-tick" />
         <span class="gi-log-slider-mark-label">{{ mark.label }}</span>
       </span>
-    </div>
-
-    <!-- Current value display -->
-    <div class="gi-log-slider-value" aria-live="polite">
-      {{ formatValue(modelValue) }}
     </div>
   </div>
 </template>
@@ -47,11 +43,9 @@ const props = withDefaults(defineProps<{
   marks: { value: number; label: string }[]
   label?: string
   ariaLabel?: string
-  formatValue?: (value: number) => string
 }>(), {
   label: '',
   ariaLabel: '',
-  formatValue: (v: number) => Math.round(v).toLocaleString(),
 })
 
 const emit = defineEmits<{
@@ -106,6 +100,13 @@ function getMarkPercent(value: number): number {
   const valLog = Math.log(Math.max(value, 1))
   if (maxLog === minLog) return 0
   return Math.round(100 * (valLog - minLog) / (maxLog - minLog))
+}
+
+// Determine if this is a prominent mark (major milestone)
+function isProminentMark(value: number): boolean {
+  const label = props.marks.find(m => m.value === value)?.label || ''
+  // Prominent marks: 1k, 10k, 100k, 1M, 10M, 100M for quantity; 100, 250, 500 for grammage
+  return label.includes('M') || label.includes('k') || ['80', '135', '250', '500'].includes(label)
 }
 </script>
 
@@ -180,25 +181,32 @@ function getMarkPercent(value: number): number {
 }
 
 .gi-log-slider-mark-tick {
-  width: 2px;
-  height: 8px;
+  width: 1px;
+  height: 6px;
   background: var(--gi-border);
   border-radius: 1px;
 }
 
-.gi-log-slider-mark-label {
-  font-size: var(--gi-font-size-xs);
-  color: var(--gi-text-muted);
-  white-space: nowrap;
-  margin-top: 2px;
+.gi-log-slider-mark-prominent .gi-log-slider-mark-tick {
+  width: 2px;
+  height: 10px;
+  background: var(--gi-text-muted);
 }
 
-/* Value display */
-.gi-log-slider-value {
-  text-align: center;
-  font-size: var(--gi-font-size-sm);
-  font-weight: 600;
-  color: var(--gi-brand);
-  margin-top: var(--gi-space-xs);
+.gi-log-slider-mark-label {
+  font-size: 10px;
+  color: var(--gi-text-muted);
+  opacity: 0.7;
+  white-space: nowrap;
+  margin-top: 2px;
+  transition: opacity var(--gi-transition-fast) var(--gi-ease-out);
 }
+
+.gi-log-slider-mark-prominent .gi-log-slider-mark-label {
+  font-weight: 600;
+  opacity: 1;
+  color: var(--gi-text);
+}
+
+/* Value display removed - redundant with input field */
 </style>

@@ -1,0 +1,131 @@
+- generic [ref=e2]:
+  - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "getinside" [ref=e7] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e8]
+          - generic [ref=e9]: tools
+        - navigation [ref=e10]:
+          - link "Accueil" [ref=e11] [cursor=pointer]:
+            - /url: "#/"
+      - button "EN" [pressed] [ref=e12] [cursor=pointer]
+  - main [ref=e13]:
+    - generic [ref=e32]:
+      - link "Retour aux outils" [ref=e33] [cursor=pointer]:
+        - /url: "#/"
+        - img [ref=e34]
+        - text: Retour aux outils
+      - generic [ref=e36]:
+        - img [ref=e38]
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - heading "Calculateur poids papier" [level=1] [ref=e43]
+            - generic [ref=e44]: Print
+          - paragraph [ref=e45]: Estimez le poids total de votre commande de flyers ou de brochures en fonction du format et du grammage.
+          - paragraph
+      - generic [ref=e46]:
+        - group "Mode de calcul" [ref=e47]:
+          - button "Flyers" [pressed] [ref=e48] [cursor=pointer]:
+            - img [ref=e49]
+            - text: Flyers
+          - button "Brochures" [ref=e53] [cursor=pointer]:
+            - img [ref=e54]
+            - text: Brochures
+        - status [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: "194"
+              - generic [ref=e60]: kg
+            - generic [ref=e61]:
+              - generic [ref=e62]: 194 250 g
+              - generic [ref=e63]: •
+              - generic [ref=e64]: 50 000 ex.
+          - button "Reset calculator" [ref=e65] [cursor=pointer]:
+            - img [ref=e66]
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic [ref=e72]:
+              - generic [ref=e73]: Nombre de flyers
+              - generic [ref=e74]:
+                - spinbutton "Nombre de flyers" [ref=e75]: "50000"
+                - generic [ref=e76]: ex.
+            - group [ref=e77]:
+              - slider "Nombre de flyers" [ref=e78] [cursor=pointer]: "587"
+              - generic [ref=e79]:
+                - generic [ref=e82]: "50"
+                - generic [ref=e85]: "100"
+                - generic [ref=e88]: "250"
+                - generic [ref=e91]: "500"
+                - generic [ref=e94]: 1k
+                - generic [ref=e97]: 2.5k
+                - generic [ref=e100]: 5k
+                - generic [ref=e103]: 10k
+                - generic [ref=e106]: 25k
+                - generic [ref=e109]: 50k
+                - generic [ref=e112]: 100k
+                - generic [ref=e115]: 250k
+                - generic [ref=e118]: 500k
+                - generic [ref=e121]: 1M
+                - generic [ref=e124]: 5M
+                - generic [ref=e127]: 10M
+                - generic [ref=e130]: 50M
+                - generic [ref=e133]: 100M
+              - generic [ref=e134]: 50 000
+          - generic [ref=e136]:
+            - generic [ref=e137]: Format
+            - combobox [ref=e138] [cursor=pointer]:
+              - option "A5 - 148 × 210 mm"
+              - option "A6 - 105 × 148 mm" [selected]
+              - option "Carte - 105 × 148 mm"
+              - option "DL - 110 × 220 mm"
+              - option "A4 - 210 × 297 mm"
+              - option "Libre..."
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - generic [ref=e141]: Grammage (g/m²)
+              - generic [ref=e142]:
+                - textbox "Grammage (g/m²)" [ref=e143]: "250"
+                - generic [ref=e144]: g/m²
+            - group [ref=e145]:
+              - slider "Grammage (g/m²)" [ref=e146] [cursor=pointer]: "754"
+              - generic [ref=e147]:
+                - generic [ref=e150]: "30"
+                - generic [ref=e153]: "60"
+                - generic [ref=e156]: "80"
+                - generic [ref=e159]: "115"
+                - generic [ref=e162]: "135"
+                - generic [ref=e165]: "170"
+                - generic [ref=e168]: "200"
+                - generic [ref=e171]: "250"
+                - generic [ref=e174]: "300"
+                - generic [ref=e177]: "350"
+                - generic [ref=e180]: "400"
+                - generic [ref=e183]: "500"
+              - generic [ref=e184]: "250"
+            - paragraph [ref=e185]: Papier très épais — pour les cartes premium et packaging
+      - generic [ref=e186]:
+        - generic [ref=e188]: À propos de cet outil
+        - text: Le grammage du papier influence le coût d'affranchissement et la qualité perçue de votre imprimé. Cet outil calcule le poids total d'un tirage de flyers ou de brochures en fonction du format, du grammage et de la quantité — utile pour estimer les frais postaux ou comparer les papiers.
+  - contentinfo [ref=e14]:
+    - generic [ref=e15]:
+      - link "getinside tools" [ref=e17] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e18]
+        - generic [ref=e19]: tools
+      - paragraph [ref=e21]: Outils proposés par getinside · Retail Media
+      - generic [ref=e22]:
+        - button "Changer de langue" [pressed] [ref=e23] [cursor=pointer]: EN
+        - button "Changer de thème" [pressed] [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e29] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e30] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e31]: © 2026 getinside. Tous droits réservés.
