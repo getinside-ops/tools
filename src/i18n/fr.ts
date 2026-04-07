@@ -581,6 +581,28 @@ const fr = {
         'Adaptez le ratio à la taille de votre projet',
       ],
     },
+    fontFamily: 'Police',
+    fontWeight: 'Graisse',
+    lineHeight: 'Interligne',
+    fonts: {
+      systemUI: 'System UI',
+      inter: 'Inter',
+      georgia: 'Georgia',
+      arial: 'Arial',
+      helvetica: 'Helvetica',
+      verdana: 'Verdana',
+      times: 'Times New Roman',
+      courier: 'Courier New',
+    },
+    weights: {
+      light: 'Léger (300)',
+      regular: 'Normal (400)',
+      medium: 'Moyen (500)',
+      semibold: 'Demi-gras (600)',
+      bold: 'Gras (700)',
+    },
+    visualization: 'Visualisation de l\'échelle',
+    visualizationSubtitle: 'Tailles relatives de chaque niveau',
   },
 
   colorConverter: {

@@ -583,6 +583,28 @@ const en: Messages = {
         'Adapt the ratio to your project size',
       ],
     },
+    fontFamily: 'Font Family',
+    fontWeight: 'Font Weight',
+    lineHeight: 'Line Height',
+    fonts: {
+      systemUI: 'System UI',
+      inter: 'Inter',
+      georgia: 'Georgia',
+      arial: 'Arial',
+      helvetica: 'Helvetica',
+      verdana: 'Verdana',
+      times: 'Times New Roman',
+      courier: 'Courier New',
+    },
+    weights: {
+      light: 'Light (300)',
+      regular: 'Regular (400)',
+      medium: 'Medium (500)',
+      semibold: 'Semi-bold (600)',
+      bold: 'Bold (700)',
+    },
+    visualization: 'Scale Visualization',
+    visualizationSubtitle: 'Relative sizes for each scale step',
   },
 
   colorConverter: {

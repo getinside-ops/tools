@@ -98,11 +98,60 @@
           </template>
         </GiFormField>
       </div>
+
+      <div class="ts-control-row ts-control-row--fonts">
+        <GiFormField :label="t('typeScale.fontFamily')">
+          <template #input>
+            <select v-model="fontFamily" class="gi-select">
+              <option v-for="(value, key) in FONT_FAMILIES" :key="key" :value="value">
+                {{ t(`typeScale.fonts.${key}`) }}
+              </option>
+            </select>
+          </template>
+        </GiFormField>
+
+        <GiFormField :label="t('typeScale.fontWeight')">
+          <template #input>
+            <select v-model.number="fontWeight" class="gi-select">
+              <option :value="300">{{ t('typeScale.weights.light') }}</option>
+              <option :value="400">{{ t('typeScale.weights.regular') }}</option>
+              <option :value="500">{{ t('typeScale.weights.medium') }}</option>
+              <option :value="600">{{ t('typeScale.weights.semibold') }}</option>
+              <option :value="700">{{ t('typeScale.weights.bold') }}</option>
+            </select>
+          </template>
+        </GiFormField>
+
+        <GiFormField :label="t('typeScale.lineHeight')">
+          <template #input>
+            <div class="ts-field-with-slider">
+              <input
+                v-model.number="lineHeight"
+                type="number"
+                class="gi-input"
+                min="1.0"
+                max="2.0"
+                step="0.1"
+                @blur="lineHeight = clampNumber(lineHeight, 1.0, 2.0)"
+              />
+              <input
+                v-model.number="lineHeight"
+                type="range"
+                class="ts-slider"
+                min="1.0"
+                max="2.0"
+                step="0.1"
+                :aria-label="t('typeScale.lineHeight')"
+              />
+            </div>
+          </template>
+        </GiFormField>
+      </div>
     </div>
 
     <!-- Visual Preview Section -->
     <GiResultCard :title="t('typeScale.preview')" :subtitle="t('typeScale.previewSubtitle')">
-      <div class="ts-visual-preview">
+      <div class="ts-visual-preview" :style="previewFontStyle">
         <div
           v-for="entry in previewEntries"
           :key="entry.step"
@@ -111,6 +160,34 @@
         >
           <span class="ts-preview-label">{{ entry.label }}</span>
           <span class="ts-preview-value">{{ t('typeScale.sampleText.sample') }}</span>
+        </div>
+      </div>
+    </GiResultCard>
+
+    <!-- Scale Visualization Section -->
+    <GiResultCard :title="t('typeScale.visualization')" :subtitle="t('typeScale.visualizationSubtitle')">
+      <div class="ts-scale-viz">
+        <div
+          v-for="entry in scaleVisualization"
+          :key="entry.step"
+          class="ts-scale-bar-row"
+          :class="{ 'ts-scale-bar-row--base': entry.step === 0 }"
+        >
+          <div class="ts-scale-bar-label">
+            <span class="ts-scale-bar-step" :class="{ 'ts-scale-bar-step--base': entry.step === 0 }">
+              {{ entry.step }}
+            </span>
+            <span class="ts-scale-bar-name">{{ entry.label }}</span>
+          </div>
+          <div class="ts-scale-bar-container">
+            <div
+              class="ts-scale-bar"
+              :class="{ 'ts-scale-bar--base': entry.step === 0 }"
+              :style="{ width: entry.percentage + '%' }"
+            >
+              <span class="ts-scale-bar-value">{{ entry.px }}px</span>
+            </div>
+          </div>
         </div>
       </div>
     </GiResultCard>
@@ -195,6 +272,21 @@ const baseSize = ref(16)
 const ratio = ref(TYPE_SCALE_RATIOS.majorThird)
 const stepsUp = ref(6)
 const stepsDown = ref(2)
+const fontFamily = ref('system-ui, -apple-system, sans-serif')
+const fontWeight = ref(400)
+const lineHeight = ref(1.5)
+
+// Font family options with CSS values
+const FONT_FAMILIES = {
+  systemUI: 'system-ui, -apple-system, sans-serif',
+  inter: 'Inter, system-ui, sans-serif',
+  georgia: 'Georgia, serif',
+  arial: 'Arial, sans-serif',
+  helvetica: 'Helvetica, sans-serif',
+  verdana: 'Verdana, sans-serif',
+  times: '"Times New Roman", serif',
+  courier: '"Courier New", monospace',
+} as const
 
 const copiedIndex = ref<number | null>(null)
 const copiedFlash = ref<number | null>(null)
@@ -202,6 +294,12 @@ const copiedFlash = ref<number | null>(null)
 const scale = computed(() => {
   return generateTypeScale(baseSize.value, ratio.value, stepsDown.value, stepsUp.value)
 })
+
+const previewFontStyle = computed(() => ({
+  fontFamily: fontFamily.value,
+  fontWeight: fontWeight.value,
+  lineHeight: lineHeight.value,
+}))
 
 // Preview entries: map steps to semantic labels
 const previewEntries = computed(() => {
@@ -235,6 +333,10 @@ const previewEntries = computed(() => {
 // Generate CSS custom properties output
 const cssOutput = computed(() => {
   const lines = [':root {']
+  lines.push(`  --font-family: ${fontFamily.value};`)
+  lines.push(`  --font-weight: ${fontWeight.value};`)
+  lines.push(`  --line-height: ${lineHeight.value};`)
+  lines.push('')
   lines.push(`  --font-size-base: ${baseSize.value}px;`)
   lines.push(`  --font-scale-ratio: ${ratio.value};`)
   lines.push('')
@@ -247,6 +349,28 @@ const cssOutput = computed(() => {
   lines.push('}')
   return lines.join('\n')
 })
+
+// Scale visualization: bars proportional to font sizes
+const scaleVisualization = computed(() => {
+  const entries = scale.value
+  const maxSize = Math.max(...entries.map(e => e.px))
+  
+  return entries.map(entry => ({
+    ...entry,
+    percentage: (entry.px / maxSize) * 100,
+    label: getStepLabel(entry.step),
+  }))
+})
+
+function getStepLabel(step: number): string {
+  if (step === 0) return t('typeScale.sampleText.body')
+  if (step === 1) return t('typeScale.sampleText.caption')
+  if (step === -1) return t('typeScale.sampleText.heading3')
+  if (step === -2) return t('typeScale.sampleText.heading2')
+  if (step === -4) return t('typeScale.sampleText.heading1')
+  if (step === -6) return t('typeScale.sampleText.display')
+  return `Step ${step > 0 ? '+' : ''}${step}`
+}
 
 function clampNumber(value: number, min: number, max: number): number {
   if (isNaN(value)) return min
@@ -287,6 +411,18 @@ async function copyAllCSS() {
   .ts-control-row {
     grid-template-columns: 1fr;
     gap: var(--gi-space-md);
+  }
+}
+
+.ts-control-row--fonts {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr;
+  gap: var(--gi-space-lg);
+}
+
+@media (max-width: 768px) {
+  .ts-control-row--fonts {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -376,6 +512,103 @@ async function copyAllCSS() {
   color: var(--gi-text);
   line-height: 1.3;
   font-weight: 400;
+}
+
+/* Scale Visualization */
+.ts-scale-viz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-md) 0;
+}
+
+.ts-scale-bar-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: var(--gi-space-md);
+  align-items: center;
+  padding: var(--gi-space-xs) 0;
+}
+
+.ts-scale-bar-row--base {
+  padding: var(--gi-space-sm) 0;
+}
+
+.ts-scale-bar-label {
+  display: flex;
+  align-items: center;
+  gap: var(--gi-space-xs);
+}
+
+.ts-scale-bar-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--gi-radius-pill);
+  font-size: var(--gi-font-size-xs);
+  font-weight: 600;
+  color: var(--gi-text-muted);
+  background: var(--gi-bg-soft);
+}
+
+.ts-scale-bar-step--base {
+  color: var(--gi-surface);
+  background: var(--gi-brand);
+}
+
+.ts-scale-bar-name {
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-scale-bar-container {
+  height: 28px;
+  background: var(--gi-bg-soft);
+  border-radius: var(--gi-radius-md);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.ts-scale-bar {
+  height: 100%;
+  background: var(--gi-border-soft);
+  border-radius: var(--gi-radius-md);
+  display: flex;
+  align-items: center;
+  padding-left: var(--gi-space-sm);
+  transition: width var(--gi-transition-base) var(--gi-ease-out);
+  min-width: 40px;
+}
+
+.ts-scale-bar--base {
+  background: var(--gi-brand);
+}
+
+.ts-scale-bar-value {
+  font-size: var(--gi-font-size-xs);
+  font-weight: 600;
+  color: var(--gi-text);
+  white-space: nowrap;
+}
+
+.ts-scale-bar--base .ts-scale-bar-value {
+  color: var(--gi-surface);
+}
+
+@media (max-width: 640px) {
+  .ts-scale-bar-row {
+    grid-template-columns: 1fr;
+    gap: var(--gi-space-xs);
+  }
+  .ts-scale-bar-label {
+    justify-content: flex-start;
+  }
 }
 
 /* CSS Output Section */
