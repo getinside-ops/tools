@@ -33,6 +33,7 @@ const en: Messages = {
     qrDecoder: 'QR Code Decoder',
     palette: 'Color Palette',
     back: 'Back to tools',
+    skipToContent: 'Skip to main content',
     search: 'Search tools…',
     copy: 'Copy',
     about: 'About this tool',

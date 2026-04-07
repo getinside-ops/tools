@@ -31,6 +31,7 @@ const fr = {
     qrDecoder: 'Décodeur QR Code',
     palette: 'Palette Couleurs',
     back: 'Retour aux outils',
+    skipToContent: 'Aller au contenu principal',
     search: 'Rechercher un outil…',
     copy: 'Copier',
     about: 'À propos de cet outil',

@@ -1,6 +1,7 @@
 <template>
+  <SkipToContent />
   <AppHeader v-if="isHomePage" />
-  <main class="gi-main">
+  <main id="main-content" class="gi-main">
     <router-view />
   </main>
   <AppFooter />
@@ -9,6 +10,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import SkipToContent from './components/SkipToContent.vue'
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 
