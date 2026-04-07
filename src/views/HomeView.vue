@@ -291,7 +291,7 @@ function setCategory(cat: string) {
 }
 .home-tab {
   padding: 0.5rem 1rem;
-  border: 1.5px solid var(--gi-border);
+  border: 1px solid var(--gi-border);
   background: var(--gi-surface);
   font-size: var(--gi-font-size-sm);
   font-weight: 500;

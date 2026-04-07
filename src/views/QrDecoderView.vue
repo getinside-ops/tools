@@ -274,7 +274,7 @@ function reset() {
 .gi-btn-ghost {
   align-self: flex-start;
   padding: 0.5rem 1rem;
-  border: 1.5px solid var(--gi-border);
+  border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius);
   background: transparent;
   font-size: 0.85rem;

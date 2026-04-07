@@ -66,7 +66,7 @@ const stats = computed(() => analyzeText(text.value))
 }
 .gi-stat-card {
   background: var(--gi-surface);
-  border: 1.5px solid var(--gi-border);
+  border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-lg);
   padding: 1rem;
   text-align: center;

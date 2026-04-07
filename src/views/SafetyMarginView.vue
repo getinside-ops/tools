@@ -153,7 +153,7 @@ const safetyStyle = computed(() => {
     left: `${offsetValue}px`,
     right: `${offsetValue}px`,
     bottom: `${offsetValue}px`,
-    border: `1.5px dashed rgba(0, 120, 255, 0.6)`,
+    border: `1px dashed rgba(0, 120, 255, 0.6)`,
     pointerEvents: 'none' as const,
     boxSizing: 'border-box' as const
   }
@@ -190,5 +190,5 @@ const safetyStyle = computed(() => {
   border-radius: 50%;
 }
 .dot.bleed { background: rgba(255, 0, 0, 0.5); }
-.dot.safety { border: 1.5px dashed rgba(0, 120, 255, 0.8); background: transparent; }
+.dot.safety { border: 1px dashed rgba(0, 120, 255, 0.8); background: transparent; }
 </style>

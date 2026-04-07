@@ -94,7 +94,7 @@ function toggleLocale() {
   min-width: 44px;
   min-height: 44px;
   padding: 0.5rem 0.75rem;
-  border: 1.5px solid var(--gi-border);
+  border: 1px solid var(--gi-border);
   border-radius: 6px;
   background: transparent;
   font-size: 0.8rem;
