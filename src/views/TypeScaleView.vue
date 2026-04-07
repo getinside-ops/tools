@@ -151,7 +151,7 @@
 
     <!-- Visual Preview Section -->
     <GiResultCard :title="t('typeScale.preview')" :subtitle="t('typeScale.previewSubtitle')">
-      <div class="ts-visual-preview">
+      <div class="ts-visual-preview" :style="previewFontStyle">
         <div
           v-for="entry in previewEntries"
           :key="entry.step"
@@ -266,6 +266,12 @@ const copiedFlash = ref<number | null>(null)
 const scale = computed(() => {
   return generateTypeScale(baseSize.value, ratio.value, stepsDown.value, stepsUp.value)
 })
+
+const previewFontStyle = computed(() => ({
+  fontFamily: fontFamily.value,
+  fontWeight: fontWeight.value,
+  lineHeight: lineHeight.value,
+}))
 
 // Preview entries: map steps to semantic labels
 const previewEntries = computed(() => {
