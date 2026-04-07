@@ -36,6 +36,7 @@ const router = createRouter({
     { path: '/colorblind', component: () => import('../views/ColorblindView.vue') },
     { path: '/qr-decoder', component: () => import('../views/QrDecoderView.vue') },
     { path: '/palette', component: () => import('../views/PaletteView.vue') },
+    { path: '/gemini-watermark', component: () => import('../views/GeminiWatermarkView.vue') },
   ],
 })
 

@@ -155,6 +155,7 @@ const allTools: Tool[] = [
   { route: '/colorblind',        icon: Eye,             titleKey: 'home.tools.colorblind.title',       descKey: 'home.tools.colorblind.desc',       category: 'design',  isNew: true  },
   { route: '/qr-decoder',        icon: QrCode,          titleKey: 'home.tools.qrDecoder.title',        descKey: 'home.tools.qrDecoder.desc',        category: 'digital', isNew: true  },
   { route: '/palette',           icon: Palette,         titleKey: 'home.tools.palette.title',          descKey: 'home.tools.palette.desc',          category: 'design',  isNew: true  },
+  { route: '/gemini-watermark',  icon: Sparkles,        titleKey: 'home.tools.geminiWatermark.title',  descKey: 'home.tools.geminiWatermark.desc',  category: 'design',  isNew: true  },
 ]
 
 const toolsByCategory = computed((): Record<ContentCategory, Tool[]> => ({
