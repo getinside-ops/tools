@@ -113,6 +113,12 @@ const fr = {
     otherWeight: 'Autre...',
     reset: 'Réinitialiser',
     enterValues: 'Entrez les valeurs pour calculer',
+    helpers: {
+      light: 'Papier léger — idéal pour les brochures et magazines',
+      medium: 'Papier standard — parfait pour les flyers et dépliants',
+      heavy: 'Papier épais — adapté pour les cartes de visite et couvertures',
+      veryHeavy: 'Papier très épais — pour les cartes premium et packaging',
+    },
     comparisons: {
       lightPackage: 'un petit colis',
       mediumPackage: 'un sac de farine',

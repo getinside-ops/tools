@@ -115,6 +115,12 @@ const en: Messages = {
     otherWeight: 'Other...',
     reset: 'Reset calculator',
     enterValues: 'Enter values to calculate',
+    helpers: {
+      light: 'Light paper — ideal for brochures and magazines',
+      medium: 'Standard paper — perfect for flyers and leaflets',
+      heavy: 'Thick paper — suitable for business cards and covers',
+      veryHeavy: 'Very thick paper — for premium cards and packaging',
+    },
     comparisons: {
       lightPackage: 'a small package',
       mediumPackage: 'a bag of flour',
