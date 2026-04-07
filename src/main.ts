@@ -17,6 +17,8 @@ const i18n = createI18n({
   legacy: false,
 })
 
+document.documentElement.lang = locale
+
 createApp(App)
   .use(router)
   .use(i18n)

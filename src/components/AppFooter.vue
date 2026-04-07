@@ -57,6 +57,7 @@ const base = import.meta.env.BASE_URL
 function toggleLocale() {
   locale.value = locale.value === 'fr' ? 'en' : 'fr'
   localStorage.setItem('gi-locale', locale.value)
+  document.documentElement.lang = locale.value
 }
 </script>
 
