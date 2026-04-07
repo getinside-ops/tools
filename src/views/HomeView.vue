@@ -248,11 +248,14 @@ function setCategory(cat: string) {
     gap: 2rem;
     text-align: center;
   }
-  .home-hero-visual { 
-    width: 120px; 
+  .home-hero-visual {
+    width: 120px;
   }
-  .home-hero-title { 
-    font-size: var(--gi-font-size-2xl); 
+  .home-hero-title {
+    font-size: var(--gi-font-size-2xl);
+  }
+  .home-hero-body {
+    font-size: 1rem;
   }
 }
 
