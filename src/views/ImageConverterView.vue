@@ -52,8 +52,8 @@
           </template>
         </GiFormField>
 
-        <button class="gi-btn" style="width: 100%; margin-top: 1rem" :disabled="!targetMime" @click="performConversion">
-          {{ t('imageConverter.convert') }}
+        <button class="gi-btn" style="width: 100%; margin-top: 1rem" :disabled="!targetMime || isConverting" @click="performConversion">
+          {{ isConverting ? t('imageConverter.processing') : t('imageConverter.convert') }}
         </button>
       </div>
 
@@ -89,6 +89,7 @@ const sourceMime = ref('')
 const targetMime = ref('')
 const quality = ref(0.9)
 const scale = ref(1)
+const isConverting = ref(false)
 
 const availableFormats = computed(() => getAvailableFormats(sourceMime.value))
 
@@ -111,8 +112,9 @@ function reset() {
 }
 
 async function performConversion() {
-  if (!sourceUrl.value || !targetMime.value) return
+  if (!sourceUrl.value || !targetMime.value || isConverting.value) return
 
+  isConverting.value = true
   try {
     const resultUrl = await convertImage(sourceUrl.value, targetMime.value, {
       quality: quality.value,
@@ -127,6 +129,8 @@ async function performConversion() {
     link.click()
   } catch (err) {
     alert('Conversion failed: ' + err)
+  } finally {
+    isConverting.value = false
   }
 }
 </script>

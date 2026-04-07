@@ -20,8 +20,10 @@
 
     <!-- Actions -->
     <div v-if="canvas" class="gi-mockup-actions">
-      <button class="gi-btn" @click="download">{{ t('mockupGenerator.download') }}</button>
-      <button class="gi-btn-ghost" @click="copyToClipboard">
+      <button class="gi-btn" :disabled="isGenerating" @click="download">
+        {{ isGenerating ? t('mockupGenerator.processing') : t('mockupGenerator.download') }}
+      </button>
+      <button class="gi-btn-ghost" :disabled="isGenerating" @click="copyToClipboard">
         {{ copied ? t('mockupGenerator.copied') : t('mockupGenerator.copy') }}
       </button>
     </div>
@@ -44,17 +46,20 @@ const previewRef = ref<HTMLCanvasElement | null>(null)
 const canvas = ref<HTMLCanvasElement | null>(null)
 const copied = ref(false)
 const error = ref<string | null>(null)
+const isGenerating = ref(false)
 
 function handleImageUpload(file: File) {
   const url = URL.createObjectURL(file)
   const img = new Image()
   img.onload = async () => {
+    isGenerating.value = true
     try {
       canvas.value = await generateMockup(img)
     } catch (err) {
       console.error('Mockup generation failed:', err)
       error.value = 'Failed to generate mockup'
     } finally {
+      isGenerating.value = false
       URL.revokeObjectURL(url)
     }
   }

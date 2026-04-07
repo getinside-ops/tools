@@ -404,6 +404,7 @@ const en: Messages = {
     download: 'Download PNG',
     copy: 'Copy to clipboard',
     copied: 'Copied!',
+    processing: 'Generating...',
     pedagogic: {
       title: 'About Mockups',
       description: 'Mockups present your designs in a realistic context, perfect for portfolios, client presentations, and social media.',
@@ -569,6 +570,7 @@ const en: Messages = {
     compressedSize: 'Compressed size',
     reduction: 'Reduction',
     download: 'Download',
+    processing: 'Compressing...',
     pedagogic: {
       title: 'About Image Compression',
       description: 'Compression reduces image file size for faster web loading while preserving visual quality.',
@@ -594,6 +596,7 @@ const en: Messages = {
     reset: 'Reset',
     download: 'Download',
     result: 'Result',
+    processing: 'Cropping...',
     pedagogic: {
       title: 'About Image Cropping',
       description: 'Cropping allows you to modify an image composition and adapt it to formats required by different platforms.',
@@ -615,6 +618,7 @@ const en: Messages = {
     preserveRatio: 'Preserve aspect ratio',
     resize: 'Resize',
     download: 'Download',
+    processing: 'Resizing...',
     pedagogic: {
       title: 'About Image Resizing',
       description: 'Resizing adjusts an image dimensions in pixels. Preserving aspect ratio prevents distortion.',
@@ -638,6 +642,7 @@ const en: Messages = {
     contrast: 'Contrast',
     apply: 'Apply',
     download: 'Download',
+    processing: 'Applying...',
     pedagogic: {
       title: 'About Image Filters',
       description: 'Filters modify an image appearance by adjusting its colorimetric and luminous properties.',
@@ -831,6 +836,7 @@ const en: Messages = {
     quality: 'Quality (Lossy)',
     scale: 'Scale multiplier',
     convert: 'Convert & Download',
+    processing: 'Converting...',
     pedagogic: {
       title: 'About Image Formats',
       description: 'Each image format has its advantages: PNG for transparency, JPG for photos, WebP for web, SVG for vectors.',

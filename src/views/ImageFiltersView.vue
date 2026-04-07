@@ -51,7 +51,7 @@
         </GiFormField>
 
         <div style="display: flex; gap: 1rem; margin-top: 1.5rem">
-          <button class="gi-btn-primary" style="flex: 1" @click="handleApply">{{ t('imageFilters.apply') }}</button>
+          <button class="gi-btn-primary" style="flex: 1" :disabled="isApplying" @click="handleApply">{{ isApplying ? t('imageFilters.processing') : t('imageFilters.apply') }}</button>
           <button class="gi-btn-ghost" @click="resetFilters">Reset</button>
         </div>
       </div>
@@ -90,6 +90,7 @@ const { t } = useI18n()
 
 const originalUrl = ref('')
 const filteredUrl = ref('')
+const isApplying = ref(false)
 
 const filters = reactive({
   brightness: 100,
@@ -124,12 +125,15 @@ function resetFilters() {
 }
 
 async function handleApply() {
-  if (!originalUrl.value) return
+  if (!originalUrl.value || isApplying.value) return
+  isApplying.value = true
   try {
     const result = await applyFilters(originalUrl.value, filters)
     filteredUrl.value = result
   } catch (err) {
     alert(err)
+  } finally {
+    isApplying.value = false
   }
 }
 

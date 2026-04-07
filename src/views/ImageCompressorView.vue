@@ -68,9 +68,10 @@
           <button
             class="gi-btn-primary"
             style="width: 100%"
+            :disabled="isProcessing || !compressedUrl"
             @click="downloadImage"
           >
-            ⬇️ {{ t('imageCompressor.download') }}
+            {{ isProcessing ? t('imageCompressor.processing') : `⬇️ ${t('imageCompressor.download')}` }}
           </button>
         </template>
       </GiResultCard>
@@ -97,6 +98,7 @@ const compressedUrl = ref('')
 const originalSize = ref(0)
 const compressedSize = ref(0)
 const uploadError = ref('')
+const isProcessing = ref(false)
 
 const quality = ref(0.8)
 const format = ref('image/jpeg')
@@ -133,8 +135,9 @@ function handleError(error: string) {
 }
 
 async function processImage() {
-  if (!originalUrl.value) return
-  
+  if (!originalUrl.value || isProcessing.value) return
+
+  isProcessing.value = true
   try {
     const result = await compressImage(originalUrl.value, {
       quality: quality.value,
@@ -142,13 +145,15 @@ async function processImage() {
       maxWidth: maxWidth.value,
       maxHeight: maxHeight.value
     })
-    
+
     compressedUrl.value = result
     // Estimate size from data URL (base64 is ~4/3 larger)
     const base64String = result.split(',')[1]
     compressedSize.value = Math.floor((base64String.length * 3) / 4)
   } catch (err) {
     console.error(err)
+  } finally {
+    isProcessing.value = false
   }
 }
 

@@ -402,6 +402,7 @@ const fr = {
     download: 'Télécharger en PNG',
     copy: 'Copier dans le presse-papiers',
     copied: 'Copié !',
+    processing: 'Génération...',
     pedagogic: {
       title: 'À propos des mockups',
       description: 'Les mockups présentent vos designs dans un contexte réaliste, parfaits pour les portfolios, présentations clients et réseaux sociaux.',
@@ -567,6 +568,7 @@ const fr = {
     compressedSize: 'Taille compressée',
     reduction: 'Réduction',
     download: 'Télécharger',
+    processing: 'Compression...',
     pedagogic: {
       title: 'À propos de la compression d\'images',
       description: 'La compression réduit le poids des images pour un chargement plus rapide sur le web, tout en préservant la qualité visuelle.',
@@ -592,6 +594,7 @@ const fr = {
     reset: 'Réinitialiser',
     download: 'Télécharger',
     result: 'Résultat',
+    processing: 'Recadrage...',
     pedagogic: {
       title: 'À propos du recadrage d\'images',
       description: 'Le recadrage permet de modifier la composition d\'une image et de l\'adapter aux formats requis par les différentes plateformes.',
@@ -613,6 +616,7 @@ const fr = {
     preserveRatio: 'Conserver les proportions',
     resize: 'Redimensionner',
     download: 'Télécharger',
+    processing: 'Redimensionnement...',
     pedagogic: {
       title: 'À propos du redimensionnement d\'images',
       description: 'Le redimensionnement ajuste les dimensions en pixels d\'une image. Conserver les proportions évite la déformation.',
@@ -636,6 +640,7 @@ const fr = {
     contrast: 'Contraste',
     apply: 'Appliquer',
     download: 'Télécharger',
+    processing: 'Application...',
     pedagogic: {
       title: 'À propos des filtres d\'image',
       description: 'Les filtres modifient l\'apparence d\'une image en ajustant ses propriétés colorimétriques et lumineuses.',
@@ -829,6 +834,7 @@ const fr = {
     quality: 'Qualité (Lossy)',
     scale: 'Multiplicateur (Scale)',
     convert: 'Convertir et Télécharger',
+    processing: 'Conversion...',
     pedagogic: {
       title: 'À propos des formats d\'image',
       description: 'Chaque format d\'image a ses avantages : PNG pour la transparence, JPG pour les photos, WebP pour le web, SVG pour les vecteurs.',

@@ -43,7 +43,7 @@
           <input v-model.number="percentage" type="range" min="1" max="200" class="gi-input" @input="onPercentageInput" />
         </div>
 
-        <button class="gi-btn-primary resizer-btn-full" @click="handleResize">{{ t('imageResizer.resize') }}</button>
+        <button class="gi-btn-primary resizer-btn-full" :disabled="isResizing" @click="handleResize">{{ isResizing ? t('imageResizer.processing') : t('imageResizer.resize') }}</button>
       </div>
 
       <!-- Preview -->
@@ -85,6 +85,7 @@ const originalUrl = ref('')
 const resizedUrl = ref('')
 const originalWidth = ref(0)
 const originalHeight = ref(0)
+const isResizing = ref(false)
 
 const width = ref(0)
 const height = ref(0)
@@ -134,7 +135,8 @@ function onPercentageInput() {
 }
 
 async function handleResize() {
-  if (!originalUrl.value) return
+  if (!originalUrl.value || isResizing.value) return
+  isResizing.value = true
   try {
     const result = await resizeImage(originalUrl.value, {
       width: width.value,
@@ -144,6 +146,8 @@ async function handleResize() {
     resizedUrl.value = result
   } catch (err) {
     alert(err)
+  } finally {
+    isResizing.value = false
   }
 }
 

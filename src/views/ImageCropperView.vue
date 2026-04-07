@@ -30,7 +30,7 @@
           </select>
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
-          <button class="gi-btn-primary" @click="handleCrop">{{ t('imageCropper.crop') }}</button>
+          <button class="gi-btn-primary" :disabled="isCropping" @click="handleCrop">{{ isCropping ? t('imageCropper.processing') : t('imageCropper.crop') }}</button>
           <button class="gi-btn-ghost" @click="resetCrop">{{ t('imageCropper.reset') }}</button>
         </div>
       </div>
@@ -99,6 +99,7 @@ const imageRef = ref<HTMLImageElement | null>(null)
 const originalUrl = ref('')
 const croppedUrl = ref('')
 const isLoaded = ref(false)
+const isCropping = ref(false)
 
 const ratioKey = ref('free')
 const ratios: Record<string, number | null> = {
@@ -246,23 +247,26 @@ function onMouseUp() {
 }
 
 async function handleCrop() {
-  if (!imageRef.value) return
+  if (!imageRef.value || isCropping.value) return
   // Need to scale screen coordinates to actual image pixels
   const { naturalWidth, width } = imageRef.value
   const scale = naturalWidth / width
-  
+
+  isCropping.value = true
   const rect = {
     x: cropBox.x * scale,
     y: cropBox.y * scale,
     width: cropBox.w * scale,
     height: cropBox.h * scale
   }
-  
+
   try {
     const result = await cropImage(originalUrl.value, rect)
     croppedUrl.value = result
   } catch (err) {
     alert(err)
+  } finally {
+    isCropping.value = false
   }
 }
 
