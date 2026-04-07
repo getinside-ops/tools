@@ -98,6 +98,55 @@
           </template>
         </GiFormField>
       </div>
+
+      <div class="ts-control-row ts-control-row--fonts">
+        <GiFormField :label="t('typeScale.fontFamily')">
+          <template #input>
+            <select v-model="fontFamily" class="gi-select">
+              <option v-for="(value, key) in FONT_FAMILIES" :key="key" :value="value">
+                {{ t(`typeScale.fonts.${key}`) }}
+              </option>
+            </select>
+          </template>
+        </GiFormField>
+
+        <GiFormField :label="t('typeScale.fontWeight')">
+          <template #input>
+            <select v-model.number="fontWeight" class="gi-select">
+              <option :value="300">{{ t('typeScale.weights.light') }}</option>
+              <option :value="400">{{ t('typeScale.weights.regular') }}</option>
+              <option :value="500">{{ t('typeScale.weights.medium') }}</option>
+              <option :value="600">{{ t('typeScale.weights.semibold') }}</option>
+              <option :value="700">{{ t('typeScale.weights.bold') }}</option>
+            </select>
+          </template>
+        </GiFormField>
+
+        <GiFormField :label="t('typeScale.lineHeight')">
+          <template #input>
+            <div class="ts-field-with-slider">
+              <input
+                v-model.number="lineHeight"
+                type="number"
+                class="gi-input"
+                min="1.0"
+                max="2.0"
+                step="0.1"
+                @blur="lineHeight = clampNumber(lineHeight, 1.0, 2.0)"
+              />
+              <input
+                v-model.number="lineHeight"
+                type="range"
+                class="ts-slider"
+                min="1.0"
+                max="2.0"
+                step="0.1"
+                :aria-label="t('typeScale.lineHeight')"
+              />
+            </div>
+          </template>
+        </GiFormField>
+      </div>
     </div>
 
     <!-- Visual Preview Section -->
@@ -195,6 +244,21 @@ const baseSize = ref(16)
 const ratio = ref(TYPE_SCALE_RATIOS.majorThird)
 const stepsUp = ref(6)
 const stepsDown = ref(2)
+const fontFamily = ref('system-ui, -apple-system, sans-serif')
+const fontWeight = ref(400)
+const lineHeight = ref(1.5)
+
+// Font family options with CSS values
+const FONT_FAMILIES = {
+  systemUI: 'system-ui, -apple-system, sans-serif',
+  inter: 'Inter, system-ui, sans-serif',
+  georgia: 'Georgia, serif',
+  arial: 'Arial, sans-serif',
+  helvetica: 'Helvetica, sans-serif',
+  verdana: 'Verdana, sans-serif',
+  times: '"Times New Roman", serif',
+  courier: '"Courier New", monospace',
+} as const
 
 const copiedIndex = ref<number | null>(null)
 const copiedFlash = ref<number | null>(null)
@@ -287,6 +351,18 @@ async function copyAllCSS() {
   .ts-control-row {
     grid-template-columns: 1fr;
     gap: var(--gi-space-md);
+  }
+}
+
+.ts-control-row--fonts {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr;
+  gap: var(--gi-space-lg);
+}
+
+@media (max-width: 768px) {
+  .ts-control-row--fonts {
+    grid-template-columns: 1fr;
   }
 }
 
