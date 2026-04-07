@@ -1,0 +1,60 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link "getinside" [ref=e6] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e7]
+          - generic [ref=e8]: tools
+        - navigation [ref=e9]:
+          - link "Accueil" [ref=e10] [cursor=pointer]:
+            - /url: "#/"
+      - button "EN" [ref=e11] [cursor=pointer]
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - link "Retour aux outils" [ref=e14] [cursor=pointer]:
+        - /url: "#/"
+        - img [ref=e15]
+        - text: Retour aux outils
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - img [ref=e20]
+          - heading "Générateur de Code-barres EAN" [level=1] [ref=e22]
+        - paragraph [ref=e23]: Générez des codes-barres EAN-13 conformes aux standards retail pour vos maquettes.
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]: Code EAN-13 (12 ou 13 chiffres)
+          - textbox "Code EAN-13 (12 ou 13 chiffres)" [ref=e29]:
+            - /placeholder: "4006381333931"
+            - text: "400638133393"
+        - generic [ref=e30]: "Clé de contrôle : 1"
+        - generic [ref=e31]:
+          - heading "Aperçu du code-barres" [level=3] [ref=e33]
+          - generic [ref=e34]:
+            - img [ref=e37]:
+              - generic [ref=e134]: "4"
+              - generic [ref=e135]: "006381"
+              - generic [ref=e136]: "333931"
+            - generic [ref=e137]:
+              - button "Copier le code" [ref=e138]
+              - button "Télécharger en SVG" [ref=e139] [cursor=pointer]
+  - contentinfo [ref=e140]:
+    - generic [ref=e141]:
+      - link "getinside tools" [ref=e143] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e144]
+        - generic [ref=e145]: tools
+      - paragraph [ref=e147]: Outils proposés par getinside · Retail Media
+      - generic [ref=e148]:
+        - button "Changer de langue" [ref=e149] [cursor=pointer]: EN
+        - button "Changer de thème" [ref=e150] [cursor=pointer]:
+          - img [ref=e151]
+    - generic [ref=e157]:
+      - generic [ref=e158]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e159] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e160] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e161]: © 2026 getinside. Tous droits réservés.

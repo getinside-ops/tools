@@ -1,0 +1,77 @@
+<h2>3 Approaches to Unify Tool Pages</h2>
+<p class="subtitle">The target design is the same for all — the difference is in how we build it</p>
+
+<div class="section">
+  <h3 style="margin-bottom:1rem">Target structure (same for all approaches)</h3>
+  <div class="mockup" style="max-width:680px;margin:0 auto">
+    <div class="mockup-header">Tool page — new structure</div>
+    <div class="mockup-body" style="background:#faf9f7;padding:2rem;font-family:Inter,sans-serif">
+
+      <!-- Back link -->
+      <div style="display:inline-flex;align-items:center;gap:6px;border:1px solid #e8e6e1;border-radius:8px;padding:5px 10px;font-size:13px;color:#6b7280;margin-bottom:1.5rem;background:#fff">
+        ← Back
+      </div>
+
+      <!-- Header card -->
+      <div style="background:#fff;border:1px solid #e8e6e1;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1rem">
+        <div style="width:44px;height:44px;background:rgba(10,170,142,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px">🖨️</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+            <span style="font-size:18px;font-weight:700;color:#1a1a1a">DPI Checker</span>
+            <span style="font-size:11px;font-weight:600;background:rgba(10,170,142,0.1);color:#0aaa8e;border-radius:999px;padding:2px 10px;text-transform:uppercase;letter-spacing:.04em">Print</span>
+          </div>
+          <p style="font-size:14px;color:#6b7280;margin:0">Check if your image has enough resolution for high-quality printing</p>
+        </div>
+      </div>
+
+      <!-- Tool content area -->
+      <div style="background:#fff;border:1px solid #e8e6e1;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem">
+        <div style="height:80px;background:#f5f4f2;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:13px;border:2px dashed #e8e6e1">Tool interactive content</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
+          <div style="background:#f5f4f2;border-radius:8px;padding:.875rem;font-size:13px;color:#6b7280;border:1px solid #e8e6e1">Result card A</div>
+          <div style="background:#f5f4f2;border-radius:8px;padding:.875rem;font-size:13px;color:#6b7280;border:1px solid #e8e6e1">Result card B</div>
+        </div>
+      </div>
+
+      <!-- About panel -->
+      <div style="background:#fff;border:1px solid #e8e6e1;border-radius:12px;padding:1.5rem">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem">
+          <div style="width:3px;height:18px;background:#0aaa8e;border-radius:2px"></div>
+          <span style="font-size:13px;font-weight:600;color:#1a1a1a;text-transform:uppercase;letter-spacing:.06em">About this tool</span>
+        </div>
+        <p style="font-size:14px;color:#6b7280;line-height:1.65;margin:0">The DPI Checker analyses your image's resolution and tells you whether it's print-ready. DPI (dots per inch) determines print sharpness — 300 DPI is the professional standard for sharp output.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3 style="margin-bottom:1rem">3 implementation approaches</h3>
+  <div class="options">
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Enhance ToolPageLayout (recommended)</h3>
+        <p>Add category pill + "About" slot to the existing shared component. Update all 30 views to pass a <code>category</code> prop and fill the <code>#about</code> slot. PxToRemView gets migrated to ToolPageLayout.</p>
+        <p style="margin-top:8px;font-size:13px;color:#0aaa8e">✓ Single source of truth &nbsp;✓ Minimal risk &nbsp;✓ Clean pattern</p>
+      </div>
+    </div>
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>New ToolAboutSection component</h3>
+        <p>Same as A, but the "About" panel becomes its own dedicated <code>ToolAboutSection.vue</code> component with structured props (title, body, tips[ ]).</p>
+        <p style="margin-top:8px;font-size:13px;color:#6b7280">More structured, slightly more overhead. Worth it only if about content needs to vary in shape per tool.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Data-driven tools config</h3>
+        <p>Store all tool metadata (title, category, about text) in a central <code>tools.config.ts</code>. Views consume from there. Fully centralized.</p>
+        <p style="margin-top:8px;font-size:13px;color:#6b7280">Cleanest architecture long-term, but over-engineered for the current scope. Big upfront change.</p>
+      </div>
+    </div>
+  </div>
+</div>

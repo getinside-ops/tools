@@ -1,0 +1,118 @@
+<h2>Design — Section 1: ToolPageLayout anatomy</h2>
+<p class="subtitle">What changes in the shared component — validate before we go further</p>
+
+<div class="section">
+
+  <div class="split">
+
+    <div class="mockup">
+      <div class="mockup-header">BEFORE — current</div>
+      <div class="mockup-body" style="background:#faf9f7;padding:1.5rem;font-family:Inter,sans-serif;font-size:13px">
+
+        <div style="display:inline-flex;align-items:center;gap:6px;border:1px solid #e8e6e1;border-radius:8px;padding:5px 10px;color:#6b7280;margin-bottom:1.25rem;background:#fff">← Back</div>
+
+        <!-- Flat header, no card, no badge -->
+        <div style="margin-bottom:1.5rem">
+          <div style="display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem">
+            <div style="width:44px;height:44px;background:rgba(10,170,142,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">🔗</div>
+            <div>
+              <div style="font-size:17px;font-weight:700;color:#1a1a1a">UTM Builder</div>
+              <!-- NO category badge -->
+            </div>
+          </div>
+          <p style="color:#6b7280;line-height:1.55;margin:0">Build UTM tracking URLs for your campaigns</p>
+        </div>
+
+        <div style="height:1px;background:#e8e6e1;margin-bottom:1.5rem"></div>
+
+        <!-- Tool content: flat, no outer card -->
+        <div style="margin-bottom:.75rem">
+          <label style="display:block;font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:4px">Destination URL</label>
+          <div class="mock-input" style="font-size:13px;color:#9ca3af">https://example.com/page</div>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <label style="display:block;font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:4px">Source</label>
+          <div class="mock-input" style="font-size:13px;color:#9ca3af">newsletter</div>
+        </div>
+
+        <!-- Result card -->
+        <div style="border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-top:1rem;background:#fff">
+          <div style="font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:.5rem">Generated URL</div>
+          <div style="font-family:monospace;font-size:11px;color:#0aaa8e;background:#f5f4f2;padding:.5rem;border-radius:6px;word-break:break-all">https://example.com/?utm_source=newsletter&utm_medium=email</div>
+        </div>
+
+        <!-- Pedagogic: optional, unstyled, missing from most tools -->
+        <div style="margin-top:1.5rem;color:#6b7280;font-size:12px;font-style:italic">(optional pedagogic slot — rarely used, no consistent style)</div>
+      </div>
+    </div>
+
+    <div class="mockup">
+      <div class="mockup-header">AFTER — new structure</div>
+      <div class="mockup-body" style="background:#faf9f7;padding:1.5rem;font-family:Inter,sans-serif;font-size:13px">
+
+        <div style="display:inline-flex;align-items:center;gap:6px;border:1px solid #e8e6e1;border-radius:8px;padding:5px 10px;color:#6b7280;margin-bottom:1.25rem;background:#fff">← Back</div>
+
+        <!-- Header in a card + category badge -->
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:12px;padding:1.125rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:.875rem">
+          <div style="width:40px;height:40px;background:rgba(10,170,142,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px">🔗</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+              <span style="font-size:16px;font-weight:700;color:#1a1a1a">UTM Builder</span>
+              <span style="font-size:10px;font-weight:600;background:rgba(37,99,235,0.1);color:#2563eb;border-radius:999px;padding:2px 9px;text-transform:uppercase;letter-spacing:.05em">Digital</span>
+            </div>
+            <p style="font-size:13px;color:#6b7280;margin:0;line-height:1.5">Build UTM tracking URLs for your campaigns</p>
+          </div>
+        </div>
+
+        <!-- Tool content (same as before) -->
+        <div style="margin-bottom:.75rem">
+          <label style="display:block;font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:4px">Destination URL</label>
+          <div class="mock-input" style="font-size:13px;color:#9ca3af">https://example.com/page</div>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <label style="display:block;font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:4px">Source</label>
+          <div class="mock-input" style="font-size:13px;color:#9ca3af">newsletter</div>
+        </div>
+
+        <div style="border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-top:1rem;background:#fff">
+          <div style="font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:.5rem">Generated URL</div>
+          <div style="font-family:monospace;font-size:11px;color:#0aaa8e;background:#f5f4f2;padding:.5rem;border-radius:6px;word-break:break-all">https://example.com/?utm_source=newsletter&utm_medium=email</div>
+        </div>
+
+        <!-- About panel: always present, consistent style -->
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:12px;padding:1.125rem 1.25rem;margin-top:1.25rem">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:.625rem">
+            <div style="width:3px;height:16px;background:#0aaa8e;border-radius:2px;flex-shrink:0"></div>
+            <span style="font-size:11px;font-weight:700;color:#1a1a1a;text-transform:uppercase;letter-spacing:.07em">About this tool</span>
+          </div>
+          <p style="font-size:13px;color:#6b7280;line-height:1.65;margin:0">UTM parameters are tags added to URLs that analytics tools like Google Analytics use to identify where traffic comes from. Use this tool to build clean, consistent URLs for every campaign without typing by hand.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section">
+  <h3>Category badge colours</h3>
+  <p class="subtitle">One colour per category — uses existing brand tints</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:.75rem">
+    <span style="font-size:12px;font-weight:600;background:rgba(10,170,142,0.1);color:#0aaa8e;border-radius:999px;padding:4px 14px;text-transform:uppercase;letter-spacing:.05em">Print</span>
+    <span style="font-size:12px;font-weight:600;background:rgba(37,99,235,0.1);color:#2563eb;border-radius:999px;padding:4px 14px;text-transform:uppercase;letter-spacing:.05em">Digital</span>
+    <span style="font-size:12px;font-weight:600;background:rgba(124,58,237,0.1);color:#7c3aed;border-radius:999px;padding:4px 14px;text-transform:uppercase;letter-spacing:.05em">Design</span>
+  </div>
+</div>
+
+<div class="section">
+  <h3>ToolPageLayout prop/slot changes</h3>
+  <div style="background:#1a1a1a;border-radius:10px;padding:1.25rem;font-family:monospace;font-size:12px;color:#e5e7eb;line-height:1.7">
+    <span style="color:#9ca3af">// NEW prop</span><br>
+    <span style="color:#6AE7C8">category</span>?: <span style="color:#fbbf24">'print' | 'digital' | 'design'</span><br><br>
+    <span style="color:#9ca3af">// RENAMED slot: pedagogic → about</span><br>
+    <span style="color:#6AE7C8">#about</span> — rendered at bottom with accent-bar header, always styled<br><br>
+    <span style="color:#9ca3af">// All existing props unchanged</span><br>
+    title, subtitle, description, <span style="color:#6AE7C8">#icon</span>, <span style="color:#6AE7C8">#default</span>
+  </div>
+</div>

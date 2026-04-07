@@ -1,0 +1,48 @@
+<h2>Design — Section 2: Migration scope</h2>
+<p class="subtitle">Two decisions that affect the implementation plan</p>
+
+<div class="section">
+  <h3>Decision 1 — "About" text for 30 tools</h3>
+  <p class="subtitle">Who writes the content?</p>
+  <div class="options">
+    <div class="option" data-choice="ai-writes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>I write all 30 about texts</h3>
+        <p>Claude generates a short paragraph (2–3 sentences) for each tool based on its name, description, and i18n translations already in the codebase. You review and adjust.</p>
+        <p style="margin-top:8px;font-size:13px;color:#0aaa8e">✓ Zero work for you &nbsp;✓ Done in one pass</p>
+      </div>
+    </div>
+    <div class="option" data-choice="stub" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Stub placeholder, you fill later</h3>
+        <p>The <code>#about</code> slot is wired up but contains a <code>TODO</code> placeholder in each view. You write the real text when ready.</p>
+        <p style="margin-top:8px;font-size:13px;color:#6b7280">Faster implementation, more work for you later.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Decision 2 — Per-view inline style cleanup</h3>
+  <p class="subtitle">Several views use inline <code>style=""</code> attributes instead of scoped CSS</p>
+  <div class="options">
+    <div class="option" data-choice="fix-inline" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Fix inline styles in the same pass</h3>
+        <p>While updating each view for the new ToolPageLayout props, also move inline styles to scoped CSS classes. Affected views: <strong>MatteGeneratorView, ImageResizerView, ContrastCheckerView, PxToRemView</strong> (+ migrate PxToRemView to ToolPageLayout).</p>
+        <p style="margin-top:8px;font-size:13px;color:#0aaa8e">✓ One clean pass &nbsp;✓ Better maintainability</p>
+      </div>
+    </div>
+    <div class="option" data-choice="skip-inline" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Only add category + about, leave styles as-is</h3>
+        <p>Minimal change: only add the new <code>category</code> prop and <code>#about</code> slot to each view. Don't touch existing layout styles.</p>
+        <p style="margin-top:8px;font-size:13px;color:#6b7280">Faster, but misses the consistency goal on the worst offenders.</p>
+      </div>
+    </div>
+  </div>
+</div>

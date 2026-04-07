@@ -1,0 +1,529 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "delphitools logo delphitools indie tools" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - img "delphitools logo" [ref=e11]
+            - generic [ref=e12]:
+              - generic [ref=e13]: delphitools
+              - generic [ref=e14]: indie tools
+      - generic [ref=e15]:
+        - list [ref=e17]:
+          - listitem [ref=e18]:
+            - link "Home" [ref=e19] [cursor=pointer]:
+              - /url: /
+              - img [ref=e20]
+              - generic [ref=e23]: Home
+        - generic [ref=e24]:
+          - generic [ref=e25]:
+            - img [ref=e26]
+            - text: Greatest Hits
+          - list [ref=e29]:
+            - listitem [ref=e30]:
+              - link "QR Generator" [ref=e31] [cursor=pointer]:
+                - /url: /tools/qr-genny
+                - img [ref=e32]
+                - generic [ref=e38]: QR Generator
+            - listitem [ref=e39]:
+              - link "Palette Generator" [ref=e40] [cursor=pointer]:
+                - /url: /tools/palette-genny
+                - img [ref=e41]
+                - generic [ref=e43]: Palette Generator
+            - listitem [ref=e44]:
+              - link "Background Remover" [ref=e45] [cursor=pointer]:
+                - /url: /tools/background-remover
+                - img [ref=e46]
+                - generic [ref=e49]: Background Remover
+        - generic [ref=e50]:
+          - generic [ref=e51]: Social Media
+          - list [ref=e53]:
+            - listitem [ref=e54]:
+              - link "Social Media Cropper" [ref=e55] [cursor=pointer]:
+                - /url: /tools/social-cropper
+                - img [ref=e56]
+                - generic [ref=e59]: Social Media Cropper
+            - listitem [ref=e60]:
+              - link "Matte Generator" [ref=e61] [cursor=pointer]:
+                - /url: /tools/matte-generator
+                - img [ref=e62]
+                - generic [ref=e64]: Matte Generator
+            - listitem [ref=e65]:
+              - link "Seamless Scroll Generator" [ref=e66] [cursor=pointer]:
+                - /url: /tools/scroll-generator
+                - img [ref=e67]
+                - generic [ref=e69]: Seamless Scroll Generator
+            - listitem [ref=e70]:
+              - link "Watermarker" [ref=e71] [cursor=pointer]:
+                - /url: /tools/watermarker
+                - img [ref=e72]
+                - generic [ref=e75]: Watermarker
+        - generic [ref=e76]:
+          - generic [ref=e77]: Colour
+          - list [ref=e79]:
+            - listitem [ref=e80]:
+              - link "Colour Converter" [ref=e81] [cursor=pointer]:
+                - /url: /tools/colour-converter
+                - img [ref=e82]
+                - generic [ref=e86]: Colour Converter
+            - listitem [ref=e87]:
+              - link "Tailwind Shade Generator" [ref=e88] [cursor=pointer]:
+                - /url: /tools/tailwind-shades
+                - img [ref=e89]
+                - generic [ref=e95]: Tailwind Shade Generator
+            - listitem [ref=e96]:
+              - link "Harmony Generator" [ref=e97] [cursor=pointer]:
+                - /url: /tools/harmony-genny
+                - img [ref=e98]
+                - generic [ref=e102]: Harmony Generator
+            - listitem [ref=e103]:
+              - link "Palette Generator" [ref=e104] [cursor=pointer]:
+                - /url: /tools/palette-genny
+                - img [ref=e105]
+                - generic [ref=e107]: Palette Generator
+            - listitem [ref=e108]:
+              - link "Palette Collection" [ref=e109] [cursor=pointer]:
+                - /url: /tools/palette-collection
+                - img [ref=e110]
+                - generic [ref=e112]: Palette Collection
+            - listitem [ref=e113]:
+              - link "Contrast Checker" [ref=e114] [cursor=pointer]:
+                - /url: /tools/contrast-checker
+                - img [ref=e115]
+                - generic [ref=e118]: Contrast Checker
+            - listitem [ref=e119]:
+              - link "Colour Blindness Simulator" [ref=e120] [cursor=pointer]:
+                - /url: /tools/colorblind-sim
+                - img [ref=e121]
+                - generic [ref=e124]: Colour Blindness Simulator
+            - listitem [ref=e125]:
+              - link "Gradient Generator" [ref=e126] [cursor=pointer]:
+                - /url: /tools/gradient-genny
+                - img [ref=e127]
+                - generic [ref=e130]: Gradient Generator
+        - generic [ref=e131]:
+          - generic [ref=e132]: Images & Assets
+          - list [ref=e134]:
+            - listitem [ref=e135]:
+              - link "Favicon Generator" [ref=e136] [cursor=pointer]:
+                - /url: /tools/favicon-genny
+                - img [ref=e137]
+                - generic [ref=e141]: Favicon Generator
+            - listitem [ref=e142]:
+              - link "SVG Optimiser" [ref=e143] [cursor=pointer]:
+                - /url: /tools/svg-optimiser
+                - img [ref=e144]
+                - generic [ref=e149]: SVG Optimiser
+            - listitem [ref=e150]:
+              - link "Placeholder Generator" [ref=e151] [cursor=pointer]:
+                - /url: /tools/placeholder-genny
+                - img [ref=e152]
+                - generic [ref=e157]: Placeholder Generator
+            - listitem [ref=e158]:
+              - link "Image Splitter" [ref=e159] [cursor=pointer]:
+                - /url: /tools/image-splitter
+                - img [ref=e160]
+                - generic [ref=e166]: Image Splitter
+            - listitem [ref=e167]:
+              - link "Image Converter" [ref=e168] [cursor=pointer]:
+                - /url: /tools/image-converter
+                - img [ref=e169]
+                - generic [ref=e174]: Image Converter
+            - listitem [ref=e175]:
+              - link "Artwork Enhancer" [ref=e176] [cursor=pointer]:
+                - /url: /tools/artwork-enhancer
+                - img [ref=e177]
+                - generic [ref=e180]: Artwork Enhancer
+            - listitem [ref=e181]:
+              - link "Background Remover" [ref=e182] [cursor=pointer]:
+                - /url: /tools/background-remover
+                - img [ref=e183]
+                - generic [ref=e186]: Background Remover
+            - listitem [ref=e187]:
+              - link "Image Tracer" [ref=e188] [cursor=pointer]:
+                - /url: /tools/image-tracer
+                - img [ref=e189]
+                - generic [ref=e194]: Image Tracer
+        - generic [ref=e195]:
+          - generic [ref=e196]: Typography & Text
+          - list [ref=e198]:
+            - listitem [ref=e199]:
+              - link "PX to REM" [ref=e200] [cursor=pointer]:
+                - /url: /tools/px-to-rem
+                - img [ref=e201]
+                - generic [ref=e207]: PX to REM
+            - listitem [ref=e208]:
+              - link "Line Height Calculator" [ref=e209] [cursor=pointer]:
+                - /url: /tools/line-height-calc
+                - img [ref=e210]
+                - generic [ref=e212]: Line Height Calculator
+            - listitem [ref=e213]:
+              - link "Typography Calculator" [ref=e214] [cursor=pointer]:
+                - /url: /tools/typo-calc
+                - img [ref=e215]
+                - generic [ref=e218]: Typography Calculator
+            - listitem [ref=e219]:
+              - link "Paper Sizes" [ref=e220] [cursor=pointer]:
+                - /url: /tools/paper-sizes
+                - img [ref=e221]
+                - generic [ref=e224]: Paper Sizes
+            - listitem [ref=e225]:
+              - link "Word Counter" [ref=e226] [cursor=pointer]:
+                - /url: /tools/word-counter
+                - img [ref=e227]
+                - generic [ref=e229]: Word Counter
+            - listitem [ref=e230]:
+              - link "Glyph Browser" [ref=e231] [cursor=pointer]:
+                - /url: /tools/glyph-browser
+                - img [ref=e232]
+                - generic [ref=e234]: Glyph Browser
+            - listitem [ref=e235]:
+              - link "Font File Explorer" [ref=e236] [cursor=pointer]:
+                - /url: /tools/font-explorer
+                - img [ref=e237]
+                - generic [ref=e241]: Font File Explorer
+        - generic [ref=e242]:
+          - generic [ref=e243]: Print & Production
+          - list [ref=e245]:
+            - listitem [ref=e246]:
+              - link "PDF Preflight" [ref=e247] [cursor=pointer]:
+                - /url: /tools/pdf-preflight
+                - img [ref=e248]
+                - generic [ref=e253]: PDF Preflight
+            - listitem [ref=e254]:
+              - link "Guillotine Director" [ref=e255] [cursor=pointer]:
+                - /url: /tools/guillotine-director
+                - img [ref=e256]
+                - generic [ref=e258]: Guillotine Director
+            - listitem [ref=e259]:
+              - link "Zine Imposer" [ref=e260] [cursor=pointer]:
+                - /url: /tools/zine-imposer
+                - img [ref=e261]
+                - generic [ref=e263]: Zine Imposer
+            - listitem [ref=e264]:
+              - link "Print Imposer" [ref=e265] [cursor=pointer]:
+                - /url: /tools/imposer
+                - img [ref=e266]
+                - generic [ref=e270]: Print Imposer
+        - generic [ref=e271]:
+          - generic [ref=e272]: Other Tools
+          - list [ref=e274]:
+            - listitem [ref=e275]:
+              - link "Text Scratchpad" [ref=e276] [cursor=pointer]:
+                - /url: /tools/markdown-writer
+                - img [ref=e277]
+                - generic [ref=e279]: Text Scratchpad
+            - listitem [ref=e280]:
+              - link "Tailwind Cheat Sheet" [ref=e281] [cursor=pointer]:
+                - /url: /tools/tailwind-cheatsheet
+                - img [ref=e282]
+                - generic [ref=e284]: Tailwind Cheat Sheet
+            - listitem [ref=e285]:
+              - link "QR Generator" [ref=e286] [cursor=pointer]:
+                - /url: /tools/qr-genny
+                - img [ref=e287]
+                - generic [ref=e293]: QR Generator
+            - listitem [ref=e294]:
+              - link "Barcode Generator" [ref=e295] [cursor=pointer]:
+                - /url: /tools/code-genny
+                - img [ref=e296]
+                - generic [ref=e297]: Barcode Generator
+            - listitem [ref=e298]:
+              - link "Meta Tag Generator" [ref=e299] [cursor=pointer]:
+                - /url: /tools/meta-tag-genny
+                - img [ref=e300]
+                - generic [ref=e303]: Meta Tag Generator
+            - listitem [ref=e304]:
+              - link "Regex Tester" [ref=e305] [cursor=pointer]:
+                - /url: /tools/regex-tester
+                - img [ref=e306]
+                - generic [ref=e310]: Regex Tester
+        - generic [ref=e311]:
+          - generic [ref=e312]: Calculators
+          - list [ref=e314]:
+            - listitem [ref=e315]:
+              - link "Scientific Calculator" [ref=e316] [cursor=pointer]:
+                - /url: /tools/sci-calc
+                - img [ref=e317]
+                - generic [ref=e319]: Scientific Calculator
+            - listitem [ref=e320]:
+              - link "Graph Calculator" [ref=e321] [cursor=pointer]:
+                - /url: /tools/graph-calc
+                - img [ref=e322]
+                - generic [ref=e325]: Graph Calculator
+            - listitem [ref=e326]:
+              - link "Algebra Calculator" [ref=e327] [cursor=pointer]:
+                - /url: /tools/algebra-calc
+                - img [ref=e328]
+                - generic [ref=e333]: Algebra Calculator
+            - listitem [ref=e334]:
+              - link "Base Converter" [ref=e335] [cursor=pointer]:
+                - /url: /tools/base-converter
+                - img [ref=e336]
+                - generic [ref=e341]: Base Converter
+            - listitem [ref=e342]:
+              - link "Time Calculator" [ref=e343] [cursor=pointer]:
+                - /url: /tools/time-calc
+                - img [ref=e344]
+                - generic [ref=e347]: Time Calculator
+            - listitem [ref=e348]:
+              - link "Unit Converter" [ref=e349] [cursor=pointer]:
+                - /url: /tools/unit-converter
+                - img [ref=e350]
+                - generic [ref=e354]: Unit Converter
+            - listitem [ref=e355]:
+              - link "Encoding Tools" [ref=e356] [cursor=pointer]:
+                - /url: /tools/encoder
+                - img [ref=e357]
+                - generic [ref=e362]: Encoding Tools
+        - generic [ref=e363]:
+          - generic [ref=e364]: Turbo-nerd Shit
+          - list [ref=e366]:
+            - listitem [ref=e367]:
+              - link "Shavian Transliterator" [ref=e368] [cursor=pointer]:
+                - /url: /tools/shavian-transliterator
+                - img [ref=e369]
+                - generic [ref=e373]: Shavian Transliterator
+      - button "No logins. No tracking. Long live the handmade web." [ref=e375]:
+        - paragraph [ref=e376]: No logins. No tracking.
+        - paragraph [ref=e377]: Long live the handmade web.
+      - button "Toggle Sidebar" [ref=e378]
+    - main [ref=e379]:
+      - generic [ref=e380]:
+        - button "Toggle Sidebar" [ref=e381]:
+          - img
+          - generic [ref=e382]: Toggle Sidebar
+        - generic [ref=e383]:
+          - generic [ref=e384]:
+            - img [ref=e385]
+            - heading "Palette Generator" [level=1] [ref=e387]
+          - generic [ref=e388]: Colour
+        - button "Toggle theme" [ref=e390]:
+          - img
+          - generic [ref=e391]: Toggle theme
+      - main [ref=e392]:
+        - generic [ref=e394]:
+          - generic [ref=e396]:
+            - img [ref=e398]
+            - generic [ref=e400]:
+              - generic [ref=e401]:
+                - heading "Palette Generator" [level=1] [ref=e402]
+                - generic [ref=e403]: Colour
+              - paragraph [ref=e404]: Generate beautiful colour palettes
+          - generic [ref=e405]:
+            - generic [ref=e407]:
+              - generic [ref=e409] [cursor=pointer]:
+                - generic [ref=e410]:
+                  - button [ref=e411]:
+                    - img [ref=e412]
+                  - button [ref=e415]:
+                    - img [ref=e416]
+                - textbox [ref=e420]: "#bacfab"
+                - button "#BACFAB" [ref=e422]:
+                  - img [ref=e423]
+                  - text: "#BACFAB"
+              - generic [ref=e427] [cursor=pointer]:
+                - generic [ref=e428]:
+                  - button [ref=e429]:
+                    - img [ref=e430]
+                  - button [ref=e433]:
+                    - img [ref=e434]
+                - textbox [ref=e438]: "#7c9675"
+                - button "#7C9675" [ref=e440]:
+                  - img [ref=e441]
+                  - text: "#7C9675"
+              - generic [ref=e445] [cursor=pointer]:
+                - generic [ref=e446]:
+                  - button [ref=e447]:
+                    - img [ref=e448]
+                  - button [ref=e451]:
+                    - img [ref=e452]
+                - textbox [ref=e456]: "#809175"
+                - button "#809175" [ref=e458]:
+                  - img [ref=e459]
+                  - text: "#809175"
+              - generic [ref=e463] [cursor=pointer]:
+                - generic [ref=e464]:
+                  - button [ref=e465]:
+                    - img [ref=e466]
+                  - button [ref=e469]:
+                    - img [ref=e470]
+                - textbox [ref=e474]: "#be8ecb"
+                - button "#BE8ECB" [ref=e476]:
+                  - img [ref=e477]
+                  - text: "#BE8ECB"
+              - generic [ref=e481] [cursor=pointer]:
+                - generic [ref=e482]:
+                  - button [ref=e483]:
+                    - img [ref=e484]
+                  - button [ref=e487]:
+                    - img [ref=e488]
+                - textbox [ref=e492]: "#c098c7"
+                - button "#C098C7" [ref=e494]:
+                  - img [ref=e495]
+                  - text: "#C098C7"
+            - generic [ref=e498]:
+              - button "Generate" [ref=e499]:
+                - img
+                - text: Generate
+              - generic [ref=e500]:
+                - combobox [ref=e501] [cursor=pointer]:
+                  - option "Chaos"
+                  - option "Random" [selected]
+                  - option "Analogous"
+                  - option "Complementary"
+                  - option "Triadic"
+                  - option "Split-Comp"
+                  - option "Tetradic"
+                  - option "Mono"
+                  - option "Thermos"
+                  - option "Specimen"
+                  - option "Souvenir"
+                  - option "Curfew"
+                  - option "Telegraph"
+                  - option "1970s"
+                  - option "1980s"
+                  - option "1990s"
+                  - option "Y2K"
+                  - option "Ocean Sunset"
+                  - option "Forest Morning"
+                  - option "Desert Dusk"
+                  - option "Arctic"
+                  - option "Volcanic"
+                  - option "Meadow"
+                  - option "Bauhaus"
+                  - option "Art Deco"
+                  - option "Japanese"
+                  - option "Scandinavian"
+                  - option "Mexican"
+                - img
+              - generic [ref=e502]:
+                - button [ref=e503]:
+                  - img
+                - generic [ref=e504]: "5"
+                - button [ref=e505]:
+                  - img
+            - generic [ref=e506]:
+              - generic [ref=e507]: "Random:"
+              - text: Random cohesive palette
+            - generic [ref=e508]:
+              - text: Export
+              - generic [ref=e509]:
+                - button "Copy HEX" [ref=e510]:
+                  - img
+                  - text: Copy HEX
+                - button "CSS Variables" [ref=e511]:
+                  - img
+                  - text: CSS Variables
+                - button "JSON" [ref=e512]:
+                  - img
+                  - text: JSON
+                - button "Download Image" [ref=e513]:
+                  - img
+                  - text: Download Image
+            - generic [ref=e514]:
+              - text: Colours
+              - generic [ref=e515]:
+                - generic [ref=e516]:
+                  - textbox [ref=e518]: "#bacfab"
+                  - generic [ref=e520]:
+                    - generic [ref=e521]:
+                      - generic [ref=e522]: "#BACFAB"
+                      - generic [ref=e523]: Bok Choy
+                    - generic [ref=e524]:
+                      - generic [ref=e525]: RGB 186 207 171
+                      - text: "|"
+                      - generic [ref=e526]: L83 C0.05 H132
+                  - generic [ref=e527]:
+                    - button "Lock colour" [ref=e528]:
+                      - img
+                    - button "Copy hex" [ref=e529]:
+                      - img
+                    - link "Generate Tailwind shades" [ref=e530] [cursor=pointer]:
+                      - /url: /tools/tailwind-shades?color=%23bacfab
+                      - img
+                    - button "Remove colour" [ref=e531]:
+                      - img
+                - generic [ref=e532]:
+                  - textbox [ref=e534]: "#7c9675"
+                  - generic [ref=e536]:
+                    - generic [ref=e537]:
+                      - generic [ref=e538]: "#7C9675"
+                      - generic [ref=e539]: Money
+                    - generic [ref=e540]:
+                      - generic [ref=e541]: RGB 124 150 117
+                      - text: "|"
+                      - generic [ref=e542]: L64 C0.06 H139
+                  - generic [ref=e543]:
+                    - button "Lock colour" [ref=e544]:
+                      - img
+                    - button "Copy hex" [ref=e545]:
+                      - img
+                    - link "Generate Tailwind shades" [ref=e546] [cursor=pointer]:
+                      - /url: /tools/tailwind-shades?color=%237c9675
+                      - img
+                    - button "Remove colour" [ref=e547]:
+                      - img
+                - generic [ref=e548]:
+                  - textbox [ref=e550]: "#809175"
+                  - generic [ref=e552]:
+                    - generic [ref=e553]:
+                      - generic [ref=e554]: "#809175"
+                      - generic [ref=e555]: Majestic Evergreen
+                    - generic [ref=e556]:
+                      - generic [ref=e557]: RGB 128 145 117
+                      - text: "|"
+                      - generic [ref=e558]: L64 C0.05 H133
+                  - generic [ref=e559]:
+                    - button "Lock colour" [ref=e560]:
+                      - img
+                    - button "Copy hex" [ref=e561]:
+                      - img
+                    - link "Generate Tailwind shades" [ref=e562] [cursor=pointer]:
+                      - /url: /tools/tailwind-shades?color=%23809175
+                      - img
+                    - button "Remove colour" [ref=e563]:
+                      - img
+                - generic [ref=e564]:
+                  - textbox [ref=e566]: "#be8ecb"
+                  - generic [ref=e568]:
+                    - generic [ref=e569]:
+                      - generic [ref=e570]: "#BE8ECB"
+                      - generic [ref=e571]: Violaceous
+                    - generic [ref=e572]:
+                      - generic [ref=e573]: RGB 190 142 203
+                      - text: "|"
+                      - generic [ref=e574]: L71 C0.10 H319
+                  - generic [ref=e575]:
+                    - button "Lock colour" [ref=e576]:
+                      - img
+                    - button "Copy hex" [ref=e577]:
+                      - img
+                    - link "Generate Tailwind shades" [ref=e578] [cursor=pointer]:
+                      - /url: /tools/tailwind-shades?color=%23be8ecb
+                      - img
+                    - button "Remove colour" [ref=e579]:
+                      - img
+                - generic [ref=e580]:
+                  - textbox [ref=e582]: "#c098c7"
+                  - generic [ref=e584]:
+                    - generic [ref=e585]:
+                      - generic [ref=e586]: "#C098C7"
+                      - generic [ref=e587]: Violaceous
+                    - generic [ref=e588]:
+                      - generic [ref=e589]: RGB 192 152 199
+                      - text: "|"
+                      - generic [ref=e590]: L73 C0.08 H321
+                  - generic [ref=e591]:
+                    - button "Lock colour" [ref=e592]:
+                      - img
+                    - button "Copy hex" [ref=e593]:
+                      - img
+                    - link "Generate Tailwind shades" [ref=e594] [cursor=pointer]:
+                      - /url: /tools/tailwind-shades?color=%23c098c7
+                      - img
+                    - button "Remove colour" [ref=e595]:
+                      - img
+            - generic [ref=e596]: Press Space to generate a new palette
+  - alert [ref=e597]

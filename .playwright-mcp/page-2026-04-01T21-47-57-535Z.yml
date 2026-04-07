@@ -1,0 +1,281 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link "getinside" [ref=e6] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e7]
+          - generic [ref=e8]: tools
+        - navigation [ref=e9]:
+          - link "Accueil" [ref=e10] [cursor=pointer]:
+            - /url: "#/"
+      - button "EN" [ref=e11] [cursor=pointer]
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e15]:
+        - img [ref=e17]
+        - generic [ref=e18]:
+          - heading "getinside toolbox" [level=1] [ref=e19]
+          - paragraph [ref=e20]: Pas de compte. Pas de serveur. Des outils qui fonctionnent — directement dans ton navigateur.
+          - paragraph [ref=e21]: Une collection d'outils utiles, tous exécutés directement dans ton navigateur. Sans installation, sans dépendance — juste un clic.
+          - link "Explorer les outils →" [ref=e22] [cursor=pointer]:
+            - /url: "#browse"
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - heading "Nos outils" [level=2] [ref=e25]
+          - paragraph [ref=e26]: Des outils gratuits pour vos projets print & digital.
+        - searchbox "Rechercher un outil…" [ref=e27]
+        - generic [ref=e28]:
+          - button "Tous" [ref=e29] [cursor=pointer]
+          - button "Print" [ref=e30] [cursor=pointer]
+          - button "Digital" [ref=e31] [cursor=pointer]
+          - button "Design" [ref=e32] [cursor=pointer]
+        - generic [ref=e33]:
+          - generic [ref=e34]: Print
+          - generic [ref=e35]:
+            - link "home.popular Calculateur poids papier Estimez le poids total de votre commande de flyers. Essayer maintenant →" [ref=e36] [cursor=pointer]:
+              - /url: "#/paper-weight"
+              - generic [ref=e37]:
+                - img [ref=e39]
+                - generic [ref=e43]: home.popular
+              - strong [ref=e44]: Calculateur poids papier
+              - paragraph [ref=e45]: Estimez le poids total de votre commande de flyers.
+              - generic [ref=e46]: Essayer maintenant →
+            - link "home.popular DPI Checker Vérifiez si votre image est à la bonne résolution pour l'impression. Essayer maintenant →" [ref=e47] [cursor=pointer]:
+              - /url: "#/dpi-checker"
+              - generic [ref=e48]:
+                - img [ref=e50]
+                - generic [ref=e54]: home.popular
+              - strong [ref=e55]: DPI Checker
+              - paragraph [ref=e56]: Vérifiez si votre image est à la bonne résolution pour l'impression.
+              - generic [ref=e57]: Essayer maintenant →
+            - link "Nouveau Code-barres EAN Générez des codes-barres EAN-13 standards pour vos produits. Essayer maintenant →" [ref=e58] [cursor=pointer]:
+              - /url: "#/barcode"
+              - generic [ref=e59]:
+                - img [ref=e61]
+                - generic [ref=e62]: Nouveau
+              - strong [ref=e63]: Code-barres EAN
+              - paragraph [ref=e64]: Générez des codes-barres EAN-13 standards pour vos produits.
+              - generic [ref=e65]: Essayer maintenant →
+            - link "Nouveau Vérification Print Visualisez les marges de sécurité et le fond perdu sur vos visuels. Essayer maintenant →" [ref=e66] [cursor=pointer]:
+              - /url: "#/safety-margin"
+              - generic [ref=e67]:
+                - img [ref=e69]
+                - generic [ref=e70]: Nouveau
+              - strong [ref=e71]: Vérification Print
+              - paragraph [ref=e72]: Visualisez les marges de sécurité et le fond perdu sur vos visuels.
+              - generic [ref=e73]: Essayer maintenant →
+        - generic [ref=e74]:
+          - generic [ref=e75]: Digital
+          - generic [ref=e76]:
+            - link "home.popular Créateur d'URL UTM Construisez des URLs avec paramètres UTM pour tracker vos campagnes. Essayer maintenant →" [ref=e77] [cursor=pointer]:
+              - /url: "#/utm-builder"
+              - generic [ref=e78]:
+                - img [ref=e80]
+                - generic [ref=e83]: home.popular
+              - strong [ref=e84]: Créateur d'URL UTM
+              - paragraph [ref=e85]: Construisez des URLs avec paramètres UTM pour tracker vos campagnes.
+              - generic [ref=e86]: Essayer maintenant →
+            - link "Redirect Checker Découvrez l'URL finale derrière une chaîne de redirections. Essayer maintenant →" [ref=e87] [cursor=pointer]:
+              - /url: "#/redirect-checker"
+              - img [ref=e90]
+              - strong [ref=e93]: Redirect Checker
+              - paragraph [ref=e94]: Découvrez l'URL finale derrière une chaîne de redirections.
+              - generic [ref=e95]: Essayer maintenant →
+            - link "Validateur de code promo Vérifiez la qualité de votre code promotionnel avant diffusion. Essayer maintenant →" [ref=e96] [cursor=pointer]:
+              - /url: "#/promo-code"
+              - img [ref=e99]
+              - strong [ref=e102]: Validateur de code promo
+              - paragraph [ref=e103]: Vérifiez la qualité de votre code promotionnel avant diffusion.
+              - generic [ref=e104]: Essayer maintenant →
+            - link "Nouveau Compteur de mots Comptez les mots, caractères, phrases et estimez le temps de lecture. Essayer maintenant →" [ref=e105] [cursor=pointer]:
+              - /url: "#/word-counter"
+              - generic [ref=e106]:
+                - img [ref=e108]
+                - generic [ref=e111]: Nouveau
+              - strong [ref=e112]: Compteur de mots
+              - paragraph [ref=e113]: Comptez les mots, caractères, phrases et estimez le temps de lecture.
+              - generic [ref=e114]: Essayer maintenant →
+            - link "Nouveau Analyseur d'URL Décortiquez une URL pour comprendre ses paramètres, son chemin et ses composants. Essayer maintenant →" [ref=e115] [cursor=pointer]:
+              - /url: "#/url-parser"
+              - generic [ref=e116]:
+                - img [ref=e118]
+                - generic [ref=e121]: Nouveau
+              - strong [ref=e122]: Analyseur d'URL
+              - paragraph [ref=e123]: Décortiquez une URL pour comprendre ses paramètres, son chemin et ses composants.
+              - generic [ref=e124]: Essayer maintenant →
+            - link "Nouveau Générateur de Favicon Générez toutes les tailles d'icônes (16px, 32px, etc.). Essayer maintenant →" [ref=e125] [cursor=pointer]:
+              - /url: "#/favicon"
+              - generic [ref=e126]:
+                - img [ref=e128]
+                - generic [ref=e131]: Nouveau
+              - strong [ref=e132]: Générateur de Favicon
+              - paragraph [ref=e133]: Générez toutes les tailles d'icônes (16px, 32px, etc.).
+              - generic [ref=e134]: Essayer maintenant →
+            - link "Nouveau Détails Image Visualisez les métadonnées et propriétés techniques de vos images. Essayer maintenant →" [ref=e135] [cursor=pointer]:
+              - /url: "#/metadata"
+              - generic [ref=e136]:
+                - img [ref=e138]
+                - generic [ref=e140]: Nouveau
+              - strong [ref=e141]: Détails Image
+              - paragraph [ref=e142]: Visualisez les métadonnées et propriétés techniques de vos images.
+              - generic [ref=e143]: Essayer maintenant →
+            - link "Nouveau Lecture QR Code Décodez le contenu d'un QR Code à partir d'une capture. Essayer maintenant →" [ref=e144] [cursor=pointer]:
+              - /url: "#/qr-decoder"
+              - generic [ref=e145]:
+                - img [ref=e147]
+                - generic [ref=e153]: Nouveau
+              - strong [ref=e154]: Lecture QR Code
+              - paragraph [ref=e155]: Décodez le contenu d'un QR Code à partir d'une capture.
+              - generic [ref=e156]: Essayer maintenant →
+        - generic [ref=e157]:
+          - generic [ref=e158]: Design
+          - generic [ref=e159]:
+            - link "Nouveau Générateur de palette Générez des palettes de couleurs harmonieuses. Appuyez sur espace pour une nouvelle palette. Essayer maintenant →" [ref=e160] [cursor=pointer]:
+              - /url: "#/color-palette"
+              - generic [ref=e161]:
+                - img [ref=e163]
+                - generic [ref=e169]: Nouveau
+              - strong [ref=e170]: Générateur de palette
+              - paragraph [ref=e171]: Générez des palettes de couleurs harmonieuses. Appuyez sur espace pour une nouvelle palette.
+              - generic [ref=e172]: Essayer maintenant →
+            - link "Nouveau Mockup iPhone Intégrez votre capture dans un mockup iPhone 15. Essayer maintenant →" [ref=e173] [cursor=pointer]:
+              - /url: "#/mockup"
+              - generic [ref=e174]:
+                - img [ref=e176]
+                - generic [ref=e178]: Nouveau
+              - strong [ref=e179]: Mockup iPhone
+              - paragraph [ref=e180]: Intégrez votre capture dans un mockup iPhone 15.
+              - generic [ref=e181]: Essayer maintenant →
+            - link "Nouveau Convertisseur PX ↔ REM Convertissez des pixels en unités rem et inversement. Essayer maintenant →" [ref=e182] [cursor=pointer]:
+              - /url: "#/px-to-rem"
+              - generic [ref=e183]:
+                - img [ref=e185]
+                - generic [ref=e191]: Nouveau
+              - strong [ref=e192]: Convertisseur PX ↔ REM
+              - paragraph [ref=e193]: Convertissez des pixels en unités rem et inversement.
+              - generic [ref=e194]: Essayer maintenant →
+            - link "Nouveau Générateur de Type Scale Créez une échelle typographique harmonieuse. Essayer maintenant →" [ref=e195] [cursor=pointer]:
+              - /url: "#/type-scale"
+              - generic [ref=e196]:
+                - img [ref=e198]
+                - generic [ref=e200]: Nouveau
+              - strong [ref=e201]: Générateur de Type Scale
+              - paragraph [ref=e202]: Créez une échelle typographique harmonieuse.
+              - generic [ref=e203]: Essayer maintenant →
+            - link "Nouveau Contrast Checker Vérifiez l'accessibilité de vos couleurs (WCAG). Essayer maintenant →" [ref=e204] [cursor=pointer]:
+              - /url: "#/contrast-checker"
+              - generic [ref=e205]:
+                - img [ref=e207]
+                - generic [ref=e210]: Nouveau
+              - strong [ref=e211]: Contrast Checker
+              - paragraph [ref=e212]: Vérifiez l'accessibilité de vos couleurs (WCAG).
+              - generic [ref=e213]: Essayer maintenant →
+            - link "Nouveau Convertisseur de Couleur Convertissez entre HEX, RGB, HSL et CMYK. Essayer maintenant →" [ref=e214] [cursor=pointer]:
+              - /url: "#/color-converter"
+              - generic [ref=e215]:
+                - img [ref=e217]
+                - generic [ref=e221]: Nouveau
+              - strong [ref=e222]: Convertisseur de Couleur
+              - paragraph [ref=e223]: Convertissez entre HEX, RGB, HSL et CMYK.
+              - generic [ref=e224]: Essayer maintenant →
+            - link "Nouveau Compresseur d'Image Réduisez le poids de vos images sans perte de qualité visible. Essayer maintenant →" [ref=e225] [cursor=pointer]:
+              - /url: "#/image-compressor"
+              - generic [ref=e226]:
+                - img [ref=e228]
+                - generic [ref=e232]: Nouveau
+              - strong [ref=e233]: Compresseur d'Image
+              - paragraph [ref=e234]: Réduisez le poids de vos images sans perte de qualité visible.
+              - generic [ref=e235]: Essayer maintenant →
+            - link "Nouveau Recadreur d'Image Recadrez vos images avec précision (carré, 16:9, etc.). Essayer maintenant →" [ref=e236] [cursor=pointer]:
+              - /url: "#/image-cropper"
+              - generic [ref=e237]:
+                - img [ref=e239]
+                - generic [ref=e242]: Nouveau
+              - strong [ref=e243]: Recadreur d'Image
+              - paragraph [ref=e244]: Recadrez vos images avec précision (carré, 16:9, etc.).
+              - generic [ref=e245]: Essayer maintenant →
+            - link "Nouveau Redimensionneur d'Image Modifiez les dimensions de vos images (pixels ou %). Essayer maintenant →" [ref=e246] [cursor=pointer]:
+              - /url: "#/image-resizer"
+              - generic [ref=e247]:
+                - img [ref=e249]
+                - generic [ref=e254]: Nouveau
+              - strong [ref=e255]: Redimensionneur d'Image
+              - paragraph [ref=e256]: Modifiez les dimensions de vos images (pixels ou %).
+              - generic [ref=e257]: Essayer maintenant →
+            - link "Nouveau Filtres d'Image Appliquez des effets visuels (Sépia, Gris, Flou). Essayer maintenant →" [ref=e258] [cursor=pointer]:
+              - /url: "#/image-filters"
+              - generic [ref=e259]:
+                - img [ref=e261]
+                - generic [ref=e264]: Nouveau
+              - strong [ref=e265]: Filtres d'Image
+              - paragraph [ref=e266]: Appliquez des effets visuels (Sépia, Gris, Flou).
+              - generic [ref=e267]: Essayer maintenant →
+            - link "Nouveau Générateur de Placeholder Créez des images de remplacement pour vos maquettes. Essayer maintenant →" [ref=e268] [cursor=pointer]:
+              - /url: "#/placeholder"
+              - generic [ref=e269]:
+                - img [ref=e271]
+                - generic [ref=e275]: Nouveau
+              - strong [ref=e276]: Générateur de Placeholder
+              - paragraph [ref=e277]: Créez des images de remplacement pour vos maquettes.
+              - generic [ref=e278]: Essayer maintenant →
+            - link "Nouveau Générateur de Matte Ajoutez une bordure de couleur autour de vos images. Essayer maintenant →" [ref=e279] [cursor=pointer]:
+              - /url: "#/matte-generator"
+              - generic [ref=e280]:
+                - img [ref=e282]
+                - generic [ref=e284]: Nouveau
+              - strong [ref=e285]: Générateur de Matte
+              - paragraph [ref=e286]: Ajoutez une bordure de couleur autour de vos images.
+              - generic [ref=e287]: Essayer maintenant →
+            - link "Nouveau Lorem Ipsum Générez du texte de remplissage pour vos maquettes. Essayer maintenant →" [ref=e288] [cursor=pointer]:
+              - /url: "#/lorem"
+              - generic [ref=e289]:
+                - img [ref=e291]
+                - generic [ref=e292]: Nouveau
+              - strong [ref=e293]: Lorem Ipsum
+              - paragraph [ref=e294]: Générez du texte de remplissage pour vos maquettes.
+              - generic [ref=e295]: Essayer maintenant →
+            - link "Nouveau Convertisseur Universel Changez le format de vos images (SVG, PNG, JPG, WebP). Essayer maintenant →" [ref=e296] [cursor=pointer]:
+              - /url: "#/image-converter"
+              - generic [ref=e297]:
+                - img [ref=e299]
+                - generic [ref=e304]: Nouveau
+              - strong [ref=e305]: Convertisseur Universel
+              - paragraph [ref=e306]: Changez le format de vos images (SVG, PNG, JPG, WebP).
+              - generic [ref=e307]: Essayer maintenant →
+            - link "Nouveau Simulation Accessibilité Visualisez vos designs comme une personne daltonienne. Essayer maintenant →" [ref=e308] [cursor=pointer]:
+              - /url: "#/colorblind"
+              - generic [ref=e309]:
+                - img [ref=e311]
+                - generic [ref=e314]: Nouveau
+              - strong [ref=e315]: Simulation Accessibilité
+              - paragraph [ref=e316]: Visualisez vos designs comme une personne daltonienne.
+              - generic [ref=e317]: Essayer maintenant →
+            - link "Nouveau Extraction Couleurs Récupérez les couleurs dominantes d'un visuel ou logo. Essayer maintenant →" [ref=e318] [cursor=pointer]:
+              - /url: "#/palette"
+              - generic [ref=e319]:
+                - img [ref=e321]
+                - generic [ref=e327]: Nouveau
+              - strong [ref=e328]: Extraction Couleurs
+              - paragraph [ref=e329]: Récupérez les couleurs dominantes d'un visuel ou logo.
+              - generic [ref=e330]: Essayer maintenant →
+  - contentinfo [ref=e331]:
+    - generic [ref=e332]:
+      - link "getinside tools" [ref=e334] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e335]
+        - generic [ref=e336]: tools
+      - paragraph [ref=e338]: Outils proposés par getinside · Retail Media
+      - generic [ref=e339]:
+        - button "Changer de langue" [ref=e340] [cursor=pointer]: EN
+        - button "Changer de thème" [ref=e341] [cursor=pointer]:
+          - img [ref=e342]
+    - generic [ref=e348]:
+      - generic [ref=e349]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e350] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e351] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e352]: © 2026 getinside. Tous droits réservés.
