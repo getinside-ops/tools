@@ -78,6 +78,10 @@
   --gi-tint-orange-text: #ea580c;
   --gi-tint-orange-border: #fed7aa;
 
+  /* Semantic Error/Warning Tokens */
+  --gi-error: #dc2626;
+  --gi-warning: #d97706;
+
   /* Shadows - Layered and subtle */
   --gi-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --gi-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
@@ -205,6 +209,10 @@
   --gi-tint-orange-bg: rgba(249, 115, 22, 0.15);
   --gi-tint-orange-text: #fb923c;
   --gi-tint-orange-border: rgba(249, 115, 22, 0.3);
+
+  /* Semantic Error/Warning Tokens */
+  --gi-error: #f87171;
+  --gi-warning: #fcd34d;
 
   /* Shadows with increased opacity for dark mode */
   --gi-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
