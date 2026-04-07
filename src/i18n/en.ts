@@ -938,6 +938,9 @@ const en: Messages = {
     pass: 'Pass',
     fail: 'Fail',
     swapColors: 'Swap colors',
+    error: {
+      invalidHex: 'Invalid hex code (e.g. #FF5733)',
+    },
     pedagogic: {
       title: 'About Contrast and Accessibility',
       description: 'Color contrast is essential for accessibility. WCAG standards define minimum ratios to ensure readability.',

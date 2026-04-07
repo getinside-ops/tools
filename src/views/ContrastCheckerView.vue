@@ -34,6 +34,7 @@
             </div>
           </template>
         </GiFormField>
+        <span v-if="!textHexValid && textHex" class="contrast-color-error" role="alert">{{ t('contrastChecker.error.invalidHex') }}</span>
 
         <button @click="swapColors" class="gi-btn-ghost contrast-swap-btn" :title="t('contrastChecker.swapColors')" aria-label="Swap colors">
           <ArrowLeftRight :size="20" aria-hidden="true" />
@@ -47,6 +48,7 @@
             </div>
           </template>
         </GiFormField>
+        <span v-if="!bgHexValid && bgHex" class="contrast-color-error" role="alert">{{ t('contrastChecker.error.invalidHex') }}</span>
       </div>
     </div>
 
@@ -125,6 +127,14 @@ const { t } = useI18n()
 
 const textHex = ref('#0aaa8e')
 const bgHex = ref('#ffffff')
+
+const textHexValid = computed(() => {
+  return !textHex.value || /^#[0-9A-Fa-f]{6}$/.test(textHex.value)
+})
+
+const bgHexValid = computed(() => {
+  return !bgHex.value || /^#[0-9A-Fa-f]{6}$/.test(bgHex.value)
+})
 
 const wcagRatio = computed(() => {
   try {
@@ -277,6 +287,12 @@ function swapColors() {
 
 .contrast-ratio-pass {
   color: var(--gi-tint-green-text);
+}
+
+.contrast-color-error {
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-error);
+  margin-top: var(--gi-space-xs);
 }
 
 @media (max-width: 480px) {
