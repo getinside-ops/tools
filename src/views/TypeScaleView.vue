@@ -164,6 +164,34 @@
       </div>
     </GiResultCard>
 
+    <!-- Scale Visualization Section -->
+    <GiResultCard :title="t('typeScale.visualization')" :subtitle="t('typeScale.visualizationSubtitle')">
+      <div class="ts-scale-viz">
+        <div
+          v-for="entry in scaleVisualization"
+          :key="entry.step"
+          class="ts-scale-bar-row"
+          :class="{ 'ts-scale-bar-row--base': entry.step === 0 }"
+        >
+          <div class="ts-scale-bar-label">
+            <span class="ts-scale-bar-step" :class="{ 'ts-scale-bar-step--base': entry.step === 0 }">
+              {{ entry.step }}
+            </span>
+            <span class="ts-scale-bar-name">{{ entry.label }}</span>
+          </div>
+          <div class="ts-scale-bar-container">
+            <div
+              class="ts-scale-bar"
+              :class="{ 'ts-scale-bar--base': entry.step === 0 }"
+              :style="{ width: entry.percentage + '%' }"
+            >
+              <span class="ts-scale-bar-value">{{ entry.px }}px</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </GiResultCard>
+
     <!-- CSS Output Section -->
     <GiResultCard :title="t('typeScale.cssOutput')" :subtitle="t('typeScale.cssOutputSubtitle')">
       <div class="ts-css-output">
@@ -318,6 +346,28 @@ const cssOutput = computed(() => {
   return lines.join('\n')
 })
 
+// Scale visualization: bars proportional to font sizes
+const scaleVisualization = computed(() => {
+  const entries = scale.value
+  const maxSize = Math.max(...entries.map(e => e.px))
+  
+  return entries.map(entry => ({
+    ...entry,
+    percentage: (entry.px / maxSize) * 100,
+    label: getStepLabel(entry.step),
+  }))
+})
+
+function getStepLabel(step: number): string {
+  if (step === 0) return t('typeScale.sampleText.body')
+  if (step === 1) return t('typeScale.sampleText.caption')
+  if (step === -1) return t('typeScale.sampleText.heading3')
+  if (step === -2) return t('typeScale.sampleText.heading2')
+  if (step === -4) return t('typeScale.sampleText.heading1')
+  if (step === -6) return t('typeScale.sampleText.display')
+  return `Step ${step > 0 ? '+' : ''}${step}`
+}
+
 function clampNumber(value: number, min: number, max: number): number {
   if (isNaN(value)) return min
   return Math.max(min, Math.min(max, value))
@@ -458,6 +508,103 @@ async function copyAllCSS() {
   color: var(--gi-text);
   line-height: 1.3;
   font-weight: 400;
+}
+
+/* Scale Visualization */
+.ts-scale-viz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-md) 0;
+}
+
+.ts-scale-bar-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: var(--gi-space-md);
+  align-items: center;
+  padding: var(--gi-space-xs) 0;
+}
+
+.ts-scale-bar-row--base {
+  padding: var(--gi-space-sm) 0;
+}
+
+.ts-scale-bar-label {
+  display: flex;
+  align-items: center;
+  gap: var(--gi-space-xs);
+}
+
+.ts-scale-bar-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--gi-radius-pill);
+  font-size: var(--gi-font-size-xs);
+  font-weight: 600;
+  color: var(--gi-text-muted);
+  background: var(--gi-bg-soft);
+}
+
+.ts-scale-bar-step--base {
+  color: var(--gi-surface);
+  background: var(--gi-brand);
+}
+
+.ts-scale-bar-name {
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-scale-bar-container {
+  height: 28px;
+  background: var(--gi-bg-soft);
+  border-radius: var(--gi-radius-md);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.ts-scale-bar {
+  height: 100%;
+  background: var(--gi-border-soft);
+  border-radius: var(--gi-radius-md);
+  display: flex;
+  align-items: center;
+  padding-left: var(--gi-space-sm);
+  transition: width var(--gi-transition-base) var(--gi-ease-out);
+  min-width: 40px;
+}
+
+.ts-scale-bar--base {
+  background: var(--gi-brand);
+}
+
+.ts-scale-bar-value {
+  font-size: var(--gi-font-size-xs);
+  font-weight: 600;
+  color: var(--gi-text);
+  white-space: nowrap;
+}
+
+.ts-scale-bar--base .ts-scale-bar-value {
+  color: var(--gi-surface);
+}
+
+@media (max-width: 640px) {
+  .ts-scale-bar-row {
+    grid-template-columns: 1fr;
+    gap: var(--gi-space-xs);
+  }
+  .ts-scale-bar-label {
+    justify-content: flex-start;
+  }
 }
 
 /* CSS Output Section */
