@@ -441,4 +441,9 @@ function setCategory(cat: string) {
   background: var(--gi-tint-orange-text);
   color: white;
 }
+
+[data-theme="dark"] .gi-badge-popular {
+  background: var(--gi-tint-orange-text);
+  color: var(--gi-text-inverse);
+}
 </style>
