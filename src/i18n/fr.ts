@@ -1146,6 +1146,10 @@ const fr = {
     selectColor: 'Sélectionner la couleur {color}',
     copyColors: 'Copier les couleurs',
     copyRatio: 'Copier le ratio',
+    copyLink: 'Copier le lien',
+    copyReport: 'Copier le rapport',
+    linkCopied: 'Lien copié !',
+    reportCopied: 'Rapport copié !',
     copied: 'Copié !',
     error: {
       invalidHex: 'Code hexadécimal invalide (ex: #FF5733)',

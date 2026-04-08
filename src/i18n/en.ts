@@ -1148,6 +1148,10 @@ const en: Messages = {
     selectColor: 'Select color {color}',
     copyColors: 'Copy colors',
     copyRatio: 'Copy ratio',
+    copyLink: 'Copy link',
+    copyReport: 'Copy report',
+    linkCopied: 'Link copied!',
+    reportCopied: 'Report copied!',
     copied: 'Copied!',
     error: {
       invalidHex: 'Invalid hex code (e.g. #FF5733)',
