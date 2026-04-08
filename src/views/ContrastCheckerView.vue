@@ -170,6 +170,19 @@
         </div>
       </div>
 
+      <!-- Luminance Bar -->
+      <div class="contrast-luminance">
+        <div class="contrast-luminance-item">
+          <span class="contrast-luminance-label">{{ t('contrastChecker.luminance.text') }}</span>
+          <span class="contrast-luminance-value">{{ (textLuminance * 100).toFixed(1) }}%</span>
+        </div>
+        <div class="contrast-luminance-divider" aria-hidden="true"></div>
+        <div class="contrast-luminance-item">
+          <span class="contrast-luminance-label">{{ t('contrastChecker.luminance.background') }}</span>
+          <span class="contrast-luminance-value">{{ (bgLuminance * 100).toFixed(1) }}%</span>
+        </div>
+      </div>
+
       <!-- Copy Actions -->
       <div class="contrast-actions">
         <button
@@ -300,7 +313,7 @@ import {
   Info,
   Pipette
 } from 'lucide-vue-next'
-import { getWcagContrast, getApcaContrast, meetsWcagLevel } from '../composables/useContrast'
+import { getWcagContrast, getApcaContrast, meetsWcagLevel, getRelativeLuminance } from '../composables/useContrast'
 
 const { t } = useI18n()
 
@@ -343,6 +356,9 @@ const apcaScore = computed(() => {
     return 0
   }
 })
+
+const textLuminance = computed(() => getRelativeLuminance(textHex.value))
+const bgLuminance = computed(() => getRelativeLuminance(bgHex.value))
 
 // WCAG checks
 const wcagChecks = computed(() => [
@@ -880,6 +896,40 @@ const bgColorPresetGroups: ColorPresetGroup[] = [
   font-size: var(--gi-font-size-xs);
   color: var(--gi-error);
   margin-top: var(--gi-space-xs);
+}
+
+/* Luminance Bar */
+.contrast-luminance {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.625rem 1.5rem;
+  background: var(--gi-surface-elevated, var(--gi-surface));
+  border-top: 1px solid var(--gi-border);
+  border-bottom: 1px solid var(--gi-border);
+  font-size: var(--gi-font-size-xs);
+}
+
+.contrast-luminance-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contrast-luminance-label {
+  color: var(--gi-text-muted);
+}
+
+.contrast-luminance-value {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-weight: 600;
+  color: var(--gi-text);
+}
+
+.contrast-luminance-divider {
+  width: 1px;
+  height: 1rem;
+  background: var(--gi-border);
 }
 
 /* Responsive */

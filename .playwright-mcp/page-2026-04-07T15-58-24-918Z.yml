@@ -1,0 +1,109 @@
+- generic [ref=e2]:
+  - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "getinside" [ref=e7] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e8]
+          - generic [ref=e9]: tools
+        - navigation [ref=e10]:
+          - link "Accueil" [ref=e11] [cursor=pointer]:
+            - /url: "#/"
+      - button "EN" [pressed] [ref=e12] [cursor=pointer]
+  - main [ref=e13]:
+    - generic [ref=e171]:
+      - link "Retour aux outils" [ref=e172] [cursor=pointer]:
+        - /url: "#/"
+        - img [ref=e173]
+        - text: Retour aux outils
+      - generic [ref=e175]:
+        - img [ref=e177]
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - heading "Générateur de Code-barres EAN" [level=1] [ref=e180]
+            - generic [ref=e181]: Print
+          - paragraph [ref=e182]: Générez des codes-barres EAN-13 conformes aux standards retail pour vos maquettes.
+      - generic [ref=e184]:
+        - generic [ref=e185]:
+          - generic [ref=e186]:
+            - generic [ref=e187]: Code EAN-13 (12 ou 13 chiffres) *
+            - textbox "Code EAN-13 (12 ou 13 chiffres) *" [ref=e188]:
+              - /placeholder: "4006381333931"
+              - text: "400638133393"
+            - generic [ref=e189]: "Pays: France (400-440)"
+            - generic [ref=e190]: "Clé de contrôle : 1 ✓"
+          - generic [ref=e191]:
+            - button "Personnaliser l'apparence" [expanded] [ref=e192] [cursor=pointer]:
+              - generic [ref=e193]: Personnaliser l'apparence
+              - img [ref=e194]
+            - generic [ref=e317]:
+              - generic [ref=e318]:
+                - generic [ref=e319]: Couleur des barres
+                - generic [ref=e320]:
+                  - button "Noir" [ref=e321] [cursor=pointer]
+                  - button "Gris" [ref=e322] [cursor=pointer]
+                  - button "Vert getinside" [ref=e323] [cursor=pointer]
+                  - button "Gris foncé" [ref=e324] [cursor=pointer]
+                  - textbox "Couleur personnalisée" [ref=e325] [cursor=pointer]: "#000000"
+              - generic [ref=e326]:
+                - generic [ref=e327]: Largeur
+                - generic [ref=e328]:
+                  - slider [ref=e329] [cursor=pointer]: "200"
+                  - generic [ref=e330]: 200 px
+                - generic [ref=e331]:
+                  - button "S (100px)" [ref=e332] [cursor=pointer]
+                  - button "M (200px)" [ref=e333] [cursor=pointer]
+                  - button "L (400px)" [ref=e334] [cursor=pointer]
+              - generic [ref=e335]:
+                - generic [ref=e336]: Hauteur
+                - generic [ref=e337]:
+                  - slider [ref=e338] [cursor=pointer]: "50"
+                  - generic [ref=e339]: 50 px
+              - generic [ref=e341] [cursor=pointer]:
+                - checkbox "Afficher le texte sous le code" [checked] [ref=e342]
+                - generic [ref=e343]: Afficher le texte sous le code
+              - generic [ref=e345] [cursor=pointer]:
+                - checkbox "Fond transparent (pour PNG)" [ref=e346]
+                - generic [ref=e347]: Fond transparent (pour PNG)
+              - generic [ref=e348]:
+                - generic [ref=e349]: Format d'export
+                - generic [ref=e350]:
+                  - button "SVG (vectoriel)" [ref=e351] [cursor=pointer]
+                  - button "PNG (matriciel)" [ref=e352] [cursor=pointer]
+                  - button "JPG (photo)" [ref=e353] [cursor=pointer]
+              - button "Réinitialiser" [ref=e354] [cursor=pointer]
+        - generic [ref=e197]:
+          - heading "Aperçu du code-barres" [level=3] [ref=e200]
+          - generic [ref=e201]:
+            - img [ref=e204]:
+              - generic [ref=e301]: "4"
+              - generic [ref=e302]: "006381"
+              - generic [ref=e303]: "333931"
+            - generic [ref=e305]:
+              - button "Copier le code" [ref=e306]
+              - button "Télécharger en SVG" [ref=e307] [cursor=pointer]
+      - generic [ref=e308]:
+        - generic [ref=e310]: À propos de cet outil
+        - text: L'EAN-13 est le code-barres international utilisé sur les produits de grande distribution. Cet outil génère un code-barres EAN-13 valide à partir de n'importe quel numéro de base à 12 chiffres, avec détection du pays d'origine et personnalisation complète des couleurs et de la taille.
+  - contentinfo [ref=e153]:
+    - generic [ref=e154]:
+      - link "getinside tools" [ref=e156] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e157]
+        - generic [ref=e158]: tools
+      - paragraph [ref=e160]: Outils proposés par getinside · Retail Media
+      - generic [ref=e161]:
+        - button "Changer de langue" [pressed] [ref=e162] [cursor=pointer]: EN
+        - button "Changer de thème" [ref=e163] [cursor=pointer]:
+          - img [ref=e311]
+    - generic [ref=e166]:
+      - generic [ref=e167]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e168] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e169] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e170]: © 2026 getinside. Tous droits réservés.

@@ -1,0 +1,9 @@
+[     390ms] [WARNING] [intlify] Not found 'home.popular' key in 'fr' locale messages. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=1eacc94a:26
+[     390ms] [WARNING] [intlify] Fall back to translate 'home.popular' key with 'en' locale. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=1eacc94a:26
+[     390ms] [WARNING] [intlify] Not found 'home.popular' key in 'en' locale messages. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=1eacc94a:26
+[     391ms] [WARNING] [intlify] Not found 'home.popular' key in 'fr' locale messages. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=1eacc94a:26
+[     391ms] [WARNING] [intlify] Fall back to translate 'home.popular' key with 'en' locale. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=1eacc94a:26
+[     391ms] [WARNING] [intlify] Not found 'home.popular' key in 'en' locale messages. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=1eacc94a:26
+[     396ms] [WARNING] [intlify] Not found 'home.popular' key in 'fr' locale messages. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=1eacc94a:26
+[     396ms] [WARNING] [intlify] Fall back to translate 'home.popular' key with 'en' locale. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=1eacc94a:26
+[     396ms] [WARNING] [intlify] Not found 'home.popular' key in 'en' locale messages. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=1eacc94a:26

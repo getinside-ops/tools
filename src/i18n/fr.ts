@@ -1161,6 +1161,10 @@ const fr = {
       largeMinimum: 'Minimum pour le texte large',
       uiMinimum: 'Minimum pour les composants UI',
     },
+    luminance: {
+      text: 'Luminance texte',
+      background: 'Luminance fond',
+    },
     pedagogic: {
       title: 'À propos du contraste et de l\'accessibilité',
       description: 'Le contraste des couleurs est essentiel pour l\'accessibilité. Les normes WCAG définissent des ratios minimums pour assurer la lisibilité.',

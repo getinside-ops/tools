@@ -1,0 +1,64 @@
+- generic [ref=e2]:
+  - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "getinside" [ref=e7] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e8]
+          - generic [ref=e9]: tools
+        - navigation [ref=e10]:
+          - link "Accueil" [ref=e11] [cursor=pointer]:
+            - /url: "#/"
+      - button "EN" [pressed] [ref=e12] [cursor=pointer]
+  - main [ref=e13]:
+    - generic [ref=e503]:
+      - link "Retour aux outils" [ref=e504] [cursor=pointer]:
+        - /url: "#/"
+        - img [ref=e505]
+        - text: Retour aux outils
+      - generic [ref=e507]:
+        - img [ref=e509]
+        - generic [ref=e515]:
+          - generic [ref=e516]:
+            - heading "Décodeur QR Code" [level=1] [ref=e517]
+            - generic [ref=e518]: Digital
+          - paragraph [ref=e519]: Extrayez instantanément le contenu d'un QR code à partir d'une image.
+      - generic [ref=e520]:
+        - generic [ref=e522] [cursor=pointer]:
+          - img [ref=e524]
+          - paragraph [ref=e529]: Collez un QR code ici
+          - paragraph [ref=e530]: Appuyez sur Ctrl/Cmd+V ou cliquez pour coller
+        - generic [ref=e532]:
+          - generic [ref=e533]:
+            - paragraph [ref=e534]: Import d'image
+            - paragraph [ref=e535]: Collez depuis le presse-papiers ou importez depuis votre appareil au même endroit.
+          - button "ou importer une image Cliquez pour parcourir ou glissez une image dans ce panneau." [ref=e537] [cursor=pointer]:
+            - generic [ref=e538]:
+              - img [ref=e540]
+              - paragraph [ref=e543]: ou importer une image
+              - paragraph [ref=e544]: Cliquez pour parcourir ou glissez une image dans ce panneau.
+      - generic [ref=e545]:
+        - generic [ref=e547]: À propos de cet outil
+        - text: Les QR codes sont largement utilisés pour des liens, des cartes de contact ou des étiquettes produit, mais leur contenu n'est pas visible à l'œil nu. Cet outil décode n'importe quelle image de QR code et affiche les données intégrées instantanément — utile pour la vérification, les tests ou l'inspection rapide.
+  - contentinfo [ref=e342]:
+    - generic [ref=e343]:
+      - link "getinside tools" [ref=e345] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e346]
+        - generic [ref=e347]: tools
+      - paragraph [ref=e349]: Outils proposés par getinside · Retail Media
+      - generic [ref=e350]:
+        - button "Changer de langue" [pressed] [ref=e351] [cursor=pointer]: EN
+        - button "Changer de thème" [ref=e352] [cursor=pointer]:
+          - img [ref=e353]
+    - generic [ref=e359]:
+      - generic [ref=e360]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e361] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e362] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e363]: © 2026 getinside. Tous droits réservés.

@@ -1,0 +1,65 @@
+- generic [ref=e2]:
+  - link "Skip to main content" [ref=e776] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "getinside" [ref=e7] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e8]
+          - generic [ref=e9]: tools
+        - navigation [ref=e10]:
+          - link "Home" [ref=e777] [cursor=pointer]:
+            - /url: "#/"
+      - button "FR" [active] [ref=e778] [cursor=pointer]
+  - main [ref=e13]:
+    - generic [ref=e734]:
+      - link "Back to tools" [ref=e779] [cursor=pointer]:
+        - /url: "#/"
+        - img [ref=e736]
+        - text: Back to tools
+      - generic [ref=e738]:
+        - img [ref=e740]
+        - generic [ref=e743]:
+          - generic [ref=e744]:
+            - heading "Gemini Watermark Remover" [level=1] [ref=e780]
+            - generic [ref=e746]: Design
+          - paragraph [ref=e747]: Automatically remove the Google Gemini star watermark from your AI-generated images.
+      - generic [ref=e750]:
+        - generic [ref=e751]:
+          - paragraph [ref=e752]: Image input
+          - paragraph [ref=e753]: Paste from your clipboard or upload from your device in one place.
+        - generic [ref=e754]:
+          - generic [ref=e756] [cursor=pointer]:
+            - img [ref=e758]
+            - paragraph [ref=e761]: Paste an image
+            - paragraph [ref=e762]: Click here and press Ctrl+V / Cmd+V
+          - generic [ref=e764]: or
+          - button "or click to upload from your device Click to browse or drag an image into this panel." [ref=e781] [cursor=pointer]:
+            - generic [ref=e766]:
+              - img [ref=e768]
+              - paragraph [ref=e771]: or click to upload from your device
+              - paragraph [ref=e772]: Click to browse or drag an image into this panel.
+      - generic [ref=e773]:
+        - generic [ref=e775]: About this tool
+        - text: Google Gemini overlays a semi-transparent star-shaped watermark on the images it generates. This tool uses reverse alpha compositing to restore the original pixels, entirely within your browser. No data is sent to any server — all processing is local and private.
+  - contentinfo [ref=e342]:
+    - generic [ref=e343]:
+      - link "getinside tools" [ref=e345] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e346]
+        - generic [ref=e347]: tools
+      - paragraph [ref=e349]: Tools by getinside · Retail Media
+      - generic [ref=e350]:
+        - button "Toggle language" [ref=e782] [cursor=pointer]: FR
+        - button "Toggle theme" [ref=e783] [cursor=pointer]:
+          - img [ref=e353]
+    - generic [ref=e359]:
+      - generic [ref=e360]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e361] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e362] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e363]: © 2026 getinside. All rights reserved.

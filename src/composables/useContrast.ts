@@ -45,3 +45,19 @@ export function getApcaContrast(textColor: string, bgColor: string): number {
 export function meetsWcagLevel(ratio: number, level: WcagLevel): boolean {
   return ratio >= WCAG_THRESHOLDS[level]
 }
+
+/**
+ * Calculate relative luminance of a color (WCAG 2.1 definition)
+ * Returns a value between 0 (black) and 1 (white)
+ */
+export function getRelativeLuminance(hex: string): number {
+  const rgb = colorParsley(hex)
+  if (!rgb) return 0
+
+  const [r, g, b] = rgb.slice(0, 3).map((v: number) => {
+    const srgb = v / 255
+    return srgb <= 0.03928 ? srgb / 12.92 : Math.pow((srgb + 0.055) / 1.055, 2.4)
+  })
+
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}

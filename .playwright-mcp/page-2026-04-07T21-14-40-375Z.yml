@@ -1,0 +1,83 @@
+- generic [ref=e2]:
+  - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "getinside" [ref=e7] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e8]
+          - generic [ref=e9]: tools
+        - navigation [ref=e10]:
+          - link "Accueil" [ref=e11] [cursor=pointer]:
+            - /url: "#/"
+      - button "EN" [pressed] [ref=e12] [cursor=pointer]
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - link "Retour aux outils" [ref=e15] [cursor=pointer]:
+        - /url: "#/"
+        - img [ref=e16]
+        - text: Retour aux outils
+      - generic [ref=e18]:
+        - img [ref=e20]
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Validateur de code promo" [level=1] [ref=e25]
+            - generic [ref=e26]: Digital
+          - paragraph [ref=e27]: Vérifiez si votre code promotionnel respecte les bonnes pratiques avant diffusion.
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - generic [ref=e30]:
+            - generic [ref=e31]: Votre code promo
+            - textbox "Votre code promo" [ref=e32]:
+              - /placeholder: SUMMER25FR
+          - generic [ref=e34]: "Bonnes pratiques : lettres majuscules, chiffres, sans espaces ni caractères spéciaux"
+        - generic [ref=e35]:
+          - img [ref=e36]
+          - paragraph [ref=e40]: Saisissez un code promo ci-dessus pour vérifier sa qualité
+          - generic [ref=e41]:
+            - generic [ref=e42]: Exemple
+            - code [ref=e43]: SUMMER25
+            - button "Essayer" [ref=e44] [cursor=pointer]
+        - button "À propos des codes promo" [ref=e46] [cursor=pointer]:
+          - img [ref=e47]
+          - text: À propos des codes promo
+          - img [ref=e49]
+      - generic [ref=e51]:
+        - generic [ref=e53]: À propos de cet outil
+        - text: Un bon code promo est court, mémorisable et sans ambiguïté. Cet outil évalue votre code selon les erreurs classiques — caractères confus (0/O, 1/I), longueur excessive, lisibilité — pour détecter les problèmes avant la diffusion.
+  - contentinfo [ref=e54]:
+    - generic [ref=e55]:
+      - link "getinside tools" [ref=e57] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e58]
+        - generic [ref=e59]: tools
+      - paragraph [ref=e61]: Outils proposés par getinside · Retail Media
+      - generic [ref=e62]:
+        - button "Changer de langue" [pressed] [ref=e63] [cursor=pointer]: EN
+        - button "Changer de thème" [ref=e64] [cursor=pointer]:
+          - img [ref=e65]
+    - generic [ref=e71]:
+      - generic [ref=e72]: Accès rapide
+      - generic [ref=e73]:
+        - link "Poids papier" [ref=e74] [cursor=pointer]:
+          - /url: "#/paper-weight"
+          - img [ref=e75]
+          - text: Poids papier
+        - link "UTM Builder" [ref=e79] [cursor=pointer]:
+          - /url: "#/utm-builder"
+          - img [ref=e80]
+          - text: UTM Builder
+        - link "DPI Checker" [ref=e83] [cursor=pointer]:
+          - /url: "#/dpi-checker"
+          - img [ref=e84]
+          - text: DPI Checker
+    - generic [ref=e88]:
+      - generic [ref=e89]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e90] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e91] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e92]: © 2026 getinside. Tous droits réservés.

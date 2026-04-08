@@ -1,0 +1,178 @@
+- generic [ref=e2]:
+  - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "getinside" [ref=e7] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e8]
+          - generic [ref=e9]: tools
+        - navigation [ref=e10]:
+          - link "Accueil" [ref=e11] [cursor=pointer]:
+            - /url: "#/"
+      - button "EN" [pressed] [ref=e12] [cursor=pointer]
+  - main [ref=e13]:
+    - generic [ref=e331]:
+      - link "Retour aux outils" [ref=e332] [cursor=pointer]:
+        - /url: "#/"
+        - img [ref=e333]
+        - text: Retour aux outils
+      - generic [ref=e335]:
+        - img [ref=e337]
+        - generic [ref=e340]:
+          - generic [ref=e341]:
+            - heading "Calculateur poids papier" [level=1] [ref=e342]
+            - generic [ref=e343]: Print
+          - paragraph [ref=e344]: Estimez le poids total de votre commande de flyers ou de brochures en fonction du format et du grammage.
+          - paragraph
+      - generic [ref=e345]:
+        - group "Mode de calcul" [ref=e346]:
+          - button "Flyers" [ref=e347] [cursor=pointer]:
+            - img [ref=e348]
+            - text: Flyers
+          - button "Brochures" [active] [pressed] [ref=e352] [cursor=pointer]:
+            - img [ref=e353]
+            - text: Brochures
+        - status [ref=e355]:
+          - generic [ref=e356]:
+            - generic [ref=e357]:
+              - generic [ref=e358]: "37"
+              - generic [ref=e359]: kg
+            - generic [ref=e360]:
+              - generic [ref=e361]: 37 141 g total
+              - generic [ref=e470]: •
+              - generic [ref=e471]: 1 000 ex.
+              - generic [ref=e472]: •
+              - generic [ref=e473]: 37 g / brochures
+        - generic [ref=e364]:
+          - generic [ref=e474]:
+            - heading "Configuration de la brochure" [level=3] [ref=e475]
+            - generic [ref=e476]:
+              - generic [ref=e477]:
+                - generic [ref=e478]: Nombre de brochures
+                - generic [ref=e479]:
+                  - textbox "Nombre de brochures" [ref=e480]: "1000"
+                  - generic [ref=e481]: ex.
+              - group [ref=e482]:
+                - slider "Nombre de brochures" [ref=e483] [cursor=pointer]: "375"
+                - generic [ref=e484]:
+                  - generic [ref=e487]: "100"
+                  - generic [ref=e490]: 1k
+                  - generic [ref=e493]: 10k
+                  - generic [ref=e496]: 50k
+                  - generic [ref=e499]: 100k
+                  - generic [ref=e502]: 1M
+            - generic [ref=e503]:
+              - generic [ref=e504]:
+                - generic [ref=e505]: Pages par brochure
+                - combobox [ref=e506] [cursor=pointer]:
+                  - option "4 pages"
+                  - option "8 pages"
+                  - option "12 pages"
+                  - option "16 pages" [selected]
+                  - option "20 pages"
+                  - option "24 pages"
+                  - option "28 pages"
+                  - option "32 pages"
+                  - option "36 pages"
+                  - option "40 pages"
+                  - option "48 pages"
+                  - option "56 pages"
+                  - option "64 pages"
+                  - option "72 pages"
+                  - option "80 pages"
+                  - option "96 pages"
+                  - option "112 pages"
+                  - option "128 pages"
+                  - option "Libre..."
+              - paragraph [ref=e507]: Le nombre de pages doit être un multiple de 4 pour une brochure pliée.
+          - generic [ref=e509]:
+            - generic [ref=e510]: Format
+            - radiogroup "Format" [ref=e511]:
+              - radio "A5 - 148 × 210 mm" [ref=e512] [cursor=pointer]:
+                - img [ref=e513]:
+                  - generic [ref=e516]: A5
+                - generic [ref=e517]: A5
+                - generic [ref=e518]: 14,8 × 21 cm
+              - radio "A6 - 105 × 148 mm" [checked] [ref=e519] [cursor=pointer]:
+                - img [ref=e520]:
+                  - generic [ref=e523]: A6
+                - generic [ref=e524]: A6
+                - generic [ref=e525]: 10,5 × 14,8 cm
+              - radio "Carte - 105 × 148 mm" [ref=e526] [cursor=pointer]:
+                - img [ref=e527]:
+                  - generic [ref=e530]: Carte
+                - generic [ref=e531]: Carte
+                - generic [ref=e532]: 10,5 × 14,8 cm
+              - radio "DL - 110 × 220 mm" [ref=e533] [cursor=pointer]:
+                - img [ref=e534]:
+                  - generic [ref=e537]: DL
+                - generic [ref=e538]: DL
+                - generic [ref=e539]: 11 × 22 cm
+              - radio "A4 - 210 × 297 mm" [ref=e540] [cursor=pointer]:
+                - img [ref=e541]:
+                  - generic [ref=e544]: A4
+                - generic [ref=e545]: A4
+                - generic [ref=e546]: 21 × 29,7 cm
+              - radio "Libre" [ref=e547] [cursor=pointer]:
+                - img [ref=e548]:
+                  - generic [ref=e553]: ↔
+                - generic [ref=e554]: Libre
+          - generic [ref=e555]:
+            - heading "Grammages du papier" [level=3] [ref=e556]
+            - generic [ref=e557]:
+              - generic [ref=e558]:
+                - img [ref=e559]
+                - generic [ref=e562]:
+                  - generic [ref=e563]: Grammage couverture (g/m²)
+                  - generic [ref=e564]:
+                    - textbox "Grammage couverture (g/m²)" [ref=e565]: "250"
+                    - generic [ref=e566]: g/m²
+              - group "Préréglages de grammage" [ref=e567]:
+                - button "80" [ref=e568] [cursor=pointer]
+                - button "115" [ref=e569] [cursor=pointer]
+                - button "135" [ref=e570] [cursor=pointer]
+                - button "170" [ref=e571] [cursor=pointer]
+                - button "250" [pressed] [ref=e572] [cursor=pointer]
+                - button "350" [ref=e573] [cursor=pointer]
+              - paragraph [ref=e574]: "Papier plus épais pour la couverture (2 pages : recto/verso)"
+            - generic [ref=e575]:
+              - generic [ref=e576]:
+                - img [ref=e577]
+                - generic [ref=e581]:
+                  - generic [ref=e582]: Grammage intérieur (g/m²)
+                  - generic [ref=e583]:
+                    - textbox "Grammage intérieur (g/m²)" [ref=e584]: "135"
+                    - generic [ref=e585]: g/m²
+              - group "Préréglages de grammage" [ref=e586]:
+                - button "80" [ref=e587] [cursor=pointer]
+                - button "115" [ref=e588] [cursor=pointer]
+                - button "135" [pressed] [ref=e589] [cursor=pointer]
+                - button "170" [ref=e590] [cursor=pointer]
+                - button "250" [ref=e591] [cursor=pointer]
+                - button "350" [ref=e592] [cursor=pointer]
+              - paragraph [ref=e593]: Papier standard pour les pages intérieures
+      - generic [ref=e467]:
+        - generic [ref=e469]: À propos de cet outil
+        - text: Le grammage du papier influence le coût d'affranchissement et la qualité perçue de votre imprimé. Cet outil calcule le poids total d'un tirage de flyers ou de brochures en fonction du format, du grammage et de la quantité — utile pour estimer les frais postaux ou comparer les papiers.
+  - contentinfo [ref=e14]:
+    - generic [ref=e15]:
+      - link "getinside tools" [ref=e17] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e18]
+        - generic [ref=e19]: tools
+      - paragraph [ref=e21]: Outils proposés par getinside · Retail Media
+      - generic [ref=e22]:
+        - button "Changer de langue" [pressed] [ref=e23] [cursor=pointer]: EN
+        - button "Changer de thème" [pressed] [ref=e24] [cursor=pointer]:
+          - img [ref=e329]
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e33] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e34] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e35]: © 2026 getinside. Tous droits réservés.

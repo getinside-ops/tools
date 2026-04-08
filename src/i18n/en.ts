@@ -1163,6 +1163,10 @@ const en: Messages = {
       largeMinimum: 'Minimum for large text',
       uiMinimum: 'Minimum for UI components',
     },
+    luminance: {
+      text: 'Text luminance',
+      background: 'Background luminance',
+    },
     pedagogic: {
       title: 'About Contrast and Accessibility',
       description: 'Color contrast is essential for accessibility. WCAG standards define minimum ratios to ensure readability.',
