@@ -255,7 +255,7 @@
 /* Dark mode focus ring adjustment for inputs */
 [data-theme="dark"] .gi-input:focus,
 [data-theme="dark"] .gi-select:focus {
-  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.25);
+  border-color: var(--gi-brand);
 }
 
 /* Dark mode elevated card adjustments */
@@ -307,11 +307,10 @@ body {
 .gi-input:focus, .gi-select:focus {
   outline: none;
   border-color: var(--gi-brand);
-  box-shadow: 0 0 0 3px var(--gi-brand-fade);
 }
 .gi-input:focus-visible, .gi-select:focus-visible {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 2px;
+  outline: none;
+  border-color: var(--gi-brand);
 }
 .gi-input::placeholder {
   color: var(--gi-text-muted);

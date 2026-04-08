@@ -1030,12 +1030,6 @@ watch(selectedFormat, (newFormat) => {
   min-height: 44px;
 }
 
-.pw-quantity-input:focus-visible,
-.pw-grammage-input:focus-visible {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 1px;
-}
-
 .pw-quantity-label {
   font-size: var(--gi-font-size-sm);
   color: var(--gi-text-muted);
@@ -1139,11 +1133,6 @@ watch(selectedFormat, (newFormat) => {
   border-color: var(--gi-brand);
 }
 
-.pw-pages-select:focus {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 1px;
-}
-
 /* Custom Pages */
 .pw-custom-pages {
   margin-top: var(--gi-space-sm);
@@ -1171,11 +1160,6 @@ watch(selectedFormat, (newFormat) => {
   padding: var(--gi-space-sm) var(--gi-space-md);
   min-height: 44px;
   font-size: var(--gi-font-size-md);
-}
-
-.pw-custom-input:focus-visible {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 1px;
 }
 
 .pw-custom-input::placeholder {
