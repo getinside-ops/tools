@@ -85,16 +85,21 @@
             {{ t('contrastChecker.error.invalidHex') }}
           </span>
           
-          <!-- Quick presets for text color -->
-          <div class="contrast-presets" :aria-label="t('contrastChecker.commonTextColors')">
-            <button
-              v-for="color in textColorPresets"
-              :key="color"
-              class="contrast-preset-btn"
-              :style="{ backgroundColor: color }"
-              :aria-label="t('contrastChecker.selectColor', { color })"
-              @click="textHex = color"
-            ></button>
+          <!-- Text color presets -->
+          <div class="contrast-presets" role="group" :aria-label="t('contrastChecker.textPresets')">
+            <div v-for="group in textColorPresetGroups" :key="group.label" class="contrast-preset-group">
+              <span class="contrast-preset-group-label">{{ group.label }}</span>
+              <div class="contrast-preset-row">
+                <button
+                  v-for="color in group.colors"
+                  :key="color"
+                  class="contrast-preset-btn"
+                  :style="{ backgroundColor: color }"
+                  :aria-label="t('contrastChecker.selectColor', { color })"
+                  @click="textHex = color"
+                ></button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -146,16 +151,21 @@
             {{ t('contrastChecker.error.invalidHex') }}
           </span>
           
-          <!-- Quick presets for background color -->
-          <div class="contrast-presets" :aria-label="t('contrastChecker.commonBgColors')">
-            <button
-              v-for="color in bgColorPresets"
-              :key="color"
-              class="contrast-preset-btn"
-              :style="{ backgroundColor: color }"
-              :aria-label="t('contrastChecker.selectColor', { color })"
-              @click="bgHex = color"
-            ></button>
+          <!-- Background color presets -->
+          <div class="contrast-presets" role="group" :aria-label="t('contrastChecker.bgPresets')">
+            <div v-for="group in bgColorPresetGroups" :key="group.label" class="contrast-preset-group">
+              <span class="contrast-preset-group-label">{{ group.label }}</span>
+              <div class="contrast-preset-row">
+                <button
+                  v-for="color in group.colors"
+                  :key="color"
+                  class="contrast-preset-btn"
+                  :style="{ backgroundColor: color }"
+                  :aria-label="t('contrastChecker.selectColor', { color })"
+                  @click="bgHex = color"
+                ></button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -426,8 +436,22 @@ async function openNativeColorPicker(type: 'text' | 'bg') {
 const hasEyeDropper = typeof window !== 'undefined' && 'EyeDropper' in window
 
 // Common color presets
-const textColorPresets = ['#000000', '#1a1a1a', '#333333', '#0aaa8e', '#2563eb', '#dc2626', '#7c3aed', '#f97316']
-const bgColorPresets = ['#ffffff', '#f8f9fa', '#f1f3f5', '#e9ecef', '#dee2e6', '#0aaa8e', '#2563eb', '#1a1a1a']
+interface ColorPresetGroup {
+  label: string
+  colors: string[]
+}
+
+const textColorPresetGroups: ColorPresetGroup[] = [
+  { label: t('contrastChecker.presets.neutral'), colors: ['#000000', '#1a1a1a', '#333333', '#4a4a4a'] },
+  { label: t('contrastChecker.presets.brand'), colors: ['#0aaa8e', '#2563eb', '#7c3aed'] },
+  { label: t('contrastChecker.presets.alert'), colors: ['#dc2626', '#ea580c', '#ca8a04'] },
+]
+
+const bgColorPresetGroups: ColorPresetGroup[] = [
+  { label: t('contrastChecker.presets.light'), colors: ['#ffffff', '#f8f9fa', '#f1f3f5', '#e9ecef'] },
+  { label: t('contrastChecker.presets.neutral'), colors: ['#dee2e6', '#adb5bd', '#6c757d', '#495057'] },
+  { label: t('contrastChecker.presets.dark'), colors: ['#1a1a1a', '#0aaa8e', '#2563eb'] },
+]
 </script>
 
 <style scoped>
@@ -647,9 +671,26 @@ const bgColorPresets = ['#ffffff', '#f8f9fa', '#f1f3f5', '#e9ecef', '#dee2e6', '
 /* Presets */
 .contrast-presets {
   display: flex;
-  gap: 0.375rem;
+  flex-direction: column;
+  gap: 0.5rem;
   margin-top: 0.75rem;
-  flex-wrap: wrap;
+}
+
+.contrast-preset-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contrast-preset-group-label {
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-text-muted);
+  font-weight: 500;
+}
+
+.contrast-preset-row {
+  display: flex;
+  gap: 0.375rem;
 }
 
 .contrast-preset-btn {
