@@ -1166,6 +1166,13 @@ const en: Messages = {
       bodyMinimum: 'Minimum for body text',
       largeMinimum: 'Minimum for large text',
       uiMinimum: 'Minimum for UI components',
+      recommendation: {
+        excellent: 'Excellent — suitable for all uses',
+        good: 'Good — suitable for body text',
+        large: 'Acceptable — large text only',
+        ui: 'Limited — UI components only',
+        fail: 'Insufficient — increase contrast',
+      },
     },
     luminance: {
       text: 'Text luminance',

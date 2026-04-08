@@ -234,6 +234,9 @@
             WCAG 2.1
             <span class="contrast-ratio-large">{{ wcagRatio.toFixed(2) }}:1</span>
           </h3>
+          <div class="contrast-pass-badge" :class="{ 'contrast-pass-badge-ok': allWcagPass }">
+            {{ passCount }}/{{ totalCount }}
+          </div>
         </div>
 
         <div class="contrast-checks">
@@ -305,6 +308,12 @@
             </div>
             <span>{{ t('contrastChecker.apca.uiMinimum') }}</span>
           </div>
+        </div>
+
+        <!-- APCA contextual recommendation -->
+        <div class="contrast-apca-recommendation" :class="apcaRecommendation.class">
+          <Info :size="16" aria-hidden="true" />
+          <span>{{ apcaRecommendation.text }}</span>
         </div>
       </div>
     </div>
@@ -417,6 +426,24 @@ const wcagChecks = computed(() => [
 ])
 
 const allWcagPass = computed(() => wcagChecks.value.every(check => check.pass))
+
+const passCount = computed(() => wcagChecks.value.filter(c => c.pass).length)
+const totalCount = computed(() => wcagChecks.value.length)
+
+const apcaRecommendation = computed(() => {
+  const score = Math.abs(apcaScore.value)
+  if (score >= 90) {
+    return { text: t('contrastChecker.apca.recommendation.excellent'), class: 'apca-rec-excellent' }
+  } else if (score >= 75) {
+    return { text: t('contrastChecker.apca.recommendation.good'), class: 'apca-rec-good' }
+  } else if (score >= 60) {
+    return { text: t('contrastChecker.apca.recommendation.large'), class: 'apca-rec-large' }
+  } else if (score >= 45) {
+    return { text: t('contrastChecker.apca.recommendation.ui'), class: 'apca-rec-ui' }
+  } else {
+    return { text: t('contrastChecker.apca.recommendation.fail'), class: 'apca-rec-fail' }
+  }
+})
 
 // Copy functionality
 const copySuccess = ref(false)
@@ -1062,5 +1089,54 @@ const bgColorPresetGroups: ColorPresetGroup[] = [
 
 [data-theme="dark"] .contrast-apca-active {
   background: rgba(10, 170, 142, 0.15);
+}
+
+/* Pass/Fail Badge */
+.contrast-pass-badge {
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--gi-radius-pill);
+  font-size: var(--gi-font-size-xs);
+  font-weight: 600;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  background: var(--gi-tint-red-50);
+  color: var(--gi-error);
+}
+
+.contrast-pass-badge-ok {
+  background: var(--gi-tint-green-50);
+  color: var(--gi-tint-green-text);
+}
+
+/* APCA Recommendation */
+.contrast-apca-recommendation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--gi-radius-md);
+  font-size: var(--gi-font-size-sm);
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.apca-rec-excellent,
+.apca-rec-good {
+  background: var(--gi-tint-green-50);
+  color: var(--gi-tint-green-text);
+}
+
+.apca-rec-large {
+  background: var(--gi-tint-yellow-50);
+  color: var(--gi-tint-yellow-text);
+}
+
+.apca-rec-ui {
+  background: var(--gi-tint-orange-50);
+  color: var(--gi-tint-orange-text);
+}
+
+.apca-rec-fail {
+  background: var(--gi-tint-red-50);
+  color: var(--gi-error);
 }
 </style>

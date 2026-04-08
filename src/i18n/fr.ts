@@ -1164,6 +1164,13 @@ const fr = {
       bodyMinimum: 'Minimum pour le texte courant',
       largeMinimum: 'Minimum pour les textes larges',
       uiMinimum: 'Minimum pour les composants',
+      recommendation: {
+        excellent: 'Excellent — convient pour tous les usages',
+        good: 'Bon — adapté au texte courant',
+        large: 'Acceptable — pour les textes larges uniquement',
+        ui: 'Limité — pour les composants uniquement',
+        fail: 'Insuffisant — augmentez le contraste',
+      },
     },
     luminance: {
       text: 'Luminance texte',
