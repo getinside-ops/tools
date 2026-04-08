@@ -15,73 +15,97 @@ function createTestI18n(locale: 'fr' | 'en' = 'fr') {
 }
 
 describe('GiImageUpload', () => {
-  it('should render the upgraded upload panel shell', () => {
+  it('should render upload button initially', () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
     })
 
-    expect(wrapper.find('.gi-image-upload-panel').exists()).toBe(true)
-    expect(wrapper.find('.gi-upload-divider').exists()).toBe(true)
+    expect(wrapper.find('.gi-image-upload-trigger').exists()).toBe(true)
+    expect(wrapper.find('.gi-image-upload-zone').exists()).toBe(false)
+    expect(wrapper.text()).toContain('Importer une image')
   })
 
-  it('should render shared shell copy from i18n', () => {
+  it('should reveal zone when button is clicked', async () => {
     const wrapper = mount(GiImageUpload, {
-      global: { plugins: [createTestI18n('en')] },
+      global: { plugins: [createTestI18n()] },
     })
 
-    expect(wrapper.find('.gi-image-upload-kicker').text()).toBe('Image input')
-    expect(wrapper.find('.gi-image-upload-intro').text()).toBe('Paste from your clipboard or upload from your device in one place.')
-    expect(wrapper.find('.gi-upload-hint').text()).toBe('Click to browse or drag an image into this panel.')
-    expect(wrapper.find('.gi-upload-divider').text()).toBe('or')
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    expect(wrapper.find('.gi-image-upload-trigger').exists()).toBe(false)
+    expect(wrapper.find('.gi-image-upload-zone').exists()).toBe(true)
   })
 
-  it('should render the french kicker from i18n', () => {
+  it('should close zone when close button is clicked', async () => {
+    const wrapper = mount(GiImageUpload, {
+      global: { plugins: [createTestI18n()] },
+    })
+
+    // Open zone
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+    expect(wrapper.find('.gi-image-upload-zone').exists()).toBe(true)
+
+    // Close zone
+    await wrapper.find('.gi-image-upload-zone__close').trigger('click')
+    expect(wrapper.find('.gi-image-upload-trigger').exists()).toBe(true)
+    expect(wrapper.find('.gi-image-upload-zone').exists()).toBe(false)
+  })
+
+  it('should render action badges in French', async () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n('fr')] },
     })
 
-    expect(wrapper.find('.gi-image-upload-kicker').text()).toBe("Import d'image")
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    const labels = wrapper.findAll('.gi-upload-action__label')
+    expect(labels[0].text()).toBe('Coller')
+    expect(labels[1].text()).toBe('Glisser')
   })
 
-  it('should render paste zone by default', () => {
-    const wrapper = mount(GiImageUpload, {
-      global: { plugins: [createTestI18n()] },
-    })
-    expect(wrapper.find('.gi-paste-zone').exists()).toBe(true)
-  })
-
-  it('should render upload zone', () => {
-    const wrapper = mount(GiImageUpload, {
-      global: { plugins: [createTestI18n()] },
-    })
-    expect(wrapper.find('.gi-upload-zone').exists()).toBe(true)
-    expect(wrapper.find('.gi-upload-zone').attributes('role')).toBe('button')
-    expect(wrapper.find('.gi-upload-zone').attributes('tabindex')).toBe('0')
-  })
-
-  it('should hide paste zone and divider when pasteZone prop is false', () => {
+  it('should render action badges in English', async () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n('en')] },
-      props: {
-        pasteZone: false,
-      },
     })
 
-    expect(wrapper.find('.gi-image-upload-panel').exists()).toBe(true)
-    expect(wrapper.find('.gi-paste-zone').exists()).toBe(false)
-    expect(wrapper.find('.gi-upload-divider').exists()).toBe(false)
-    expect(wrapper.find('.gi-image-upload-actions').classes()).toContain('gi-image-upload-actions--single')
-    expect(wrapper.find('.gi-upload-zone').exists()).toBe(true)
-    expect(wrapper.find('.gi-upload-hint').text()).toBe('Click to browse or drag an image into this panel.')
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    const labels = wrapper.findAll('.gi-upload-action__label')
+    expect(labels[0].text()).toBe('Paste')
+    expect(labels[1].text()).toBe('Drop')
   })
 
-  it('should emit upload event when file is selected via click', async () => {
+  it('should show paste hint when zone is open', async () => {
+    const wrapper = mount(GiImageUpload, {
+      global: { plugins: [createTestI18n('fr')] },
+    })
+
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    expect(wrapper.find('.gi-image-upload-zone__hint').text()).toContain('Ctrl+V / Cmd+V pour coller')
+  })
+
+  it('should have correct ARIA attributes', async () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
     })
-    const testFile = new File(['test content'], 'test.png', { type: 'image/png' })
 
-    // Mock the file input change by directly setting files
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    const zone = wrapper.find('.gi-image-upload-zone')
+    expect(zone.attributes('role')).toBe('button')
+    expect(zone.attributes('tabindex')).toBe('0')
+    expect(zone.attributes('aria-label')).toBe('Importer une image')
+  })
+
+  it('should emit upload event when file is selected', async () => {
+    const wrapper = mount(GiImageUpload, {
+      global: { plugins: [createTestI18n()] },
+    })
+
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    const testFile = new File(['test content'], 'test.png', { type: 'image/png' })
     const input = wrapper.find('input[type="file"]')
     Object.defineProperty(input.element, 'files', {
       value: [testFile],
@@ -97,9 +121,11 @@ describe('GiImageUpload', () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
     })
-    const testFile = new File(['test content'], 'test.png', { type: 'image/png' })
 
-    const dropZone = wrapper.find('.gi-upload-zone')
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    const testFile = new File(['test content'], 'test.png', { type: 'image/png' })
+    const dropZone = wrapper.find('.gi-image-upload-zone')
     await dropZone.trigger('drop', {
       dataTransfer: {
         files: [testFile],
@@ -110,14 +136,31 @@ describe('GiImageUpload', () => {
     expect(wrapper.emitted('upload')?.[0]).toEqual([testFile])
   })
 
-  it('should handle paste event', async () => {
+  it('should show drag-over state when dragging', async () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
     })
-    const testFile = new File(['test content'], 'test.png', { type: 'image/png' })
 
-    const pasteZone = wrapper.find('.gi-paste-zone')
-    await pasteZone.trigger('paste', {
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    const dropZone = wrapper.find('.gi-image-upload-zone')
+    await dropZone.trigger('dragover')
+    expect(dropZone.classes()).toContain('gi-image-upload-zone--dragover')
+
+    await dropZone.trigger('dragleave')
+    expect(dropZone.classes()).not.toContain('gi-image-upload-zone--dragover')
+  })
+
+  it('should handle paste event on zone', async () => {
+    const wrapper = mount(GiImageUpload, {
+      global: { plugins: [createTestI18n()] },
+    })
+
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    const testFile = new File(['test content'], 'test.png', { type: 'image/png' })
+    const zone = wrapper.find('.gi-image-upload-zone')
+    await zone.trigger('paste', {
       clipboardData: {
         items: [{
           type: 'image/png',
@@ -130,6 +173,23 @@ describe('GiImageUpload', () => {
     expect(wrapper.emitted('upload')?.[0]).toHaveLength(1)
   })
 
+  it('should show error when paste has no image data', async () => {
+    const wrapper = mount(GiImageUpload, {
+      global: { plugins: [createTestI18n()] },
+    })
+
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
+    const zone = wrapper.find('.gi-image-upload-zone')
+    await zone.trigger('paste', {
+      clipboardData: {
+        items: [],
+      },
+    })
+
+    expect(wrapper.text()).toContain('Aucune image dans le presse-papiers')
+  })
+
   it('should show error for invalid file type', async () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
@@ -138,8 +198,9 @@ describe('GiImageUpload', () => {
       },
     })
 
-    const pdfFile = new File(['test'], 'test.pdf', { type: 'application/pdf' })
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
 
+    const pdfFile = new File(['test'], 'test.pdf', { type: 'application/pdf' })
     const input = wrapper.find('input[type="file"]')
     Object.defineProperty(input.element, 'files', {
       value: [pdfFile],
@@ -151,42 +212,7 @@ describe('GiImageUpload', () => {
     expect(wrapper.emitted('error')?.[0]).toEqual(['Type ou taille de fichier invalide'])
   })
 
-  it('should show error when paste has no image data', async () => {
-    const wrapper = mount(GiImageUpload, {
-      global: { plugins: [createTestI18n()] },
-    })
-
-    const pasteZone = wrapper.find('.gi-paste-zone')
-    await pasteZone.trigger('paste', {
-      clipboardData: {
-        items: [],
-      },
-    })
-
-    // When there are no items, the error message should be displayed
-    expect(wrapper.text()).toContain('Aucune donnée dans le presse-papiers')
-  })
-
-  it('should show error when clipboard items contain no image', async () => {
-    const wrapper = mount(GiImageUpload, {
-      global: { plugins: [createTestI18n()] },
-    })
-
-    const pasteZone = wrapper.find('.gi-paste-zone')
-    await pasteZone.trigger('paste', {
-      clipboardData: {
-        items: [{
-          type: 'text/plain',
-          getAsFile: () => null,
-        }],
-      },
-    })
-
-    expect(wrapper.emitted('error')?.[0]).toEqual(['Aucune donnée dans le presse-papiers'])
-    expect(wrapper.text()).toContain('Aucune donnée dans le presse-papiers')
-  })
-
-  it('should accept custom accept types', () => {
+  it('should accept custom accept types', async () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
       props: {
@@ -194,47 +220,37 @@ describe('GiImageUpload', () => {
       },
     })
 
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
     const input = wrapper.find('input[type="file"]')
     expect(input.attributes('accept')).toBe('.pdf,application/pdf')
   })
 
-  it('should expose reset method', async () => {
+  it('should expose reset and closeZone methods', async () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
     })
 
-    // Verify reset is exposed
     expect(wrapper.vm.reset).toBeDefined()
-    expect(typeof wrapper.vm.reset).toBe('function')
-  })
-
-  it('should apply focus state when paste zone is focused', async () => {
-    const wrapper = mount(GiImageUpload, {
-      global: { plugins: [createTestI18n()] },
-    })
-    const pasteZone = wrapper.find('.gi-paste-zone')
-
-    await pasteZone.trigger('focus')
-    expect(pasteZone.classes()).toContain('gi-paste-zone-focus')
-
-    await pasteZone.trigger('blur')
-    expect(pasteZone.classes()).not.toContain('gi-paste-zone-focus')
+    expect(wrapper.vm.closeZone).toBeDefined()
   })
 
   it('should trigger file input on Enter key', async () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
     })
+
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
     const fileInput = wrapper.find('input[type="file"]')
     const clickSpy = vi.fn(() => fileInput.element.dispatchEvent(new Event('click')))
-    // Mock the click method properly
     Object.defineProperty(fileInput.element, 'click', {
       value: clickSpy,
       writable: true,
     })
 
-    const pasteZone = wrapper.find('.gi-paste-zone')
-    await pasteZone.trigger('keydown', { key: 'Enter' })
+    const zone = wrapper.find('.gi-image-upload-zone')
+    await zone.trigger('keydown', { key: 'Enter' })
 
     expect(clickSpy).toHaveBeenCalled()
   })
@@ -243,6 +259,9 @@ describe('GiImageUpload', () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
     })
+
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
+
     const fileInput = wrapper.find('input[type="file"]')
     const clickSpy = vi.fn(() => fileInput.element.dispatchEvent(new Event('click')))
     Object.defineProperty(fileInput.element, 'click', {
@@ -250,60 +269,23 @@ describe('GiImageUpload', () => {
       writable: true,
     })
 
-    const pasteZone = wrapper.find('.gi-paste-zone')
-    await pasteZone.trigger('keydown', { key: ' ' })
+    const zone = wrapper.find('.gi-image-upload-zone')
+    await zone.trigger('keydown', { key: ' ' })
 
     expect(clickSpy).toHaveBeenCalled()
   })
 
-  it('should trigger file input from the upload zone keyboard interaction', async () => {
-    const wrapper = mount(GiImageUpload, {
-      global: { plugins: [createTestI18n()] },
-    })
-    const fileInput = wrapper.find('input[type="file"]')
-    const clickSpy = vi.fn(() => fileInput.element.dispatchEvent(new Event('click')))
-    Object.defineProperty(fileInput.element, 'click', {
-      value: clickSpy,
-      writable: true,
-    })
-
-    const uploadZone = wrapper.find('.gi-upload-zone')
-    await uploadZone.trigger('keydown', { key: 'Enter' })
-    await uploadZone.trigger('keydown', { key: ' ' })
-
-    expect(clickSpy).toHaveBeenCalledTimes(2)
-  })
-
-  it('should use custom paste title and hint when provided', () => {
+  it('should use custom label for aria-label', async () => {
     const wrapper = mount(GiImageUpload, {
       global: { plugins: [createTestI18n()] },
       props: {
-        pasteTitle: 'Custom Title',
-        pasteHint: 'Custom Hint',
+        label: 'Custom upload label',
       },
     })
 
-    expect(wrapper.text()).toContain('Custom Title')
-    expect(wrapper.text()).toContain('Custom Hint')
-  })
+    await wrapper.find('.gi-image-upload-trigger').trigger('click')
 
-  it('should use i18n defaults when props not provided', () => {
-    const wrapper = mount(GiImageUpload, {
-      global: { plugins: [createTestI18n()] },
-    })
-
-    expect(wrapper.find('.gi-paste-title').text()).toContain('Coller une image')
-    expect(wrapper.find('.gi-paste-hint').text()).toContain('Cliquez ici et appuyez sur Ctrl+V / Cmd+V')
-  })
-
-  it('should use custom upload text', () => {
-    const wrapper = mount(GiImageUpload, {
-      global: { plugins: [createTestI18n()] },
-      props: {
-        uploadText: 'Custom upload text',
-      },
-    })
-
-    expect(wrapper.text()).toContain('Custom upload text')
+    const zone = wrapper.find('.gi-image-upload-zone')
+    expect(zone.attributes('aria-label')).toBe('Custom upload label')
   })
 })

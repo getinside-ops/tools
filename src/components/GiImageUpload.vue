@@ -1,83 +1,86 @@
 <template>
-  <div class="gi-image-upload-wrapper">
-    <div class="gi-image-upload-panel">
-      <div class="gi-image-upload-header">
-        <p class="gi-image-upload-kicker">{{ uploadKickerText }}</p>
-        <p class="gi-image-upload-intro">
-          {{ uploadIntroText }}
-        </p>
-      </div>
+  <div class="gi-image-upload">
+    <!-- Initial state: clean upload button -->
+    <button
+      v-if="!isOpen"
+      class="gi-image-upload-trigger"
+      type="button"
+      @click="openZone"
+    >
+      <ImagePlus :size="20" :stroke-width="1.5" />
+      <span>{{ t('imageUpload.uploadBtn') }}</span>
+    </button>
 
-      <div class="gi-image-upload-actions" :class="{ 'gi-image-upload-actions--single': !pasteZone }">
-        <div
-          v-if="pasteZone"
-          ref="pasteZoneRef"
-          class="gi-paste-zone"
-          :class="{ 'gi-paste-zone-focus': isFocused }"
-          tabindex="0"
-          @focus="isFocused = true"
-          @blur="isFocused = false"
-          @paste="handlePaste"
-          @keydown="handleKeydown"
-          @click="focusPasteZone"
-        >
-          <div class="gi-paste-zone-content">
-            <div class="gi-paste-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-              </svg>
+    <!-- Expanded state: drop zone with paste support -->
+    <div
+      v-else
+      ref="dropZoneRef"
+      class="gi-image-upload-zone"
+      :class="{
+        'gi-image-upload-zone--dragover': isDragOver,
+      }"
+      tabindex="0"
+      role="button"
+      :aria-label="ariaLabelText"
+      @click="fileInputRef?.click()"
+      @keydown.enter="fileInputRef?.click()"
+      @keydown.space.prevent="fileInputRef?.click()"
+      @paste="handlePaste"
+      @dragover.prevent="onDragOver"
+      @dragleave="onDragLeave"
+      @drop.prevent="onDrop"
+    >
+      <input
+        ref="fileInputRef"
+        type="file"
+        hidden
+        :accept="computedAccept"
+        :multiple="multiple"
+        @change="handleFileInput"
+      />
+
+      <button
+        class="gi-image-upload-zone__close"
+        type="button"
+        :aria-label="t('imageUpload.close')"
+        @click.stop="closeZone"
+      >
+        <X :size="18" :stroke-width="2" />
+      </button>
+
+      <div class="gi-image-upload-zone__content">
+        <div class="gi-image-upload-zone__actions">
+          <div class="gi-upload-action">
+            <div class="gi-upload-action__icon">
+              <Clipboard :size="20" :stroke-width="1.5" />
             </div>
-            <p class="gi-paste-title">{{ pasteTitleText }}</p>
-            <p class="gi-paste-hint">{{ pasteHintText }}</p>
+            <span class="gi-upload-action__label">{{ t('imageUpload.paste') }}</span>
+          </div>
+
+          <span class="gi-upload-action__separator" aria-hidden="true" />
+
+          <div class="gi-upload-action">
+            <div class="gi-upload-action__icon">
+              <ArrowDownToLine :size="20" :stroke-width="1.5" />
+            </div>
+            <span class="gi-upload-action__label">{{ t('imageUpload.drop') }}</span>
           </div>
         </div>
 
-        <div v-if="pasteZone" class="gi-upload-divider" aria-hidden="true">
-          <span>{{ uploadDividerText }}</span>
-        </div>
-
-        <div
-          class="gi-upload-zone"
-          role="button"
-          tabindex="0"
-          @click="fileInputRef?.click()"
-          @keydown="handleKeydown"
-          @dragover.prevent
-          @drop.prevent="handleDrop"
-        >
-          <input
-            ref="fileInputRef"
-            type="file"
-            hidden
-            :accept="computedAccept"
-            :multiple="multiple"
-            @change="handleFileInput"
-          />
-          <div class="gi-upload-zone-content">
-            <div class="gi-upload-icon" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
-            </div>
-            <p class="gi-upload-title">{{ uploadTextValue }}</p>
-            <p class="gi-upload-hint">{{ uploadHintText }}</p>
-          </div>
-        </div>
+        <p class="gi-image-upload-zone__hint">{{ t('imageUpload.pasteHint') }}</p>
       </div>
     </div>
 
-    <div v-if="localError" class="gi-result gi-result-error">
+    <div v-if="localError" class="gi-image-upload__error" role="alert" aria-live="polite">
       <GiStatusBadge variant="error" :showIcon="true">{{ localError }}</GiStatusBadge>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { ImagePlus, Clipboard, ArrowDownToLine, X } from 'lucide-vue-next'
 import { useImageUpload } from '../composables/useImageUpload'
 import GiStatusBadge from './GiStatusBadge.vue'
 
@@ -86,19 +89,13 @@ const { t } = useI18n()
 const props = withDefaults(defineProps<{
   accept?: string[]
   multiple?: boolean
-  pasteZone?: boolean
-  pasteTitle?: string
-  pasteHint?: string
-  uploadText?: string
   maxSizeMB?: number
+  label?: string
 }>(), {
   accept: () => ['image/*'],
   multiple: false,
-  pasteZone: true,
-  pasteTitle: undefined,
-  pasteHint: undefined,
-  uploadText: undefined,
   maxSizeMB: undefined,
+  label: undefined,
 })
 
 const emit = defineEmits<{
@@ -112,33 +109,43 @@ const { isValidFile, processFile, reset } = useImageUpload({
   maxSizeMB: props.maxSizeMB,
 })
 
-const pasteZoneRef = ref<HTMLElement | null>(null)
+const dropZoneRef = ref<HTMLElement | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null)
-const isFocused = ref(false)
+const isDragOver = ref(false)
+const isOpen = ref(false)
 const localError = ref<string | null>(null)
 
 const computedAccept = computed(() => props.accept.join(','))
+const ariaLabelText = computed(() => props.label || t('imageUpload.ariaLabel'))
 
-// Computed for i18n with override support
-const pasteTitleText = computed(() => props.pasteTitle || t('imageUpload.pasteTitle'))
-const pasteHintText = computed(() => props.pasteHint || t('imageUpload.pasteHint'))
-const uploadTextValue = computed(() => props.uploadText || t('imageUpload.uploadText'))
-const uploadKickerText = computed(() => t('imageUpload.kicker'))
-const uploadIntroText = computed(() => t('imageUpload.intro'))
-const uploadHintText = computed(() => t('imageUpload.hint'))
-const uploadDividerText = computed(() => t('imageUpload.divider'))
-const invalidFileError = computed(() => t('imageUpload.error.invalidFile'))
-const noClipboardError = computed(() => t('imageUpload.error.noClipboard'))
-
-function focusPasteZone() {
-  pasteZoneRef.value?.focus()
+function openZone() {
+  isOpen.value = true
+  // Small delay to let animation start before focusing
+  requestAnimationFrame(() => {
+    dropZoneRef.value?.focus()
+  })
 }
 
-function handleKeydown(e: KeyboardEvent) {
-  // Allow Enter or Space to trigger file input
-  if (e.key === 'Enter' || e.key === ' ') {
-    e.preventDefault()
-    fileInputRef.value?.click()
+function closeZone() {
+  isOpen.value = false
+  localError.value = null
+}
+
+function onDragOver() {
+  isDragOver.value = true
+}
+
+function onDragLeave() {
+  isDragOver.value = false
+}
+
+function onDrop(e: DragEvent) {
+  isDragOver.value = false
+  localError.value = null
+
+  const file = e.dataTransfer?.files?.[0]
+  if (file) {
+    handleFile(file)
   }
 }
 
@@ -148,7 +155,7 @@ async function handlePaste(e: ClipboardEvent) {
 
   const items = e.clipboardData?.items
   if (!items || items.length === 0) {
-    localError.value = noClipboardError.value
+    localError.value = t('imageUpload.error.noClipboard')
     emit('error', localError.value)
     return
   }
@@ -168,16 +175,8 @@ async function handlePaste(e: ClipboardEvent) {
   }
 
   if (!hasImageItem) {
-    localError.value = noClipboardError.value
+    localError.value = t('imageUpload.error.noClipboard')
     emit('error', localError.value)
-  }
-}
-
-function handleDrop(e: DragEvent) {
-  localError.value = null
-  const file = e.dataTransfer?.files?.[0]
-  if (file) {
-    handleFile(file)
   }
 }
 
@@ -192,7 +191,7 @@ function handleFileInput(e: Event) {
 
 async function handleFile(file: File) {
   if (!isValidFile(file)) {
-    localError.value = invalidFileError.value
+    localError.value = t('imageUpload.error.invalidFile')
     emit('error', localError.value)
     return
   }
@@ -201,225 +200,317 @@ async function handleFile(file: File) {
   emit('upload', file)
 }
 
+// Global paste listener - works when zone is open
+function onGlobalPaste(e: ClipboardEvent) {
+  if (!isOpen.value) return
+
+  // Don't intercept if user is typing in an input
+  const activeElement = document.activeElement
+  const isInputFocused = activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA'
+  if (isInputFocused) return
+
+  e.preventDefault()
+  localError.value = null
+
+  const items = e.clipboardData?.items
+  if (!items || items.length === 0) return
+
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      const blob = item.getAsFile()
+      if (blob) {
+        const file = new File([blob], 'pasted-image.png', { type: blob.type })
+        handleFile(file)
+      }
+      break
+    }
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('paste', onGlobalPaste)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('paste', onGlobalPaste)
+})
+
 defineExpose({
   reset,
+  closeZone,
 })
 </script>
 
 <style scoped>
-.gi-image-upload-wrapper {
-  margin-bottom: 1rem;
+.gi-image-upload {
+  margin-bottom: var(--gi-space-lg);
 }
 
-.gi-image-upload-panel {
-  position: relative;
-  margin-bottom: 1rem;
-  border: 1px solid color-mix(in srgb, var(--gi-brand) 22%, var(--gi-border));
-  border-radius: var(--gi-radius-xl);
-  padding: 1.25rem;
-  background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--gi-mint) 18%, transparent), transparent 42%),
-    linear-gradient(180deg, color-mix(in srgb, var(--gi-surface) 92%, var(--gi-bg-soft)), var(--gi-surface));
-  box-shadow: var(--gi-shadow-sm);
-}
-
-.gi-image-upload-panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), transparent 42%);
-  pointer-events: none;
-}
-
-.gi-image-upload-header,
-.gi-image-upload-actions {
-  position: relative;
-  z-index: 1;
-}
-
-.gi-image-upload-header {
-  margin-bottom: 1rem;
-}
-
-.gi-image-upload-kicker {
-  margin: 0 0 0.35rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--gi-brand-dark);
-}
-
-.gi-image-upload-intro {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--gi-text-muted);
-}
-
-.gi-image-upload-actions {
-  display: grid;
-  gap: 1rem;
-}
-
-.gi-image-upload-actions--single {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.gi-upload-divider {
-  display: flex;
+/* Upload trigger button */
+.gi-image-upload-trigger {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: var(--gi-text-muted);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.gi-upload-divider::before,
-.gi-upload-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: color-mix(in srgb, var(--gi-brand) 18%, var(--gi-border));
-}
-
-.gi-upload-divider span {
-  padding: 0 0.75rem;
-}
-
-.gi-paste-zone {
-  min-height: 100%;
-  border: 1px solid color-mix(in srgb, var(--gi-brand) 22%, var(--gi-border));
-  border-radius: calc(var(--gi-radius-xl) - 4px);
-  padding: 1.5rem 1.25rem;
-  text-align: left;
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-sm) var(--gi-space-lg);
+  border: 1px solid var(--gi-border-hover);
+  border-radius: var(--gi-radius-pill);
+  background: var(--gi-surface);
+  color: var(--gi-text);
+  font-size: var(--gi-font-size-sm);
+  font-weight: var(--gi-font-weight-medium);
+  font-family: inherit;
   cursor: pointer;
-  transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s, transform 0.15s;
-  outline: none;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.92));
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
+  box-shadow: var(--gi-shadow-sm);
 }
 
-.gi-paste-zone:hover,
-.gi-upload-zone:hover {
+.gi-image-upload-trigger:hover {
   border-color: var(--gi-brand);
-  background: color-mix(in srgb, var(--gi-tint-green-bg) 68%, var(--gi-surface));
-  box-shadow: var(--gi-shadow-sm);
+  color: var(--gi-brand);
+  background: color-mix(in srgb, var(--gi-tint-green-bg) 40%, var(--gi-surface));
+  box-shadow: var(--gi-shadow);
   transform: translateY(-1px);
 }
 
-.gi-paste-zone-focus {
-  border-color: var(--gi-brand);
-  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.15);
+.gi-image-upload-trigger:active {
+  transform: scale(0.98);
+  box-shadow: var(--gi-shadow-sm);
 }
 
-.gi-paste-zone-content {
+.gi-image-upload-trigger:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+/* Upload zone */
+.gi-image-upload-zone {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  align-items: center;
   justify-content: center;
-  min-height: 100%;
-}
-
-.gi-paste-icon {
-  color: var(--gi-brand);
-  opacity: 0.85;
-}
-
-.gi-paste-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--gi-text);
-  margin: 0;
-}
-
-.gi-paste-hint {
-  font-size: 0.92rem;
-  color: var(--gi-text-muted);
-  line-height: 1.55;
-  margin: 0;
-}
-
-.gi-upload-zone {
-  min-height: 100%;
-  border: 1px dashed color-mix(in srgb, var(--gi-brand) 38%, var(--gi-border));
-  border-radius: calc(var(--gi-radius-xl) - 4px);
-  padding: 1.5rem;
-  text-align: left;
-  cursor: pointer;
-  transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s, transform 0.15s;
-  background: color-mix(in srgb, var(--gi-bg-soft) 70%, var(--gi-surface));
-}
-
-.gi-upload-zone-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  justify-content: center;
-  min-height: 100%;
-}
-
-.gi-upload-icon {
-  color: var(--gi-brand-dark);
-}
-
-.gi-upload-title {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--gi-text);
-}
-
-.gi-upload-hint {
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: var(--gi-text-muted);
-}
-
-@media (min-width: 720px) {
-  .gi-image-upload-actions {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: stretch;
-  }
-
-  .gi-image-upload-actions--single {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .gi-upload-divider {
-    flex-direction: column;
-    min-height: 100%;
-  }
-
-  .gi-upload-divider span {
-    padding: 0.75rem 0;
-  }
-
-  .gi-upload-divider::before,
-  .gi-upload-divider::after {
-    width: 1px;
-    height: auto;
-  }
-}
-
-[data-theme='dark'] .gi-image-upload-panel::before {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 42%);
-}
-
-[data-theme='dark'] .gi-paste-zone,
-[data-theme='dark'] .gi-upload-zone {
-  background: color-mix(in srgb, var(--gi-surface-elevated) 88%, var(--gi-bg-soft));
-}
-
-/* Error State */
-.gi-result {
+  min-height: 120px;
+  padding: var(--gi-space-lg);
+  border: 2px dashed var(--gi-border-hover);
+  border-radius: var(--gi-radius-xl);
   background: var(--gi-surface);
-  border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius-lg);
-  padding: 1.25rem;
-  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all var(--gi-transition-base) var(--gi-ease-out);
+  outline: none;
+  animation: zone-expand var(--gi-transition-base) var(--gi-ease-out);
+}
+
+@keyframes zone-expand {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.gi-image-upload-zone:hover {
+  border-color: var(--gi-brand);
+  background: color-mix(in srgb, var(--gi-tint-green-bg) 40%, var(--gi-surface));
+}
+
+.gi-image-upload-zone:focus-visible {
+  border-color: var(--gi-brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gi-brand) 20%, transparent);
+}
+
+.gi-image-upload-zone--dragover {
+  border-color: var(--gi-brand);
+  border-style: solid;
+  background: color-mix(in srgb, var(--gi-tint-green-bg) 60%, var(--gi-surface));
+  box-shadow: var(--gi-shadow-md);
+  transform: scale(1.01);
+}
+
+.gi-image-upload-zone:active {
+  transform: scale(0.99);
+}
+
+/* Close button */
+.gi-image-upload-zone__close {
+  position: absolute;
+  top: var(--gi-space-sm);
+  right: var(--gi-space-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--gi-radius-md);
+  background: transparent;
+  color: var(--gi-text-muted);
+  cursor: pointer;
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+  z-index: 1;
+}
+
+.gi-image-upload-zone__close:hover {
+  background: var(--gi-bg-soft);
+  color: var(--gi-text);
+}
+
+.gi-image-upload-zone__close:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 1px;
+}
+
+/* Zone content */
+.gi-image-upload-zone__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gi-space-md);
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Action badges */
+.gi-image-upload-zone__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gi-space-sm);
+}
+
+.gi-upload-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gi-space-xs);
+  padding: var(--gi-space-sm) var(--gi-space-md);
+  border-radius: var(--gi-radius-md);
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+  min-width: 64px;
+}
+
+.gi-upload-action__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--gi-radius-md);
+  background: var(--gi-bg-soft);
+  color: var(--gi-brand);
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.gi-image-upload-zone:hover .gi-upload-action__icon {
+  background: color-mix(in srgb, var(--gi-tint-green-bg) 70%, var(--gi-bg-soft));
+}
+
+.gi-upload-action__label {
+  font-size: var(--gi-font-size-xs);
+  font-weight: var(--gi-font-weight-medium);
+  color: var(--gi-text-muted);
+  white-space: nowrap;
+}
+
+.gi-upload-action__separator {
+  width: 1px;
+  height: 32px;
+  background: var(--gi-border);
+  flex-shrink: 0;
+}
+
+/* Hint text */
+.gi-image-upload-zone__hint {
+  margin: 0;
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-text-muted);
+  line-height: var(--gi-line-height-base);
+}
+
+/* Error state */
+.gi-image-upload__error {
+  margin-top: var(--gi-space-md);
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .gi-image-upload-trigger {
+    width: 100%;
+    justify-content: center;
+    padding: var(--gi-space-md);
+  }
+
+  .gi-image-upload-zone {
+    min-height: 110px;
+    padding: var(--gi-space-md);
+  }
+
+  .gi-image-upload-zone__actions {
+    gap: var(--gi-space-xs);
+  }
+
+  .gi-upload-action {
+    padding: var(--gi-space-xs) var(--gi-space-sm);
+    min-width: 56px;
+  }
+
+  .gi-upload-action__icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .gi-upload-action__label {
+    font-size: 11px;
+  }
+
+  .gi-upload-action__separator {
+    height: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gi-image-upload-zone,
+  .gi-upload-action,
+  .gi-upload-action__icon,
+  .gi-image-upload-trigger {
+    transition: none;
+  }
+
+  .gi-image-upload-zone {
+    animation: none;
+  }
+}
+
+/* Dark mode */
+[data-theme="dark"] .gi-image-upload-trigger {
+  background: var(--gi-surface-elevated);
+}
+
+[data-theme="dark"] .gi-image-upload-trigger:hover {
+  background: color-mix(in srgb, var(--gi-tint-green-bg) 25%, var(--gi-surface-elevated));
+}
+
+[data-theme="dark"] .gi-image-upload-zone {
+  background: var(--gi-surface-elevated);
+}
+
+[data-theme="dark"] .gi-image-upload-zone:hover {
+  background: color-mix(in srgb, var(--gi-tint-green-bg) 25%, var(--gi-surface-elevated));
+}
+
+[data-theme="dark"] .gi-image-upload-zone--dragover {
+  background: color-mix(in srgb, var(--gi-tint-green-bg) 45%, var(--gi-surface-elevated));
+}
+
+[data-theme="dark"] .gi-upload-action__icon {
+  background: var(--gi-bg-soft);
+}
+
+[data-theme="dark"] .gi-upload-action__separator {
+  background: var(--gi-border-strong);
+}
+
+[data-theme="dark"] .gi-image-upload-zone__close:hover {
+  background: var(--gi-surface);
 }
 </style>

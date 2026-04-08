@@ -1199,16 +1199,15 @@ const fr = {
     },
   },
   imageUpload: {
-    kicker: "Import d'image",
-    intro: 'Collez depuis le presse-papiers ou importez depuis votre appareil au même endroit.',
-    pasteTitle: 'Coller une image',
-    pasteHint: 'Cliquez ici et appuyez sur Ctrl+V / Cmd+V',
-    uploadText: 'ou cliquez pour télécharger depuis votre appareil',
-    hint: 'Cliquez pour parcourir ou glissez une image dans ce panneau.',
-    divider: 'ou',
+    ariaLabel: "Importer une image",
+    uploadBtn: 'Importer une image',
+    close: 'Fermer',
+    paste: 'Coller',
+    drop: 'Glisser',
+    pasteHint: 'Ctrl+V / Cmd+V pour coller · ou cliquez pour parcourir',
     error: {
       invalidFile: 'Type ou taille de fichier invalide',
-      noClipboard: 'Aucune donnée dans le presse-papiers',
+      noClipboard: 'Aucune image dans le presse-papiers',
     },
   },
   pedagogic: {
