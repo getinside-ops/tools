@@ -451,11 +451,12 @@ async function downloadBarcode() {
 
 /* Input States */
 .gi-input-success {
-  border-color: var(--gi-success);
+  border-color: var(--gi-brand);
 }
 
 .gi-input-success:focus {
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  border-color: var(--gi-brand);
+  box-shadow: none;
 }
 
 .gi-input-error {
@@ -463,7 +464,8 @@ async function downloadBarcode() {
 }
 
 .gi-input-error:focus {
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  border-color: var(--gi-error);
+  box-shadow: none;
 }
 
 /* Customization Panel */
