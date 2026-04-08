@@ -89,7 +89,7 @@
       <div v-if="showTips" class="promo-tips-content">
         <p class="promo-tips-desc">{{ t('promoCode.pedagogic.description') }}</p>
         <ul class="promo-tips-list">
-          <li v-for="(tip, i) in t('promoCode.pedagogic.tips')" :key="i">{{ tip }}</li>
+          <li v-for="(tip, i) in pedagogicTips" :key="i">{{ tip }}</li>
         </ul>
       </div>
     </div>
@@ -115,11 +115,16 @@ import { validatePromoCode } from '../composables/usePromoCode'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 
-const { t } = useI18n()
+const { t, tm } = useI18n()
 const code = ref('')
 const copied = ref(false)
 const showTips = ref(false)
 const MAX_LENGTH = 12
+
+const pedagogicTips = computed(() => {
+  const tips = tm('promoCode.pedagogic.tips') as unknown
+  return Array.isArray(tips) ? (tips as string[]) : []
+})
 
 const checks = computed(() => validatePromoCode(code.value))
 const passed = computed(() => checks.value.filter(c => c.pass).length)
