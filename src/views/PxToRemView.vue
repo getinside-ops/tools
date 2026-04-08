@@ -133,11 +133,8 @@ function removeRow(index: number) {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.px-base-input .gi-input {
   width: 80px;
-  text-align: center;
+  margin: 0 auto;
 }
 
 .px-base-unit {
@@ -172,18 +169,13 @@ function removeRow(index: number) {
 }
 
 .px-value-input {
-  background: transparent;
-  border-color: transparent;
-  font-size: 1.25rem;
+  font-size: var(--gi-font-size-lg);
+  text-align: center;
 }
 
 .px-value-input--rem {
   color: var(--gi-brand);
-}
-
-.px-value-input:focus {
-  background: var(--gi-bg-soft) !important;
-  border-color: var(--gi-brand) !important;
+  font-weight: 600;
 }
 
 .px-remove-btn {
