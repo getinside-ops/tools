@@ -58,8 +58,8 @@
       </GiFormField>
     </div>
 
-    <!-- Quick Presets -->
-    <div class="utm-presets" v-if="!source || !medium">
+    <!-- Quick Presets (always visible) -->
+    <div class="utm-presets">
       <span class="utm-presets-label">{{ t('utmBuilder.presets.label') }}</span>
 
       <div class="utm-preset-group">
@@ -110,8 +110,8 @@
       {{ isGenerating ? t('utmBuilder.generating') : t('utmBuilder.generate') }}
     </button>
 
-    <!-- Empty State -->
-    <div v-if="!hasContent && !generatedUrl" class="utm-empty-state">
+    <!-- Empty State (hide once URL is generated) -->
+    <div v-if="!hasContent && !generatedUrl && !isGenerating" class="utm-empty-state">
       <Link :size="48" class="utm-empty-icon" />
       <p class="utm-empty-text">{{ t('utmBuilder.emptyState.title') }}</p>
       <p class="utm-empty-desc">{{ t('utmBuilder.emptyState.desc') }}</p>
@@ -167,7 +167,7 @@
       <div v-if="showTips" class="utm-tips-content">
         <p class="utm-tips-desc">{{ t('utmBuilder.pedagogic.description') }}</p>
         <ul class="utm-tips-list">
-          <li v-for="(tip, i) in t('utmBuilder.pedagogic.tips')" :key="i">{{ tip }}</li>
+          <li v-for="(tip, i) in pedagogicTips" :key="i">{{ tip }}</li>
         </ul>
       </div>
     </div>
@@ -195,6 +195,16 @@ import GiResultCard from '../components/GiResultCard.vue'
 import { buildUtmUrl } from '../composables/useUtmBuilder'
 
 const { t } = useI18n()
+
+// Pedagogic tips as a static array (avoids tm() type complexity)
+const pedagogicTips: string[] = [
+  t('utmBuilder.pedagogic.tips.0'),
+  t('utmBuilder.pedagogic.tips.1'),
+  t('utmBuilder.pedagogic.tips.2'),
+  t('utmBuilder.pedagogic.tips.3'),
+  t('utmBuilder.pedagogic.tips.4'),
+  t('utmBuilder.pedagogic.tips.5'),
+]
 
 const url = ref('')
 const source = ref('')
