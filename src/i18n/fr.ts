@@ -373,6 +373,12 @@ const fr = {
     copied: 'Copié !',
     hopsCount: '{n} redirection(s)',
     tooManyRedirects: 'Boucle de redirection ou chaîne trop longue (15 sauts max).',
+    loopWarning: 'Boucle de redirection détectée — la même URL apparaît plusieurs fois.',
+    times: 'fois',
+    toggleGroup: 'Afficher/masquer {n} redirection(s) répétée(s)',
+    stepStart: 'Départ',
+    stepFinal: 'Final',
+    stepIntermediate: 'Étape {n}',
     pedagogic: {
       title: 'À propos des redirections URL',
       description: 'Les redirections URL (301, 302) transfèrent automatiquement d\'une adresse vers une autre. Utiles pour les migrations de site ou les liens raccourcis.',

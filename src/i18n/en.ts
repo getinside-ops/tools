@@ -375,6 +375,12 @@ const en: Messages = {
     copied: 'Copied!',
     hopsCount: '{n} redirect(s)',
     tooManyRedirects: 'Redirect loop or chain too long (15 hops max).',
+    loopWarning: 'Redirect loop detected — the same URL appears multiple times.',
+    times: 'times',
+    toggleGroup: 'Show/hide {n} repeated redirect(s)',
+    stepStart: 'Start',
+    stepFinal: 'Final',
+    stepIntermediate: 'Step {n}',
     pedagogic: {
       title: 'About URL Redirects',
       description: 'URL redirects (301, 302) automatically forward from one address to another. Useful for site migrations or shortened links.',
