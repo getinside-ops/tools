@@ -100,17 +100,15 @@ defineOptions({
 .gi-input:focus {
   outline: none;
   border-color: var(--gi-brand);
-  box-shadow: none;
 }
 
 .gi-input:focus-visible {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 2px;
+  outline: none;
+  border-color: var(--gi-brand);
 }
 
 [data-theme="dark"] .gi-input:focus {
   border-color: var(--gi-brand);
-  box-shadow: none;
 }
 
 .gi-input--error {
