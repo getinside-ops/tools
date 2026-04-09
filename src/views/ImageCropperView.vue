@@ -34,9 +34,7 @@
         <div class="ic-controls-body">
           <!-- Aspect Ratio Selector -->
           <div class="ic-control-group">
-            <label class="gi-label" for="aspect-ratio-select">
-              {{ t('imageCropper.aspectRatio') }}
-            </label>
+            <label class="gi-label">{{ t('imageCropper.aspectRatio') }}</label>
             <div class="ic-ratio-buttons">
               <button
                 v-for="[key, label] in ratioOptions"
@@ -44,16 +42,63 @@
                 :class="['ic-ratio-btn', { active: ratioKey === key }]"
                 @click="setRatio(key)"
                 :aria-pressed="ratioKey === key"
+                :title="getRatioDescription(key)"
               >
                 {{ label }}
               </button>
             </div>
           </div>
 
-          <!-- Image Info -->
+          <!-- Manual Dimensions -->
+          <div v-if="isLoaded" class="ic-control-group">
+            <label class="gi-label">{{ t('imageCropper.dimensions') }}</label>
+            <div class="ic-dimension-inputs">
+              <div class="ic-dimension-field">
+                <label class="ic-field-label" for="crop-width">{{ t('imageCropper.width') }}</label>
+                <input
+                  id="crop-width"
+                  v-model.number="manualWidth"
+                  type="number"
+                  min="1"
+                  :max="maxWidth"
+                  class="gi-input ic-dimension-input"
+                  @input="onManualWidthChange"
+                />
+              </div>
+              <span class="ic-dimension-separator">×</span>
+              <div class="ic-dimension-field">
+                <label class="ic-field-label" for="crop-height">{{ t('imageCropper.height') }}</label>
+                <input
+                  id="crop-height"
+                  v-model.number="manualHeight"
+                  type="number"
+                  min="1"
+                  :max="maxHeight"
+                  class="gi-input ic-dimension-input"
+                  @input="onManualHeightChange"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Crop Position & Zoom Info -->
           <div v-if="isLoaded" class="ic-image-info">
-            <span class="ic-info-label">{{ t('imageCropper.imageSize') }}:</span>
-            <span class="ic-info-value">{{ imageDimensions }}</span>
+            <div class="ic-info-row">
+              <span class="ic-info-label">{{ t('imageCropper.imageSize') }}:</span>
+              <span class="ic-info-value">{{ imageDimensions }}</span>
+            </div>
+            <div class="ic-info-row">
+              <span class="ic-info-label">{{ t('imageCropper.cropSize') }}:</span>
+              <span class="ic-info-value">{{ cropSizeDisplay }}</span>
+            </div>
+            <div class="ic-info-row">
+              <span class="ic-info-label">{{ t('imageCropper.position') }}:</span>
+              <span class="ic-info-value">{{ cropPositionDisplay }}</span>
+            </div>
+            <div class="ic-info-row">
+              <span class="ic-info-label">{{ t('imageCropper.zoom') }}:</span>
+              <span class="ic-info-value">{{ zoomLevel }}%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -182,7 +227,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Crop, RotateCcw, Loader2, CheckCircle2, Download, CircleAlert, X, Check } from 'lucide-vue-next'
 import { cropImage } from '../composables/useImageCropper'
@@ -232,6 +277,118 @@ const imageDimensions = computed(() => {
   if (!imageRef.value) return ''
   return `${imageRef.value.naturalWidth} × ${imageRef.value.naturalHeight} px`
 })
+
+const maxWidth = computed(() => {
+  if (!imageRef.value) return 9999
+  return Math.round(imageRef.value.width)
+})
+
+const maxHeight = computed(() => {
+  if (!imageRef.value) return 9999
+  return Math.round(imageRef.value.height)
+})
+
+const manualWidth = ref(0)
+const manualHeight = ref(0)
+const isManualInput = ref(false)
+
+// Sync manual inputs with cropBox
+watch(
+  () => [cropBox.w, cropBox.h] as const,
+  ([w, h]) => {
+    if (!isManualInput.value) {
+      manualWidth.value = Math.round(w)
+      manualHeight.value = Math.round(h)
+    }
+  }
+)
+
+function onManualWidthChange() {
+  isManualInput.value = true
+  let w = Math.max(1, Math.min(manualWidth.value, maxWidth.value))
+  let h = cropBox.h
+  
+  const ratio = ratios[ratioKey.value]
+  if (ratio) {
+    h = w / ratio
+    if (h > maxHeight.value) {
+      h = maxHeight.value
+      w = h * ratio
+    }
+  }
+  
+  h = Math.max(1, Math.min(h, maxHeight.value))
+  w = Math.max(1, Math.min(w, maxWidth.value))
+  
+  cropBox.w = w
+  cropBox.h = h
+  
+  // Keep crop box within image bounds
+  if (cropBox.x + w > maxWidth.value) {
+    cropBox.x = maxWidth.value - w
+  }
+  if (cropBox.y + h > maxHeight.value) {
+    cropBox.y = maxHeight.value - h
+  }
+  
+  setTimeout(() => { isManualInput.value = false }, 100)
+}
+
+function onManualHeightChange() {
+  isManualInput.value = true
+  let h = Math.max(1, Math.min(manualHeight.value, maxHeight.value))
+  let w = cropBox.w
+  
+  const ratio = ratios[ratioKey.value]
+  if (ratio) {
+    w = h * ratio
+    if (w > maxWidth.value) {
+      w = maxWidth.value
+      h = w / ratio
+    }
+  }
+  
+  w = Math.max(1, Math.min(w, maxWidth.value))
+  h = Math.max(1, Math.min(h, maxHeight.value))
+  
+  cropBox.w = w
+  cropBox.h = h
+  
+  // Keep crop box within image bounds
+  if (cropBox.x + w > maxWidth.value) {
+    cropBox.x = maxWidth.value - w
+  }
+  if (cropBox.y + h > maxHeight.value) {
+    cropBox.y = maxHeight.value - h
+  }
+  
+  setTimeout(() => { isManualInput.value = false }, 100)
+}
+
+const cropSizeDisplay = computed(() => {
+  return `${Math.round(cropBox.w)} × ${Math.round(cropBox.h)} px`
+})
+
+const cropPositionDisplay = computed(() => {
+  return `X: ${Math.round(cropBox.x)}, Y: ${Math.round(cropBox.y)}`
+})
+
+const zoomLevel = computed(() => {
+  if (!imageRef.value) return 100
+  const displayedWidth = imageRef.value.width
+  const naturalWidth = imageRef.value.naturalWidth
+  return Math.round((displayedWidth / naturalWidth) * 100)
+})
+
+function getRatioDescription(key: string): string {
+  const descriptions: Record<string, string> = {
+    'free': locale.value === 'fr' ? 'Ratio libre' : 'Free ratio',
+    '1:1': locale.value === 'fr' ? 'Carré - Instagram, avatars' : 'Square - Instagram, avatars',
+    '16:9': locale.value === 'fr' ? 'Paysage - YouTube, bannières' : 'Landscape - YouTube, banners',
+    '4:5': locale.value === 'fr' ? 'Portrait - Instagram posts' : 'Portrait - Instagram posts',
+  }
+  return descriptions[key] || ''
+}
 
 const cropDimensions = computed(() => {
   return croppedDimensions.value
@@ -557,6 +714,65 @@ function downloadCropped() {
   font-weight: 600;
   color: var(--gi-text);
   margin-left: 0.25rem;
+}
+
+.ic-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.ic-info-row:not(:last-child) {
+  border-bottom: 1px solid var(--gi-border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Dimension Inputs */
+.ic-dimension-inputs {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gi-space-xs);
+}
+
+.ic-dimension-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ic-field-label {
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-text-secondary);
+  font-weight: 500;
+}
+
+.ic-dimension-input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: var(--gi-font-size-md);
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-md);
+  background: var(--gi-surface);
+  color: var(--gi-text);
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.ic-dimension-input:focus {
+  border-color: var(--gi-brand);
+  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.1);
+  outline: none;
+}
+
+.ic-dimension-separator {
+  font-size: var(--gi-font-size-lg);
+  font-weight: 600;
+  color: var(--gi-text-secondary);
+  padding-bottom: 0.25rem;
 }
 
 .ic-actions {
