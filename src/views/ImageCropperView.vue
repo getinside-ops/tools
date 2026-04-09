@@ -18,21 +18,57 @@
     />
 
     <div v-else>
-      <!-- Controls -->
-      <div class="ic-controls">
-        <div class="ic-field">
-          <label class="gi-label">{{ t('imageCropper.aspectRatio') }}</label>
-          <select v-model="ratioKey" class="gi-select" @change="applyRatio">
-            <option value="free">{{ t('imageCropper.free') }}</option>
-            <option value="1:1">{{ t('imageCropper.square') }}</option>
-            <option value="16:9">{{ t('imageCropper.landscape') }}</option>
-            <option value="4:5">{{ t('imageCropper.portrait') }}</option>
-          </select>
+      <!-- Controls Card -->
+      <div class="gi-card ic-controls-card">
+        <div class="ic-controls-header">
+          <h3 class="ic-controls-title">{{ t('imageCropper.controls') }}</h3>
+          <button 
+            class="gi-btn-ghost ic-btn-reset" 
+            @click="resetCrop"
+            :aria-label="t('imageCropper.reset')"
+          >
+            <RotateCcw :size="18" />
+          </button>
         </div>
-        <div class="ic-actions">
-          <button class="gi-btn-primary" :disabled="isCropping" @click="handleCrop">{{ isCropping ? t('imageCropper.processing') : t('imageCropper.crop') }}</button>
-          <button class="gi-btn-ghost" @click="resetCrop">{{ t('imageCropper.reset') }}</button>
+        
+        <div class="ic-controls-body">
+          <!-- Aspect Ratio Selector -->
+          <div class="ic-control-group">
+            <label class="gi-label" for="aspect-ratio-select">
+              {{ t('imageCropper.aspectRatio') }}
+            </label>
+            <div class="ic-ratio-buttons">
+              <button
+                v-for="[key, label] in ratioOptions"
+                :key="key"
+                :class="['ic-ratio-btn', { active: ratioKey === key }]"
+                @click="setRatio(key)"
+                :aria-pressed="ratioKey === key"
+              >
+                {{ label }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Image Info -->
+          <div v-if="isLoaded" class="ic-image-info">
+            <span class="ic-info-label">{{ t('imageCropper.imageSize') }}:</span>
+            <span class="ic-info-value">{{ imageDimensions }}</span>
+          </div>
         </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="ic-actions">
+        <button 
+          class="gi-btn-primary" 
+          :disabled="isCropping" 
+          @click="handleCrop"
+        >
+          <Crop :size="18" v-if="!isCropping" />
+          <Loader2 :size="18" class="animate-spin" v-else />
+          {{ isCropping ? t('imageCropper.processing') : t('imageCropper.crop') }}
+        </button>
       </div>
 
       <!-- Cropper Workspace -->
@@ -86,7 +122,7 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Crop } from 'lucide-vue-next'
+import { Crop, RotateCcw, Loader2 } from 'lucide-vue-next'
 import { cropImage } from '../composables/useImageCropper'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import GiResultCard from '../components/GiResultCard.vue'
@@ -106,6 +142,23 @@ const ratios: Record<string, number | null> = {
   '1:1': 1,
   '16:9': 16/9,
   '4:5': 4/5
+}
+
+const ratioOptions = computed(() => [
+  ['free', t('imageCropper.free')],
+  ['1:1', t('imageCropper.square')],
+  ['16:9', t('imageCropper.landscape')],
+  ['4:5', t('imageCropper.portrait')],
+] as const)
+
+const imageDimensions = computed(() => {
+  if (!imageRef.value) return ''
+  return `${imageRef.value.naturalWidth} × ${imageRef.value.naturalHeight} px`
+})
+
+function setRatio(key: string) {
+  ratioKey.value = key
+  applyRatio()
 }
 
 // Visual state in pixels relative to the *rendered* image
@@ -273,24 +326,95 @@ function downloadCropped() {
 </script>
 
 <style scoped>
-/* Controls */
-.ic-controls {
-  display: flex;
-  gap: var(--gi-space-md);
-  margin-bottom: var(--gi-space-lg);
-  flex-wrap: wrap;
-  align-items: flex-start;
+/* Controls Card */
+.ic-controls-card {
+  padding: var(--gi-space-md);
+  margin-bottom: var(--gi-space-md);
 }
 
-.ic-field {
-  margin-bottom: 0;
-  min-width: 200px;
+.ic-controls-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--gi-space-sm);
+}
+
+.ic-controls-title {
+  font-size: var(--gi-font-size-md);
+  font-weight: 600;
+  color: var(--gi-text);
+  margin: 0;
+}
+
+.ic-btn-reset {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem;
+}
+
+.ic-controls-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-md);
+}
+
+.ic-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-xs);
+}
+
+.ic-ratio-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ic-ratio-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-md);
+  background: var(--gi-surface);
+  color: var(--gi-text);
+  font-size: var(--gi-font-size-sm);
+  cursor: pointer;
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.ic-ratio-btn:hover {
+  background: var(--gi-surface-hover);
+  border-color: var(--gi-border-hover);
+}
+
+.ic-ratio-btn.active {
+  background: var(--gi-brand);
+  color: var(--gi-text-inverse);
+  border-color: var(--gi-brand);
+}
+
+.ic-image-info {
+  padding-top: var(--gi-space-sm);
+  border-top: 1px solid var(--gi-border);
+}
+
+.ic-info-label {
+  font-size: var(--gi-font-size-sm);
+  color: var(--gi-text-secondary);
+}
+
+.ic-info-value {
+  font-size: var(--gi-font-size-sm);
+  font-weight: 600;
+  color: var(--gi-text);
+  margin-left: 0.25rem;
 }
 
 .ic-actions {
   display: flex;
   gap: var(--gi-space-sm);
-  align-items: flex-end;
+  margin-top: var(--gi-space-md);
 }
 
 /* Workspace */
@@ -404,8 +528,8 @@ function downloadCropped() {
 
 /* Responsive */
 @media (max-width: 640px) {
-  .ic-controls {
-    flex-direction: column;
+  .ic-ratio-buttons {
+    flex-wrap: wrap;
   }
 
   .ic-workspace {
