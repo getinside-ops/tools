@@ -8,6 +8,13 @@ export interface ImageMetadata {
   size: number
   type: string
   lastModified: number
+  width?: number
+  height?: number
+}
+
+export interface ImageDimensions {
+  width: number
+  height: number
 }
 
 /**
@@ -20,4 +27,36 @@ export function extractBasicMetadata(file: File): ImageMetadata {
     type: file.type,
     lastModified: file.lastModified
   }
+}
+
+/**
+ * Extracts image dimensions from a File object by loading it into an Image element.
+ * Returns null if the file is not an image or fails to load.
+ */
+export function extractDimensions(file: File): Promise<ImageDimensions | null> {
+  return new Promise((resolve) => {
+    if (!file.type.startsWith('image/')) {
+      resolve(null)
+      return
+    }
+
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(file)
+
+    img.onload = () => {
+      const dimensions = {
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+      }
+      URL.revokeObjectURL(objectUrl)
+      resolve(dimensions)
+    }
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl)
+      resolve(null)
+    }
+
+    img.src = objectUrl
+  })
 }
