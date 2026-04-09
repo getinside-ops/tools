@@ -749,6 +749,7 @@ const fr = {
     download: 'Télécharger',
     result: 'Résultat',
     processing: 'Recadrage...',
+    cropArea: 'Zone de recadrage',
     error: {
       cropFailed: 'Échec du recadrage',
       invalidCrop: 'Zone de recadrage invalide',

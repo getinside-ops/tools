@@ -101,7 +101,11 @@
             v-if="isLoaded"
             class="ic-crop-box"
             :style="boxStyle"
-            @mousedown.self="onBoxMouseDown"
+            tabindex="0"
+            role="region"
+            :aria-label="t('imageCropper.cropArea')"
+            @mousedown="onBoxMouseDown"
+            @keydown="onCropBoxKeyDown"
           >
             <!-- Preview of un-dimmed image -->
             <div
@@ -367,6 +371,30 @@ function onMouseMove(e: MouseEvent) {
 function onMouseUp() {
   isDragging.value = false
   isResizing.value = false
+}
+
+function onCropBoxKeyDown(e: KeyboardEvent) {
+  const step = e.shiftKey ? 10 : 1
+  const { width: imgW, height: imgH } = imageRef.value!
+  
+  switch (e.key) {
+    case 'ArrowLeft':
+      e.preventDefault()
+      cropBox.x = Math.max(0, cropBox.x - step)
+      break
+    case 'ArrowRight':
+      e.preventDefault()
+      cropBox.x = Math.min(imgW - cropBox.w, cropBox.x + step)
+      break
+    case 'ArrowUp':
+      e.preventDefault()
+      cropBox.y = Math.max(0, cropBox.y - step)
+      break
+    case 'ArrowDown':
+      e.preventDefault()
+      cropBox.y = Math.min(imgH - cropBox.h, cropBox.y + step)
+      break
+  }
 }
 
 async function handleCrop() {

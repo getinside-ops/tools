@@ -751,6 +751,7 @@ const en: Messages = {
     download: 'Download',
     result: 'Result',
     processing: 'Cropping...',
+    cropArea: 'Crop area',
     error: {
       cropFailed: 'Crop failed',
       invalidCrop: 'Invalid crop area',
