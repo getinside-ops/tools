@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest'
-import { extractBasicMetadata, extractDimensions } from '../useMetadata'
+import { 
+  extractBasicMetadata, 
+  extractDimensions,
+} from '../useMetadata'
 
 describe('useMetadata - Logic', () => {
   it('should return basic info for a mock image file', () => {
-    // Mock File object
     const file = new File([''], 'test.png', { type: 'image/png' })
-    // Ensure lastModified is a number
     Object.defineProperty(file, 'lastModified', { value: 12345 })
 
     const meta = extractBasicMetadata(file)
@@ -26,4 +27,7 @@ describe('useMetadata - Logic', () => {
     // and hard to unit test reliably in jsdom. This is tested manually in browser.
     // See QWEN.md: "Canvas-based composables — Skip unit tests, Manual Test required"
   })
+
+  // Note: extractComprehensiveMetadata is tested manually in browser
+  // because it depends on exifr which requires real file data
 })
