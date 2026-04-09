@@ -169,7 +169,7 @@
         <h4 class="ic-pedagogic-title">{{ t('imageCropper.pedagogic.title') }}</h4>
         <p class="ic-pedagogic-description">{{ t('imageCropper.pedagogic.description') }}</p>
         <ul class="ic-pedagogic-tips">
-          <li v-for="(tip, index) in t('imageCropper.pedagogic.tips')" :key="index">
+          <li v-for="(tip, index) in pedagogicTips" :key="index">
             <Check :size="16" class="ic-tip-icon" />
             {{ tip }}
           </li>
@@ -235,6 +235,26 @@ const imageDimensions = computed(() => {
 
 const cropDimensions = computed(() => {
   return croppedDimensions.value
+})
+
+const locale = computed(() => useI18n().locale.value)
+
+// Pedagogic tips - defined here to avoid i18n array iteration issues
+const pedagogicTips = computed<string[]>(() => {
+  const isFrench = locale.value === 'fr'
+  return isFrench
+    ? [
+        '1:1 (carré) pour Instagram et les avatars',
+        '16:9 pour les vidéos YouTube et les bannières',
+        '4:5 pour les posts portrait Instagram',
+        'Conservez les éléments importants au centre',
+      ]
+    : [
+        '1:1 (square) for Instagram and avatars',
+        '16:9 for YouTube videos and banners',
+        '4:5 for Instagram portrait posts',
+        'Keep important elements centered',
+      ]
 })
 
 function updateCroppedDimensions() {
