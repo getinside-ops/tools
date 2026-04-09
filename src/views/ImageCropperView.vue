@@ -106,13 +106,49 @@
         </div>
       </div>
 
-      <!-- Result -->
-      <GiResultCard v-if="croppedUrl" :title="t('imageCropper.result')" class="ic-result">
-        <img :src="croppedUrl" class="ic-result-image" />
-        <template #actions>
-          <button class="gi-btn-primary" @click="downloadCropped">⬇️ {{ t('imageCropper.download') }}</button>
-        </template>
-      </GiResultCard>
+      <!-- Result Section -->
+      <div v-if="croppedUrl" class="gi-card ic-result-card">
+        <div class="ic-result-header">
+          <h3 class="ic-result-title">
+            <CheckCircle2 :size="20" class="ic-success-icon" />
+            {{ t('imageCropper.result') }}
+          </h3>
+          <div class="ic-result-actions">
+            <button 
+              class="gi-btn-ghost" 
+              @click="resetCrop"
+              :aria-label="t('imageCropper.reset')"
+            >
+              {{ t('imageCropper.reset') }}
+            </button>
+          </div>
+        </div>
+        
+        <div class="ic-result-body">
+          <img 
+            :src="croppedUrl" 
+            :alt="t('imageCropper.result')"
+            class="ic-result-image" 
+          />
+          
+          <div class="ic-result-info">
+            <div class="ic-info-row">
+              <span class="ic-info-label">{{ t('imageCropper.cropDimensions') }}:</span>
+              <span class="ic-info-value">{{ cropDimensions }}</span>
+            </div>
+          </div>
+          
+          <div class="ic-result-actions-bottom">
+            <button 
+              class="gi-btn-primary ic-download-btn" 
+              @click="downloadCropped"
+            >
+              <Download :size="18" />
+              {{ t('imageCropper.download') }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <template #about>{{ t('imageCropper.about') }}</template>
@@ -122,10 +158,9 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Crop, RotateCcw, Loader2 } from 'lucide-vue-next'
+import { Crop, RotateCcw, Loader2, CheckCircle2, Download } from 'lucide-vue-next'
 import { cropImage } from '../composables/useImageCropper'
 import GiImageUpload from '../components/GiImageUpload.vue'
-import GiResultCard from '../components/GiResultCard.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 
 const { t } = useI18n()
@@ -133,6 +168,7 @@ const { t } = useI18n()
 const imageRef = ref<HTMLImageElement | null>(null)
 const originalUrl = ref('')
 const croppedUrl = ref('')
+const croppedDimensions = ref('')
 const isLoaded = ref(false)
 const isCropping = ref(false)
 
@@ -155,6 +191,22 @@ const imageDimensions = computed(() => {
   if (!imageRef.value) return ''
   return `${imageRef.value.naturalWidth} × ${imageRef.value.naturalHeight} px`
 })
+
+const cropDimensions = computed(() => {
+  return croppedDimensions.value
+})
+
+function updateCroppedDimensions() {
+  if (!croppedUrl.value) {
+    croppedDimensions.value = ''
+    return
+  }
+  const img = new Image()
+  img.onload = () => {
+    croppedDimensions.value = `${img.naturalWidth} × ${img.naturalHeight} px`
+  }
+  img.src = croppedUrl.value
+}
 
 function setRatio(key: string) {
   ratioKey.value = key
@@ -310,6 +362,7 @@ async function handleCrop() {
   try {
     const result = await cropImage(originalUrl.value, rect)
     croppedUrl.value = result
+    updateCroppedDimensions()
   } catch (err) {
     alert(err)
   } finally {
@@ -494,15 +547,77 @@ function downloadCropped() {
   right: -10px;
 }
 
-/* Result */
-.ic-result {
+/* Result Section */
+.ic-result-card {
   margin-top: var(--gi-space-xl);
+  border: 2px solid var(--gi-brand);
+}
+
+.ic-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--gi-space-md);
+}
+
+.ic-result-title {
+  display: flex;
+  align-items: center;
+  gap: var(--gi-space-xs);
+  font-size: var(--gi-font-size-lg);
+  font-weight: 600;
+  color: var(--gi-text);
+  margin: 0;
+}
+
+.ic-success-icon {
+  color: var(--gi-brand);
+}
+
+.ic-result-actions {
+  display: flex;
+  gap: var(--gi-space-xs);
+}
+
+.ic-result-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-md);
 }
 
 .ic-result-image {
+  width: 100%;
   max-width: 100%;
   border-radius: var(--gi-radius-lg);
   border: 1px solid var(--gi-border);
+}
+
+.ic-result-info {
+  padding: var(--gi-space-sm);
+  background: var(--gi-bg);
+  border-radius: var(--gi-radius-md);
+}
+
+.ic-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ic-result-actions-bottom {
+  display: flex;
+  gap: var(--gi-space-sm);
+  padding-top: var(--gi-space-sm);
+  border-top: 1px solid var(--gi-border);
+}
+
+.ic-download-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gi-space-xs);
+  min-height: 44px;
 }
 
 /* Dark mode */
@@ -534,6 +649,16 @@ function downloadCropped() {
 
   .ic-workspace {
     min-height: 300px;
+  }
+  
+  .ic-result-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gi-space-sm);
+  }
+  
+  .ic-result-actions-bottom {
+    flex-direction: column;
   }
 }
 </style>
