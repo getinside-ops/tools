@@ -292,17 +292,6 @@ const manualWidth = ref(0)
 const manualHeight = ref(0)
 const isManualInput = ref(false)
 
-// Sync manual inputs with cropBox
-watch(
-  () => [cropBox.w, cropBox.h] as const,
-  ([w, h]) => {
-    if (!isManualInput.value && isLoaded.value) {
-      manualWidth.value = Math.round(w)
-      manualHeight.value = Math.round(h)
-    }
-  }
-)
-
 function onManualWidthChange() {
   isManualInput.value = true
   let w = Math.max(1, Math.min(manualWidth.value, maxWidth.value))
@@ -438,6 +427,17 @@ const cropBox = reactive({
   w: 100,
   h: 100
 })
+
+// Sync manual inputs with cropBox
+watch(
+  () => [cropBox.w, cropBox.h] as const,
+  ([w, h]) => {
+    if (!isManualInput.value && isLoaded.value) {
+      manualWidth.value = Math.round(w)
+      manualHeight.value = Math.round(h)
+    }
+  }
+)
 
 // Mouse Interaction
 const isDragging = ref(false)
