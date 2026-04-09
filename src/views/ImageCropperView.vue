@@ -100,6 +100,7 @@
           <div
             v-if="isLoaded"
             class="ic-crop-box"
+            :class="{ 'ic-crop-box--active': isDragging || isResizing }"
             :style="boxStyle"
             tabindex="0"
             role="region"
@@ -506,12 +507,19 @@ function downloadCropped() {
 .ic-ratio-btn:hover {
   background: var(--gi-surface-hover);
   border-color: var(--gi-border-hover);
+  transform: translateY(-1px);
+}
+
+.ic-ratio-btn:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .ic-ratio-btn.active {
   background: var(--gi-brand);
   color: var(--gi-text-inverse);
   border-color: var(--gi-brand);
+  transform: translateY(-1px);
+  box-shadow: var(--gi-shadow-sm);
 }
 
 .ic-image-info {
@@ -551,6 +559,23 @@ function downloadCropped() {
   border: 1px solid var(--gi-border);
 }
 
+/* Loading shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.ic-workspace--loading {
+  background: linear-gradient(
+    90deg,
+    var(--gi-surface) 25%,
+    var(--gi-bg) 50%,
+    var(--gi-surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
 .ic-image-container {
   position: relative;
   display: inline-block;
@@ -580,10 +605,16 @@ function downloadCropped() {
   cursor: grab;
   overflow: hidden;
   box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+  transition: box-shadow var(--gi-transition-base) var(--gi-ease-out);
 }
 
 .ic-crop-box:active {
   cursor: grabbing;
+}
+
+.ic-crop-box--active {
+  border-width: 3px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(10, 170, 142, 0.3);
 }
 
 /* Crop Preview */
@@ -829,6 +860,36 @@ function downloadCropped() {
   
   .ic-result-actions-bottom {
     flex-direction: column;
+  }
+  
+  .ic-pedagogic {
+    padding: var(--gi-space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .ic-workspace {
+    min-height: 250px;
+    max-height: 50vh;
+  }
+  
+  .ic-ratio-btn {
+    font-size: var(--gi-font-size-xs);
+    padding: 0.4rem 0.75rem;
+  }
+  
+  .ic-handle {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .ic-handle-br {
+    bottom: -12px;
+    right: -12px;
+  }
+  
+  .ic-controls-card {
+    padding: var(--gi-space-sm);
   }
 }
 </style>
