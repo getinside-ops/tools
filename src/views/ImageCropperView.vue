@@ -19,8 +19,8 @@
 
     <div v-else>
       <!-- Controls -->
-      <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-        <div class="gi-field" style="margin-bottom: 0; min-width: 200px">
+      <div class="ic-controls">
+        <div class="ic-field">
           <label class="gi-label">{{ t('imageCropper.aspectRatio') }}</label>
           <select v-model="ratioKey" class="gi-select" @change="applyRatio">
             <option value="free">{{ t('imageCropper.free') }}</option>
@@ -29,7 +29,7 @@
             <option value="4:5">{{ t('imageCropper.portrait') }}</option>
           </select>
         </div>
-        <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+        <div class="ic-actions">
           <button class="gi-btn-primary" :disabled="isCropping" @click="handleCrop">{{ isCropping ? t('imageCropper.processing') : t('imageCropper.crop') }}</button>
           <button class="gi-btn-ghost" @click="resetCrop">{{ t('imageCropper.reset') }}</button>
         </div>
@@ -38,42 +38,41 @@
       <!-- Cropper Workspace -->
       <div
         ref="containerRef"
-        class="cropper-workspace"
-        style="position: relative; overflow: hidden; background: var(--gi-bg); border-radius: var(--gi-radius); display: flex; justify-content: center; align-items: center; min-height: 400px; max-height: 70vh;"
+        class="ic-workspace"
       >
-        <div style="position: relative; display: inline-block;">
-          <img 
+        <div class="ic-image-container">
+          <img
             ref="imageRef"
-            :src="originalUrl" 
-            style="display: block; max-width: 100%; max-height: 70vh; user-select: none;"
+            :src="originalUrl"
+            class="ic-image"
             @load="onImageLoad"
           />
-          
+
           <!-- Dimming Overlay -->
-          <div v-if="isLoaded" class="crop-dimmer" style="position: absolute; inset: 0; background: rgba(0,0,0,0.5); pointer-events: none;"></div>
+          <div v-if="isLoaded" class="ic-dimmer"></div>
 
           <!-- Crop Box -->
-          <div 
+          <div
             v-if="isLoaded"
-            class="crop-box"
+            class="ic-crop-box"
             :style="boxStyle"
             @mousedown.self="onBoxMouseDown"
           >
             <!-- Preview of un-dimmed image -->
-            <div 
-              class="crop-preview-img" 
+            <div
+              class="ic-crop-preview"
               :style="previewImgStyle"
             ></div>
 
             <!-- Resizers -->
-            <div class="handle br" @mousedown.stop="onHandleMouseDown($event)"></div>
+            <div class="ic-handle ic-handle-br" @mousedown.stop="onHandleMouseDown($event)"></div>
           </div>
         </div>
       </div>
 
       <!-- Result -->
-      <GiResultCard v-if="croppedUrl" :title="t('imageCropper.result')" style="margin-top: 2rem;">
-        <img :src="croppedUrl" style="max-width: 100%; border-radius: var(--gi-radius);" />
+      <GiResultCard v-if="croppedUrl" :title="t('imageCropper.result')" class="ic-result">
+        <img :src="croppedUrl" class="ic-result-image" />
         <template #actions>
           <button class="gi-btn-primary" @click="downloadCropped">⬇️ {{ t('imageCropper.download') }}</button>
         </template>
@@ -142,11 +141,6 @@ const boxStyle = computed(() => ({
   top: `${cropBox.y}px`,
   width: `${cropBox.w}px`,
   height: `${cropBox.h}px`,
-  position: 'absolute' as const,
-  border: '2px solid var(--gi-text-brand)',
-  cursor: isDragging.value ? 'grabbing' : 'grab',
-  boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.5)', // Alternative dimming
-  overflow: 'hidden'
 }))
 
 const previewImgStyle = computed(() => {
@@ -279,17 +273,143 @@ function downloadCropped() {
 </script>
 
 <style scoped>
-.handle {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background: white;
-  border: 2px solid var(--gi-text-brand);
-  border-radius: 50%;
+/* Controls */
+.ic-controls {
+  display: flex;
+  gap: var(--gi-space-md);
+  margin-bottom: var(--gi-space-lg);
+  flex-wrap: wrap;
+  align-items: flex-start;
 }
-.handle.br {
-  bottom: -6px;
-  right: -6px;
+
+.ic-field {
+  margin-bottom: 0;
+  min-width: 200px;
+}
+
+.ic-actions {
+  display: flex;
+  gap: var(--gi-space-sm);
+  align-items: flex-end;
+}
+
+/* Workspace */
+.ic-workspace {
+  position: relative;
+  overflow: hidden;
+  background: var(--gi-bg);
+  border-radius: var(--gi-radius-lg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  max-height: 70vh;
+  border: 1px solid var(--gi-border);
+}
+
+.ic-image-container {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.ic-image {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Dimming Overlay */
+.ic-dimmer {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+/* Crop Box */
+.ic-crop-box {
+  position: absolute;
+  border: 2px solid var(--gi-brand);
+  cursor: grab;
+  overflow: hidden;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+}
+
+.ic-crop-box:active {
+  cursor: grabbing;
+}
+
+/* Crop Preview */
+.ic-crop-preview {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+}
+
+/* Handles */
+.ic-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--gi-surface);
+  border: 2px solid var(--gi-brand);
+  border-radius: var(--gi-radius-sm);
   cursor: nwse-resize;
+  transition: transform var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.ic-handle:hover {
+  transform: scale(1.1);
+}
+
+.ic-handle-br {
+  bottom: -10px;
+  right: -10px;
+}
+
+/* Result */
+.ic-result {
+  margin-top: var(--gi-space-xl);
+}
+
+.ic-result-image {
+  max-width: 100%;
+  border-radius: var(--gi-radius-lg);
+  border: 1px solid var(--gi-border);
+}
+
+/* Dark mode */
+[data-theme="dark"] .ic-crop-box {
+  border-color: var(--gi-mint);
+}
+
+[data-theme="dark"] .ic-handle {
+  background: var(--gi-surface);
+  border-color: var(--gi-mint);
+}
+
+/* Focus states */
+.ic-crop-box:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+.ic-handle:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .ic-controls {
+    flex-direction: column;
+  }
+
+  .ic-workspace {
+    min-height: 300px;
+  }
 }
 </style>
