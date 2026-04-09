@@ -279,12 +279,12 @@ const imageDimensions = computed(() => {
 })
 
 const maxWidth = computed(() => {
-  if (!imageRef.value) return 9999
+  if (!imageRef.value || !isLoaded.value) return 9999
   return Math.round(imageRef.value.width)
 })
 
 const maxHeight = computed(() => {
-  if (!imageRef.value) return 9999
+  if (!imageRef.value || !isLoaded.value) return 9999
   return Math.round(imageRef.value.height)
 })
 
@@ -296,7 +296,7 @@ const isManualInput = ref(false)
 watch(
   () => [cropBox.w, cropBox.h] as const,
   ([w, h]) => {
-    if (!isManualInput.value) {
+    if (!isManualInput.value && isLoaded.value) {
       manualWidth.value = Math.round(w)
       manualHeight.value = Math.round(h)
     }
