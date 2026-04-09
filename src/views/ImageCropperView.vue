@@ -34,7 +34,19 @@
         <div class="ic-controls-body">
           <!-- Aspect Ratio Selector -->
           <div class="ic-control-group">
-            <label class="gi-label">{{ t('imageCropper.aspectRatio') }}</label>
+            <div class="ic-control-header">
+              <label class="gi-label">{{ t('imageCropper.aspectRatio') }}</label>
+              <button 
+                v-if="ratioKey !== 'free'"
+                class="ic-lock-toggle"
+                @click="toggleRatioLock"
+                :aria-label="ratioLocked ? t('imageCropper.unlockRatio') : t('imageCropper.lockRatio')"
+                :title="ratioLocked ? t('imageCropper.unlockRatio') : t('imageCropper.lockRatio')"
+              >
+                <Lock v-if="ratioLocked" :size="16" />
+                <Unlock v-else :size="16" />
+              </button>
+            </div>
             <div class="ic-ratio-buttons">
               <button
                 v-for="[key, label] in ratioOptions"
@@ -106,7 +118,7 @@
       <!-- Action Buttons -->
       <div class="ic-actions">
         <button
-          class="gi-btn"
+          class="gi-btn ic-crop-btn"
           :disabled="isCropping"
           @click="handleCrop"
         >
@@ -208,18 +220,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Pedagogic Section -->
-      <div class="ic-pedagogic">
-        <h4 class="ic-pedagogic-title">{{ t('imageCropper.pedagogic.title') }}</h4>
-        <p class="ic-pedagogic-description">{{ t('imageCropper.pedagogic.description') }}</p>
-        <ul class="ic-pedagogic-tips">
-          <li v-for="(tip, index) in pedagogicTips" :key="index">
-            <Check :size="16" class="ic-tip-icon" />
-            {{ tip }}
-          </li>
-        </ul>
-      </div>
     </div>
 
     <template #about>{{ t('imageCropper.about') }}</template>
@@ -229,7 +229,7 @@
 <script setup lang="ts">
 import { ref, computed, reactive, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Crop, RotateCcw, Loader2, CheckCircle2, Download, CircleAlert, X, Check } from 'lucide-vue-next'
+import { Crop, RotateCcw, Loader2, CheckCircle2, Download, CircleAlert, X, Lock, Unlock } from 'lucide-vue-next'
 import { cropImage } from '../composables/useImageCropper'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
@@ -259,6 +259,7 @@ function clearError() {
 }
 
 const ratioKey = ref('free')
+const ratioLocked = ref(true) // By default, maintain aspect ratio when resizing
 const ratios: Record<string, number | null> = {
   'free': null,
   '1:1': 1,
@@ -297,12 +298,15 @@ function onManualWidthChange() {
   let w = Math.max(1, Math.min(manualWidth.value, maxWidth.value))
   let h = cropBox.h
   
-  const ratio = ratios[ratioKey.value]
-  if (ratio) {
-    h = w / ratio
-    if (h > maxHeight.value) {
-      h = maxHeight.value
-      w = h * ratio
+  // Only maintain ratio if ratio is locked AND not in free mode
+  if (ratioLocked.value && ratioKey.value !== 'free') {
+    const ratio = ratios[ratioKey.value]
+    if (ratio) {
+      h = w / ratio
+      if (h > maxHeight.value) {
+        h = maxHeight.value
+        w = h * ratio
+      }
     }
   }
   
@@ -328,12 +332,15 @@ function onManualHeightChange() {
   let h = Math.max(1, Math.min(manualHeight.value, maxHeight.value))
   let w = cropBox.w
   
-  const ratio = ratios[ratioKey.value]
-  if (ratio) {
-    w = h * ratio
-    if (w > maxWidth.value) {
-      w = maxWidth.value
-      h = w / ratio
+  // Only maintain ratio if ratio is locked AND not in free mode
+  if (ratioLocked.value && ratioKey.value !== 'free') {
+    const ratio = ratios[ratioKey.value]
+    if (ratio) {
+      w = h * ratio
+      if (w > maxWidth.value) {
+        w = maxWidth.value
+        h = w / ratio
+      }
     }
   }
   
@@ -352,6 +359,10 @@ function onManualHeightChange() {
   }
   
   setTimeout(() => { isManualInput.value = false }, 100)
+}
+
+function toggleRatioLock() {
+  ratioLocked.value = !ratioLocked.value
 }
 
 const cropSizeDisplay = computed(() => {
@@ -384,24 +395,6 @@ const cropDimensions = computed(() => {
 })
 
 const locale = computed(() => useI18n().locale.value)
-
-// Pedagogic tips - defined here to avoid i18n array iteration issues
-const pedagogicTips = computed<string[]>(() => {
-  const isFrench = locale.value === 'fr'
-  return isFrench
-    ? [
-        '1:1 (carré) pour Instagram et les avatars',
-        '16:9 pour les vidéos YouTube et les bannières',
-        '4:5 pour les posts portrait Instagram',
-        'Conservez les éléments importants au centre',
-      ]
-    : [
-        '1:1 (square) for Instagram and avatars',
-        '16:9 for YouTube videos and banners',
-        '4:5 for Instagram portrait posts',
-        'Keep important elements centered',
-      ]
-})
 
 function updateCroppedDimensions() {
   if (!croppedUrl.value) {
@@ -662,6 +655,36 @@ function downloadCropped() {
   gap: var(--gi-space-xs);
 }
 
+.ic-control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ic-lock-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--gi-text-secondary);
+  cursor: pointer;
+  border-radius: var(--gi-radius-sm);
+  transition: all var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.ic-lock-toggle:hover {
+  background: var(--gi-surface-hover);
+  color: var(--gi-text);
+}
+
+.ic-lock-toggle:focus-visible {
+  outline: 2px solid var(--gi-brand);
+  outline-offset: 2px;
+}
+
 .ic-ratio-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -779,6 +802,14 @@ function downloadCropped() {
   display: flex;
   gap: var(--gi-space-sm);
   margin-top: var(--gi-space-md);
+  margin-bottom: var(--gi-space-md);
+}
+
+.ic-crop-btn {
+  flex: 1;
+  min-height: 48px;
+  font-size: var(--gi-font-size-md);
+  font-weight: 600;
 }
 
 /* Workspace */

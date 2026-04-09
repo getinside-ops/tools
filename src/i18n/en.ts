@@ -740,6 +740,8 @@ const en: Messages = {
     desc: 'Crop your images manually or using predefined aspect ratios.',
     controls: 'Controls',
     aspectRatio: 'Aspect Ratio',
+    lockRatio: 'Lock aspect ratio',
+    unlockRatio: 'Unlock aspect ratio',
     dimensions: 'Dimensions',
     width: 'Width',
     height: 'Height',

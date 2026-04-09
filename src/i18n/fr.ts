@@ -738,6 +738,8 @@ const fr = {
     desc: 'Recadrez vos images manuellement ou selon des ratios prédéfinis.',
     controls: 'Contrôles',
     aspectRatio: 'Ratio d\'aspect',
+    lockRatio: 'Verrouiller le ratio',
+    unlockRatio: 'Déverrouiller le ratio',
     dimensions: 'Dimensions',
     width: 'Largeur',
     height: 'Hauteur',
