@@ -60,9 +60,9 @@
 
       <!-- Action Buttons -->
       <div class="ic-actions">
-        <button 
-          class="gi-btn-primary" 
-          :disabled="isCropping" 
+        <button
+          class="gi-btn"
+          :disabled="isCropping"
           @click="handleCrop"
         >
           <Crop :size="18" v-if="!isCropping" />
@@ -154,7 +154,7 @@
           
           <div class="ic-result-actions-bottom">
             <button 
-              class="gi-btn-primary ic-download-btn" 
+              class="gi-btn ic-download-btn" 
               @click="downloadCropped"
             >
               <Download :size="18" />
