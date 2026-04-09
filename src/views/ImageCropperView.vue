@@ -162,6 +162,18 @@
           </div>
         </div>
       </div>
+
+      <!-- Pedagogic Section -->
+      <div class="ic-pedagogic">
+        <h4 class="ic-pedagogic-title">{{ t('imageCropper.pedagogic.title') }}</h4>
+        <p class="ic-pedagogic-description">{{ t('imageCropper.pedagogic.description') }}</p>
+        <ul class="ic-pedagogic-tips">
+          <li v-for="(tip, index) in t('imageCropper.pedagogic.tips')" :key="index">
+            <Check :size="16" class="ic-tip-icon" />
+            {{ tip }}
+          </li>
+        </ul>
+      </div>
     </div>
 
     <template #about>{{ t('imageCropper.about') }}</template>
@@ -171,7 +183,7 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Crop, RotateCcw, Loader2, CheckCircle2, Download, CircleAlert, X } from 'lucide-vue-next'
+import { Crop, RotateCcw, Loader2, CheckCircle2, Download, CircleAlert, X, Check } from 'lucide-vue-next'
 import { cropImage } from '../composables/useImageCropper'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
@@ -727,6 +739,56 @@ function downloadCropped() {
 [data-theme="dark"] .ic-error-message,
 [data-theme="dark"] .ic-error-dismiss {
   color: #f87171;
+}
+
+/* Pedagogic Section */
+.ic-pedagogic {
+  margin-top: var(--gi-space-lg);
+  padding: var(--gi-space-lg);
+  background: linear-gradient(135deg, rgba(10, 170, 142, 0.05) 0%, rgba(106, 231, 200, 0.05) 100%);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-lg);
+}
+
+.ic-pedagogic-title {
+  font-size: var(--gi-font-size-md);
+  font-weight: 600;
+  color: var(--gi-text);
+  margin: 0 0 var(--gi-space-sm) 0;
+}
+
+.ic-pedagogic-description {
+  font-size: var(--gi-font-size-sm);
+  color: var(--gi-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--gi-space-md) 0;
+}
+
+.ic-pedagogic-tips {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-space-xs);
+}
+
+.ic-pedagogic-tips li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gi-space-sm);
+  font-size: var(--gi-font-size-sm);
+  color: var(--gi-text);
+}
+
+.ic-tip-icon {
+  color: var(--gi-brand);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+[data-theme="dark"] .ic-pedagogic {
+  background: linear-gradient(135deg, rgba(10, 170, 142, 0.1) 0%, rgba(106, 231, 200, 0.1) 100%);
 }
 
 [data-theme="dark"] .ic-crop-box {
