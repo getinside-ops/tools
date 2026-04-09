@@ -752,6 +752,7 @@ const fr = {
     error: {
       cropFailed: 'Échec du recadrage',
       invalidCrop: 'Zone de recadrage invalide',
+      dismiss: 'Fermer',
     },
     about: "Le recadrage selon un ratio fixe est une tâche courante lors de la préparation d'images pour les réseaux sociaux, l'e-commerce ou l'impression. Cet outil permet de recadrer selon des presets standard ou un ratio personnalisé, avec un aperçu en temps réel — entièrement dans le navigateur.",
     pedagogic: {

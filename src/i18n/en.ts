@@ -754,6 +754,7 @@ const en: Messages = {
     error: {
       cropFailed: 'Crop failed',
       invalidCrop: 'Invalid crop area',
+      dismiss: 'Dismiss',
     },
     about: "Cropping to a fixed ratio is a common task when preparing images for social media, e-commerce, or print. This tool lets you crop to standard presets or a custom ratio, with a live preview — entirely in your browser.",
     pedagogic: {

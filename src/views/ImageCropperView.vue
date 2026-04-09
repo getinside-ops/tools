@@ -71,6 +71,15 @@
         </button>
       </div>
 
+      <!-- Error Alert -->
+      <div v-if="error" class="ic-error-alert" role="alert">
+        <CircleAlert :size="18" class="ic-error-icon" />
+        <span class="ic-error-message">{{ errorMessage }}</span>
+        <button class="ic-error-dismiss" @click="clearError" :aria-label="t('imageCropper.error.dismiss')">
+          <X :size="16" />
+        </button>
+      </div>
+
       <!-- Cropper Workspace -->
       <div
         ref="containerRef"
@@ -158,7 +167,7 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Crop, RotateCcw, Loader2, CheckCircle2, Download } from 'lucide-vue-next'
+import { Crop, RotateCcw, Loader2, CheckCircle2, Download, CircleAlert, X } from 'lucide-vue-next'
 import { cropImage } from '../composables/useImageCropper'
 import GiImageUpload from '../components/GiImageUpload.vue'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
@@ -171,6 +180,21 @@ const croppedUrl = ref('')
 const croppedDimensions = ref('')
 const isLoaded = ref(false)
 const isCropping = ref(false)
+const error = ref<string | null>(null)
+
+const errorMessage = computed(() => {
+  if (!error.value) return ''
+  switch (error.value) {
+    case 'Invalid crop area':
+      return t('imageCropper.error.invalidCrop')
+    default:
+      return t('imageCropper.error.cropFailed')
+  }
+})
+
+function clearError() {
+  error.value = null
+}
 
 const ratioKey = ref('free')
 const ratios: Record<string, number | null> = {
@@ -347,6 +371,9 @@ function onMouseUp() {
 
 async function handleCrop() {
   if (!imageRef.value || isCropping.value) return
+  
+  clearError()
+  
   // Need to scale screen coordinates to actual image pixels
   const { naturalWidth, width } = imageRef.value
   const scale = naturalWidth / width
@@ -364,7 +391,7 @@ async function handleCrop() {
     croppedUrl.value = result
     updateCroppedDimensions()
   } catch (err) {
-    alert(err)
+    error.value = err instanceof Error ? err.message : t('imageCropper.error.cropFailed')
   } finally {
     isCropping.value = false
   }
@@ -620,7 +647,60 @@ function downloadCropped() {
   min-height: 44px;
 }
 
+/* Error Alert */
+.ic-error-alert {
+  display: flex;
+  align-items: center;
+  gap: var(--gi-space-sm);
+  padding: var(--gi-space-md);
+  background: rgba(220, 38, 38, 0.05);
+  border: 1px solid var(--gi-error);
+  border-radius: var(--gi-radius-md);
+  margin-bottom: var(--gi-space-md);
+}
+
+.ic-error-icon {
+  color: var(--gi-error);
+  flex-shrink: 0;
+}
+
+.ic-error-message {
+  flex: 1;
+  color: var(--gi-error);
+  font-size: var(--gi-font-size-sm);
+  font-weight: 500;
+}
+
+.ic-error-dismiss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0.25rem;
+  border: none;
+  background: transparent;
+  color: var(--gi-error);
+  cursor: pointer;
+  border-radius: var(--gi-radius-sm);
+  transition: background var(--gi-transition-fast) var(--gi-ease-out);
+}
+
+.ic-error-dismiss:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
 /* Dark mode */
+[data-theme="dark"] .ic-error-alert {
+  background: rgba(248, 113, 113, 0.1);
+}
+
+[data-theme="dark"] .ic-error-icon,
+[data-theme="dark"] .ic-error-message,
+[data-theme="dark"] .ic-error-dismiss {
+  color: #f87171;
+}
+
 [data-theme="dark"] .ic-crop-box {
   border-color: var(--gi-mint);
 }
