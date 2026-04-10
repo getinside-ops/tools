@@ -515,6 +515,7 @@ const en: Messages = {
     full: {
       title: 'Color Palette',
       generate: 'Generate',
+      reset: 'Reset',
       lock: 'Lock',
       unlock: 'Unlock',
       copied: 'Copied',
@@ -553,6 +554,7 @@ const en: Messages = {
         urlCopied: 'URL copied',
         cssCopied: 'CSS copied',
         extracted: 'Palette extracted!',
+        paletteReset: 'Palette reset!',
       },
       keyboard: {
         space: 'Generate',
@@ -563,6 +565,7 @@ const en: Messages = {
         esc: 'Close',
       },
       extract: 'Extract',
+      screen: 'Fullscreen',
     },
     pedagogic: {
       title: 'About Color Palettes',

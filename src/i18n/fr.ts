@@ -513,6 +513,7 @@ const fr = {
     full: {
       title: 'Palette de couleurs',
       generate: 'Générer',
+      reset: 'Réinitialiser',
       lock: 'Verrouiller',
       unlock: 'Déverrouiller',
       copied: 'Copié',
@@ -551,6 +552,7 @@ const fr = {
         urlCopied: 'URL copiée',
         cssCopied: 'CSS copié',
         extracted: 'Palette extraite !',
+        paletteReset: 'Palette réinitialisée !',
       },
       keyboard: {
         space: 'Générer',
@@ -561,6 +563,7 @@ const fr = {
         esc: 'Fermer',
       },
       extract: 'Extraire',
+      screen: 'Plein écran',
     },
     pedagogic: {
       title: 'À propos des palettes de couleurs',

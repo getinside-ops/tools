@@ -16,6 +16,9 @@
           {{ t('colorPalette.generate') }}
           <kbd class="cp-shortcut">Space</kbd>
         </button>
+        <button class="cp-reset-btn" @click="resetPalette" :aria-label="t('colorPalette.full.reset')">
+          <RefreshCw :size="16" />
+        </button>
 
         <!-- Harmony selector -->
         <div class="cp-harmony-selector">
@@ -55,7 +58,7 @@
         <button class="cp-action-btn" @click="showExportModal = true" :aria-label="t('colorPalette.full.export.label')">
           <Download :size="16" />
         </button>
-        <button class="cp-fullscreen-btn" @click="openFullscreen" :aria-label="'Plein écran'">
+        <button class="cp-fullscreen-btn" @click="openFullscreen" :aria-label="t('colorPalette.full.screen')">
           <Maximize2 :size="16" />
         </button>
       </div>
@@ -256,9 +259,10 @@ import {
   Palette, Shuffle, Sparkles, ChevronDown, Copy, Lock, Unlock,
   RotateCcw, CheckCircle, Code, Braces, Wind, X, ImageUp,
   Maximize2, Download, Link as LinkIcon,
+  RefreshCw,
 } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
-import { toggleLock as paletteToggleLock, usePaletteState, getContrastRatio, getColorFormats, adjustColor, updateColor } from '../composables/useColorPalette'
+import { toggleLock as paletteToggleLock, usePaletteState, getContrastRatio, getColorFormats, adjustColor, updateColor, initPalette } from '../composables/useColorPalette'
 import { generateHarmony, type HarmonyType } from '../composables/useColorHarmony'
 import type { ColorFormats } from '../composables/useColorPalette'
 
@@ -309,27 +313,48 @@ const harmonyLabel = computed(() => harmonyTypes.find(h => h.value === harmonyTy
 // --- Actions ---
 
 function generate() {
-  const unlocked = palette.value.filter(c => !c.locked)
-  if (unlocked.length === 0) {
+  const unlockedIndices = palette.value.reduce<number[]>((acc, c, i) => {
+    if (!c.locked) acc.push(i)
+    return acc
+  }, [])
+
+  if (unlockedIndices.length === 0) {
+    // All colors locked - generate from first color
     const base = palette.value[0].hex
     const newColors = generateHarmony(base, harmonyType.value as HarmonyType, palette.value.length)
     palette.value = palette.value.map((c, i) => ({ ...c, hex: newColors[i] }))
-  } else {
-    const base = unlocked[0].hex
+  } else if (unlockedIndices.length === palette.value.length) {
+    // No colors locked - full regeneration
+    const base = palette.value[0].hex
     const newColors = generateHarmony(base, harmonyType.value as HarmonyType, palette.value.length)
-    let idx = 0
-    palette.value = palette.value.map(c => c.locked ? c : { ...c, hex: newColors[idx++] })
+    palette.value = newColors.map(hex => ({ hex, locked: false }))
+  } else {
+    // Some colors locked - generate from first unlocked, preserve locked positions
+    const base = palette.value[unlockedIndices[0]].hex
+    const newColors = generateHarmony(base, harmonyType.value as HarmonyType, palette.value.length)
+    // Only update unlocked positions
+    palette.value = palette.value.map((c, i) => {
+      const unlockedIdx = unlockedIndices.indexOf(i)
+      if (unlockedIdx === -1) return c // Keep locked
+      return { ...c, hex: newColors[i] } // Use harmony position
+    })
   }
   syncToUrl()
 }
 
+function resetPalette() {
+  palette.value = initPalette()
+  selectedIndex.value = null
+  adjustments.value = { hue: 0, saturation: 0, lightness: 0 }
+  syncToUrl()
+  showToast(t('colorPalette.full.toast.paletteReset'))
+}
+
 function handleSwatchClick(i: number) {
-  if (palette.value[i].locked) {
-    selectedIndex.value = i
-  } else {
-    palette.value = paletteToggleLock(palette.value, i)
-    selectedIndex.value = i
-  }
+  // Toggle lock state
+  palette.value = paletteToggleLock(palette.value, i)
+  // Select the color if it's now unlocked, deselect if locked
+  selectedIndex.value = palette.value[i].locked ? null : i
 }
 
 function selectHarmony(type: HarmonyType) {
@@ -477,14 +502,15 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown); if (
 .cp-harmony-option:hover { background: var(--gi-bg); }
 .cp-harmony-option--active { background: var(--gi-brand-fade); color: var(--gi-brand); font-weight: 600; }
 
-.cp-upload-btn, .cp-action-btn, .cp-fullscreen-btn {
+.cp-upload-btn, .cp-action-btn, .cp-fullscreen-btn, .cp-reset-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 44px; height: 44px; background: var(--gi-surface);
   border: 1px solid var(--gi-border); border-radius: var(--gi-radius-md);
   color: var(--gi-text-muted); cursor: pointer;
   transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
-.cp-upload-btn:hover, .cp-action-btn:hover, .cp-fullscreen-btn:hover { color: var(--gi-text); border-color: var(--gi-brand); box-shadow: var(--gi-shadow-sm); }
+.cp-upload-btn:hover, .cp-action-btn:hover, .cp-fullscreen-btn:hover, .cp-reset-btn:hover {
+  color: var(--gi-text); border-color: var(--gi-brand); box-shadow: var(--gi-shadow-sm); }
 .cp-upload-btn input { display: none; }
 
 /* Palette grid */
