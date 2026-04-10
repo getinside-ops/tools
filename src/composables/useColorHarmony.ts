@@ -113,7 +113,7 @@ export function generateHarmony(
 
     case 'tetradic': {
       const offsets = [0, 90, 180, 270]
-      return offsets.map((offset, i) => {
+      return offsets.map(offset => {
         const { h, s, l } = clampHsl(
           base.h + offset,
           base.s,
