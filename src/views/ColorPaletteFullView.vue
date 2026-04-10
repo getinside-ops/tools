@@ -152,6 +152,26 @@
               </div>
             </div>
           </div>
+          <!-- Contrast section -->
+          <div class="cpf-contrast-section">
+            <span class="cpf-shades-label">Contraste</span>
+            <div class="cpf-contrast-row">
+              <div class="cpf-contrast-item" style="background: #FFFFFF; border-color: #e0e0e0;">
+                <span class="cpf-contrast-text" :style="{ color: selectedColor?.hex }">Aa</span>
+                <span class="cpf-contrast-ratio">{{ contrastOnWhite.toFixed(1) }}:1</span>
+                <span class="cpf-contrast-badge" :class="contrastOnWhite >= 4.5 ? 'cpf-contrast-badge--pass' : 'cpf-contrast-badge--fail'">
+                  {{ contrastOnWhite >= 4.5 ? 'AA' : '—' }}
+                </span>
+              </div>
+              <div class="cpf-contrast-item" style="background: #000000;">
+                <span class="cpf-contrast-text" :style="{ color: selectedColor?.hex }">Aa</span>
+                <span class="cpf-contrast-ratio">{{ contrastOnBlack.toFixed(1) }}:1</span>
+                <span class="cpf-contrast-badge" :class="contrastOnBlack >= 4.5 ? 'cpf-contrast-badge--pass' : 'cpf-contrast-badge--fail'">
+                  {{ contrastOnBlack >= 4.5 ? 'AA' : '—' }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </Transition>
@@ -269,6 +289,7 @@ import {
 import {
   toggleLock as paletteToggleLock,
   usePaletteState,
+  getContrastRatio,
 } from '../composables/useColorPalette'
 import { generateHarmony, type HarmonyType } from '../composables/useColorHarmony'
 
@@ -323,6 +344,16 @@ const tones = computed(() => {
 const shades = computed(() => {
   if (!selectedColor.value) return []
   return genShades(selectedColor.value.hex, 6)
+})
+
+const contrastOnWhite = computed(() => {
+  if (!selectedColor.value) return 1
+  return getContrastRatio(selectedColor.value.hex, '#FFFFFF')
+})
+
+const contrastOnBlack = computed(() => {
+  if (!selectedColor.value) return 1
+  return getContrastRatio(selectedColor.value.hex, '#000000')
 })
 
 const gradientCss = computed(() => {
@@ -754,6 +785,26 @@ onUnmounted(() => {
   font-size: 0.6rem; font-weight: 600; font-family: monospace;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
+
+/* Contrast section */
+.cpf-contrast-section {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-top: 0.75rem; padding-top: 0.75rem;
+  border-top: 1px solid var(--gi-border);
+}
+.cpf-contrast-row { display: flex; gap: 0.5rem; flex: 1; }
+.cpf-contrast-item {
+  flex: 1; padding: 0.5rem; border-radius: var(--gi-radius-md);
+  display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--gi-border);
+}
+.cpf-contrast-text { font-size: 1.25rem; font-weight: 700; }
+.cpf-contrast-ratio { font-size: 0.75rem; font-family: monospace; color: var(--gi-text-muted); }
+.cpf-contrast-badge {
+  font-size: 0.65rem; font-weight: 700; padding: 0.125rem 0.375rem;
+  border-radius: var(--gi-radius-sm);
+}
+.cpf-contrast-badge--pass { background: var(--gi-brand-fade); color: var(--gi-brand); }
+.cpf-contrast-badge--fail { background: var(--gi-tint-red-bg); color: var(--gi-tint-red-text); }
 
 /* Modals */
 .cpf-modal-overlay {
