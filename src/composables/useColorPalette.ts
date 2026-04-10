@@ -153,25 +153,32 @@ export function usePaletteState(): PaletteState {
   const palette = ref<PaletteColor[]>(initPalette())
   const harmonyType = ref('random-beautiful')
 
-  // Restore from URL on init
-  const hash = window.location.hash.replace('#', '')
-  if (hash && hash.includes('-')) {
-    const parts = hash.split('-')
-    // Colors are stored without # prefix in URL (e.g., 0aaa8e-b8d5b8-...)
-    const colorParts = parts.filter(c => /^[0-9A-Fa-f]{6}$/i.test(c))
-    if (colorParts.length >= 2) {
-      palette.value = colorParts.map(hex => ({ hex: '#' + hex.toUpperCase(), locked: false }))
+  // Restore from URL query params in hash (e.g., #/color-palette?p=0aaa8e-b8d5b8&t=analogous)
+  const hash = window.location.hash || ''
+  const queryPart = hash.split('?')[1]
+  if (queryPart) {
+    const params = new URLSearchParams(queryPart)
+    const paletteParam = params.get('p')
+    const typeParam = params.get('t')
+    if (paletteParam) {
+      const colorHexes = paletteParam.split('-').filter((c: string) => /^[0-9A-Fa-f]{6}$/i.test(c))
+      if (colorHexes.length >= 2) {
+        palette.value = colorHexes.map((hex: string) => ({ hex: '#' + hex.toUpperCase(), locked: false }))
+      }
     }
-    // Check for harmony type
-    const validTypes = ['analogous', 'complementary', 'triadic', 'tetradic', 'split-complementary', 'monochromatic', 'random-beautiful']
-    const harmonyParam = parts.find(p => validTypes.includes(p))
-    if (harmonyParam) harmonyType.value = harmonyParam
+    if (typeParam) {
+      const validTypes = ['analogous', 'complementary', 'triadic', 'tetradic', 'split-complementary', 'monochromatic', 'random-beautiful']
+      if (validTypes.includes(typeParam)) harmonyType.value = typeParam
+    }
   }
 
   function syncToUrl() {
     const colors = palette.value.map(c => c.hex.replace('#', '').toLowerCase())
     const type = harmonyType.value
-    window.location.hash = colors.join('-') + '-' + type
+    const currentHash = window.location.hash || '#/'
+    const routePart = currentHash.split('?')[0]
+    const newHash = routePart + '?p=' + colors.join('-') + '&t=' + type
+    history.replaceState(null, '', window.location.pathname + newHash)
   }
 
   // Auto-sync on palette change (debounced)

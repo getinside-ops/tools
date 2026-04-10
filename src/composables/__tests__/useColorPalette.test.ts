@@ -90,8 +90,8 @@ describe('usePaletteState', () => {
     expect(palette.value).toHaveLength(5)
   })
 
-  it('restores palette from URL hash', () => {
-    window.location.hash = '#0aaa8e-b8d5b8-d7b49e-dc602e-bc412b'
+  it('restores palette from URL hash query params', () => {
+    window.location.hash = '#/color-palette?p=0aaa8e-b8d5b8-d7b49e-dc602e-bc412b'
     const { palette } = usePaletteState()
     expect(palette.value.map(c => c.hex.toLowerCase())).toEqual([
       '#0aaa8e', '#b8d5b8', '#d7b49e', '#dc602e', '#bc412b'
@@ -99,18 +99,19 @@ describe('usePaletteState', () => {
   })
 
   it('restores harmony type from URL', () => {
-    window.location.hash = '#0aaa8e-b8d5b8-d7b49e-dc602e-bc412b-analogous'
+    window.location.hash = '#/color-palette?p=0aaa8e-b8d5b8-d7b49e-dc602e-bc412b&t=analogous'
     const { harmonyType } = usePaletteState()
     expect(harmonyType.value).toBe('analogous')
   })
 
   it('handles malformed URL gracefully', () => {
-    window.location.hash = '#not-a-color-bad-data'
+    window.location.hash = '#/color-palette?p=not-a-color'
     const { palette } = usePaletteState()
     expect(palette.value).toHaveLength(5) // Falls back to default
   })
 
-  it('syncToUrl writes palette to hash', () => {
+  it('syncToUrl writes palette to hash without breaking route', () => {
+    window.location.hash = '#/color-palette'
     const { palette, syncToUrl } = usePaletteState()
     palette.value = [
       { hex: '#FF0000', locked: false },
@@ -120,6 +121,8 @@ describe('usePaletteState', () => {
       { hex: '#FF00FF', locked: false },
     ]
     syncToUrl()
+    // Route should be preserved
+    expect(window.location.hash).toContain('#/color-palette')
     expect(window.location.hash).toContain('ff0000')
     expect(window.location.hash).toContain('00ff00')
   })
