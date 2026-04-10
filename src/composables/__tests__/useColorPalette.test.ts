@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { generatePalette, toggleLock, initPalette } from '../useColorPalette'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { generatePalette, toggleLock, initPalette, usePaletteState } from '../useColorPalette'
 import type { PaletteColor } from '../useColorPalette'
 
 describe('initPalette', () => {
@@ -73,5 +73,54 @@ describe('toggleLock', () => {
     const result = toggleLock(palette, 0)
     expect(result[1].locked).toBe(false)
     expect(result[1].hex).toBe('#BBBBBB')
+  })
+})
+
+describe('usePaletteState', () => {
+  beforeEach(() => {
+    window.location.hash = ''
+  })
+
+  afterEach(() => {
+    window.location.hash = ''
+  })
+
+  it('initializes with default palette when no URL params', () => {
+    const { palette } = usePaletteState()
+    expect(palette.value).toHaveLength(5)
+  })
+
+  it('restores palette from URL hash', () => {
+    window.location.hash = '#0aaa8e-b8d5b8-d7b49e-dc602e-bc412b'
+    const { palette } = usePaletteState()
+    expect(palette.value.map(c => c.hex.toLowerCase())).toEqual([
+      '#0aaa8e', '#b8d5b8', '#d7b49e', '#dc602e', '#bc412b'
+    ])
+  })
+
+  it('restores harmony type from URL', () => {
+    window.location.hash = '#0aaa8e-b8d5b8-d7b49e-dc602e-bc412b-analogous'
+    const { harmonyType } = usePaletteState()
+    expect(harmonyType.value).toBe('analogous')
+  })
+
+  it('handles malformed URL gracefully', () => {
+    window.location.hash = '#not-a-color-bad-data'
+    const { palette } = usePaletteState()
+    expect(palette.value).toHaveLength(5) // Falls back to default
+  })
+
+  it('syncToUrl writes palette to hash', () => {
+    const { palette, syncToUrl } = usePaletteState()
+    palette.value = [
+      { hex: '#FF0000', locked: false },
+      { hex: '#00FF00', locked: false },
+      { hex: '#0000FF', locked: false },
+      { hex: '#FFFF00', locked: false },
+      { hex: '#FF00FF', locked: false },
+    ]
+    syncToUrl()
+    expect(window.location.hash).toContain('ff0000')
+    expect(window.location.hash).toContain('00ff00')
   })
 })
