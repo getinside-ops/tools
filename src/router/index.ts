@@ -12,8 +12,8 @@ const router = createRouter({
     { path: '/redirect-checker', component: () => import('../views/RedirectCheckerView.vue') },
     { path: '/promo-code', component: () => import('../views/PromoCodeView.vue') },
     { path: '/word-counter', component: () => import('../views/WordCounterView.vue') },
-    { path: '/color-palette', component: () => import('../views/ColorPaletteFullView.vue') },
-    { path: '/color-palette-classic', component: () => import('../views/ColorPaletteView.vue') },
+    { path: '/color-palette', component: () => import('../views/ColorPaletteView.vue') },
+    { path: '/color-palette-fullscreen', component: () => import('../views/ColorPaletteFullscreenView.vue') },
     { path: '/mockup', component: () => import('../views/MockupGeneratorView.vue') },
     
     // Batch 1 & 2 tools

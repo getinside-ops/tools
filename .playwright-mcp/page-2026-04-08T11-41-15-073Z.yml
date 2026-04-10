@@ -1,0 +1,73 @@
+- generic [ref=e2]:
+  - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "getinside" [ref=e7] [cursor=pointer]:
+          - /url: https://www.getinside.fr/
+          - img "getinside" [ref=e8]
+          - generic [ref=e9]: tools
+        - navigation [ref=e10]:
+          - link "Accueil" [ref=e11] [cursor=pointer]:
+            - /url: "#/"
+      - button "EN" [pressed] [ref=e12] [cursor=pointer]
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - link "Retour aux outils" [ref=e15] [cursor=pointer]:
+        - /url: "#/"
+        - img [ref=e16]
+        - text: Retour aux outils
+      - generic [ref=e18]:
+        - img [ref=e20]
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Redirect Checker" [level=1] [ref=e25]
+            - generic [ref=e26]: Digital
+          - paragraph [ref=e27]: Découvrez vers quelle URL finale pointe une adresse après ses redirections.
+      - generic [ref=e29]:
+        - generic [ref=e30]: URL à vérifier
+        - generic [ref=e31]:
+          - textbox "URL à vérifier" [active] [ref=e32]:
+            - /placeholder: https://example.com/lien-ou-raccourci
+            - text: https://gtinsi.de/69a0078
+          - button "Vérifier" [ref=e33] [cursor=pointer]:
+            - img [ref=e34]
+      - generic [ref=e36]:
+        - generic [ref=e38]: À propos de cet outil
+        - text: Une chaîne de redirections ajoute de la latence et peut casser le tracking. Cet outil suit chaque étape depuis votre URL de départ jusqu'à la destination finale, en révélant chaque intermédiaire, le code HTTP correspondant et l'URL résolue — utile pour diagnostiquer des problèmes de référencement ou vérifier des liens de campagne.
+  - contentinfo [ref=e39]:
+    - generic [ref=e40]:
+      - link "getinside tools" [ref=e42] [cursor=pointer]:
+        - /url: https://www.getinside.fr/
+        - img "getinside" [ref=e43]
+        - generic [ref=e44]: tools
+      - paragraph [ref=e46]: Outils proposés par getinside · Retail Media
+      - generic [ref=e47]:
+        - button "Changer de langue" [pressed] [ref=e48] [cursor=pointer]: EN
+        - button "Changer de thème" [ref=e49] [cursor=pointer]:
+          - img [ref=e50]
+    - generic [ref=e56]:
+      - generic [ref=e57]: Accès rapide
+      - generic [ref=e58]:
+        - link "Poids papier" [ref=e59] [cursor=pointer]:
+          - /url: "#/paper-weight"
+          - img [ref=e60]
+          - text: Poids papier
+        - link "UTM Builder" [ref=e64] [cursor=pointer]:
+          - /url: "#/utm-builder"
+          - img [ref=e65]
+          - text: UTM Builder
+        - link "DPI Checker" [ref=e68] [cursor=pointer]:
+          - /url: "#/dpi-checker"
+          - img [ref=e69]
+          - text: DPI Checker
+    - generic [ref=e73]:
+      - generic [ref=e74]:
+        - text: "Contact — Opérations :"
+        - link "benoit@getinside.fr" [ref=e75] [cursor=pointer]:
+          - /url: mailto:benoit@getinside.fr
+        - text: "· Studio :"
+        - link "studio@getinside.fr" [ref=e76] [cursor=pointer]:
+          - /url: mailto:studio@getinside.fr
+      - generic [ref=e77]: © 2026 getinside. Tous droits réservés.

@@ -602,6 +602,8 @@ onMounted(() => {
       if (menu && !menu.contains(e.target as Node)) showHarmonyMenu.value = false
     }
   })
+  // Prevent body scroll while fullscreen
+  document.body.style.overflow = 'hidden'
   resetHideTimer()
 })
 
@@ -610,6 +612,8 @@ onUnmounted(() => {
   document.removeEventListener('mousemove', resetHideTimer)
   if (hideToolbarTimer) clearTimeout(hideToolbarTimer)
   if (toastTimer) clearTimeout(toastTimer)
+  // Restore body scroll
+  document.body.style.overflow = ''
 })
 </script>
 

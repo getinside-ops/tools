@@ -1,0 +1,50 @@
+[     203ms] [WARNING] [Vue warn]: Unhandled error during execution of watcher getter 
+  at <ImageCropperView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <App> @ http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2203
+[     203ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <ImageCropperView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <App> @ http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2203
+[     203ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <App> @ http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2203
+[     272ms] ReferenceError: Cannot access 'cropBox' before initialization
+    at http://localhost:5173/tools/src/views/ImageCropperView.vue:61:14
+    at callWithErrorHandling (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2351:33)
+    at callWithAsyncErrorHandling (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2358:17)
+    at baseWatchOptions.call (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:3043:47)
+    at ReactiveEffect.getter [as fn] (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2017:29)
+    at ReactiveEffect.run (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:507:19)
+    at watch (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2118:26)
+    at doWatch (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:3071:23)
+    at watch2 (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:3004:10)
+    at setup (http://localhost:5173/tools/src/views/ImageCropperView.vue:60:5)
+[  494423ms] [WARNING] [Vue warn]: Unhandled error during execution of scheduler flush 
+  at <ImageCropperView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <App> @ http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2203
+[  494426ms] TypeError: Cannot read properties of null (reading 'flags')
+    at http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2687:28
+    at callWithErrorHandling (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2351:33)
+    at flushJobs (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2559:9)
+[  667665ms] [WARNING] [Vue warn]: Unhandled error during execution of scheduler flush 
+  at <ImageCropperView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <App> @ http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2203
+[  667667ms] TypeError: Cannot read properties of null (reading 'flags')
+    at http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2687:28
+    at callWithErrorHandling (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2351:33)
+    at flushJobs (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2559:9)
+[ 1381752ms] [ERROR] TypeError: Cannot read properties of null (reading 'flags')
+    at http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2655:24
+    at Array.forEach (<anonymous>)
+    at rerender (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2648:25)
+    at Object.rerender (http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2722:14)
+    at http://localhost:5173/tools/src/views/ImageCropperView.vue?t=1775744530931:866:25
+    at http://localhost:5173/tools/@vite/client:34:58
+    at http://localhost:5173/tools/@vite/client:213:11
+    at http://localhost:5173/tools/@vite/client:186:58
+    at Array.forEach (<anonymous>)
+    at HMRClient.queueUpdate (http://localhost:5173/tools/@vite/client:186:36) @ http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2723
+[ 1381754ms] [WARNING] [HMR] Something went wrong during Vue component hot-reload. Full reload required. @ http://localhost:5173/tools/node_modules/.vite/deps/chunk-UFUI7XLO.js?v=1eacc94a:2724
