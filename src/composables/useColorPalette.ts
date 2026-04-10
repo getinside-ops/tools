@@ -1,5 +1,6 @@
 import { ref, watch } from 'vue'
 import type { Ref } from 'vue'
+import { generateHarmony } from './useColorHarmony'
 
 export interface PaletteColor {
   hex: string
@@ -126,7 +127,17 @@ function randomColor(): string {
 }
 
 export function initPalette(): PaletteColor[] {
-  return Array.from({ length: 5 }, () => ({ hex: randomColor(), locked: false }))
+  // Generate a beautiful random palette using the harmony engine
+  const baseH = Math.floor(Math.random() * 360)
+  const baseS = 40 + Math.floor(Math.random() * 40)
+  const baseL = 35 + Math.floor(Math.random() * 30)
+  const baseHex = hslToHex(baseH, baseS, baseL)
+  const types: Array<'analogous' | 'complementary' | 'triadic' | 'tetradic' | 'split-complementary' | 'monochromatic' | 'random-beautiful'> = [
+    'random-beautiful', 'analogous', 'complementary', 'triadic', 'split-complementary'
+  ]
+  const type = types[Math.floor(Math.random() * types.length)]
+  const colors = generateHarmony(baseHex, type, 5)
+  return colors.map(hex => ({ hex, locked: false }))
 }
 
 export function generatePalette(current: PaletteColor[]): PaletteColor[] {
