@@ -448,6 +448,12 @@ async function copyAllCSS() {
   cursor: pointer;
 }
 
+.ts-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: var(--gi-radius-pill);
+  background: var(--gi-border-soft);
+}
+
 .ts-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -459,10 +465,18 @@ async function copyAllCSS() {
   border: 2px solid var(--gi-surface);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
   transition: transform var(--gi-transition-fast) var(--gi-ease-out);
+  margin-top: -7px; /* Center thumb on track (20px thumb - 6px track) / 2 */
 }
 
 .ts-slider::-webkit-slider-thumb:hover {
   transform: scale(1.1);
+}
+
+.ts-slider::-moz-range-track {
+  height: 6px;
+  border-radius: var(--gi-radius-pill);
+  background: var(--gi-border-soft);
+  border: none;
 }
 
 .ts-slider::-moz-range-thumb {
@@ -473,6 +487,12 @@ async function copyAllCSS() {
   cursor: pointer;
   border: 2px solid var(--gi-surface);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.ts-slider::-moz-range-progress {
+  height: 6px;
+  border-radius: var(--gi-radius-pill);
+  background: var(--gi-brand);
 }
 
 .ts-slider:focus-visible {
