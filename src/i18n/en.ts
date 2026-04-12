@@ -677,6 +677,7 @@ const en: Messages = {
     copied: 'Copied!',
     cssOutput: 'CSS snippet',
     removeRow: 'Remove this row',
+    resetRows: 'Reset to defaults',
     error: {
       invalidBase: 'Base size must be between 1 and 100',
     },

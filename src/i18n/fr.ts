@@ -675,6 +675,7 @@ const fr = {
     copied: 'Copié !',
     cssOutput: 'Extrait CSS',
     removeRow: 'Supprimer cette ligne',
+    resetRows: 'Réinitialiser',
     error: {
       invalidBase: 'La taille de base doit être entre 1 et 100',
     },
