@@ -672,6 +672,14 @@ const en: Messages = {
     remLabel: 'REM (rem)',
     result: 'Conversion result',
     addRow: 'Add a row',
+    copyRem: 'Copy REM value',
+    copyAll: 'Copy all',
+    copied: 'Copied!',
+    cssOutput: 'CSS snippet',
+    removeRow: 'Remove this row',
+    error: {
+      invalidBase: 'Base size must be between 1 and 100',
+    },
     pedagogic: {
       title: 'About REM Units',
       description: 'REM (root em) is a unit relative to the root font size. Ideal for accessibility and responsive design.',

@@ -670,6 +670,14 @@ const fr = {
     remLabel: 'REM (rem)',
     result: 'Résultat de la conversion',
     addRow: 'Ajouter une ligne',
+    copyRem: 'Copier la valeur REM',
+    copyAll: 'Tout copier',
+    copied: 'Copié !',
+    cssOutput: 'Extrait CSS',
+    removeRow: 'Supprimer cette ligne',
+    error: {
+      invalidBase: 'La taille de base doit être entre 1 et 100',
+    },
     pedagogic: {
       title: 'À propos des unités REM',
       description: 'Le REM (root em) est une unité relative à la taille de police racine. Idéal pour l\'accessibilité et le responsive design.',
