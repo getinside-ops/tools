@@ -1070,6 +1070,11 @@ const en: Messages = {
       raster: '(raster)',
       photo: '(photo)',
     },
+    formatShort: {
+      svg: 'SVG',
+      png: 'PNG',
+      jpg: 'JPG',
+    },
     pedagogic: {
       title: 'About EAN Barcodes',
       description: 'EAN-13 (European Article Numbering) is an international barcode standard used to identify products in retail.',

@@ -166,21 +166,24 @@
                 :class="{ 'is-active': settings.exportFormat === 'svg' }"
                 @click="setExportFormat('svg')"
               >
-                SVG {{ t('barcode.format.vector') }}
+                <FileText :size="16" class="barcode-format-icon" />
+                {{ t('barcode.formatShort.svg') }}
               </button>
               <button
                 class="gi-btn-ghost"
                 :class="{ 'is-active': settings.exportFormat === 'png' }"
                 @click="setExportFormat('png')"
               >
-                PNG {{ t('barcode.format.raster') }}
+                <FileText :size="16" class="barcode-format-icon" />
+                {{ t('barcode.formatShort.png') }}
               </button>
               <button
                 class="gi-btn-ghost"
                 :class="{ 'is-active': settings.exportFormat === 'jpg' }"
                 @click="setExportFormat('jpg')"
               >
-                JPG {{ t('barcode.format.photo') }}
+                <FileText :size="16" class="barcode-format-icon" />
+                {{ t('barcode.formatShort.jpg') }}
               </button>
             </div>
           </div>
@@ -292,7 +295,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Barcode, Loader2, Clipboard } from 'lucide-vue-next'
+import { Barcode, Loader2, FileText } from 'lucide-vue-next'
 import { generateEanBinary } from '../composables/useBarcode'
 import { useBarcodeValidator } from '../composables/useBarcodeValidator'
 import { useBarcodeExporter } from '../composables/useBarcodeExporter'
@@ -657,10 +660,20 @@ async function downloadBarcode() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: var(--gi-space-xs);
+  font-weight: 500;
+  font-size: var(--gi-font-size-sm);
+  padding: var(--gi-space-xs) var(--gi-space-md);
 }
 
 .barcode-format-selector .gi-btn-ghost:active {
   transform: scale(0.98);
+}
+
+.barcode-format-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
 }
 
 /* Checkbox Styling */

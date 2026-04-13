@@ -1068,6 +1068,11 @@ const fr = {
       raster: '(matriciel)',
       photo: '(photo)',
     },
+    formatShort: {
+      svg: 'SVG',
+      png: 'PNG',
+      jpg: 'JPG',
+    },
     pedagogic: {
       title: 'À propos des codes-barres EAN',
       description: 'L\'EAN-13 (European Article Numbering) est un standard international de code-barres utilisé pour identifier les produits dans le commerce de détail.',
