@@ -1081,7 +1081,6 @@ const fr = {
     validation: {
       maxDigits: '13 chiffres maximum',
       requiredDigits: '13 chiffres requis',
-      onlyDigits: 'Uniquement des chiffres autorisés',
     },
   },
   safetyMargin: {

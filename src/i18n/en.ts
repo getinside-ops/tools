@@ -1083,7 +1083,6 @@ const en: Messages = {
     validation: {
       maxDigits: '13 digits maximum',
       requiredDigits: '13 digits required',
-      onlyDigits: 'Only digits allowed',
     },
   },
   safetyMargin: {

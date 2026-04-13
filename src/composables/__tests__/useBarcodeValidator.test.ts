@@ -37,4 +37,32 @@ describe('useBarcodeValidator', () => {
     expect(state.value.isValid).toBe(true)
     expect(state.value.checksumValid).toBe(true)
   })
+
+  it('detects country from first digits', () => {
+    const { state, validate } = useBarcodeValidator()
+    validate('4006381333931')
+    expect(state.value.errorCode).toBeNull()
+    expect(state.value.country).toBe('France')
+  })
+
+  it('detects invalid checksum', () => {
+    const { state, validate } = useBarcodeValidator()
+    validate('4006381333932')
+    expect(state.value.errorCode).toBeNull()
+    expect(state.value.checksumValid).toBe(false)
+  })
+
+  it('strips non-digit characters', () => {
+    const { state, validate } = useBarcodeValidator()
+    validate('400-638-133-3931')
+    expect(state.value.errorCode).toBeNull()
+    expect(state.value.isValid).toBe(true)
+  })
+
+  it('detects Bulgaria (single range 380)', () => {
+    const { state, validate } = useBarcodeValidator()
+    validate('3800000000007')
+    expect(state.value.errorCode).toBeNull()
+    expect(state.value.country).toBe('Bulgarie')
+  })
 })
