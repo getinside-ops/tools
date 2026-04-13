@@ -50,7 +50,12 @@
 
         <!-- Customization Panel (always visible) -->
         <div class="barcode-customization">
-          <h3 class="barcode-section-title">{{ t('barcode.customize') }}</h3>
+          <div class="barcode-customization-header">
+            <h3 class="barcode-section-title">{{ t('barcode.customize') }}</h3>
+            <button class="gi-btn-ghost gi-btn-sm barcode-reset-btn" @click="reset" :title="t('barcode.reset')">
+              <RotateCcw :size="16" />
+            </button>
+          </div>
 
           <!-- Bar Color -->
           <div class="gi-field">
@@ -86,6 +91,9 @@
                 step="10"
                 :value="settings.width"
                 class="gi-slider"
+                :style="{
+                  background: `linear-gradient(to right, var(--gi-brand) ${((settings.width - 100) / 300) * 100}%, var(--gi-border) ${((settings.width - 100) / 300) * 100}%)`
+                }"
                 @input="(e) => setDimensions({ width: Number((e.target as HTMLInputElement).value), height: settings.height })"
               />
               <span class="barcode-slider-value">{{ settings.width }} px</span>
@@ -126,6 +134,9 @@
                 step="5"
                 :value="settings.height"
                 class="gi-slider"
+                :style="{
+                  background: `linear-gradient(to right, var(--gi-brand) ${((settings.height - 30) / 50) * 100}%, var(--gi-border) ${((settings.height - 30) / 50) * 100}%)`
+                }"
                 @input="(e) => setDimensions({ width: settings.width, height: Number((e.target as HTMLInputElement).value) })"
               />
               <span class="barcode-slider-value">{{ settings.height }} px</span>
@@ -188,10 +199,6 @@
             </div>
           </div>
 
-          <!-- Reset Button -->
-          <button class="gi-btn-ghost gi-btn-sm barcode-reset-btn" @click="reset">
-            {{ t('barcode.reset') }}
-          </button>
         </div>
       </div>
 
@@ -296,7 +303,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Barcode, Loader2, FileText, Copy } from 'lucide-vue-next'
+import { Barcode, Loader2, FileText, Copy, RotateCcw } from 'lucide-vue-next'
 import { generateEanBinary } from '../composables/useBarcode'
 import { useBarcodeValidator } from '../composables/useBarcodeValidator'
 import { useBarcodeExporter } from '../composables/useBarcodeExporter'
@@ -499,6 +506,20 @@ async function downloadBarcode() {
   flex-direction: column;
   gap: var(--gi-space-md);
   background: var(--gi-surface);
+}
+
+.barcode-customization-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--gi-space-sm);
+  border-bottom: 1px solid var(--gi-border);
+}
+
+.barcode-reset-btn {
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
 }
 
 .barcode-section-title {
