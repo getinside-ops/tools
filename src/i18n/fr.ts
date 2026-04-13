@@ -1037,7 +1037,7 @@ const fr = {
     checksum: 'Clé de contrôle : {n}',
     invalid: 'Entrez un code valide pour afficher l\'aperçu',
     preview: 'Aperçu du code-barres',
-    copy: 'Copier le code',
+    copyNumber: 'Copier le numéro',
     copied: 'Copié !',
     download: 'Télécharger en {format}',
     exporting: 'Téléchargement...',

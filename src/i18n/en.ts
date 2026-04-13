@@ -1039,7 +1039,7 @@ const en: Messages = {
     checksum: 'Check digit: {n}',
     invalid: 'Enter a valid code to see preview',
     preview: 'Barcode Preview',
-    copy: 'Copy Code',
+    copyNumber: 'Copy number',
     copied: 'Copied!',
     download: 'Download {format}',
     exporting: 'Downloading...',

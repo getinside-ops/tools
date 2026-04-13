@@ -273,7 +273,8 @@
           <template #actions>
             <div class="barcode-export-actions">
               <button class="gi-btn-ghost" @click="copyCode">
-                {{ copied ? t('barcode.copied') : t('barcode.copy') }}
+                <Copy :size="16" />
+                {{ copied ? t('barcode.copied') : t('barcode.copyNumber') }}
               </button>
               <button class="gi-btn" :disabled="isExporting" @click="downloadBarcode">
                 <Loader2 v-if="isExporting" :size="16" class="animate-spin" />
@@ -295,7 +296,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Barcode, Loader2, FileText } from 'lucide-vue-next'
+import { Barcode, Loader2, FileText, Copy } from 'lucide-vue-next'
 import { generateEanBinary } from '../composables/useBarcode'
 import { useBarcodeValidator } from '../composables/useBarcodeValidator'
 import { useBarcodeExporter } from '../composables/useBarcodeExporter'
