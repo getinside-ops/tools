@@ -41,6 +41,11 @@
             <span v-if="validationState.checksumValid" class="gi-text-success"> ✓</span>
             <span v-else class="gi-text-error"> ✗</span>
           </div>
+
+          <!-- Character Counter -->
+          <div class="gi-hint barcode-char-counter">
+            {{ inputCode.length }}/13
+          </div>
         </div>
 
         <!-- Customization Panel (always visible) -->
@@ -768,6 +773,14 @@ async function downloadBarcode() {
 /* Export Error */
 .gi-export-error {
   margin-top: var(--gi-space-sm);
+  font-size: var(--gi-font-size-xs);
+}
+
+/* Character Counter */
+.barcode-char-counter {
+  text-align: right;
+  font-weight: 500;
+  color: var(--gi-text-muted);
   font-size: var(--gi-font-size-xs);
 }
 
