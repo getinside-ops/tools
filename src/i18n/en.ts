@@ -1086,6 +1086,9 @@ const en: Messages = {
     },
     exportError: 'Export failed. Please try again or change format.',
     exportProcessing: 'Processing...',
+    paste: 'Paste',
+    pasteSuccess: 'Code pasted from clipboard',
+    pasteError: 'Unable to access clipboard',
   },
   safetyMargin: {
     title: 'Safety Margin & Bleed Checker',

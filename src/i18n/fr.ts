@@ -1084,6 +1084,9 @@ const fr = {
     },
     exportError: 'Échec de l\'exportation. Réessayez ou changez de format.',
     exportProcessing: 'Traitement en cours...',
+    paste: 'Coller',
+    pasteSuccess: 'Code collé depuis le presse-papiers',
+    pasteError: 'Impossible d\'accéder au presse-papiers',
   },
   safetyMargin: {
     title: 'Vérification Marges & Fond Perdu',
