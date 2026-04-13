@@ -307,7 +307,7 @@
       <h3 class="barcode-section-title">{{ t('barcode.pedagogic.title') }}</h3>
       <p class="gi-text-muted">{{ t('barcode.pedagogic.description') }}</p>
       <ul class="barcode-tips">
-        <li v-for="(tip, idx) in t('barcode.pedagogic.tips', { returnObjects: true })" :key="idx">
+        <li v-for="(tip, idx) in pedagogicTips" :key="idx">
           {{ tip }}
         </li>
       </ul>
@@ -328,7 +328,25 @@ import { useBarcodeCustomization } from '../composables/useBarcodeCustomization'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiResultCard from '../components/GiResultCard.vue'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+// Pedagogic tips (static array for tips section)
+const pedagogicTips = computed(() => {
+  if (locale.value === 'fr') {
+    return [
+      '13 chiffres : 12 chiffres + 1 clé de contrôle automatique',
+      'La clé de contrôle est calculée par un algorithme modulo 10',
+      'Les 2-3 premiers chiffres identifient le pays',
+      'Format SVG pour une qualité vectorielle parfaite',
+    ]
+  }
+  return [
+    '13 digits: 12 digits + 1 automatic check digit',
+    'The checksum is calculated using a modulo 10 algorithm',
+    'The first 2-3 digits identify the country',
+    'SVG format for perfect vector quality',
+  ]
+})
 
 // Initialize composables
 const { state: validationState, validate } = useBarcodeValidator()
