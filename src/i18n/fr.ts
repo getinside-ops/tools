@@ -1092,6 +1092,7 @@ const fr = {
     paste: 'Coller',
     pasteSuccess: 'Code collé depuis le presse-papiers',
     pasteError: 'Impossible d\'accéder au presse-papiers',
+    generateRandom: 'Générer un code aléatoire',
   },
   safetyMargin: {
     title: 'Vérification Marges & Fond Perdu',

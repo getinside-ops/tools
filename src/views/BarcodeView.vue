@@ -31,8 +31,9 @@
           <div v-if="errorMessage" class="gi-text-error gi-validation-message">
             {{ errorMessage }}
           </div>
-          <div v-else-if="validationState.country" class="gi-hint gi-validation-message">
-            {{ t('barcode.country', { country: validationState.country, code: validationState.countryCode }) }}
+          <div v-else-if="validationState.country" class="gi-hint gi-country-info">
+            <Globe :size="14" class="gi-country-icon" />
+            <span>{{ t('barcode.country', { country: validationState.country, code: validationState.countryCode }) }}</span>
           </div>
 
           <!-- Checksum Display -->
@@ -46,6 +47,12 @@
           <div class="gi-hint barcode-char-counter">
             {{ inputCode.length }}/13
           </div>
+
+          <!-- Random Code Generator -->
+          <button class="gi-btn-ghost gi-btn-sm barcode-random-btn" @click="generateRandom">
+            <Shuffle :size="16" />
+            {{ t('barcode.generateRandom') }}
+          </button>
         </div>
 
         <!-- Customization Panel (always visible) -->
@@ -101,22 +108,22 @@
             <div class="barcode-size-presets">
               <button
                 class="gi-btn-ghost gi-btn-sm"
-                :class="{ 'is-active': settings.width === 100 }"
-                @click="setDimensions({ width: 100, height: settings.height })"
+                :class="{ 'is-active': settings.width === 100 && settings.height === 25 }"
+                @click="setDimensions({ width: 100, height: 25 })"
               >
                 {{ t('barcode.size.small') }}
               </button>
               <button
                 class="gi-btn-ghost gi-btn-sm"
-                :class="{ 'is-active': settings.width === 200 }"
-                @click="setDimensions({ width: 200, height: settings.height })"
+                :class="{ 'is-active': settings.width === 200 && settings.height === 50 }"
+                @click="setDimensions({ width: 200, height: 50 })"
               >
                 {{ t('barcode.size.medium') }}
               </button>
               <button
                 class="gi-btn-ghost gi-btn-sm"
-                :class="{ 'is-active': settings.width === 400 }"
-                @click="setDimensions({ width: 400, height: settings.height })"
+                :class="{ 'is-active': settings.width === 400 && settings.height === 100 }"
+                @click="setDimensions({ width: 400, height: 100 })"
               >
                 {{ t('barcode.size.large') }}
               </button>
@@ -210,7 +217,6 @@
               v-if="fullCode.length === 13 && binary"
               ref="barcodeSvgContainer"
               class="barcode-preview"
-              :style="{ background: settings.transparentBackground ? 'transparent' : 'white' }"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -296,6 +302,17 @@
       </div>
     </div>
 
+    <!-- Pedagogical Content -->
+    <div class="barcode-pedagogic">
+      <h3 class="barcode-section-title">{{ t('barcode.pedagogic.title') }}</h3>
+      <p class="gi-text-muted">{{ t('barcode.pedagogic.description') }}</p>
+      <ul class="barcode-tips">
+        <li v-for="(tip, idx) in t('barcode.pedagogic.tips', { returnObjects: true })" :key="idx">
+          {{ tip }}
+        </li>
+      </ul>
+    </div>
+
     <template #about>{{ t('barcode.about') }}</template>
   </ToolPageLayout>
 </template>
@@ -303,8 +320,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Barcode, Loader2, FileText, Copy, RotateCcw } from 'lucide-vue-next'
-import { generateEanBinary } from '../composables/useBarcode'
+import { Barcode, Loader2, FileText, Copy, RotateCcw, Shuffle, Globe } from 'lucide-vue-next'
+import { generateEanBinary, generateRandomEan13 } from '../composables/useBarcode'
 import { useBarcodeValidator } from '../composables/useBarcodeValidator'
 import { useBarcodeExporter } from '../composables/useBarcodeExporter'
 import { useBarcodeCustomization } from '../composables/useBarcodeCustomization'
@@ -396,6 +413,12 @@ async function copyCode() {
   await navigator.clipboard.writeText(fullCode.value)
   copied.value = true
   setTimeout(() => (copied.value = false), 2000)
+}
+
+function generateRandom() {
+  const randomCode = generateRandomEan13()
+  inputCode.value = randomCode.slice(0, 12)
+  validate(inputCode.value)
 }
 
 async function downloadBarcode() {
@@ -820,8 +843,56 @@ async function downloadBarcode() {
 }
 
 /* Dark Mode Adjustments */
+.barcode-preview {
+  /* Force white background for accurate barcode preview */
+  background: white !important;
+}
+
 [data-theme='dark'] .barcode-preview {
-  background: var(--gi-surface-elevated);
+  background: white !important;
+  border-color: var(--gi-border);
+}
+
+/* Country Info */
+.gi-country-info {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gi-space-xs);
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-text-muted);
+  margin-top: var(--gi-space-xs);
+}
+
+.gi-country-icon {
+  opacity: 0.6;
+}
+
+/* Random Code Button */
+.barcode-random-btn {
+  margin-top: var(--gi-space-xs);
+  gap: var(--gi-space-xs);
+  min-height: 44px;
+  cursor: pointer;
+}
+
+/* Pedagogical Section */
+.barcode-pedagogic {
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-md);
+  padding: var(--gi-space-md);
+  background: var(--gi-surface);
+  margin-top: var(--gi-space-md);
+}
+
+.barcode-tips {
+  margin: var(--gi-space-sm) 0 0;
+  padding-left: var(--gi-space-md);
+  font-size: var(--gi-font-size-sm);
+  color: var(--gi-text-muted);
+}
+
+.barcode-tips li {
+  margin-bottom: var(--gi-space-xs);
 }
 
 /* Responsive Improvements */

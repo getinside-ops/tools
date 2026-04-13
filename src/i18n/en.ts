@@ -1094,6 +1094,7 @@ const en: Messages = {
     paste: 'Paste',
     pasteSuccess: 'Code pasted from clipboard',
     pasteError: 'Unable to access clipboard',
+    generateRandom: 'Generate random code',
   },
   safetyMargin: {
     title: 'Safety Margin & Bleed Checker',
