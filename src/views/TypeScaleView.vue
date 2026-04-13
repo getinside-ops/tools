@@ -31,6 +31,7 @@
                 max="64"
                 step="1"
                 :aria-label="t('typeScale.baseSize')"
+                :style="`--slider-fill: ${baseSizeFill}%`"
               />
             </div>
           </template>
@@ -68,6 +69,7 @@
                 max="6"
                 step="1"
                 :aria-label="t('typeScale.stepsDown')"
+                :style="`--slider-fill: ${stepsDownFill}%`"
               />
             </div>
           </template>
@@ -93,6 +95,7 @@
                 max="12"
                 step="1"
                 :aria-label="t('typeScale.stepsUp')"
+                :style="`--slider-fill: ${stepsUpFill}%`"
               />
             </div>
           </template>
@@ -142,6 +145,7 @@
                 max="2.0"
                 step="0.1"
                 :aria-label="t('typeScale.lineHeight')"
+                :style="`--slider-fill: ${lineHeightFill}%`"
               />
             </div>
           </template>
@@ -290,6 +294,12 @@ const FONT_FAMILIES = {
 
 const copiedIndex = ref<number | null>(null)
 const copiedFlash = ref<number | null>(null)
+
+// Slider fill percentages for visual feedback
+const baseSizeFill = computed(() => ((baseSize.value - 8) / (64 - 8)) * 100)
+const stepsDownFill = computed(() => ((stepsDown.value - 0) / (6 - 0)) * 100)
+const stepsUpFill = computed(() => ((stepsUp.value - 2) / (12 - 2)) * 100)
+const lineHeightFill = computed(() => ((lineHeight.value - 1.0) / (2.0 - 1.0)) * 100)
 
 const scale = computed(() => {
   return generateTypeScale(baseSize.value, ratio.value, stepsDown.value, stepsUp.value)
@@ -441,17 +451,17 @@ async function copyAllCSS() {
   width: 100%;
   height: 6px;
   border-radius: var(--gi-radius-pill);
-  background: var(--gi-border-soft);
   outline: none;
   -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
+  background: transparent;
 }
 
 .ts-slider::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: var(--gi-radius-pill);
-  background: var(--gi-border-soft);
+  background: linear-gradient(to right, var(--gi-brand) 0%, var(--gi-brand) var(--slider-fill, 0%), var(--gi-border) var(--slider-fill, 0%), var(--gi-border) 100%);
 }
 
 .ts-slider::-webkit-slider-thumb {
@@ -475,7 +485,7 @@ async function copyAllCSS() {
 .ts-slider::-moz-range-track {
   height: 6px;
   border-radius: var(--gi-radius-pill);
-  background: var(--gi-border-soft);
+  background: var(--gi-border);
   border: none;
 }
 
