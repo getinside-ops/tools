@@ -1039,7 +1039,7 @@ const en: Messages = {
     checksum: 'Check digit: {n}',
     invalid: 'Enter a valid code to see preview',
     preview: 'Barcode Preview',
-    copy: 'Copy Code',
+    copyNumber: 'Copy number',
     copied: 'Copied!',
     download: 'Download {format}',
     exporting: 'Downloading...',
@@ -1070,6 +1070,11 @@ const en: Messages = {
       raster: '(raster)',
       photo: '(photo)',
     },
+    formatShort: {
+      svg: 'SVG',
+      png: 'PNG',
+      jpg: 'JPG',
+    },
     pedagogic: {
       title: 'About EAN Barcodes',
       description: 'EAN-13 (European Article Numbering) is an international barcode standard used to identify products in retail.',
@@ -1080,6 +1085,16 @@ const en: Messages = {
         'SVG format for perfect vector quality',
       ],
     },
+    validation: {
+      maxDigits: '13 digits maximum',
+      requiredDigits: '13 digits required',
+    },
+    exportError: 'Export failed. Please try again or change format.',
+    exportProcessing: 'Processing...',
+    paste: 'Paste',
+    pasteSuccess: 'Code pasted from clipboard',
+    pasteError: 'Unable to access clipboard',
+    generateRandom: 'Generate random code',
   },
   safetyMargin: {
     title: 'Safety Margin & Bleed Checker',

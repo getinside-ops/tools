@@ -1,3 +1,0 @@
-[   33463ms] [WARNING] [intlify] Not found 'metadata.pedagogic.tips' key in 'fr' locale messages. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=ec78afd3:26
-[   33463ms] [WARNING] [intlify] Fall back to translate 'metadata.pedagogic.tips' key with 'en' locale. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=ec78afd3:26
-[   33464ms] [WARNING] [intlify] Not found 'metadata.pedagogic.tips' key in 'en' locale messages. @ http://localhost:5173/tools/node_modules/.vite/deps/vue-i18n.js?v=ec78afd3:26

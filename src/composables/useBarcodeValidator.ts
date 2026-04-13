@@ -109,7 +109,7 @@ const COUNTRY_RANGES: Array<{ range: string; country: string }> = [
 
 export interface BarcodeValidationState {
   isValid: boolean
-  error: string | null
+  errorCode: string | null
   isCalculating: boolean
   checksum: number | null
   checksumValid: boolean
@@ -121,7 +121,7 @@ export interface BarcodeValidationState {
 export function useBarcodeValidator() {
   const state = ref<BarcodeValidationState>({
     isValid: false,
-    error: null,
+    errorCode: null,
     isCalculating: false,
     checksum: null,
     checksumValid: false,
@@ -168,7 +168,7 @@ export function useBarcodeValidator() {
     if (cleanCode.length === 0) {
       state.value = {
         isValid: false,
-        error: null,
+        errorCode: null,
         isCalculating: false,
         checksum: null,
         checksumValid: false,
@@ -183,7 +183,7 @@ export function useBarcodeValidator() {
     if (cleanCode.length > 13) {
       state.value = {
         isValid: false,
-        error: '13 chiffres maximum',
+        errorCode: 'maxDigits',
         isCalculating: false,
         checksum: null,
         checksumValid: false,
@@ -200,7 +200,7 @@ export function useBarcodeValidator() {
       const country = detectCountry(cleanCode)
       state.value = {
         isValid: false,
-        error: null,
+        errorCode: null,
         isCalculating: false,
         checksum,
         checksumValid: true,
@@ -215,7 +215,7 @@ export function useBarcodeValidator() {
     if (cleanCode.length !== 13) {
       state.value = {
         isValid: false,
-        error: '13 chiffres requis',
+        errorCode: 'requiredDigits',
         isCalculating: false,
         checksum: null,
         checksumValid: false,
@@ -234,7 +234,7 @@ export function useBarcodeValidator() {
 
     state.value = {
       isValid: true,
-      error: null,
+      errorCode: null,
       isCalculating: false,
       checksum: expectedChecksum,
       checksumValid: lastDigit === expectedChecksum,

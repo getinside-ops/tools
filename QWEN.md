@@ -2079,3 +2079,6 @@ function roundToStep(value: number, min: number, max: number, stepFn: (v: number
 - `src/views/PaperWeightView.vue` — Weight per unit display, booklet pages dropdown, compact layout, silent clamping
 - `src/i18n/fr.ts` — Custom pages translations
 - `src/i18n/en.ts` — Custom pages translations
+
+## Qwen Added Memories
+- Barcode UX improvements worktree: /Users/benoitprentout/github repos/tools/.worktrees/barcode-ux-improvements on branch feat/barcode-ux-improvements. All 255 tests passing at baseline.

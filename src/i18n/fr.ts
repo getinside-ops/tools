@@ -1037,7 +1037,7 @@ const fr = {
     checksum: 'Clé de contrôle : {n}',
     invalid: 'Entrez un code valide pour afficher l\'aperçu',
     preview: 'Aperçu du code-barres',
-    copy: 'Copier le code',
+    copyNumber: 'Copier le numéro',
     copied: 'Copié !',
     download: 'Télécharger en {format}',
     exporting: 'Téléchargement...',
@@ -1068,6 +1068,11 @@ const fr = {
       raster: '(matriciel)',
       photo: '(photo)',
     },
+    formatShort: {
+      svg: 'SVG',
+      png: 'PNG',
+      jpg: 'JPG',
+    },
     pedagogic: {
       title: 'À propos des codes-barres EAN',
       description: 'L\'EAN-13 (European Article Numbering) est un standard international de code-barres utilisé pour identifier les produits dans le commerce de détail.',
@@ -1078,6 +1083,16 @@ const fr = {
         'Format SVG pour une qualité vectorielle parfaite',
       ],
     },
+    validation: {
+      maxDigits: '13 chiffres maximum',
+      requiredDigits: '13 chiffres requis',
+    },
+    exportError: 'Échec de l\'exportation. Réessayez ou changez de format.',
+    exportProcessing: 'Traitement en cours...',
+    paste: 'Coller',
+    pasteSuccess: 'Code collé depuis le presse-papiers',
+    pasteError: 'Impossible d\'accéder au presse-papiers',
+    generateRandom: 'Générer un code aléatoire',
   },
   safetyMargin: {
     title: 'Vérification Marges & Fond Perdu',

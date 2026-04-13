@@ -21,30 +21,48 @@
             class="gi-input"
             :class="{
               'gi-input-success': validationState.isValid,
-              'gi-input-error': validationState.error && !validationState.isValid,
+              'gi-input-error': validationState.errorCode && !validationState.isValid,
             }"
             @input="handleInput"
             maxlength="13"
           />
 
           <!-- Validation Feedback -->
-          <div v-if="validationState.error" class="gi-text-error gi-validation-message">
-            {{ validationState.error }}
+          <div v-if="errorMessage" class="gi-text-error gi-validation-message">
+            {{ errorMessage }}
           </div>
-          <div v-else-if="validationState.country" class="gi-hint gi-validation-message">
-            {{ t('barcode.country', { country: validationState.country, code: validationState.countryCode }) }}
+          <div v-else-if="validationState.country" class="gi-hint gi-country-info">
+            <Globe :size="14" class="gi-country-icon" />
+            <span>{{ t('barcode.country', { country: validationState.country, code: validationState.countryCode }) }}</span>
           </div>
 
           <!-- Checksum Display -->
-          <div v-if="validationState.checksum !== null" class="gi-hint">
+          <div v-if="fullCode.length === 13 && validationState.checksum !== null" class="gi-hint">
             {{ t('barcode.checksum', { n: validationState.checksum }) }}
             <span v-if="validationState.checksumValid" class="gi-text-success"> ✓</span>
+            <span v-else class="gi-text-error"> ✗</span>
           </div>
+
+          <!-- Character Counter -->
+          <div class="gi-hint barcode-char-counter">
+            {{ inputCode.length }}/13
+          </div>
+
+          <!-- Random Code Generator -->
+          <button class="gi-btn-ghost gi-btn-sm barcode-random-btn" @click="generateRandom">
+            <Shuffle :size="16" />
+            {{ t('barcode.generateRandom') }}
+          </button>
         </div>
 
         <!-- Customization Panel (always visible) -->
         <div class="barcode-customization">
-          <h3 class="barcode-section-title">{{ t('barcode.customize') }}</h3>
+          <div class="barcode-customization-header">
+            <h3 class="barcode-section-title">{{ t('barcode.customize') }}</h3>
+            <button class="gi-btn-ghost gi-btn-sm barcode-reset-btn" @click="reset" :title="t('barcode.reset')">
+              <RotateCcw :size="16" />
+            </button>
+          </div>
 
           <!-- Bar Color -->
           <div class="gi-field">
@@ -80,6 +98,9 @@
                 step="10"
                 :value="settings.width"
                 class="gi-slider"
+                :style="{
+                  background: `linear-gradient(to right, var(--gi-brand) ${((settings.width - 100) / 300) * 100}%, var(--gi-border) ${((settings.width - 100) / 300) * 100}%)`
+                }"
                 @input="(e) => setDimensions({ width: Number((e.target as HTMLInputElement).value), height: settings.height })"
               />
               <span class="barcode-slider-value">{{ settings.width }} px</span>
@@ -87,22 +108,22 @@
             <div class="barcode-size-presets">
               <button
                 class="gi-btn-ghost gi-btn-sm"
-                :class="{ 'is-active': settings.width === 100 }"
-                @click="setDimensions({ width: 100, height: settings.height })"
+                :class="{ 'is-active': settings.width === 100 && settings.height === 25 }"
+                @click="setDimensions({ width: 100, height: 25 })"
               >
                 {{ t('barcode.size.small') }}
               </button>
               <button
                 class="gi-btn-ghost gi-btn-sm"
-                :class="{ 'is-active': settings.width === 200 }"
-                @click="setDimensions({ width: 200, height: settings.height })"
+                :class="{ 'is-active': settings.width === 200 && settings.height === 50 }"
+                @click="setDimensions({ width: 200, height: 50 })"
               >
                 {{ t('barcode.size.medium') }}
               </button>
               <button
                 class="gi-btn-ghost gi-btn-sm"
-                :class="{ 'is-active': settings.width === 400 }"
-                @click="setDimensions({ width: 400, height: settings.height })"
+                :class="{ 'is-active': settings.width === 400 && settings.height === 100 }"
+                @click="setDimensions({ width: 400, height: 100 })"
               >
                 {{ t('barcode.size.large') }}
               </button>
@@ -120,6 +141,9 @@
                 step="5"
                 :value="settings.height"
                 class="gi-slider"
+                :style="{
+                  background: `linear-gradient(to right, var(--gi-brand) ${((settings.height - 30) / 50) * 100}%, var(--gi-border) ${((settings.height - 30) / 50) * 100}%)`
+                }"
                 @input="(e) => setDimensions({ width: settings.width, height: Number((e.target as HTMLInputElement).value) })"
               />
               <span class="barcode-slider-value">{{ settings.height }} px</span>
@@ -160,29 +184,28 @@
                 :class="{ 'is-active': settings.exportFormat === 'svg' }"
                 @click="setExportFormat('svg')"
               >
-                SVG {{ t('barcode.format.vector') }}
+                <FileText :size="16" class="barcode-format-icon" />
+                {{ t('barcode.formatShort.svg') }}
               </button>
               <button
                 class="gi-btn-ghost"
                 :class="{ 'is-active': settings.exportFormat === 'png' }"
                 @click="setExportFormat('png')"
               >
-                PNG {{ t('barcode.format.raster') }}
+                <FileText :size="16" class="barcode-format-icon" />
+                {{ t('barcode.formatShort.png') }}
               </button>
               <button
                 class="gi-btn-ghost"
                 :class="{ 'is-active': settings.exportFormat === 'jpg' }"
                 @click="setExportFormat('jpg')"
               >
-                JPG {{ t('barcode.format.photo') }}
+                <FileText :size="16" class="barcode-format-icon" />
+                {{ t('barcode.formatShort.jpg') }}
               </button>
             </div>
           </div>
 
-          <!-- Reset Button -->
-          <button class="gi-btn-ghost gi-btn-sm barcode-reset-btn" @click="reset">
-            {{ t('barcode.reset') }}
-          </button>
         </div>
       </div>
 
@@ -194,7 +217,6 @@
               v-if="fullCode.length === 13 && binary"
               ref="barcodeSvgContainer"
               class="barcode-preview"
-              :style="{ background: settings.transparentBackground ? 'transparent' : 'white' }"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -264,16 +286,31 @@
           <template #actions>
             <div class="barcode-export-actions">
               <button class="gi-btn-ghost" @click="copyCode">
-                {{ copied ? t('barcode.copied') : t('barcode.copy') }}
+                <Copy :size="16" />
+                {{ copied ? t('barcode.copied') : t('barcode.copyNumber') }}
               </button>
               <button class="gi-btn" :disabled="isExporting" @click="downloadBarcode">
                 <Loader2 v-if="isExporting" :size="16" class="animate-spin" />
                 {{ isExporting ? t('barcode.exporting') : t('barcode.download', { format: settings.exportFormat.toUpperCase() }) }}
               </button>
             </div>
+            <div v-if="exportError" class="gi-text-error gi-export-error" role="alert">
+              {{ exportError }}
+            </div>
           </template>
         </GiResultCard>
       </div>
+    </div>
+
+    <!-- Pedagogical Content -->
+    <div class="barcode-pedagogic">
+      <h3 class="barcode-section-title">{{ t('barcode.pedagogic.title') }}</h3>
+      <p class="gi-text-muted">{{ t('barcode.pedagogic.description') }}</p>
+      <ul class="barcode-tips">
+        <li v-for="(tip, idx) in t('barcode.pedagogic.tips', { returnObjects: true })" :key="idx">
+          {{ tip }}
+        </li>
+      </ul>
     </div>
 
     <template #about>{{ t('barcode.about') }}</template>
@@ -283,8 +320,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Barcode, Loader2 } from 'lucide-vue-next'
-import { generateEanBinary } from '../composables/useBarcode'
+import { Barcode, Loader2, FileText, Copy, RotateCcw, Shuffle, Globe } from 'lucide-vue-next'
+import { generateEanBinary, generateRandomEan13 } from '../composables/useBarcode'
 import { useBarcodeValidator } from '../composables/useBarcodeValidator'
 import { useBarcodeExporter } from '../composables/useBarcodeExporter'
 import { useBarcodeCustomization } from '../composables/useBarcodeCustomization'
@@ -310,6 +347,7 @@ const {
 const inputCode = ref('400638133393')
 const copied = ref(false)
 const isExporting = ref(false)
+const exportError = ref<string | null>(null)
 const barcodeSvgContainer = ref<HTMLElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 
@@ -346,6 +384,11 @@ const fullCode = computed(() => {
   return inputCode.value
 })
 
+const errorMessage = computed(() => {
+  if (!validationState.value.errorCode) return null
+  return t(`barcode.validation.${validationState.value.errorCode}`)
+})
+
 const binary = computed(() => {
   try {
     if (fullCode.value.length === 13) {
@@ -372,8 +415,16 @@ async function copyCode() {
   setTimeout(() => (copied.value = false), 2000)
 }
 
+function generateRandom() {
+  const randomCode = generateRandomEan13()
+  inputCode.value = randomCode.slice(0, 12)
+  validate(inputCode.value)
+}
+
 async function downloadBarcode() {
   if (!barcodeSvgContainer.value || fullCode.value.length !== 13 || isExporting.value) return
+
+  exportError.value = null
 
   const svgElement = barcodeSvgContainer.value.querySelector('svg')
   if (!svgElement) return
@@ -409,6 +460,7 @@ async function downloadBarcode() {
     downloadBlob(blob, exportFilename)
   } catch (error) {
     console.error('Export failed:', error)
+    exportError.value = t('barcode.exportError')
   } finally {
     isExporting.value = false
   }
@@ -477,6 +529,20 @@ async function downloadBarcode() {
   flex-direction: column;
   gap: var(--gi-space-md);
   background: var(--gi-surface);
+}
+
+.barcode-customization-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--gi-space-sm);
+  border-bottom: 1px solid var(--gi-border);
+}
+
+.barcode-reset-btn {
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
 }
 
 .barcode-section-title {
@@ -639,10 +705,20 @@ async function downloadBarcode() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: var(--gi-space-xs);
+  font-weight: 500;
+  font-size: var(--gi-font-size-sm);
+  padding: var(--gi-space-xs) var(--gi-space-md);
 }
 
 .barcode-format-selector .gi-btn-ghost:active {
   transform: scale(0.98);
+}
+
+.barcode-format-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
 }
 
 /* Checkbox Styling */
@@ -752,9 +828,71 @@ async function downloadBarcode() {
   cursor: not-allowed;
 }
 
+/* Export Error */
+.gi-export-error {
+  margin-top: var(--gi-space-sm);
+  font-size: var(--gi-font-size-xs);
+}
+
+/* Character Counter */
+.barcode-char-counter {
+  text-align: right;
+  font-weight: 500;
+  color: var(--gi-text-muted);
+  font-size: var(--gi-font-size-xs);
+}
+
 /* Dark Mode Adjustments */
+.barcode-preview {
+  /* Force white background for accurate barcode preview */
+  background: white !important;
+}
+
 [data-theme='dark'] .barcode-preview {
-  background: var(--gi-surface-elevated);
+  background: white !important;
+  border-color: var(--gi-border);
+}
+
+/* Country Info */
+.gi-country-info {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gi-space-xs);
+  font-size: var(--gi-font-size-xs);
+  color: var(--gi-text-muted);
+  margin-top: var(--gi-space-xs);
+}
+
+.gi-country-icon {
+  opacity: 0.6;
+}
+
+/* Random Code Button */
+.barcode-random-btn {
+  margin-top: var(--gi-space-xs);
+  gap: var(--gi-space-xs);
+  min-height: 44px;
+  cursor: pointer;
+}
+
+/* Pedagogical Section */
+.barcode-pedagogic {
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-md);
+  padding: var(--gi-space-md);
+  background: var(--gi-surface);
+  margin-top: var(--gi-space-md);
+}
+
+.barcode-tips {
+  margin: var(--gi-space-sm) 0 0;
+  padding-left: var(--gi-space-md);
+  font-size: var(--gi-font-size-sm);
+  color: var(--gi-text-muted);
+}
+
+.barcode-tips li {
+  margin-bottom: var(--gi-space-xs);
 }
 
 /* Responsive Improvements */

@@ -58,3 +58,9 @@ export function generateEanBinary(ean: string): string {
 
   return binary
 }
+
+export function generateRandomEan13(): string {
+  const digits = Array.from({ length: 12 }, () => Math.floor(Math.random() * 10))
+  const checksum = calculateEanChecksum(digits.join(''))
+  return digits.join('') + checksum
+}
