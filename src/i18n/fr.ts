@@ -1082,6 +1082,8 @@ const fr = {
       maxDigits: '13 chiffres maximum',
       requiredDigits: '13 chiffres requis',
     },
+    exportError: 'Échec de l\'exportation. Réessayez ou changez de format.',
+    exportProcessing: 'Traitement en cours...',
   },
   safetyMargin: {
     title: 'Vérification Marges & Fond Perdu',

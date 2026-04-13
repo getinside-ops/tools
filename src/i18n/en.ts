@@ -1084,6 +1084,8 @@ const en: Messages = {
       maxDigits: '13 digits maximum',
       requiredDigits: '13 digits required',
     },
+    exportError: 'Export failed. Please try again or change format.',
+    exportProcessing: 'Processing...',
   },
   safetyMargin: {
     title: 'Safety Margin & Bleed Checker',

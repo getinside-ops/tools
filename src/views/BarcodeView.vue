@@ -271,6 +271,9 @@
                 {{ isExporting ? t('barcode.exporting') : t('barcode.download', { format: settings.exportFormat.toUpperCase() }) }}
               </button>
             </div>
+            <div v-if="exportError" class="gi-text-error gi-export-error" role="alert">
+              {{ exportError }}
+            </div>
           </template>
         </GiResultCard>
       </div>
@@ -310,6 +313,7 @@ const {
 const inputCode = ref('400638133393')
 const copied = ref(false)
 const isExporting = ref(false)
+const exportError = ref<string | null>(null)
 const barcodeSvgContainer = ref<HTMLElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 
@@ -380,6 +384,8 @@ async function copyCode() {
 async function downloadBarcode() {
   if (!barcodeSvgContainer.value || fullCode.value.length !== 13 || isExporting.value) return
 
+  exportError.value = null
+
   const svgElement = barcodeSvgContainer.value.querySelector('svg')
   if (!svgElement) return
 
@@ -414,6 +420,7 @@ async function downloadBarcode() {
     downloadBlob(blob, exportFilename)
   } catch (error) {
     console.error('Export failed:', error)
+    exportError.value = t('barcode.exportError')
   } finally {
     isExporting.value = false
   }
@@ -755,6 +762,12 @@ async function downloadBarcode() {
 .barcode-export-actions .gi-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Export Error */
+.gi-export-error {
+  margin-top: var(--gi-space-sm);
+  font-size: var(--gi-font-size-xs);
 }
 
 /* Dark Mode Adjustments */
