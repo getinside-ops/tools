@@ -36,9 +36,10 @@
           </div>
 
           <!-- Checksum Display -->
-          <div v-if="validationState.checksum !== null" class="gi-hint">
+          <div v-if="fullCode.length === 13 && validationState.checksum !== null" class="gi-hint">
             {{ t('barcode.checksum', { n: validationState.checksum }) }}
             <span v-if="validationState.checksumValid" class="gi-text-success"> ✓</span>
+            <span v-else class="gi-text-error"> ✗</span>
           </div>
         </div>
 
