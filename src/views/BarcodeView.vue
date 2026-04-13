@@ -21,15 +21,15 @@
             class="gi-input"
             :class="{
               'gi-input-success': validationState.isValid,
-              'gi-input-error': validationState.error && !validationState.isValid,
+              'gi-input-error': validationState.errorCode && !validationState.isValid,
             }"
             @input="handleInput"
             maxlength="13"
           />
 
           <!-- Validation Feedback -->
-          <div v-if="validationState.error" class="gi-text-error gi-validation-message">
-            {{ validationState.error }}
+          <div v-if="errorMessage" class="gi-text-error gi-validation-message">
+            {{ errorMessage }}
           </div>
           <div v-else-if="validationState.country" class="gi-hint gi-validation-message">
             {{ t('barcode.country', { country: validationState.country, code: validationState.countryCode }) }}
@@ -344,6 +344,11 @@ const fullCode = computed(() => {
     return inputCode.value + validationState.value.checksum
   }
   return inputCode.value
+})
+
+const errorMessage = computed(() => {
+  if (!validationState.value.errorCode) return null
+  return t(`barcode.validation.${validationState.value.errorCode}`)
 })
 
 const binary = computed(() => {

@@ -1080,6 +1080,11 @@ const en: Messages = {
         'SVG format for perfect vector quality',
       ],
     },
+    validation: {
+      maxDigits: '13 digits maximum',
+      requiredDigits: '13 digits required',
+      onlyDigits: 'Only digits allowed',
+    },
   },
   safetyMargin: {
     title: 'Safety Margin & Bleed Checker',

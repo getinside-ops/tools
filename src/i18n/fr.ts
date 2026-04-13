@@ -1078,6 +1078,11 @@ const fr = {
         'Format SVG pour une qualité vectorielle parfaite',
       ],
     },
+    validation: {
+      maxDigits: '13 chiffres maximum',
+      requiredDigits: '13 chiffres requis',
+      onlyDigits: 'Uniquement des chiffres autorisés',
+    },
   },
   safetyMargin: {
     title: 'Vérification Marges & Fond Perdu',
