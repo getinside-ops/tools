@@ -1,32 +1,29 @@
-/**
- * Theme management composable for light/dark mode support
- * Handles theme persistence, system preference detection, and DOM updates
- */
-
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 export type Theme = 'light' | 'dark'
 
 const STORAGE_KEY = 'gi-theme'
 
-export function useTheme() {
-  const theme = ref<Theme>('light')
+// Module-level singleton — shared between AppHeader and AppFooter
+const theme = ref<Theme>('light')
+let initialized = false
 
-  function applyTheme(newTheme: Theme) {
-    if (newTheme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark')
-    } else {
-      document.documentElement.removeAttribute('data-theme')
-    }
+function applyTheme(newTheme: Theme) {
+  if (newTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark')
+  } else {
+    document.documentElement.removeAttribute('data-theme')
   }
+}
 
-  function initTheme() {
+export function useTheme() {
+  if (!initialized) {
+    initialized = true
     const stored = localStorage.getItem(STORAGE_KEY) as Theme | null
-    if (stored) {
+    if (stored === 'dark' || stored === 'light') {
       theme.value = stored
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      theme.value = prefersDark ? 'dark' : 'light'
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      theme.value = 'dark'
     }
     applyTheme(theme.value)
   }
@@ -37,14 +34,5 @@ export function useTheme() {
     localStorage.setItem(STORAGE_KEY, theme.value)
   }
 
-  watch(theme, (newTheme) => {
-    localStorage.setItem(STORAGE_KEY, newTheme)
-  })
-
-  initTheme()
-
-  return {
-    theme,
-    toggleTheme,
-  }
+  return { theme, toggleTheme }
 }

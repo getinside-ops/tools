@@ -284,6 +284,7 @@ body {
 }
 
 .gi-main { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.gi-main-home { display: block; width: 100%; }
 
 .gi-field { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
 .gi-label { font-size: 0.875rem; font-weight: 500; color: var(--gi-text); }

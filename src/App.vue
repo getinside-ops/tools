@@ -1,7 +1,7 @@
 <template>
   <SkipToContent />
   <AppHeader v-if="isHomePage" />
-  <main id="main-content" class="gi-main">
+  <main id="main-content" :class="isHomePage ? 'gi-main-home' : 'gi-main'">
     <router-view />
   </main>
   <AppFooter />
@@ -16,10 +16,6 @@ import AppFooter from './components/AppFooter.vue'
 
 const route = useRoute()
 
-const isHomePage = computed(() => {
-  const path = route.path
-  const hash = route.hash
-  // Check for: /, /#/, /#, or empty (handles hash routes like /#/qr-decoder)
-  return path === '/' || path === '' || hash === '/' || hash === '' || hash === '#/'
-})
+// In hash-history mode, route.path is the segment after "#" — "/" means home
+const isHomePage = computed(() => route.path === '/')
 </script>

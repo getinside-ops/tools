@@ -4,7 +4,7 @@
       <!-- Left: Logo -->
       <div class="gi-footer-left">
         <a href="https://www.getinside.fr/" class="gi-footer-logo">
-          <img :src="`${base}getinside-current.png`" alt="getinside">
+          <img :src="`${base}logo-getinside.svg`" alt="getinside">
           <span class="gi-footer-logo-badge">tools</span>
         </a>
       </div>
@@ -86,7 +86,7 @@ function toggleLocale() {
   margin-top: 4rem;
 }
 .gi-footer-inner {
-  max-width: 1100px;
+  max-width: var(--gi-container-hero);
   margin: 0 auto;
   padding: 1.5rem;
   display: flex;
@@ -162,7 +162,7 @@ function toggleLocale() {
 
 /* Quick Access */
 .gi-footer-quick-access {
-  max-width: 1100px;
+  max-width: var(--gi-container-hero);
   margin: 0 auto;
   padding: 0 1.5rem;
   display: flex;
@@ -208,7 +208,7 @@ function toggleLocale() {
 
 /* Bottom bar */
 .gi-footer-bottom {
-  max-width: 1100px;
+  max-width: var(--gi-container-hero);
   margin: 0 auto;
   padding: 0.75rem 1.5rem;
   border-top: 1px solid var(--gi-border);

@@ -6,20 +6,15 @@
       {{ t('nav.back') }}
     </router-link>
 
-    <!-- Tool Header Card -->
-    <div class="tool-header-card">
+    <!-- Tool Header (flat) -->
+    <div class="tool-header">
       <div class="tool-icon" v-if="$slots.icon">
         <slot name="icon"></slot>
       </div>
       <div class="tool-title-section">
-        <div class="tool-title-row">
-          <h1 class="tool-title">
-            <slot name="title">{{ title }}</slot>
-          </h1>
-          <span v-if="category" class="tool-category-badge" :class="`tool-category-badge--${category}`">
-            {{ t(`home.categories.${category}`) }}
-          </span>
-        </div>
+        <h1 class="tool-title">
+          <slot name="title">{{ title }}</slot>
+        </h1>
         <p v-if="subtitle" class="tool-subtitle">{{ subtitle }}</p>
         <p class="tool-description">
           <slot name="description">{{ description }}</slot>
@@ -27,13 +22,15 @@
       </div>
     </div>
 
+    <hr class="tool-divider" />
+
     <!-- Tool Content -->
     <div class="tool-content">
       <slot></slot>
     </div>
 
     <!-- About Panel -->
-    <div v-if="$slots.about" class="tool-about" :class="`tool-about--${category}`">
+    <div v-if="$slots.about" class="tool-about" :class="category ? `tool-about--${category}` : ''">
       <div class="tool-about-label">
         <span>{{ t('nav.about') }}</span>
       </div>
@@ -50,7 +47,7 @@ defineProps<{
   title?: string
   subtitle?: string
   description?: string
-  category?: 'print' | 'digital' | 'design'
+  category?: string
 }>()
 
 const { t } = useI18n()
@@ -60,52 +57,38 @@ const { t } = useI18n()
 .tool-page {
   max-width: var(--gi-container-tool);
   margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
+  padding: 1.75rem 1.5rem 4rem;
 }
 
 /* Back Link */
 .tool-back-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 1.5rem;
-  padding: 0.375rem 0.625rem;
-  border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius-md);
+  gap: 0.3rem;
+  margin-bottom: 2rem;
   font-size: var(--gi-font-size-sm);
+  font-weight: 500;
   color: var(--gi-text-muted);
   text-decoration: none;
-  transition: all var(--gi-transition-fast) var(--gi-ease-out);
-  background: var(--gi-surface);
+  transition: color var(--gi-transition-fast);
 }
 
 .tool-back-link:hover {
-  border-color: var(--gi-brand);
   color: var(--gi-brand);
-  background: var(--gi-brand-fade);
-  transform: translateX(-2px);
 }
 
 .tool-back-link:focus-visible {
   outline: 2px solid var(--gi-brand);
   outline-offset: 2px;
+  border-radius: 2px;
 }
 
-[data-theme="dark"] .tool-back-link:hover {
-  background: rgba(10, 170, 142, 0.15);
-}
-
-/* Header Card */
-.tool-header-card {
-  background: var(--gi-surface);
-  border: 1px solid var(--gi-border);
-  border-radius: var(--gi-radius-lg);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+/* Header (flat, no card) */
+.tool-header {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  box-shadow: var(--gi-shadow-sm);
+  margin-bottom: 1.25rem;
 }
 
 .tool-icon {
@@ -123,48 +106,17 @@ const { t } = useI18n()
 .tool-title-section {
   min-width: 0;
   flex: 1;
-}
-
-.tool-title-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.25rem;
+  padding-top: 0.2rem;
 }
 
 .tool-title {
-  font-size: var(--gi-font-size-xl);
+  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-size: var(--gi-font-size-2xl);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
   color: var(--gi-text);
-  margin: 0;
-}
-
-.tool-category-badge {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  border-radius: var(--gi-radius-pill);
-  padding: 2px 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
-.tool-category-badge--print {
-  background: var(--gi-brand-fade);
-  color: var(--gi-brand);
-}
-
-.tool-category-badge--digital {
-  background: var(--gi-tint-blue-bg);
-  color: var(--gi-tint-blue-text);
-}
-
-.tool-category-badge--design {
-  background: var(--gi-tint-purple-bg);
-  color: var(--gi-tint-purple-text);
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.02em;
 }
 
 .tool-subtitle {
@@ -174,11 +126,18 @@ const { t } = useI18n()
 }
 
 .tool-description {
-  max-width: 56ch;
+  max-width: 60ch;
   font-size: 1rem;
-  color: color-mix(in srgb, var(--gi-text-muted) 92%, var(--gi-text));
+  color: var(--gi-text-muted);
   line-height: 1.7;
   margin: 0;
+}
+
+/* Divider */
+.tool-divider {
+  border: none;
+  border-top: 1px solid var(--gi-border);
+  margin: 0 0 1.75rem;
 }
 
 /* Content */
@@ -247,8 +206,7 @@ const { t } = useI18n()
     padding-inline: 1rem;
   }
 
-  .tool-header-card {
-    padding: 1.25rem;
+  .tool-header {
     flex-direction: column;
   }
 }
