@@ -29,5 +29,19 @@ Thumbs.db
 # Worktrees
 .worktrees/
 
+# AI tools
 .qwen/
+.claude/
+.superpowers/
+.playwright-mcp/
 gha-creds-*.json
+
+# Screenshots (verification screenshots at root)
+*.png
+
+# Visual tests
+visual-tests/
+
+# Package lock (using pnpm)
+package-lock.json
+backend/package-lock.json
