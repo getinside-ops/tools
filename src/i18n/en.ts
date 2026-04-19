@@ -454,6 +454,8 @@ const en: Messages = {
     selectedFile: 'Selected file',
     error: 'Error',
     ready: 'Ready to download',
+    backendWaking: 'Backend waking up… (~30 seconds)',
+    backendUnreachable: 'Backend unavailable. Try again in a few minutes.',
     pedagogic: {
       title: 'About PDF/X',
       description: 'PDF/X-1a is an ISO standard for professional printing. It ensures your file is print-ready.',

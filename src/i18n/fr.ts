@@ -452,6 +452,8 @@ const fr = {
     selectedFile: 'Fichier sélectionné',
     error: 'Erreur',
     ready: 'Prêt à télécharger',
+    backendWaking: 'Le serveur démarre… (~30 secondes)',
+    backendUnreachable: 'Serveur indisponible. Réessayez dans quelques minutes.',
     pedagogic: {
       title: 'À propos du PDF/X',
       description: 'Le PDF/X-1a est un standard ISO pour l\'impression professionnelle. Il garantit que votre fichier est prêt pour l\'imprimeur.',

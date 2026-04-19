@@ -33,10 +33,17 @@
       {{ t(`pdfX.error${capitalize(error)}`) }}
     </GiResultCard>
 
+    <div v-if="backendStatus === 'waking'" class="gi-info-box">
+      {{ t('pdfX.backendWaking') }}
+    </div>
+    <div v-if="backendStatus === 'unreachable'" class="gi-status-error">
+      {{ t('pdfX.backendUnreachable') }}
+    </div>
+
     <button
       class="gi-btn"
       style="margin-top:1rem"
-      :disabled="!selectedFile || loading"
+      :disabled="!selectedFile || loading || (!!selectedFile && backendStatus !== 'ready')"
       @click="convert"
     >
       {{ loading ? t('pdfX.converting') : t('pdfX.convert') }}
@@ -72,6 +79,7 @@ const loading = ref(false)
 const error = ref<ConversionError | null>(null)
 const downloadUrl = ref('')
 const downloadName = ref('')
+const backendStatus = ref<'idle' | 'waking' | 'ready' | 'unreachable'>('idle')
 
 const fileSizeMb = computed(() =>
   selectedFile.value ? (selectedFile.value.size / 1024 / 1024).toFixed(1) : '0'
@@ -79,10 +87,28 @@ const fileSizeMb = computed(() =>
 
 function capitalize(s: string) { return s.charAt(0).toUpperCase() + s.slice(1) }
 
+async function checkBackendHealth() {
+  const apiUrl = import.meta.env.VITE_PDFX_API_URL
+  const MAX_ATTEMPTS = 12
+  const POLL_INTERVAL = 5000
+
+  for (let i = 0; i < MAX_ATTEMPTS; i++) {
+    try {
+      const res = await fetch(`${apiUrl}/health`, { signal: AbortSignal.timeout(5000) })
+      if (res.ok) { backendStatus.value = 'ready'; return }
+    } catch {}
+    if (i === 0) backendStatus.value = 'waking'
+    if (i < MAX_ATTEMPTS - 1) await new Promise(r => setTimeout(r, POLL_INTERVAL))
+  }
+  backendStatus.value = 'unreachable'
+}
+
 function handleImageUpload(file: File) {
   selectedFile.value = file
   error.value = null
   downloadUrl.value = ''
+  backendStatus.value = 'idle'
+  checkBackendHealth()
 }
 
 function handleError(err: string) {
