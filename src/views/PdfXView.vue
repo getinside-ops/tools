@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { FileText } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
@@ -80,6 +80,7 @@ const error = ref<ConversionError | null>(null)
 const downloadUrl = ref('')
 const downloadName = ref('')
 const backendStatus = ref<'idle' | 'waking' | 'ready' | 'unreachable'>('idle')
+let healthAbortController: AbortController | null = null
 
 const fileSizeMb = computed(() =>
   selectedFile.value ? (selectedFile.value.size / 1024 / 1024).toFixed(1) : '0'
@@ -88,26 +89,34 @@ const fileSizeMb = computed(() =>
 function capitalize(s: string) { return s.charAt(0).toUpperCase() + s.slice(1) }
 
 async function checkBackendHealth() {
+  healthAbortController?.abort()
+  const ac = new AbortController()
+  healthAbortController = ac
+
   const apiUrl = import.meta.env.VITE_PDFX_API_URL
   const MAX_ATTEMPTS = 12
   const POLL_INTERVAL = 5000
 
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
+    if (ac.signal.aborted) return
     try {
       const res = await fetch(`${apiUrl}/health`, { signal: AbortSignal.timeout(5000) })
       if (res.ok) { backendStatus.value = 'ready'; return }
     } catch {}
-    if (i === 0) backendStatus.value = 'waking'
     if (i < MAX_ATTEMPTS - 1) await new Promise(r => setTimeout(r, POLL_INTERVAL))
   }
-  backendStatus.value = 'unreachable'
+  if (!ac.signal.aborted) backendStatus.value = 'unreachable'
 }
+
+onUnmounted(() => {
+  healthAbortController?.abort()
+})
 
 function handleImageUpload(file: File) {
   selectedFile.value = file
   error.value = null
   downloadUrl.value = ''
-  backendStatus.value = 'idle'
+  backendStatus.value = 'waking'
   checkBackendHealth()
 }
 
