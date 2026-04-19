@@ -160,6 +160,7 @@ interface Tool {
 const allTools: Tool[] = [
   // Print
   { route: '/paper-weight',    icon: Scale,           titleKey: 'home.tools.paperWeight.title',     descKey: 'home.tools.paperWeight.desc',     category: 'print'     },
+  { route: '/pdfx',            icon: FileText,        titleKey: 'home.tools.pdfX.title',             descKey: 'home.tools.pdfX.desc',             category: 'print'     },
   { route: '/dpi-checker',     icon: Printer,         titleKey: 'home.tools.dpiChecker.title',      descKey: 'home.tools.dpiChecker.desc',      category: 'print'     },
   { route: '/barcode',         icon: Barcode,         titleKey: 'home.tools.barcode.title',          descKey: 'home.tools.barcode.desc',          category: 'print'     },
   { route: '/safety-margin',   icon: Frame,           titleKey: 'home.tools.safetyMargin.title',     descKey: 'home.tools.safetyMargin.desc',     category: 'print'     },

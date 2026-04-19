@@ -7,6 +7,7 @@ const router = createRouter({
     { path: '/', component: HomeView },
     // Existing main branch tools
     { path: '/paper-weight', component: () => import('../views/PaperWeightView.vue') },
+    { path: '/pdfx', component: () => import('../views/PdfXView.vue') },
     { path: '/utm-builder', component: () => import('../views/UtmBuilderView.vue') },
     { path: '/dpi-checker', component: () => import('../views/DpiCheckerView.vue') },
     { path: '/redirect-checker', component: () => import('../views/RedirectCheckerView.vue') },

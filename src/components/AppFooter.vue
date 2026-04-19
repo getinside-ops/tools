@@ -53,6 +53,10 @@
           <Printer :size="14" />
           {{ t('nav.dpiChecker') }}
         </router-link>
+        <router-link to="/pdfx" class="gi-footer-quick-link">
+          <FileText :size="14" />
+          {{ t('nav.pdfX') }}
+        </router-link>
       </div>
     </div>
 
@@ -66,7 +70,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useTheme } from '../composables/useTheme'
-import { Sun as SunIcon, Moon as MoonIcon, Scale, Link2, Printer } from 'lucide-vue-next'
+import { Sun as SunIcon, Moon as MoonIcon, Scale, Link2, Printer, FileText } from 'lucide-vue-next'
 
 const { t, locale } = useI18n()
 const { theme, toggleTheme } = useTheme()
