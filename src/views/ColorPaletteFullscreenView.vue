@@ -52,45 +52,91 @@
 
     <!-- Color columns -->
     <div class="cpf-columns" role="group" :aria-label="t('colorPalette.title')">
-      <div
-        v-for="(color, i) in palette"
-        :key="i"
-        class="cpf-column"
-        :class="{
-          'cpf-column--locked': color.locked,
-          'cpf-column--flash': flashIndex === i,
-        }"
-        :style="{ background: color.hex }"
-        @click="lockToggle(i)"
-      >
-        <div class="cpf-column-icon">
-          <Lock v-if="color.locked" :size="24" />
+      <template v-for="(color, i) in palette" :key="i">
+        <!-- Add strip before each column -->
+        <div
+          v-if="palette.length < 8"
+          class="cpf-add-strip"
+          @click="addColorAt(i)"
+          :aria-label="t('colorPalette.full.addColor')"
+          role="button"
+          tabindex="0"
+        >
+          <Plus :size="14" />
         </div>
-        <div class="cpf-column-info">
-          <button
-            class="cpf-color-value"
-            @click.stop="copyColor(color.hex, i)"
-            :aria-label="`${color.hex} — ${t('colorPalette.full.copied')}`"
-          >
-            {{ copiedIndex === i ? '✓' : color.hex.toUpperCase() }}
-          </button>
-          <div class="cpf-color-actions">
+        <!-- Column -->
+        <div
+          class="cpf-column"
+          :class="{
+            'cpf-column--locked': color.locked,
+            'cpf-column--flash': flashIndex === i,
+            'cpf-column--drag-over': dragOverIndex === i,
+          }"
+          :style="{ background: color.hex }"
+          draggable="true"
+          @dragstart="onDragStart($event, i)"
+          @dragover.prevent="onDragOver(i)"
+          @drop.prevent="onDrop(i)"
+          @dragend="onDragEnd"
+        >
+          <!-- Top overlay: drag handle + lock -->
+          <div class="cpf-col-top-overlay">
+            <div class="cpf-drag-handle"><GripVertical :size="20" /></div>
             <button
-              class="cpf-action-btn"
-              @click.stop="openShades(i)"
-              :aria-label="t('colorPalette.full.shades')"
+              class="cpf-col-btn"
+              @click.stop="lockToggle(i)"
+              :aria-label="color.locked ? t('colorPalette.full.unlock') : t('colorPalette.full.lock')"
             >
-              <Layers :size="16" />
-            </button>
-            <button
-              class="cpf-action-btn"
-              @click.stop="copyColor(color.hex, i)"
-              :aria-label="t('colorPalette.full.copied')"
-            >
-              <Copy :size="16" />
+              <Lock v-if="color.locked" :size="20" />
+              <Unlock v-else :size="20" />
             </button>
           </div>
+          <!-- Bottom info: hex badge + actions -->
+          <div class="cpf-column-info">
+            <button
+              class="cpf-color-value"
+              @click.stop="openCpfPicker(i)"
+              :aria-label="t('colorPalette.full.pickColor')"
+            >
+              {{ copiedIndex === i ? '✓' : color.hex.toUpperCase() }}
+              <input
+                type="color"
+                class="cpf-picker-input"
+                :ref="(el) => { cpfPickerRefs[i] = el as HTMLInputElement }"
+                :value="color.hex"
+                @input="onCpfPickerInput($event, i)"
+                tabindex="-1"
+                aria-hidden="true"
+              />
+            </button>
+            <div class="cpf-color-actions">
+              <button class="cpf-action-btn" @click.stop="openShades(i)" :aria-label="t('colorPalette.full.shades')">
+                <Layers :size="16" />
+              </button>
+              <button class="cpf-action-btn" @click.stop="copyColor(color.hex, i)" :aria-label="t('colorPalette.full.copied')">
+                <Copy :size="16" />
+              </button>
+              <button
+                v-if="palette.length > 3"
+                class="cpf-action-btn cpf-action-btn--delete"
+                @click.stop="removeColor(i)"
+                :aria-label="t('colorPalette.full.deleteColor')"
+              >
+                <Trash2 :size="16" />
+              </button>
+            </div>
+          </div>
         </div>
+      </template>
+      <!-- Trailing add strip -->
+      <div
+        v-if="palette.length < 8"
+        class="cpf-add-strip"
+        @click="addColorAt(palette.length)"
+        role="button"
+        tabindex="0"
+      >
+        <Plus :size="14" />
       </div>
     </div>
 
@@ -283,14 +329,16 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   ChevronLeft, ChevronDown, Shuffle, Sparkles, Download,
-  Lock, Copy, Layers, X, CheckCircle, Code, Braces,
+  Lock, Unlock, Copy, Layers, X, CheckCircle, Code, Braces,
   Wind, Link as LinkIcon, ImageIcon, Palette, ImageUp,
+  GripVertical, Trash2, Plus,
 } from 'lucide-vue-next'
 import {
   toggleLock as paletteToggleLock,
   usePaletteState,
   getContrastRatio,
   generateWithHarmony,
+  updateColor,
 } from '../composables/useColorPalette'
 import type { HarmonyType } from '../composables/useColorHarmony'
 
@@ -309,6 +357,9 @@ const toastMessage = ref<string | null>(null)
 const gradientType = ref<'linear' | 'radial'>('linear')
 const selectedColorIndex = ref<number | null>(null)
 const copiedIndex = ref<number | null>(null)
+const dragIndex = ref<number | null>(null)
+const dragOverIndex = ref<number | null>(null)
+const cpfPickerRefs = ref<(HTMLInputElement | null)[]>([])
 let toastTimer: ReturnType<typeof setTimeout> | null = null
 let hideToolbarTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -375,6 +426,62 @@ function generate() {
 function lockToggle(index: number) {
   palette.value = paletteToggleLock(palette.value, index)
   syncToUrl()
+}
+
+function addColorAt(i: number) {
+  if (palette.value.length >= 8) return
+  const neighbor = palette.value[Math.min(i, palette.value.length - 1)].hex
+  const newColors = generateWithHarmony(
+    [{ hex: neighbor, locked: false }],
+    harmonyType.value as HarmonyType
+  )
+  const newPalette = [...palette.value]
+  newPalette.splice(i, 0, { hex: newColors[0], locked: false })
+  palette.value = newPalette
+  syncToUrl()
+}
+
+function removeColor(i: number) {
+  if (palette.value.length <= 3) return
+  palette.value = palette.value.filter((_, idx) => idx !== i)
+  syncToUrl()
+}
+
+function openCpfPicker(i: number) {
+  cpfPickerRefs.value[i]?.click()
+}
+
+function onCpfPickerInput(e: Event, i: number) {
+  const hex = (e.target as HTMLInputElement).value.toUpperCase()
+  palette.value = updateColor(palette.value, i, hex)
+}
+
+function onDragStart(e: DragEvent, i: number) {
+  dragIndex.value = i
+  if (e.dataTransfer) {
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', String(i))
+  }
+}
+
+function onDragOver(i: number) {
+  if (dragIndex.value !== null && dragIndex.value !== i) dragOverIndex.value = i
+}
+
+function onDrop(i: number) {
+  if (dragIndex.value === null || dragIndex.value === i) return
+  const newPalette = [...palette.value]
+  const [dragged] = newPalette.splice(dragIndex.value, 1)
+  newPalette.splice(i, 0, dragged)
+  palette.value = newPalette
+  dragIndex.value = null
+  dragOverIndex.value = null
+  syncToUrl()
+}
+
+function onDragEnd() {
+  dragIndex.value = null
+  dragOverIndex.value = null
 }
 
 function selectHarmony(type: HarmonyType) {
@@ -693,38 +800,70 @@ onUnmounted(() => {
 .cpf-generate-text { display: none; }
 @media (min-width: 640px) { .cpf-generate-text { display: inline; } }
 
-/* Columns */
+/* Columns layout */
 .cpf-columns { display: flex; flex: 1; min-height: 0; }
+
+/* Add strip */
+.cpf-add-strip {
+  display: flex; align-items: center; justify-content: center;
+  width: 6px; flex-shrink: 0; cursor: pointer;
+  color: rgba(255,255,255,0.7); opacity: 0;
+  transition: width 0.18s var(--gi-ease-out), opacity 0.18s;
+}
+.cpf-columns:hover .cpf-add-strip { opacity: 1; }
+.cpf-add-strip:hover { width: 40px; background: rgba(0,0,0,0.15); }
+
+/* Column */
 .cpf-column {
   flex: 1; display: flex; flex-direction: column;
   justify-content: space-between; align-items: center;
-  position: relative; cursor: pointer;
+  position: relative;
   transition: flex 0.3s var(--gi-ease-out);
 }
 .cpf-column:hover { flex: 1.2; }
+.cpf-column--locked { outline: 2px solid rgba(255,255,255,0.85); outline-offset: -2px; }
 .cpf-column--flash { animation: cpf-flash 0.3s ease-out; }
+.cpf-column--drag-over { outline: 2px dashed rgba(255,255,255,0.8); outline-offset: -2px; }
 @keyframes cpf-flash { 0% { filter: brightness(1.5); } 100% { filter: brightness(1); } }
 
-.cpf-column-icon {
+/* Top overlay: drag handle + lock */
+.cpf-col-top-overlay {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
   padding-top: 1.5rem; opacity: 0; transition: opacity 0.2s;
-  color: white; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
-.cpf-column--locked .cpf-column-icon { opacity: 1; }
-.cpf-column:hover .cpf-column-icon { opacity: 0.7; }
+.cpf-column:hover .cpf-col-top-overlay,
+.cpf-column--locked .cpf-col-top-overlay { opacity: 1; }
 
+.cpf-drag-handle {
+  color: white; cursor: grab; opacity: 0.7;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+.cpf-drag-handle:active { cursor: grabbing; }
+
+.cpf-col-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; background: rgba(0,0,0,0.2); backdrop-filter: blur(4px);
+  border: none; border-radius: var(--gi-radius-md); color: white; cursor: pointer;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  transition: background 0.12s;
+}
+.cpf-col-btn:hover { background: rgba(0,0,0,0.4); }
+
+/* Bottom info */
 .cpf-column-info {
   padding: 1rem; display: flex; flex-direction: column;
   align-items: center; gap: 0.5rem;
 }
 .cpf-color-value {
-  background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(4px);
+  position: relative; background: rgba(0,0,0,0.25); backdrop-filter: blur(4px);
   border: none; border-radius: var(--gi-radius-md);
   padding: 0.375rem 0.75rem; font-size: 0.85rem; font-weight: 700;
-  color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.5);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   cursor: pointer; transition: background 0.15s;
 }
-.cpf-color-value:hover { background: rgba(0, 0, 0, 0.35); }
+.cpf-color-value:hover { background: rgba(0,0,0,0.4); }
+.cpf-picker-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
 .cpf-color-actions {
   display: flex; gap: 0.375rem; opacity: 0; transition: opacity 0.2s;
@@ -732,11 +871,12 @@ onUnmounted(() => {
 .cpf-column:hover .cpf-color-actions { opacity: 1; }
 .cpf-action-btn {
   display: flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; background: rgba(0, 0, 0, 0.2);
+  width: 32px; height: 32px; background: rgba(0,0,0,0.2);
   backdrop-filter: blur(4px); border: none; border-radius: var(--gi-radius-sm);
   color: white; cursor: pointer; transition: background 0.15s;
 }
-.cpf-action-btn:hover { background: rgba(0, 0, 0, 0.4); }
+.cpf-action-btn:hover { background: rgba(0,0,0,0.4); }
+.cpf-action-btn--delete:hover { background: rgba(200,30,30,0.45); }
 
 /* Shades panel */
 .cpf-shades-panel {
@@ -889,6 +1029,7 @@ onUnmounted(() => {
 @media (max-width: 640px) {
   .cpf-columns { flex-direction: column; }
   .cpf-column { min-height: 120px; }
+  .cpf-add-strip { display: none; }
   .cpf-shades-row { flex-wrap: wrap; }
   .cpf-shade-cell { min-height: 36px; flex: 1 1 calc(33.333% - 0.25rem); }
   .cpf-export-grid { grid-template-columns: 1fr; }
