@@ -46,7 +46,7 @@ function jitter(range: number): number {
   return (Math.random() - 0.5) * range
 }
 
-// Maps t in [0,1] to lightness from ~87% (light) to ~18% (dark)
+// Maps t in [0,1] to lightness from ~92% (light) to ~10% (dark)
 function spreadL(t: number): number {
   return Math.round(Math.max(10, Math.min(95, 92 - t * 82 + jitter(6))))
 }
