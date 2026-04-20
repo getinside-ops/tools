@@ -198,40 +198,8 @@
               <button class="cp-apply-btn" @click="applyAdjustments">{{ t('colorPalette.apply') }}</button>
             </div>
           </div>
-          <div class="cp-contrast-section">
-            <span class="cp-adjust-title" style="margin: 0;">Contraste WCAG</span>
-            <div class="cp-contrast-row">
-              <div class="cp-contrast-item" style="background: #FFFFFF;">
-                <span class="cp-contrast-text" :style="{ color: palette[selectedIndex].hex }">Aa</span>
-                <span class="cp-contrast-ratio">{{ contrastOnWhite.toFixed(1) }}:1</span>
-                <span class="cp-contrast-badge" :class="contrastOnWhite >= 4.5 ? 'cp-contrast-badge--pass' : 'cp-contrast-badge--fail'">{{ contrastOnWhite >= 4.5 ? 'AA ✓' : '—' }}</span>
-              </div>
-              <div class="cp-contrast-item" style="background: #000000;">
-                <span class="cp-contrast-text" :style="{ color: palette[selectedIndex].hex }">Aa</span>
-                <span class="cp-contrast-ratio">{{ contrastOnBlack.toFixed(1) }}:1</span>
-                <span class="cp-contrast-badge" :class="contrastOnBlack >= 4.5 ? 'cp-contrast-badge--pass' : 'cp-contrast-badge--fail'">{{ contrastOnBlack >= 4.5 ? 'AA ✓' : '—' }}</span>
-              </div>
-            </div>
-          </div>
         </div>
       </Transition>
-    </div>
-
-    <!-- UI Preview -->
-    <div class="cp-preview">
-      <h3 class="cp-preview-title">{{ t('colorPalette.uiPreview') }}</h3>
-      <div class="cp-preview-card" :style="{ borderColor: palette[0].hex }">
-        <div class="cp-preview-header" :style="{ background: palette[0].hex }">
-          <div class="cp-preview-dots"><span></span><span></span><span></span></div>
-        </div>
-        <div class="cp-preview-body" :style="{ background: palette[4].hex + '12' }">
-          <div class="cp-preview-text" :style="{ color: getContrastingColor(palette[1].hex, palette[4].hex + '12') }">Title text</div>
-          <div class="cp-preview-text-sm" :style="{ color: getContrastingColor(palette[2].hex, palette[4].hex + '12') }">Secondary text with some content.</div>
-          <button class="cp-preview-cta" :style="{ background: palette[3].hex, color: getContrastColor(palette[3].hex) }">
-            Call to action
-          </button>
-        </div>
-      </div>
     </div>
 
     <!-- Toast -->
@@ -309,7 +277,7 @@ import {
   GripVertical, Info, Trash2, Plus,
 } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
-import { toggleLock as paletteToggleLock, usePaletteState, getContrastRatio, getColorFormats, adjustColor, updateColor, initPalette, generateWithHarmony } from '../composables/useColorPalette'
+import { toggleLock as paletteToggleLock, usePaletteState, getColorFormats, adjustColor, updateColor, initPalette, generateWithHarmony } from '../composables/useColorPalette'
 import type { HarmonyType } from '../composables/useColorHarmony'
 import type { ColorFormats } from '../composables/useColorPalette'
 
@@ -339,8 +307,6 @@ const formats = computed<ColorFormats>(() => {
 })
 
 const selectedColor = computed(() => selectedIndex.value !== null ? palette.value[selectedIndex.value] : null)
-const contrastOnWhite = computed(() => selectedColor.value ? getContrastRatio(selectedColor.value.hex, '#FFFFFF') : 1)
-const contrastOnBlack = computed(() => selectedColor.value ? getContrastRatio(selectedColor.value.hex, '#000000') : 1)
 
 const gradientCss = computed(() => {
   const colors = palette.value.map(c => c.hex)
@@ -509,16 +475,6 @@ function applyAdjustments() {
 }
 
 // Color utilities
-function toHsl(hex: string): { h: number; s: number; l: number } {
-  const r = parseInt(hex.slice(1, 3), 16) / 255, g = parseInt(hex.slice(3, 5), 16) / 255, b = parseInt(hex.slice(5, 7), 16) / 255
-  const max = Math.max(r, g, b), min = Math.min(r, g, b)
-  let h = 0, s = 0; const l = (max + min) / 2
-  if (max !== min) { const d = max - min; s = l > 0.5 ? d / (2 - max - min) : d / (max + min); switch (max) { case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break; case g: h = ((b - r) / d + 2) / 6; break; case b: h = ((r - g) / d + 4) / 6; break } }
-  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) }
-}
-function getContrastColor(hex: string): string { return toHsl(hex).l > 50 ? '#000000' : '#FFFFFF' }
-function getContrastingColor(_t: string, bg: string): string { const l = parseInt(bg.slice(1, 3), 16) || 0; return l > 128 ? '#1a1a1a' : '#f0f0f0' }
-
 function extractColors(canvas: HTMLCanvasElement, count: number): string[] {
   const ctx = canvas.getContext('2d'); if (!ctx) return []
   const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data
@@ -727,30 +683,6 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown); if (
 .cp-apply-btn:hover { background: #089678; box-shadow: 0 2px 6px rgba(10,170,142,0.4); }
 .cp-apply-btn:active { transform: scale(0.97); }
 .cp-apply-btn:focus-visible, .cp-reset-btn:focus-visible { outline: 2px solid var(--gi-brand); outline-offset: 2px; }
-
-/* Contrast */
-.cp-contrast-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gi-border); }
-.cp-contrast-row { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-.cp-contrast-item { flex: 1; padding: 0.5rem; border-radius: var(--gi-radius-md); display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--gi-border); }
-.cp-contrast-text { font-size: 1.25rem; font-weight: 700; }
-.cp-contrast-ratio { font-size: 0.75rem; font-family: monospace; color: var(--gi-text-muted); }
-.cp-contrast-badge { font-size: 0.65rem; font-weight: 700; padding: 0.125rem 0.375rem; border-radius: var(--gi-radius-sm); }
-.cp-contrast-badge--pass { background: var(--gi-brand-fade); color: var(--gi-brand); }
-.cp-contrast-badge--fail { background: var(--gi-tint-red-bg); color: var(--gi-tint-red-text); }
-
-/* Preview */
-.cp-preview { margin-top: 1.5rem; }
-.cp-preview-title { font-size: var(--gi-font-size-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gi-text-muted); margin: 0 0 0.75rem; }
-.cp-preview-card { background: var(--gi-surface); border-radius: var(--gi-radius-lg); overflow: hidden; box-shadow: var(--gi-shadow); border: 2px solid; }
-.cp-preview-header { padding: 0.625rem 0.875rem; display: flex; align-items: center; }
-.cp-preview-dots { display: flex; gap: 0.375rem; }
-.cp-preview-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.45); }
-.cp-preview-body { padding: 1.25rem; }
-.cp-preview-text { font-size: var(--gi-font-size-lg); font-weight: 700; margin-bottom: 0.375rem; }
-.cp-preview-text-sm { font-size: var(--gi-font-size-sm); opacity: 0.65; margin-bottom: 1rem; }
-.cp-preview-cta { display: inline-flex; align-items: center; justify-content: center; padding: 0.625rem 1.25rem; border-radius: var(--gi-radius-md); font-size: var(--gi-font-size-sm); font-weight: 600; border: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
-.cp-preview-cta:hover { transform: translateY(-1px); box-shadow: var(--gi-shadow-sm); }
-.cp-preview-cta:active { transform: scale(0.97); }
 
 /* Modals */
 .cp-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 300; }
