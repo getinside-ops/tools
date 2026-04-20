@@ -126,7 +126,7 @@ import type { Component } from 'vue'
 import {
   Scale, Link2, Printer, CornerDownRight, Tag, FileText, Palette, Smartphone,
   Globe, Ruler, Type, Eye, Pipette, FileDown, Crop, Maximize, Sparkles, ImagePlus,
-  Square, Compass, AlignLeft, Barcode, Frame, Repeat, Info, QrCode, ArrowUp,
+  Square, Compass, AlignLeft, Barcode, Frame, Repeat, Info, QrCode, ArrowUp, Hash,
 } from 'lucide-vue-next'
 import { useSearch } from '../composables/useSearch'
 
@@ -193,6 +193,7 @@ const allTools: Tool[] = [
   { route: '/type-scale',      icon: Type,            titleKey: 'home.tools.typeScale.title',       descKey: 'home.tools.typeScale.desc',       category: 'contenu'   },
   { route: '/px-to-rem',       icon: Ruler,           titleKey: 'home.tools.pxToRem.title',        descKey: 'home.tools.pxToRem.desc',        category: 'contenu'   },
   { route: '/lorem',           icon: AlignLeft,       titleKey: 'home.tools.lorem.title',            descKey: 'home.tools.lorem.desc',            category: 'contenu'   },
+  { route: '/random-hex',     icon: Hash,           titleKey: 'home.tools.randomHex.title',     descKey: 'home.tools.randomHex.desc',     category: 'contenu'   },
 ]
 
 const TOP_TOOL_ROUTES = ['/qr-decoder', '/utm-builder', '/promo-code', '/type-scale']
