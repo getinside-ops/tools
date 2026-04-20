@@ -514,7 +514,6 @@ const en: Messages = {
     exportJson: 'JSON',
     cssCopied: 'CSS variables copied!',
     jsonCopied: 'JSON copied!',
-    uiPreview: 'UI Preview',
     toast: {
       copied: 'Color copied',
       cssCopied: 'CSS variables copied to clipboard',

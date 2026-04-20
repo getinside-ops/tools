@@ -512,7 +512,6 @@ const fr = {
     exportJson: 'JSON',
     cssCopied: 'Variables CSS copiées !',
     jsonCopied: 'JSON copié !',
-    uiPreview: 'Aperçu UI',
     toast: {
       copied: 'Couleur copiée',
       cssCopied: 'Variables CSS copiées dans le presse-papiers',
