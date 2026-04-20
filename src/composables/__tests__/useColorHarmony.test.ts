@@ -45,6 +45,29 @@ describe('generateHarmony', () => {
     expect(unique.size).toBeGreaterThan(1)
   })
 
+  it('random-beautiful produces hues spanning >180° across 5 colors', () => {
+    for (let trial = 0; trial < 10; trial++) {
+      const colors = generateHarmony('#0aaa8e', 'random-beautiful', 5)
+      const hues = colors.map(c => {
+        const r = parseInt(c.slice(1, 3), 16) / 255
+        const g = parseInt(c.slice(3, 5), 16) / 255
+        const b = parseInt(c.slice(5, 7), 16) / 255
+        const max = Math.max(r, g, b), min = Math.min(r, g, b)
+        if (max === min) return 0
+        const d = max - min
+        let h = 0
+        switch (max) {
+          case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break
+          case g: h = ((b - r) / d + 2) / 6; break
+          case b: h = ((r - g) / d + 4) / 6; break
+        }
+        return h * 360
+      })
+      const hueSpread = Math.max(...hues) - Math.min(...hues)
+      expect(hueSpread).toBeGreaterThan(180)
+    }
+  })
+
   it('handles edge case: white base color', () => {
     const colors = generateHarmony('#FFFFFF', 'analogous', 5)
     expect(colors).toHaveLength(5)

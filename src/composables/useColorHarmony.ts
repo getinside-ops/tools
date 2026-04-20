@@ -48,14 +48,14 @@ function jitter(range: number): number {
 
 // Maps t in [0,1] to lightness from ~87% (light) to ~18% (dark)
 function spreadL(t: number): number {
-  return Math.round(Math.max(10, Math.min(95, 87 - t * 69 + jitter(6))))
+  return Math.round(Math.max(10, Math.min(95, 92 - t * 82 + jitter(6))))
 }
 
 // Maps t in [0,1] to saturation that peaks in the vivid mid-range
 function spreadS(t: number, baseSat: number): number {
-  const peak = Math.max(baseSat, 65)
+  const peak = Math.max(baseSat, 80)
   const sat = peak - Math.abs(t - 0.5) * 90 + jitter(15)
-  return Math.round(Math.max(15, Math.min(90, sat)))
+  return Math.round(Math.max(25, Math.min(90, sat)))
 }
 
 export function generateHarmony(
@@ -71,7 +71,7 @@ export function generateHarmony(
       const baseHue = Math.floor(Math.random() * 360)
       return Array.from({ length: count }, (_, i) => {
         const ti = t(i)
-        const h = ((baseHue + jitter(35) + 360) % 360)
+        const h = (baseHue + i * 137.5 + jitter(12) + 360) % 360
         return hslToHex(h, spreadS(ti, 65), spreadL(ti))
       })
     }
