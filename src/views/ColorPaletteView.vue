@@ -394,7 +394,7 @@ function addColorAt(i: number) {
     harmonyType.value as HarmonyType
   )
   const newPalette = [...palette.value]
-  newPalette.splice(i, 0, { hex: newColors[0], locked: false })
+  newPalette.splice(i, 0, { hex: newColors[0].hex, locked: false })
   palette.value = newPalette
   syncToUrl()
 }
