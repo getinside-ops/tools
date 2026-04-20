@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue'
 import type { Ref } from 'vue'
-import { generateHarmony } from './useColorHarmony'
+import { generateHarmony, type HarmonyType } from './useColorHarmony'
 
 export interface PaletteColor {
   hex: string
@@ -146,6 +146,21 @@ export function generatePalette(current: PaletteColor[]): PaletteColor[] {
 
 export function toggleLock(palette: PaletteColor[], index: number): PaletteColor[] {
   return palette.map((color, i) => i === index ? { ...color, locked: !color.locked } : color)
+}
+
+export function generateWithHarmony(
+  palette: PaletteColor[],
+  harmonyType: HarmonyType
+): PaletteColor[] {
+  const unlockedIndices = palette.reduce<number[]>((acc, c, i) => {
+    if (!c.locked) acc.push(i)
+    return acc
+  }, [])
+  if (unlockedIndices.length === 0) return palette
+  const base = palette[unlockedIndices[0]].hex
+  const newColors = generateHarmony(base, harmonyType, palette.length)
+  let newIdx = 0
+  return palette.map(c => c.locked ? c : { ...c, hex: newColors[newIdx++] })
 }
 
 export function updateColor(palette: PaletteColor[], index: number, newHex: string): PaletteColor[] {

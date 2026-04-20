@@ -573,6 +573,9 @@ const fr = {
       },
       extract: 'Extraire',
       screen: 'Plein écran',
+      addColor: 'Ajouter une couleur',
+      deleteColor: 'Supprimer cette couleur',
+      pickColor: 'Choisir une couleur',
     },
     pedagogic: {
       title: 'À propos des palettes de couleurs',

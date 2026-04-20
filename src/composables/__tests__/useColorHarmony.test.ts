@@ -102,3 +102,36 @@ describe('generateHarmony', () => {
     expect(hasComplement).toBe(true)
   })
 })
+
+describe('lightness spread', () => {
+  function hexToL(hex: string): number {
+    const r = parseInt(hex.slice(1, 3), 16) / 255
+    const g = parseInt(hex.slice(3, 5), 16) / 255
+    const b = parseInt(hex.slice(5, 7), 16) / 255
+    const max = Math.max(r, g, b), min = Math.min(r, g, b)
+    return Math.round(((max + min) / 2) * 100)
+  }
+
+  it('random-beautiful has at least 40% lightness range across 5 colors', () => {
+    for (let t = 0; t < 10; t++) {
+      const colors = generateHarmony('#0aaa8e', 'random-beautiful', 5)
+      const lightnesses = colors.map(hexToL)
+      const spread = Math.max(...lightnesses) - Math.min(...lightnesses)
+      expect(spread).toBeGreaterThanOrEqual(40)
+    }
+  })
+
+  it('monochromatic has at least 50% lightness range across 5 colors', () => {
+    const colors = generateHarmony('#0aaa8e', 'monochromatic', 5)
+    const lightnesses = colors.map(hexToL)
+    const spread = Math.max(...lightnesses) - Math.min(...lightnesses)
+    expect(spread).toBeGreaterThanOrEqual(50)
+  })
+
+  it('generates correct count for non-default sizes', () => {
+    (['random-beautiful', 'analogous', 'triadic', 'monochromatic'] as const).forEach(type => {
+      expect(generateHarmony('#FF0000', type, 3)).toHaveLength(3)
+      expect(generateHarmony('#FF0000', type, 7)).toHaveLength(7)
+    })
+  })
+})
