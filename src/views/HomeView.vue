@@ -7,7 +7,7 @@
         <p class="home-hero-tagline">{{ t('home.subtitle') }}</p>
         <p class="home-hero-body">{{ t('home.heroText') }}</p>
         <div class="home-hero-actions">
-          <a href="#browse" class="gi-btn home-hero-cta">{{ t('home.exploreTools') }}</a>
+          <a href="#" class="gi-btn home-hero-cta" @click.prevent="scrollToBrowse">{{ t('home.exploreTools') }}</a>
           <a href="https://www.getinside.fr/" class="home-hero-link" target="_blank" rel="noopener noreferrer">{{ t('home.discoverGetinside') }} →</a>
         </div>
       </div>
@@ -223,6 +223,13 @@ const filteredTools = computed(() => {
 function setCategory(cat: string) {
   activeCategory.value = cat
   searchQuery.value = ''
+}
+
+function scrollToBrowse() {
+  const el = document.getElementById('browse')
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' })
+  }
 }
 </script>
 

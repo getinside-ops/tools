@@ -306,8 +306,6 @@ const formats = computed<ColorFormats>(() => {
   return getColorFormats(palette.value[selectedIndex.value].hex)
 })
 
-const selectedColor = computed(() => selectedIndex.value !== null ? palette.value[selectedIndex.value] : null)
-
 const gradientCss = computed(() => {
   const colors = palette.value.map(c => c.hex)
   return gradientType.value === 'linear'
