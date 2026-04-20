@@ -34,7 +34,7 @@ describe('ToolPageLayout', () => {
       }
     })
 
-    expect(wrapper.find('.tool-header-card').exists()).toBe(true)
+    expect(wrapper.find('.tool-header').exists()).toBe(true)
     expect(wrapper.find('.tool-icon').exists()).toBe(true)
     expect(wrapper.find('.tool-title').text()).toBe('DPI Checker')
     expect(wrapper.find('.tool-description').text()).toBe('Check whether artwork is ready for print.')

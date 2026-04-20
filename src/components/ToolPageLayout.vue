@@ -12,6 +12,7 @@
         <slot name="icon"></slot>
       </div>
       <div class="tool-title-section">
+        <span v-if="category" class="tool-category-badge" :class="`tool-category-badge--${category}`">{{ categoryLabel }}</span>
         <h1 class="tool-title">
           <slot name="title">{{ title }}</slot>
         </h1>
@@ -40,10 +41,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ChevronLeft } from 'lucide-vue-next'
 
-defineProps<{
+const props = defineProps<{
   title?: string
   subtitle?: string
   description?: string
@@ -51,6 +53,10 @@ defineProps<{
 }>()
 
 const { t } = useI18n()
+
+const categoryLabel = computed(() =>
+  props.category ? props.category.charAt(0).toUpperCase() + props.category.slice(1) : ''
+)
 </script>
 
 <style scoped>
@@ -107,6 +113,29 @@ const { t } = useI18n()
   min-width: 0;
   flex: 1;
   padding-top: 0.2rem;
+}
+
+.tool-category-badge {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.15em 0.55em;
+  border-radius: var(--gi-radius-sm);
+  background: var(--gi-tint-green-bg);
+  color: var(--gi-brand);
+  margin-bottom: 0.4rem;
+}
+
+.tool-category-badge--digital {
+  background: var(--gi-tint-blue-bg);
+  color: var(--gi-tint-blue-text);
+}
+
+.tool-category-badge--design {
+  background: var(--gi-tint-purple-bg);
+  color: var(--gi-tint-purple-text);
 }
 
 .tool-title {

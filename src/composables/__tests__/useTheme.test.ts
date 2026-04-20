@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { useTheme } from '../useTheme'
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -40,10 +39,15 @@ Object.defineProperty(window, 'matchMedia', {
 })
 
 describe('useTheme', () => {
-  beforeEach(() => {
+  let useTheme: (typeof import('../useTheme'))['useTheme']
+
+  beforeEach(async () => {
     document.documentElement.removeAttribute('data-theme')
     localStorage.clear()
+    window.matchMedia = matchMediaMock
     vi.clearAllMocks()
+    vi.resetModules()
+    ;({ useTheme } = await import('../useTheme'))
   })
 
   afterEach(() => {
