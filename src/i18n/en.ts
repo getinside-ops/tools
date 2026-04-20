@@ -404,7 +404,7 @@ const en: Messages = {
   promoCode: {
     title: 'Promo Code Validator',
     desc: 'Check whether your promotional code follows best practices before publishing.',
-    about: "A good promo code is short, memorable, and unambiguous. This tool scores your code against common pitfalls — confusing characters (0/O, 1/I), excessive length, and readability — so you can catch problems before you publish.",
+    about: "A good promo code is short, memorable, and unambiguous. This tool scores your code against common pitfalls — confusing characters (0/O, I/l), excessive length, and readability — so you can catch problems before you publish.",
     label: 'Your promo code',
     placeholder: 'SUMMER25FR',
     helperText: 'Best practices: uppercase letters, numbers, no spaces or special characters',
@@ -425,7 +425,7 @@ const en: Messages = {
       length: 'Length ≤ 12 characters',
       noSpecialChars: 'No special characters',
       noSpaces: 'No spaces',
-      noAmbiguous: 'No ambiguous characters (0/O, 1/I/l)',
+      noAmbiguous: 'No ambiguous characters (0/O, I/l)',
       uppercase: 'All uppercase',
     },
     pedagogic: {

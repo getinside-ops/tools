@@ -402,7 +402,7 @@ const fr = {
   promoCode: {
     title: 'Validateur de code promo',
     desc: 'Vérifiez si votre code promotionnel respecte les bonnes pratiques avant diffusion.',
-    about: "Un bon code promo est court, mémorisable et sans ambiguïté. Cet outil évalue votre code selon les erreurs classiques — caractères confus (0/O, 1/I), longueur excessive, lisibilité — pour détecter les problèmes avant la diffusion.",
+    about: "Un bon code promo est court, mémorisable et sans ambiguïté. Cet outil évalue votre code selon les erreurs classiques — caractères confus (0/O, I/l), longueur excessive, lisibilité — pour détecter les problèmes avant la diffusion.",
     label: 'Votre code promo',
     placeholder: 'SUMMER25FR',
     helperText: 'Bonnes pratiques : lettres majuscules, chiffres, sans espaces ni caractères spéciaux',
@@ -423,7 +423,7 @@ const fr = {
       length: 'Longueur ≤ 12 caractères',
       noSpecialChars: 'Aucun caractère spécial',
       noSpaces: 'Aucun espace',
-      noAmbiguous: 'Pas de caractères ambigus (0/O, 1/I/l)',
+      noAmbiguous: 'Pas de caractères ambigus (0/O, I/l)',
       uppercase: 'Tout en majuscules',
     },
     pedagogic: {
@@ -431,7 +431,7 @@ const fr = {
       description: 'Un bon code promo est court, mémorable et sans ambiguïté. Évitez les caractères spéciaux et privilégiez les majuscules.',
       tips: [
         'Maximum 12 caractères pour une saisie facile',
-        'Évitez 0/O et 1/I/l qui prêtent à confusion',
+        'Évitez 0/O et I/l qui prêtent à confusion',
         'Utilisez uniquement des lettres et chiffres',
         'Tout en majuscules pour une meilleure lisibilité',
       ],
