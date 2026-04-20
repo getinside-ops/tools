@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { generatePalette, toggleLock, initPalette, usePaletteState } from '../useColorPalette'
+import { generatePalette, toggleLock, initPalette, usePaletteState, generateWithHarmony } from '../useColorPalette'
 import type { PaletteColor } from '../useColorPalette'
 
 describe('initPalette', () => {
@@ -125,5 +125,49 @@ describe('usePaletteState', () => {
     expect(window.location.hash).toContain('#/color-palette')
     expect(window.location.hash).toContain('ff0000')
     expect(window.location.hash).toContain('00ff00')
+  })
+})
+
+describe('generateWithHarmony', () => {
+  it('returns palette unchanged when all colors are locked', () => {
+    const palette: PaletteColor[] = [
+      { hex: '#AAAAAA', locked: true },
+      { hex: '#BBBBBB', locked: true },
+      { hex: '#CCCCCC', locked: true },
+    ]
+    const result = generateWithHarmony(palette, 'random-beautiful')
+    expect(result[0].hex).toBe('#AAAAAA')
+    expect(result[1].hex).toBe('#BBBBBB')
+    expect(result[2].hex).toBe('#CCCCCC')
+  })
+
+  it('preserves locked colors and changes unlocked ones', () => {
+    const palette: PaletteColor[] = [
+      { hex: '#AAAAAA', locked: true },
+      { hex: '#BBBBBB', locked: false },
+      { hex: '#CCCCCC', locked: true },
+      { hex: '#DDDDDD', locked: false },
+      { hex: '#EEEEEE', locked: false },
+    ]
+    const result = generateWithHarmony(palette, 'analogous')
+    expect(result[0].hex).toBe('#AAAAAA')
+    expect(result[2].hex).toBe('#CCCCCC')
+    expect(result[0].locked).toBe(true)
+    expect(result[2].locked).toBe(true)
+  })
+
+  it('returns valid uppercase hex for all positions', () => {
+    const palette: PaletteColor[] = Array(5).fill(null).map(() => ({ hex: '#123456', locked: false }))
+    generateWithHarmony(palette, 'analogous').forEach(c => {
+      expect(c.hex).toMatch(/^#[0-9A-F]{6}$/)
+    })
+  })
+
+  it('works for palette counts other than 5', () => {
+    const palette3: PaletteColor[] = Array(3).fill(null).map(() => ({ hex: '#FF0000', locked: false }))
+    expect(generateWithHarmony(palette3, 'analogous')).toHaveLength(3)
+
+    const palette7: PaletteColor[] = Array(7).fill(null).map(() => ({ hex: '#FF0000', locked: false }))
+    expect(generateWithHarmony(palette7, 'triadic')).toHaveLength(7)
   })
 })

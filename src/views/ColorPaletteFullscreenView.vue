@@ -290,8 +290,9 @@ import {
   toggleLock as paletteToggleLock,
   usePaletteState,
   getContrastRatio,
+  generateWithHarmony,
 } from '../composables/useColorPalette'
-import { generateHarmony, type HarmonyType } from '../composables/useColorHarmony'
+import type { HarmonyType } from '../composables/useColorHarmony'
 
 const { t } = useI18n()
 const { palette, harmonyType, syncToUrl } = usePaletteState()
@@ -367,20 +368,7 @@ const gradientCss = computed(() => {
 // --- Actions ---
 
 function generate() {
-  const unlocked = palette.value.filter(c => !c.locked)
-  if (unlocked.length === 0) {
-    const base = palette.value[0].hex
-    const newColors = generateHarmony(base, harmonyType.value as HarmonyType, palette.value.length)
-    palette.value = palette.value.map((c, i) => ({ ...c, hex: newColors[i] }))
-  } else {
-    const base = unlocked[0].hex
-    const newColors = generateHarmony(base, harmonyType.value as HarmonyType, palette.value.length)
-    let colorIdx = 0
-    palette.value = palette.value.map(c => {
-      if (c.locked) return c
-      return { ...c, hex: newColors[colorIdx++] }
-    })
-  }
+  palette.value = generateWithHarmony(palette.value, harmonyType.value as HarmonyType)
   syncToUrl()
 }
 

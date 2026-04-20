@@ -262,8 +262,8 @@ import {
   RefreshCw,
 } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
-import { toggleLock as paletteToggleLock, usePaletteState, getContrastRatio, getColorFormats, adjustColor, updateColor, initPalette } from '../composables/useColorPalette'
-import { generateHarmony, type HarmonyType } from '../composables/useColorHarmony'
+import { toggleLock as paletteToggleLock, usePaletteState, getContrastRatio, getColorFormats, adjustColor, updateColor, initPalette, generateWithHarmony } from '../composables/useColorPalette'
+import type { HarmonyType } from '../composables/useColorHarmony'
 import type { ColorFormats } from '../composables/useColorPalette'
 
 const { t } = useI18n()
@@ -313,32 +313,7 @@ const harmonyLabel = computed(() => harmonyTypes.find(h => h.value === harmonyTy
 // --- Actions ---
 
 function generate() {
-  const unlockedIndices = palette.value.reduce<number[]>((acc, c, i) => {
-    if (!c.locked) acc.push(i)
-    return acc
-  }, [])
-
-  if (unlockedIndices.length === 0) {
-    // All colors locked - generate from first color
-    const base = palette.value[0].hex
-    const newColors = generateHarmony(base, harmonyType.value as HarmonyType, palette.value.length)
-    palette.value = palette.value.map((c, i) => ({ ...c, hex: newColors[i] }))
-  } else if (unlockedIndices.length === palette.value.length) {
-    // No colors locked - full regeneration
-    const base = palette.value[0].hex
-    const newColors = generateHarmony(base, harmonyType.value as HarmonyType, palette.value.length)
-    palette.value = newColors.map(hex => ({ hex, locked: false }))
-  } else {
-    // Some colors locked - generate from first unlocked, preserve locked positions
-    const base = palette.value[unlockedIndices[0]].hex
-    const newColors = generateHarmony(base, harmonyType.value as HarmonyType, palette.value.length)
-    // Only update unlocked positions
-    palette.value = palette.value.map((c, i) => {
-      const unlockedIdx = unlockedIndices.indexOf(i)
-      if (unlockedIdx === -1) return c // Keep locked
-      return { ...c, hex: newColors[i] } // Use harmony position
-    })
-  }
+  palette.value = generateWithHarmony(palette.value, harmonyType.value as HarmonyType)
   syncToUrl()
 }
 
