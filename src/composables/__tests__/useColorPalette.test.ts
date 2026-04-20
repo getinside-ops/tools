@@ -98,10 +98,12 @@ describe('usePaletteState', () => {
     ])
   })
 
-  it('restores harmony type from URL', () => {
+  it('restores palette from URL ignoring harmony type param', () => {
     window.location.hash = '#/color-palette?p=0aaa8e-b8d5b8-d7b49e-dc602e-bc412b&t=analogous'
-    const { harmonyType } = usePaletteState()
-    expect(harmonyType.value).toBe('analogous')
+    const { palette } = usePaletteState()
+    expect(palette.value.map(c => c.hex.toLowerCase())).toEqual([
+      '#0aaa8e', '#b8d5b8', '#d7b49e', '#dc602e', '#bc412b'
+    ])
   })
 
   it('handles malformed URL gracefully', () => {

@@ -6,31 +6,6 @@
         <router-link to="/" class="cpf-back-btn" :aria-label="t('nav.back')">
           <ChevronLeft :size="18" />
         </router-link>
-        <div class="cpf-harmony-selector">
-          <button
-            class="cpf-harmony-btn"
-            @click="showHarmonyMenu = !showHarmonyMenu"
-            :aria-expanded="showHarmonyMenu"
-            :aria-label="t('colorPalette.full.harmony.label')"
-          >
-            <Sparkles :size="16" />
-            <span>{{ harmonyLabel }}</span>
-            <ChevronDown :size="14" class="cpf-chevron" :class="{ 'cpf-chevron--open': showHarmonyMenu }" />
-          </button>
-          <div v-if="showHarmonyMenu" class="cpf-harmony-menu" role="listbox">
-            <button
-              v-for="type in harmonyTypes"
-              :key="type.value"
-              class="cpf-harmony-option"
-              :class="{ 'cpf-harmony-option--active': harmonyType === type.value }"
-              role="option"
-              :aria-selected="harmonyType === type.value"
-              @click="selectHarmony(type.value)"
-            >
-              {{ type.label }}
-            </button>
-          </div>
-        </div>
       </div>
       <div class="cpf-toolbar-right">
         <label class="cpf-tool-btn" :aria-label="t('colorPalette.full.extract')" tabindex="0">
@@ -332,7 +307,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import {
-  ChevronLeft, ChevronDown, Shuffle, Sparkles, Download,
+  ChevronLeft, Shuffle, Download,
   Lock, Unlock, Copy, Layers, X, CheckCircle, Code, Braces,
   Wind, Link as LinkIcon, ImageIcon, Palette, ImageUp,
   GripVertical, Trash2, Plus, Minimize2,
@@ -344,16 +319,14 @@ import {
   generateWithHarmony,
   updateColor,
 } from '../composables/useColorPalette'
-import type { HarmonyType } from '../composables/useColorHarmony'
 
 const { t } = useI18n()
 const router = useRouter()
-const { palette, harmonyType, syncToUrl } = usePaletteState()
+const { palette, syncToUrl } = usePaletteState()
 
 // UI state
 const toolbarVisible = ref(true)
 const hoverToolbar = ref(false)
-const showHarmonyMenu = ref(false)
 const showExportModal = ref(false)
 const showGradientModal = ref(false)
 const showShadesPanel = ref(false)
@@ -367,21 +340,6 @@ const dragOverIndex = ref<number | null>(null)
 const cpfPickerRefs = ref<(HTMLInputElement | null)[]>([])
 let toastTimer: ReturnType<typeof setTimeout> | null = null
 let hideToolbarTimer: ReturnType<typeof setTimeout> | null = null
-
-// Harmony types
-const harmonyTypes = [
-  { value: 'random-beautiful' as HarmonyType, label: t('colorPalette.full.harmony.randomBeautiful') },
-  { value: 'analogous' as HarmonyType, label: t('colorPalette.full.harmony.analogous') },
-  { value: 'complementary' as HarmonyType, label: t('colorPalette.full.harmony.complementary') },
-  { value: 'triadic' as HarmonyType, label: t('colorPalette.full.harmony.triadic') },
-  { value: 'tetradic' as HarmonyType, label: t('colorPalette.full.harmony.tetradic') },
-  { value: 'split-complementary' as HarmonyType, label: t('colorPalette.full.harmony.splitComplementary') },
-  { value: 'monochromatic' as HarmonyType, label: t('colorPalette.full.harmony.monochromatic') },
-]
-
-const harmonyLabel = computed(() => {
-  return harmonyTypes.find(h => h.value === harmonyType.value)?.label || ''
-})
 
 const selectedColor = computed(() => {
   if (selectedColorIndex.value === null) return null
@@ -424,7 +382,7 @@ const gradientCss = computed(() => {
 // --- Actions ---
 
 function generate() {
-  palette.value = generateWithHarmony(palette.value, harmonyType.value as HarmonyType)
+  palette.value = generateWithHarmony(palette.value, 'random-beautiful')
   syncToUrl()
 }
 
@@ -438,7 +396,7 @@ function addColorAt(i: number) {
   const neighbor = palette.value[Math.min(i, palette.value.length - 1)].hex
   const newColors = generateWithHarmony(
     [{ hex: neighbor, locked: false }],
-    harmonyType.value as HarmonyType
+    'random-beautiful'
   )
   const newPalette = [...palette.value]
   newPalette.splice(i, 0, { hex: newColors[0].hex, locked: false })
@@ -487,12 +445,6 @@ function onDrop(i: number) {
 function onDragEnd() {
   dragIndex.value = null
   dragOverIndex.value = null
-}
-
-function selectHarmony(type: HarmonyType) {
-  harmonyType.value = type
-  showHarmonyMenu.value = false
-  generate()
 }
 
 function openShades(index: number) {
@@ -676,11 +628,10 @@ function handleKeydown(e: KeyboardEvent) {
   else if (e.key === 'g') { showGradientModal.value = !showGradientModal.value }
   else if (e.key === 'e') { showExportModal.value = !showExportModal.value }
   else if (e.key === 'Escape') {
-    const anyOpen = showExportModal.value || showGradientModal.value || showShadesPanel.value || showHarmonyMenu.value
+    const anyOpen = showExportModal.value || showGradientModal.value || showShadesPanel.value
     showExportModal.value = false
     showGradientModal.value = false
     showShadesPanel.value = false
-    showHarmonyMenu.value = false
     if (!anyOpen) router.push('/color-palette')
   }
 }
@@ -698,12 +649,6 @@ function resetHideTimer() {
 onMounted(() => {
   document.addEventListener('keydown', handleKeydown)
   document.addEventListener('mousemove', resetHideTimer)
-  document.addEventListener('click', (e) => {
-    if (showHarmonyMenu.value) {
-      const menu = document.querySelector('.cpf-harmony-selector')
-      if (menu && !menu.contains(e.target as Node)) showHarmonyMenu.value = false
-    }
-  })
   // Prevent body scroll while fullscreen
   document.body.style.overflow = 'hidden'
   resetHideTimer()

@@ -20,32 +20,7 @@
           <RefreshCw :size="16" />
         </button>
 
-        <!-- Harmony selector -->
-        <div class="cp-harmony-selector">
-          <button
-            class="cp-harmony-btn"
-            @click="showHarmonyMenu = !showHarmonyMenu"
-            :aria-expanded="showHarmonyMenu"
-            :aria-label="t('colorPalette.full.harmony.label')"
-          >
-            <Sparkles :size="16" />
-            <span>{{ harmonyLabel }}</span>
-            <ChevronDown :size="14" class="cp-chevron" :class="{ 'cp-chevron--open': showHarmonyMenu }" />
-          </button>
-          <div v-if="showHarmonyMenu" class="cp-harmony-menu" role="listbox">
-            <button
-              v-for="type in harmonyTypes"
-              :key="type.value"
-              class="cp-harmony-option"
-              :class="{ 'cp-harmony-option--active': harmonyType === type.value }"
-              role="option"
-              :aria-selected="harmonyType === type.value"
-              @click="selectHarmony(type.value)"
-            >
-              {{ type.label }}
-            </button>
-          </div>
-        </div>
+
       </div>
       <div class="cp-actions-right">
         <label class="cp-upload-btn" :aria-label="t('colorPalette.full.extract')" tabindex="0">
@@ -271,25 +246,23 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import {
-  Palette, Shuffle, Sparkles, ChevronDown, Copy, Lock, Unlock,
+  Palette, Shuffle, Copy, Lock, Unlock,
   RotateCcw, CheckCircle, Code, Braces, Wind, X, ImageUp,
   Maximize2, Download, Link as LinkIcon, RefreshCw,
   GripVertical, Info, Trash2, Plus,
 } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { toggleLock as paletteToggleLock, usePaletteState, getColorFormats, adjustColor, updateColor, initPalette, generateWithHarmony } from '../composables/useColorPalette'
-import type { HarmonyType } from '../composables/useColorHarmony'
 import type { ColorFormats } from '../composables/useColorPalette'
 
 const { t } = useI18n()
 const router = useRouter()
-const { palette, harmonyType, syncToUrl } = usePaletteState()
+const { palette, syncToUrl } = usePaletteState()
 
 const selectedIndex = ref<number | null>(null)
 const copiedIndex = ref<number | null>(null)
 const flashIndex = ref<number | null>(null)
 const toastMessage = ref<string | null>(null)
-const showHarmonyMenu = ref(false)
 const showExportModal = ref(false)
 const showGradientModal = ref(false)
 const gradientType = ref<'linear' | 'radial'>('linear')
@@ -313,21 +286,10 @@ const gradientCss = computed(() => {
     : `radial-gradient(circle, ${colors.join(', ')})`
 })
 
-const harmonyTypes = [
-  { value: 'random-beautiful' as HarmonyType, label: t('colorPalette.full.harmony.randomBeautiful') },
-  { value: 'analogous' as HarmonyType, label: t('colorPalette.full.harmony.analogous') },
-  { value: 'complementary' as HarmonyType, label: t('colorPalette.full.harmony.complementary') },
-  { value: 'triadic' as HarmonyType, label: t('colorPalette.full.harmony.triadic') },
-  { value: 'tetradic' as HarmonyType, label: t('colorPalette.full.harmony.tetradic') },
-  { value: 'split-complementary' as HarmonyType, label: t('colorPalette.full.harmony.splitComplementary') },
-  { value: 'monochromatic' as HarmonyType, label: t('colorPalette.full.harmony.monochromatic') },
-]
-const harmonyLabel = computed(() => harmonyTypes.find(h => h.value === harmonyType.value)?.label || '')
-
 // --- Actions ---
 
 function generate() {
-  palette.value = generateWithHarmony(palette.value, harmonyType.value as HarmonyType)
+  palette.value = generateWithHarmony(palette.value, 'random-beautiful')
   syncToUrl()
 }
 
@@ -355,7 +317,7 @@ function addColorAt(i: number) {
   const neighbor = palette.value[Math.min(i, palette.value.length - 1)].hex
   const newColors = generateWithHarmony(
     [{ hex: neighbor, locked: false }],
-    harmonyType.value as HarmonyType
+    'random-beautiful'
   )
   const newPalette = [...palette.value]
   newPalette.splice(i, 0, { hex: newColors[0].hex, locked: false })
@@ -407,11 +369,7 @@ function onDragEnd() {
   dragOverIndex.value = null
 }
 
-function selectHarmony(type: HarmonyType) {
-  harmonyType.value = type
-  showHarmonyMenu.value = false
-  generate()
-}
+
 
 async function copyColor(hex: string, index: number) {
   try {
@@ -492,12 +450,11 @@ function handleKeydown(e: KeyboardEvent) {
   else if (e.key === 'c' && !e.metaKey && !e.ctrlKey) { navigator.clipboard.writeText(palette.value.map(c => c.hex).join(' ')); showToast(t('colorPalette.full.toast.copied')) }
   else if (e.key === 'e') { showExportModal.value = !showExportModal.value }
   else if (e.key === 'g') { showGradientModal.value = !showGradientModal.value }
-  else if (e.key === 'Escape') { showExportModal.value = false; showGradientModal.value = false; selectedIndex.value = null; showHarmonyMenu.value = false }
+  else if (e.key === 'Escape') { showExportModal.value = false; showGradientModal.value = false; selectedIndex.value = null }
 }
 
 onMounted(() => {
   document.addEventListener('keydown', handleKeydown)
-  document.addEventListener('click', (e) => { if (showHarmonyMenu.value && !document.querySelector('.cp-harmony-selector')?.contains(e.target as Node)) showHarmonyMenu.value = false })
 })
 onUnmounted(() => { document.removeEventListener('keydown', handleKeydown); if (toastTimer) clearTimeout(toastTimer) })
 </script>

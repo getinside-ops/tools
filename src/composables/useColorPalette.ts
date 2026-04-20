@@ -128,14 +128,14 @@ function randomColor(): string {
 
 export function initPalette(): PaletteColor[] {
   // Generate a beautiful random palette using the harmony engine
+  const types: Array<'analogous' | 'complementary' | 'triadic' | 'tetradic' | 'split-complementary' | 'random-beautiful'> = [
+    'random-beautiful', 'analogous', 'complementary', 'triadic', 'split-complementary'
+  ]
+  const type = types[Math.floor(Math.random() * types.length)]
   const baseH = Math.floor(Math.random() * 360)
   const baseS = 40 + Math.floor(Math.random() * 40)
   const baseL = 35 + Math.floor(Math.random() * 30)
   const baseHex = hslToHex(baseH, baseS, baseL)
-  const types: Array<'analogous' | 'complementary' | 'triadic' | 'tetradic' | 'split-complementary' | 'monochromatic' | 'random-beautiful'> = [
-    'random-beautiful', 'analogous', 'complementary', 'triadic', 'split-complementary'
-  ]
-  const type = types[Math.floor(Math.random() * types.length)]
   const colors = generateHarmony(baseHex, type, 5)
   return colors.map(hex => ({ hex, locked: false }))
 }
@@ -171,39 +171,31 @@ export function updateColor(palette: PaletteColor[], index: number, newHex: stri
 
 export interface PaletteState {
   palette: Ref<PaletteColor[]>
-  harmonyType: Ref<string>
   syncToUrl: () => void
 }
 
 export function usePaletteState(): PaletteState {
   const palette = ref<PaletteColor[]>(initPalette())
-  const harmonyType = ref('random-beautiful')
 
-  // Restore from URL query params in hash (e.g., #/color-palette?p=0aaa8e-b8d5b8&t=analogous)
+  // Restore from URL query params in hash (e.g., #/color-palette?p=0aaa8e-b8d5b8)
   const hash = window.location.hash || ''
   const queryPart = hash.split('?')[1]
   if (queryPart) {
     const params = new URLSearchParams(queryPart)
     const paletteParam = params.get('p')
-    const typeParam = params.get('t')
     if (paletteParam) {
       const colorHexes = paletteParam.split('-').filter((c: string) => /^[0-9A-Fa-f]{6}$/i.test(c))
       if (colorHexes.length >= 2) {
         palette.value = colorHexes.map((hex: string) => ({ hex: '#' + hex.toUpperCase(), locked: false }))
       }
     }
-    if (typeParam) {
-      const validTypes = ['analogous', 'complementary', 'triadic', 'tetradic', 'split-complementary', 'monochromatic', 'random-beautiful']
-      if (validTypes.includes(typeParam)) harmonyType.value = typeParam
-    }
   }
 
   function syncToUrl() {
     const colors = palette.value.map(c => c.hex.replace('#', '').toLowerCase())
-    const type = harmonyType.value
     const currentHash = window.location.hash || '#/'
     const routePart = currentHash.split('?')[0]
-    const newHash = routePart + '?p=' + colors.join('-') + '&t=' + type
+    const newHash = routePart + '?p=' + colors.join('-')
     history.replaceState(null, '', window.location.pathname + newHash)
   }
 
@@ -214,9 +206,7 @@ export function usePaletteState(): PaletteState {
     syncTimer = setTimeout(syncToUrl, 500)
   }, { deep: true })
 
-  watch(harmonyType, syncToUrl)
-
-  return { palette, harmonyType, syncToUrl }
+  return { palette, syncToUrl }
 }
 
 // --- WCAG Contrast utilities ---
