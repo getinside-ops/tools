@@ -65,109 +65,156 @@
     </div>
 
     <!-- Color swatches -->
-    <div class="cp-palette" role="group" :aria-label="t('colorPalette.title')">
-      <div
-        v-for="(color, i) in palette"
-        :key="i"
-        class="cp-swatch"
-        :class="{
-          'cp-swatch--locked': color.locked,
-          'cp-swatch--flash': flashIndex === i,
-          'cp-swatch--selected': selectedIndex === i,
-        }"
-        :style="{ background: color.hex }"
-        @click="handleSwatchClick(i)"
-        @keydown.enter="handleSwatchClick(i)"
-      >
-        <div class="cp-swatch-lock" :class="{ 'cp-swatch-lock--visible': color.locked || selectedIndex === i }">
-          <Lock v-if="color.locked" :size="18" />
-          <Unlock v-else :size="18" />
-        </div>
-        <div class="cp-swatch-hex" @click.stop="copyColor(color.hex, i)">
-          <span>{{ copiedIndex === i ? '✓' : color.hex }}</span>
+    <div class="cp-palette-wrapper">
+      <div class="cp-palette" role="group" :aria-label="t('colorPalette.title')">
+        <template v-for="(color, i) in palette" :key="i">
+          <!-- Add strip before each swatch -->
+          <div
+            v-if="palette.length < 8"
+            class="cp-add-strip"
+            @click="addColorAt(i)"
+            :aria-label="t('colorPalette.full.addColor')"
+            role="button"
+            tabindex="0"
+            @keydown.enter="addColorAt(i)"
+          >
+            <Plus :size="12" />
+          </div>
+          <!-- Swatch -->
+          <div
+            class="cp-swatch"
+            :class="{
+              'cp-swatch--locked': color.locked,
+              'cp-swatch--flash': flashIndex === i,
+              'cp-swatch--drag-over': dragOverIndex === i,
+            }"
+            :style="{ background: color.hex }"
+            draggable="true"
+            @dragstart="onDragStart($event, i)"
+            @dragover.prevent="onDragOver(i)"
+            @drop.prevent="onDrop(i)"
+            @dragend="onDragEnd"
+          >
+            <!-- Hover overlay -->
+            <div class="cp-swatch-overlay">
+              <div class="cp-drag-handle"><GripVertical :size="16" /></div>
+              <button
+                class="cp-swatch-btn"
+                @click.stop="toggleLockAt(i)"
+                :aria-label="color.locked ? t('colorPalette.unlock') : t('colorPalette.lock')"
+              >
+                <Lock v-if="color.locked" :size="17" />
+                <Unlock v-else :size="17" />
+              </button>
+              <div class="cp-swatch-action-row">
+                <button class="cp-swatch-btn cp-swatch-btn--sm" @click.stop="copyColor(color.hex, i)" :aria-label="t('colorPalette.copied')">
+                  <Copy :size="15" />
+                </button>
+                <button class="cp-swatch-btn cp-swatch-btn--sm" @click.stop="openDetail(i)" :aria-label="t('colorPalette.selectedColor')">
+                  <Info :size="15" />
+                </button>
+                <button
+                  v-if="palette.length > 3"
+                  class="cp-swatch-btn cp-swatch-btn--sm cp-swatch-btn--delete"
+                  @click.stop="removeColor(i)"
+                  :aria-label="t('colorPalette.full.deleteColor')"
+                >
+                  <Trash2 :size="15" />
+                </button>
+              </div>
+            </div>
+            <!-- Always-visible hex badge -->
+            <div class="cp-swatch-hex" @click.stop="openPicker(i)">
+              <span>{{ copiedIndex === i ? '✓' : color.hex }}</span>
+              <input
+                type="color"
+                class="cp-picker-input"
+                :ref="(el) => { pickerRefs[i] = el as HTMLInputElement }"
+                :value="color.hex"
+                @input="onPickerInput($event, i)"
+                tabindex="-1"
+                aria-hidden="true"
+              />
+            </div>
+          </div>
+        </template>
+        <!-- Trailing add strip -->
+        <div
+          v-if="palette.length < 8"
+          class="cp-add-strip"
+          @click="addColorAt(palette.length)"
+          :aria-label="t('colorPalette.full.addColor')"
+          role="button"
+          tabindex="0"
+          @keydown.enter="addColorAt(palette.length)"
+        >
+          <Plus :size="12" />
         </div>
       </div>
-    </div>
 
-    <!-- Selected color detail panel -->
-    <div v-if="selectedIndex !== null" class="cp-detail-panel">
-      <div class="cp-detail-header">
-        <div class="cp-detail-swatch" :style="{ background: palette[selectedIndex].hex }"></div>
-        <div class="cp-detail-info">
-          <h3 class="cp-detail-title">{{ t('colorPalette.selectedColor') }}</h3>
-          <div class="cp-format-row" @click="copyColor(formats.hex, selectedIndex)">
-            <span class="cp-format-label">HEX</span>
-            <code class="cp-format-value">{{ formats.hex }}</code>
-            <Copy :size="14" class="cp-format-copy" />
-          </div>
-          <div class="cp-format-row" @click="copyColor(formats.rgb, selectedIndex)">
-            <span class="cp-format-label">RGB</span>
-            <code class="cp-format-value">{{ formats.rgb }}</code>
-            <Copy :size="14" class="cp-format-copy" />
-          </div>
-          <div class="cp-format-row" @click="copyColor(formats.hsl, selectedIndex)">
-            <span class="cp-format-label">HSL</span>
-            <code class="cp-format-value">{{ formats.hsl }}</code>
-            <Copy :size="14" class="cp-format-copy" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Adjustment sliders -->
-      <div class="cp-adjust">
-        <h4 class="cp-adjust-title">{{ t('colorPalette.adjust') }}</h4>
-        <div class="cp-slider-group">
-          <label class="cp-slider-label">
-            {{ t('colorPalette.hue') }}
-            <span class="cp-slider-value">{{ adjustments.hue }}°</span>
-          </label>
-          <input type="range" v-model.number="adjustments.hue" min="-180" max="180" step="1" class="cp-slider cp-slider--hue" />
-        </div>
-        <div class="cp-slider-group">
-          <label class="cp-slider-label">
-            {{ t('colorPalette.saturation') }}
-            <span class="cp-slider-value">{{ adjustments.saturation > 0 ? '+' : '' }}{{ adjustments.saturation }}%</span>
-          </label>
-          <input type="range" v-model.number="adjustments.saturation" min="-50" max="50" step="1" class="cp-slider" />
-        </div>
-        <div class="cp-slider-group">
-          <label class="cp-slider-label">
-            {{ t('colorPalette.lightness') }}
-            <span class="cp-slider-value">{{ adjustments.lightness > 0 ? '+' : '' }}{{ adjustments.lightness }}%</span>
-          </label>
-          <input type="range" v-model.number="adjustments.lightness" min="-50" max="50" step="1" class="cp-slider" />
-        </div>
-        <div class="cp-adjust-actions">
-          <button class="cp-reset-btn" @click="resetAdjustments">
-            <RotateCcw :size="14" />
-            {{ t('colorPalette.reset') }}
+      <!-- Detail panel — right-side overlay -->
+      <Transition name="cp-detail-slide">
+        <div v-if="selectedIndex !== null && selectedIndex < palette.length" class="cp-detail-overlay" role="dialog">
+          <button class="cp-detail-close" @click="selectedIndex = null" :aria-label="t('colorPalette.full.keyboard.esc')">
+            <X :size="16" />
           </button>
-          <button class="cp-apply-btn" @click="applyAdjustments">
-            {{ t('colorPalette.apply') }}
-          </button>
-        </div>
-      </div>
-
-      <!-- Contrast section -->
-      <div class="cp-contrast-section">
-        <span class="cp-adjust-title" style="margin: 0;">Contraste WCAG</span>
-        <div class="cp-contrast-row">
-          <div class="cp-contrast-item" style="background: #FFFFFF;">
-            <span class="cp-contrast-text" :style="{ color: palette[selectedIndex].hex }">Aa</span>
-            <span class="cp-contrast-ratio">{{ contrastOnWhite.toFixed(1) }}:1</span>
-            <span class="cp-contrast-badge" :class="contrastOnWhite >= 4.5 ? 'cp-contrast-badge--pass' : 'cp-contrast-badge--fail'">
-              {{ contrastOnWhite >= 4.5 ? 'AA ✓' : '—' }}
-            </span>
+          <div class="cp-detail-header">
+            <div class="cp-detail-swatch" :style="{ background: palette[selectedIndex].hex }"></div>
+            <div class="cp-detail-info">
+              <h3 class="cp-detail-title">{{ t('colorPalette.selectedColor') }}</h3>
+              <div class="cp-format-row" @click="copyColor(formats.hex, selectedIndex)">
+                <span class="cp-format-label">HEX</span>
+                <code class="cp-format-value">{{ formats.hex }}</code>
+                <Copy :size="14" class="cp-format-copy" />
+              </div>
+              <div class="cp-format-row" @click="copyColor(formats.rgb, selectedIndex)">
+                <span class="cp-format-label">RGB</span>
+                <code class="cp-format-value">{{ formats.rgb }}</code>
+                <Copy :size="14" class="cp-format-copy" />
+              </div>
+              <div class="cp-format-row" @click="copyColor(formats.hsl, selectedIndex)">
+                <span class="cp-format-label">HSL</span>
+                <code class="cp-format-value">{{ formats.hsl }}</code>
+                <Copy :size="14" class="cp-format-copy" />
+              </div>
+            </div>
           </div>
-          <div class="cp-contrast-item" style="background: #000000;">
-            <span class="cp-contrast-text" :style="{ color: palette[selectedIndex].hex }">Aa</span>
-            <span class="cp-contrast-ratio">{{ contrastOnBlack.toFixed(1) }}:1</span>
-            <span class="cp-contrast-badge" :class="contrastOnBlack >= 4.5 ? 'cp-contrast-badge--pass' : 'cp-contrast-badge--fail'">
-              {{ contrastOnBlack >= 4.5 ? 'AA ✓' : '—' }}
-            </span>
+          <div class="cp-adjust">
+            <h4 class="cp-adjust-title">{{ t('colorPalette.adjust') }}</h4>
+            <div class="cp-slider-group">
+              <label class="cp-slider-label">{{ t('colorPalette.hue') }}<span class="cp-slider-value">{{ adjustments.hue }}°</span></label>
+              <input type="range" v-model.number="adjustments.hue" min="-180" max="180" step="1" class="cp-slider cp-slider--hue" />
+            </div>
+            <div class="cp-slider-group">
+              <label class="cp-slider-label">{{ t('colorPalette.saturation') }}<span class="cp-slider-value">{{ adjustments.saturation > 0 ? '+' : '' }}{{ adjustments.saturation }}%</span></label>
+              <input type="range" v-model.number="adjustments.saturation" min="-50" max="50" step="1" class="cp-slider" />
+            </div>
+            <div class="cp-slider-group">
+              <label class="cp-slider-label">{{ t('colorPalette.lightness') }}<span class="cp-slider-value">{{ adjustments.lightness > 0 ? '+' : '' }}{{ adjustments.lightness }}%</span></label>
+              <input type="range" v-model.number="adjustments.lightness" min="-50" max="50" step="1" class="cp-slider" />
+            </div>
+            <div class="cp-adjust-actions">
+              <button class="cp-reset-btn" @click="resetAdjustments"><RotateCcw :size="14" />{{ t('colorPalette.reset') }}</button>
+              <button class="cp-apply-btn" @click="applyAdjustments">{{ t('colorPalette.apply') }}</button>
+            </div>
+          </div>
+          <div class="cp-contrast-section">
+            <span class="cp-adjust-title" style="margin: 0;">Contraste WCAG</span>
+            <div class="cp-contrast-row">
+              <div class="cp-contrast-item" style="background: #FFFFFF;">
+                <span class="cp-contrast-text" :style="{ color: palette[selectedIndex].hex }">Aa</span>
+                <span class="cp-contrast-ratio">{{ contrastOnWhite.toFixed(1) }}:1</span>
+                <span class="cp-contrast-badge" :class="contrastOnWhite >= 4.5 ? 'cp-contrast-badge--pass' : 'cp-contrast-badge--fail'">{{ contrastOnWhite >= 4.5 ? 'AA ✓' : '—' }}</span>
+              </div>
+              <div class="cp-contrast-item" style="background: #000000;">
+                <span class="cp-contrast-text" :style="{ color: palette[selectedIndex].hex }">Aa</span>
+                <span class="cp-contrast-ratio">{{ contrastOnBlack.toFixed(1) }}:1</span>
+                <span class="cp-contrast-badge" :class="contrastOnBlack >= 4.5 ? 'cp-contrast-badge--pass' : 'cp-contrast-badge--fail'">{{ contrastOnBlack >= 4.5 ? 'AA ✓' : '—' }}</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </Transition>
     </div>
 
     <!-- UI Preview -->
@@ -258,8 +305,8 @@ import { useRouter } from 'vue-router'
 import {
   Palette, Shuffle, Sparkles, ChevronDown, Copy, Lock, Unlock,
   RotateCcw, CheckCircle, Code, Braces, Wind, X, ImageUp,
-  Maximize2, Download, Link as LinkIcon,
-  RefreshCw,
+  Maximize2, Download, Link as LinkIcon, RefreshCw,
+  GripVertical, Info, Trash2, Plus,
 } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import { toggleLock as paletteToggleLock, usePaletteState, getContrastRatio, getColorFormats, adjustColor, updateColor, initPalette, generateWithHarmony } from '../composables/useColorPalette'
@@ -278,13 +325,16 @@ const showHarmonyMenu = ref(false)
 const showExportModal = ref(false)
 const showGradientModal = ref(false)
 const gradientType = ref<'linear' | 'radial'>('linear')
+const dragIndex = ref<number | null>(null)
+const dragOverIndex = ref<number | null>(null)
+const pickerRefs = ref<(HTMLInputElement | null)[]>([])
 let toastTimer: ReturnType<typeof setTimeout> | null = null
 
 const adjustments = ref({ hue: 0, saturation: 0, lightness: 0 })
 watch(selectedIndex, () => { adjustments.value = { hue: 0, saturation: 0, lightness: 0 } })
 
 const formats = computed<ColorFormats>(() => {
-  if (selectedIndex.value === null) return { hex: '', rgb: '', hsl: '' }
+  if (selectedIndex.value === null || selectedIndex.value >= palette.value.length) return { hex: '', rgb: '', hsl: '' }
   return getColorFormats(palette.value[selectedIndex.value].hex)
 })
 
@@ -325,11 +375,72 @@ function resetPalette() {
   showToast(t('colorPalette.full.toast.paletteReset'))
 }
 
-function handleSwatchClick(i: number) {
-  // Toggle lock state
+function toggleLockAt(i: number) {
   palette.value = paletteToggleLock(palette.value, i)
-  // Select the color if it's now unlocked, deselect if locked
-  selectedIndex.value = palette.value[i].locked ? null : i
+  if (selectedIndex.value === i && palette.value[i].locked) selectedIndex.value = null
+  syncToUrl()
+}
+
+function openDetail(i: number) {
+  selectedIndex.value = selectedIndex.value === i ? null : i
+  adjustments.value = { hue: 0, saturation: 0, lightness: 0 }
+}
+
+function addColorAt(i: number) {
+  if (palette.value.length >= 8) return
+  const neighbor = palette.value[Math.min(i, palette.value.length - 1)].hex
+  const newColors = generateWithHarmony(
+    [{ hex: neighbor, locked: false }],
+    harmonyType.value as HarmonyType
+  )
+  const newPalette = [...palette.value]
+  newPalette.splice(i, 0, { hex: newColors[0], locked: false })
+  palette.value = newPalette
+  syncToUrl()
+}
+
+function removeColor(i: number) {
+  if (palette.value.length <= 3) return
+  selectedIndex.value = null
+  palette.value = palette.value.filter((_, idx) => idx !== i)
+  syncToUrl()
+}
+
+function openPicker(i: number) {
+  pickerRefs.value[i]?.click()
+}
+
+function onPickerInput(e: Event, i: number) {
+  const hex = (e.target as HTMLInputElement).value.toUpperCase()
+  palette.value = updateColor(palette.value, i, hex)
+}
+
+function onDragStart(e: DragEvent, i: number) {
+  dragIndex.value = i
+  if (e.dataTransfer) {
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', String(i))
+  }
+}
+
+function onDragOver(i: number) {
+  if (dragIndex.value !== null && dragIndex.value !== i) dragOverIndex.value = i
+}
+
+function onDrop(i: number) {
+  if (dragIndex.value === null || dragIndex.value === i) return
+  const newPalette = [...palette.value]
+  const [dragged] = newPalette.splice(dragIndex.value, 1)
+  newPalette.splice(i, 0, dragged)
+  palette.value = newPalette
+  dragIndex.value = null
+  dragOverIndex.value = null
+  syncToUrl()
+}
+
+function onDragEnd() {
+  dragIndex.value = null
+  dragOverIndex.value = null
 }
 
 function selectHarmony(type: HarmonyType) {
@@ -488,32 +599,99 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown); if (
   color: var(--gi-text); border-color: var(--gi-brand); box-shadow: var(--gi-shadow-sm); }
 .cp-upload-btn input { display: none; }
 
-/* Palette grid */
-.cp-palette { display: flex; gap: 0.75rem; border-radius: var(--gi-radius-xl); overflow: visible; height: 280px; margin-bottom: 1.5rem; }
-.cp-swatch {
-  flex: 1; position: relative; cursor: pointer;
-  display: flex; flex-direction: column; justify-content: space-between;
-  transition: flex 0.25s var(--gi-ease-out), transform 0.15s var(--gi-ease-out), box-shadow 0.2s var(--gi-ease-out);
-  border-radius: var(--gi-radius-lg); overflow: hidden; box-shadow: var(--gi-shadow-sm);
+/* Palette wrapper + overlay */
+.cp-palette-wrapper { position: relative; margin-bottom: 1.5rem; }
+.cp-detail-overlay {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 280px;
+  background: var(--gi-surface); border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-xl); box-shadow: var(--gi-shadow-lg);
+  overflow-y: auto; padding: 1.25rem; z-index: 10;
 }
-.cp-swatch:hover { flex: 1.3; transform: translateY(-2px); box-shadow: var(--gi-shadow-md); }
-.cp-swatch:active { transform: scale(0.98); }
+.cp-detail-close {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; background: var(--gi-bg); border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius-sm); color: var(--gi-text-muted); cursor: pointer;
+  margin-bottom: 0.75rem; transition: color 0.15s, border-color 0.15s;
+}
+.cp-detail-close:hover { color: var(--gi-text); border-color: var(--gi-text-muted); }
+.cp-detail-slide-enter-active, .cp-detail-slide-leave-active {
+  transition: transform 0.22s var(--gi-ease-out), opacity 0.22s;
+}
+.cp-detail-slide-enter-from, .cp-detail-slide-leave-to { transform: translateX(16px); opacity: 0; }
+
+/* Palette row */
+.cp-palette { display: flex; align-items: stretch; gap: 0; height: 400px; }
+
+/* Add strip */
+.cp-add-strip {
+  display: flex; align-items: center; justify-content: center;
+  width: 8px; flex-shrink: 0; cursor: pointer;
+  color: var(--gi-text-muted); opacity: 0;
+  border: 1px dashed transparent; border-radius: var(--gi-radius-sm);
+  transition: width 0.18s var(--gi-ease-out), opacity 0.18s, border-color 0.18s;
+}
+.cp-palette:hover .cp-add-strip { opacity: 1; }
+.cp-add-strip:hover {
+  width: 36px; border-color: var(--gi-border); color: var(--gi-brand);
+  background: var(--gi-brand-fade);
+}
+
+/* Swatch */
+.cp-swatch {
+  flex: 1; position: relative; border-radius: var(--gi-radius-lg); overflow: hidden;
+  display: flex; flex-direction: column; justify-content: space-between;
+  box-shadow: var(--gi-shadow-sm);
+  transition: flex 0.22s var(--gi-ease-out), box-shadow 0.2s, transform 0.12s;
+  cursor: default;
+}
+.cp-swatch:hover { flex: 1.3; box-shadow: var(--gi-shadow-md); transform: translateY(-2px); }
 .cp-swatch:focus-visible { outline: 3px solid var(--gi-brand); outline-offset: 2px; z-index: 1; }
-.cp-swatch--locked { box-shadow: 0 0 0 3px var(--gi-brand), var(--gi-shadow-sm); }
-.cp-swatch--selected { box-shadow: 0 0 0 3px var(--gi-text), var(--gi-shadow-md); }
-[data-theme="dark"] .cp-swatch--locked { box-shadow: 0 0 0 3px rgba(255,255,255,0.5), var(--gi-shadow-sm); }
+.cp-swatch--locked { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: -2px; }
 .cp-swatch--flash { animation: cp-flash 0.3s ease-out; }
+.cp-swatch--drag-over { outline: 2px dashed rgba(255,255,255,0.8); outline-offset: -2px; }
 @keyframes cp-flash { 0% { filter: brightness(1.8); } 100% { filter: brightness(1); } }
 
-.cp-swatch-lock { display: flex; align-items: center; justify-content: center; padding: 0.75rem; opacity: 0; transition: opacity 0.2s var(--gi-ease-out); color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
-.cp-swatch-lock--visible { opacity: 1; }
-.cp-swatch-hex { padding: 0.625rem; text-align: center; background: rgba(0,0,0,0.25); backdrop-filter: blur(6px); cursor: copy; transition: background 0.15s; }
-.cp-swatch-hex:hover { background: rgba(0,0,0,0.35); }
-.cp-swatch-hex span { font-size: 0.75rem; font-weight: 700; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.5); letter-spacing: 0.05em; font-family: monospace; }
+/* Hover overlay */
+.cp-swatch-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: 0.625rem 0.5rem;
+  opacity: 0; transition: opacity 0.15s;
+}
+.cp-swatch:hover .cp-swatch-overlay { opacity: 1; }
 
-/* Detail panel */
-.cp-detail-panel { background: var(--gi-surface); border-radius: var(--gi-radius-xl); padding: 1.25rem; margin-bottom: 1.5rem; box-shadow: var(--gi-shadow); border: 1px solid var(--gi-border); }
-.cp-detail-header { display: flex; gap: 1rem; align-items: flex-start; }
+.cp-drag-handle {
+  color: white; cursor: grab; opacity: 0.8;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+.cp-drag-handle:active { cursor: grabbing; }
+
+.cp-swatch-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; background: rgba(0,0,0,0.25); backdrop-filter: blur(6px);
+  border: none; border-radius: var(--gi-radius-md); color: white; cursor: pointer;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  transition: background 0.12s;
+}
+.cp-swatch-btn:hover { background: rgba(0,0,0,0.45); }
+.cp-swatch-btn--sm { width: 28px; height: 28px; border-radius: var(--gi-radius-sm); }
+.cp-swatch-btn--delete:hover { background: rgba(200,30,30,0.5); }
+
+.cp-swatch-action-row { display: flex; gap: 0.3rem; }
+
+/* Hex badge (always visible) */
+.cp-swatch-hex {
+  padding: 0.5rem; text-align: center;
+  background: rgba(0,0,0,0.3); backdrop-filter: blur(6px);
+  cursor: pointer; position: relative;
+  transition: background 0.15s;
+}
+.cp-swatch-hex:hover { background: rgba(0,0,0,0.45); }
+.cp-swatch-hex span { font-size: 0.72rem; font-weight: 700; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.5); letter-spacing: 0.05em; font-family: monospace; }
+.cp-picker-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+/* Detail panel (inside overlay) */
+.cp-detail-header { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 0.75rem; }
 .cp-detail-swatch { width: 48px; height: 48px; border-radius: var(--gi-radius-md); flex-shrink: 0; box-shadow: var(--gi-shadow-sm); }
 .cp-detail-info { flex: 1; min-width: 0; }
 .cp-detail-title { font-size: var(--gi-font-size-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gi-text-muted); margin: 0 0 0.625rem; }
@@ -609,10 +787,11 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown); if (
 /* Responsive */
 @media (max-width: 640px) {
   .cp-palette { flex-wrap: wrap; height: auto; }
-  .cp-swatch { min-height: 100px; flex: 1 1 calc(50% - 0.375rem); }
+  .cp-swatch { min-height: 120px; flex: 1 1 calc(50% - 0.375rem); }
+  .cp-detail-overlay { position: static; width: 100%; border-radius: var(--gi-radius-xl); margin-top: 0.75rem; }
+  .cp-add-strip { display: none; }
   .cp-actions { flex-direction: column; align-items: stretch; }
   .cp-actions-right { justify-content: center; }
-  .cp-detail-header { flex-direction: column; align-items: center; text-align: center; }
   .cp-export-grid { grid-template-columns: 1fr; }
 }
 </style>
