@@ -577,6 +577,7 @@ const en: Messages = {
       addColor: 'Add color',
       deleteColor: 'Delete this color',
       pickColor: 'Pick a color',
+      exitFullscreen: 'Exit fullscreen',
     },
     pedagogic: {
       title: 'About Color Palettes',

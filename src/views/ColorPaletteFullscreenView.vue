@@ -43,6 +43,9 @@
         <button class="cpf-tool-btn" @click="showExportModal = true" :aria-label="t('colorPalette.full.export.label')">
           <Download :size="16" />
         </button>
+        <button class="cpf-tool-btn" @click="router.push('/color-palette')" :aria-label="t('colorPalette.full.exitFullscreen')">
+          <Minimize2 :size="16" />
+        </button>
         <button class="cpf-generate-btn" @click="generate" :aria-label="t('colorPalette.full.generate')">
           <Shuffle :size="18" />
           <span class="cpf-generate-text">{{ t('colorPalette.full.generate') }}</span>
@@ -327,11 +330,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import {
   ChevronLeft, ChevronDown, Shuffle, Sparkles, Download,
   Lock, Unlock, Copy, Layers, X, CheckCircle, Code, Braces,
   Wind, Link as LinkIcon, ImageIcon, Palette, ImageUp,
-  GripVertical, Trash2, Plus,
+  GripVertical, Trash2, Plus, Minimize2,
 } from 'lucide-vue-next'
 import {
   toggleLock as paletteToggleLock,
@@ -343,6 +347,7 @@ import {
 import type { HarmonyType } from '../composables/useColorHarmony'
 
 const { t } = useI18n()
+const router = useRouter()
 const { palette, harmonyType, syncToUrl } = usePaletteState()
 
 // UI state
@@ -671,10 +676,12 @@ function handleKeydown(e: KeyboardEvent) {
   else if (e.key === 'g') { showGradientModal.value = !showGradientModal.value }
   else if (e.key === 'e') { showExportModal.value = !showExportModal.value }
   else if (e.key === 'Escape') {
+    const anyOpen = showExportModal.value || showGradientModal.value || showShadesPanel.value || showHarmonyMenu.value
     showExportModal.value = false
     showGradientModal.value = false
     showShadesPanel.value = false
     showHarmonyMenu.value = false
+    if (!anyOpen) router.push('/color-palette')
   }
 }
 

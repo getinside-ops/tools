@@ -575,6 +575,7 @@ const fr = {
       addColor: 'Ajouter une couleur',
       deleteColor: 'Supprimer cette couleur',
       pickColor: 'Choisir une couleur',
+      exitFullscreen: 'Quitter le plein écran',
     },
     pedagogic: {
       title: 'À propos des palettes de couleurs',
