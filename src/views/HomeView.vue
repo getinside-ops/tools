@@ -169,6 +169,7 @@ const allTools: Tool[] = [
   { route: '/promo-code',      icon: Tag,             titleKey: 'home.tools.promoCode.title',       descKey: 'home.tools.promoCode.desc',       category: 'marketing' },
   { route: '/redirect-checker',icon: CornerDownRight, titleKey: 'home.tools.redirectChecker.title', descKey: 'home.tools.redirectChecker.desc', category: 'marketing' },
   { route: '/qr-decoder',      icon: QrCode,          titleKey: 'home.tools.qrDecoder.title',        descKey: 'home.tools.qrDecoder.desc',        category: 'marketing' },
+  { route: '/qr-creator',     icon: QrCode,          titleKey: 'home.tools.qrCreator.title',       descKey: 'home.tools.qrCreator.desc',       category: 'marketing' },
   { route: '/url-parser',      icon: Globe,           titleKey: 'home.tools.urlParser.title',       descKey: 'home.tools.urlParser.desc',       category: 'marketing' },
   { route: '/favicon',         icon: Compass,         titleKey: 'home.tools.favicon.title',          descKey: 'home.tools.favicon.desc',          category: 'marketing' },
   // Images
