@@ -69,7 +69,7 @@
             v-for="[key, label] in Object.entries(sourcePresets)"
             :key="key"
             class="utm-chip"
-            :class="{ 'utm-chip--active': source === key }"
+            :class="{ 'utm-chip--active': source === key, 'utm-chip--highlighted': key === 'getinside' }"
             @click="source = key"
           >
             {{ label }}
@@ -235,6 +235,7 @@ const previewParams = computed(() => {
 })
 
 const sourcePresets: Record<string, string> = {
+  getinside: t('utmBuilder.presets.sources.getinside'),
   google: t('utmBuilder.presets.sources.google'),
   facebook: t('utmBuilder.presets.sources.facebook'),
   newsletter: t('utmBuilder.presets.sources.newsletter'),
@@ -439,6 +440,25 @@ async function copy() {
 
 .utm-chip--active:hover {
   background: var(--gi-brand-dark);
+}
+
+.utm-chip--highlighted {
+  background: var(--gi-brand-fade);
+  border-color: var(--gi-brand);
+  font-weight: 600;
+  color: var(--gi-brand);
+}
+
+.utm-chip--highlighted:hover {
+  background: var(--gi-brand);
+  border-color: var(--gi-brand);
+  color: var(--gi-text-inverse);
+}
+
+.utm-chip--highlighted.utm-chip--active {
+  background: var(--gi-brand);
+  border-color: var(--gi-brand);
+  color: var(--gi-text-inverse);
 }
 
 /* Generate Button */

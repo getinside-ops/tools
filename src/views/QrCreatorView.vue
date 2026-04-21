@@ -151,6 +151,12 @@
               <option value="H">H (30%)</option>
             </select>
           </div>
+          <div class="gi-input-group gi-checkbox-group">
+            <label class="gi-checkbox-label">
+              <input v-model="options.transparentBg" type="checkbox" @change="generate" />
+              {{ t('qrCreator.transparentBg') }}
+            </label>
+          </div>
           <div class="gi-input-group">
             <label class="gi-label">{{ t('qrCreator.fgColor') }}</label>
             <div class="gi-color-input">
@@ -158,11 +164,45 @@
               <input v-model="options.colorDark" type="text" class="gi-input gi-color-text" @input="generate" />
             </div>
           </div>
-          <div class="gi-input-group">
+          <div class="gi-input-group" :class="{ 'gi-disabled': options.transparentBg }">
             <label class="gi-label">{{ t('qrCreator.bgColor') }}</label>
             <div class="gi-color-input">
-              <input v-model="options.colorLight" type="color" @input="generate" />
-              <input v-model="options.colorLight" type="text" class="gi-input gi-color-text" @input="generate" />
+              <input v-model="options.colorLight" type="color" :disabled="options.transparentBg" @input="generate" />
+              <input v-model="options.colorLight" type="text" class="gi-input gi-color-text" :disabled="options.transparentBg" @input="generate" />
+            </div>
+          </div>
+        </div>
+
+        <div class="gi-shape-section">
+          <div class="gi-section-title">{{ t('qrCreator.shape') }}</div>
+          <div class="gi-options-grid">
+            <div class="gi-input-group">
+              <label class="gi-label">{{ t('qrCreator.dotStyle') }}</label>
+              <select v-model="options.dotStyle" class="gi-select" @change="generate">
+                <option value="square">{{ t('qrCreator.dotSquare') }}</option>
+                <option value="dots">{{ t('qrCreator.dotDots') }}</option>
+                <option value="rounded">{{ t('qrCreator.dotRounded') }}</option>
+                <option value="classy">{{ t('qrCreator.dotClassy') }}</option>
+                <option value="classy-rounded">{{ t('qrCreator.dotClassyRounded') }}</option>
+                <option value="extra-rounded">{{ t('qrCreator.dotExtraRounded') }}</option>
+              </select>
+            </div>
+            <div class="gi-input-group">
+              <label class="gi-label">{{ t('qrCreator.cornerSquareStyle') }}</label>
+              <select v-model="options.cornerSquareStyle" class="gi-select" @change="generate">
+                <option value="square">{{ t('qrCreator.cornerSquare') }}</option>
+                <option value="dot">{{ t('qrCreator.cornerDot') }}</option>
+                <option value="extra-rounded">{{ t('qrCreator.cornerExtraRounded') }}</option>
+                <option value="none">{{ t('qrCreator.cornerNone') }}</option>
+              </select>
+            </div>
+            <div class="gi-input-group">
+              <label class="gi-label">{{ t('qrCreator.cornerDotStyle') }}</label>
+              <select v-model="options.cornerDotStyle" class="gi-select" @change="generate">
+                <option value="square">{{ t('qrCreator.cornerSquare') }}</option>
+                <option value="dot">{{ t('qrCreator.cornerDot') }}</option>
+                <option value="none">{{ t('qrCreator.cornerNone') }}</option>
+              </select>
             </div>
           </div>
         </div>
@@ -238,6 +278,7 @@ import {
   getQrData,
   generateQrCode,
   copyToClipboard as copyQrToClipboard,
+  copyToClipboardWithBg,
   downloadFile,
   downloadSvg as downloadSvgFile,
 } from '../composables/useQrCreator'
@@ -274,7 +315,11 @@ const options = reactive<QrOptions>({
   width: 256,
   colorDark: '#000000',
   colorLight: '#ffffff',
+  transparentBg: true,
   errorCorrectionLevel: 'M',
+  dotStyle: 'square',
+  cornerSquareStyle: 'square',
+  cornerDotStyle: 'square',
   logoUrl: null,
   logoWidth: 40,
   logoHeight: 40,
@@ -339,7 +384,9 @@ function downloadSvg() {
 
 async function copyToClipboard() {
   if (qrResult.value) {
-    const success = await copyQrToClipboard(qrResult.value.dataUrl)
+    const success = options.transparentBg
+      ? await copyQrToClipboard(qrResult.value.dataUrl)
+      : await copyToClipboardWithBg(qrResult.value.dataUrl)
     if (success) {
       copied.value = true
       setTimeout(() => {
@@ -600,5 +647,23 @@ async function copyToClipboard() {
   background: var(--gi-success);
   border-color: var(--gi-success);
   color: white;
+}
+.gi-checkbox-group {
+  margin-bottom: 0;
+}
+.gi-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.gi-shape-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gi-border);
+}
+.gi-section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gi-text);
+  margin-bottom: 1rem;
 }
 </style>

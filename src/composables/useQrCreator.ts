@@ -23,7 +23,11 @@ export interface QrOptions {
   width: number
   colorDark: string
   colorLight: string
+  transparentBg: boolean
   errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H'
+  dotStyle: 'square' | 'dots' | 'rounded' | 'classy' | 'classy-rounded' | 'extra-rounded'
+  cornerSquareStyle: 'square' | 'dot' | 'extra-rounded' | 'none'
+  cornerDotStyle: 'square' | 'dot' | 'none'
   logoUrl: string | null
   logoWidth: number
   logoHeight: number
@@ -87,20 +91,38 @@ export function getQrData(
 export function generateQrCode(data: string, options: QrOptions): Promise<QrResult> {
   return new Promise(async (resolve, reject) => {
     try {
-      const baseOptions: QRCode.QRCodeToDataURLOptions = {
+      const bgColor = options.transparentBg ? 'transparent' : options.colorLight
+
+      const baseOptions: QRCode.QRCodeToDataURLOptions & Record<string, unknown> = {
         width: options.width,
         margin: 1,
         color: {
           dark: options.colorDark,
-          light: options.colorLight,
+          light: bgColor,
         },
         errorCorrectionLevel: options.errorCorrectionLevel,
+        dotsOptions: {
+          type: options.dotStyle,
+        },
+        cornersSquareOptions: {
+          type: options.cornerSquareStyle,
+        },
+        cornersDotOptions: {
+          type: options.cornerDotStyle,
+        },
       }
 
       let dataUrl = await QRCode.toDataURL(data, baseOptions)
 
       if (options.logoUrl) {
-        dataUrl = await addLogoToQr(dataUrl, options.logoUrl, options.logoWidth, options.logoHeight, options.logoMargin, options.colorLight)
+        dataUrl = await addLogoToQr(
+          dataUrl,
+          options.logoUrl,
+          options.logoWidth,
+          options.logoHeight,
+          options.logoMargin,
+          options.transparentBg ? '#00000000' : options.colorLight
+        )
       }
 
       const svg = await QRCode.toString(data, {
@@ -174,6 +196,41 @@ export async function copyToClipboard(dataUrl: string): Promise<boolean> {
   } catch {
     return false
   }
+}
+
+export async function copyToClipboardWithBg(dataUrl: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = async () => {
+      const canvas = document.createElement('canvas')
+      canvas.width = img.width
+      canvas.height = img.height
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        resolve(false)
+        return
+      }
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(img, 0, 0)
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          resolve(false)
+          return
+        }
+        try {
+          await navigator.clipboard.write([
+            new ClipboardItem({ 'image/png': blob })
+          ])
+          resolve(true)
+        } catch {
+          resolve(false)
+        }
+      }, 'image/png')
+    }
+    img.onerror = () => resolve(false)
+    img.src = dataUrl
+  })
 }
 
 export function downloadFile(dataUrl: string, filename: string): void {
