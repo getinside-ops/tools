@@ -37,6 +37,8 @@ export interface QrOptions {
 export interface QrResult {
   dataUrl: string
   svg: string
+  exportDataUrl: string
+  exportSvg: string
 }
 
 function buildWifiString(data: WifiData): string {
@@ -91,46 +93,40 @@ export function getQrData(
 export function generateQrCode(data: string, options: QrOptions): Promise<QrResult> {
   return new Promise(async (resolve, reject) => {
     try {
-      const bgColor = options.transparentBg ? 'transparent' : options.colorLight
+      const previewBg = options.transparentBg ? '#ffffff' : options.colorLight
+      const exportBg = options.transparentBg ? 'transparent' : options.colorLight
 
-      const baseOptions: QRCode.QRCodeToDataURLOptions & Record<string, unknown> = {
+      const baseOptions = {
         width: options.width,
         margin: 1,
-        color: {
-          dark: options.colorDark,
-          light: bgColor,
-        },
         errorCorrectionLevel: options.errorCorrectionLevel,
-        dotsOptions: {
-          type: options.dotStyle,
-        },
-        cornersSquareOptions: {
-          type: options.cornerSquareStyle,
-        },
-        cornersDotOptions: {
-          type: options.cornerDotStyle,
-        },
+        dotsOptions: { type: options.dotStyle },
+        cornersSquareOptions: { type: options.cornerSquareStyle },
+        cornersDotOptions: { type: options.cornerDotStyle },
+      } as Record<string, unknown>
+
+      const previewOptions = {
+        ...baseOptions,
+        color: { dark: options.colorDark, light: previewBg },
       }
 
-      let dataUrl = await QRCode.toDataURL(data, baseOptions)
+      const exportOptions = {
+        ...baseOptions,
+        color: { dark: options.colorDark, light: exportBg },
+      }
+
+      let dataUrl = await QRCode.toDataURL(data, previewOptions)
+      let exportDataUrl = await QRCode.toDataURL(data, exportOptions)
 
       if (options.logoUrl) {
-        dataUrl = await addLogoToQr(
-          dataUrl,
-          options.logoUrl,
-          options.logoWidth,
-          options.logoHeight,
-          options.logoMargin,
-          options.transparentBg ? '#00000000' : options.colorLight
-        )
+        dataUrl = await addLogoToQr(dataUrl, options.logoUrl, options.logoWidth, options.logoHeight, options.logoMargin, previewBg)
+        exportDataUrl = await addLogoToQr(exportDataUrl, options.logoUrl, options.logoWidth, options.logoHeight, options.logoMargin, exportBg)
       }
 
-      const svg = await QRCode.toString(data, {
-        ...baseOptions,
-        type: 'svg',
-      })
+      const svg = await QRCode.toString(data, { ...previewOptions, type: 'svg' })
+      const exportSvg = await QRCode.toString(data, { ...exportOptions, type: 'svg' })
 
-      resolve({ dataUrl, svg })
+      resolve({ dataUrl, svg, exportDataUrl, exportSvg })
     } catch (err) {
       reject(err)
     }

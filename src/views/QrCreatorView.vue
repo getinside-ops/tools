@@ -327,7 +327,7 @@ const options = reactive<QrOptions>({
 })
 
 const showOptions = ref(false)
-const qrResult = ref<{ dataUrl: string; svg: string } | null>(null)
+const qrResult = ref<{ dataUrl: string; svg: string; exportDataUrl: string; exportSvg: string } | null>(null)
 const copied = ref(false)
 const logoInput = ref<HTMLInputElement | null>(null)
 
@@ -372,21 +372,22 @@ function removeLogo() {
 
 function downloadPng() {
   if (qrResult.value) {
-    downloadFile(qrResult.value.dataUrl, 'qrcode.png')
+    downloadFile(qrResult.value.exportDataUrl, 'qrcode.png')
   }
 }
 
 function downloadSvg() {
   if (qrResult.value) {
-    downloadSvgFile(qrResult.value.svg, 'qrcode.svg')
+    downloadSvgFile(qrResult.value.exportSvg, 'qrcode.svg')
   }
 }
 
 async function copyToClipboard() {
   if (qrResult.value) {
+    const dataToCopy = options.transparentBg ? qrResult.value.exportDataUrl : qrResult.value.dataUrl
     const success = options.transparentBg
-      ? await copyQrToClipboard(qrResult.value.dataUrl)
-      : await copyToClipboardWithBg(qrResult.value.dataUrl)
+      ? await copyQrToClipboard(dataToCopy)
+      : await copyToClipboardWithBg(dataToCopy)
     if (success) {
       copied.value = true
       setTimeout(() => {
