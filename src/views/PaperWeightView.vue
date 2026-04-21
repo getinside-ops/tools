@@ -176,72 +176,61 @@
 
       <!-- ==================== BOOKLET MODE ==================== -->
       <template v-else>
-        <!-- Booklet Configuration Section -->
-        <div class="pw-booklet-section">
-          <h3 class="pw-section-title">{{ t('paperWeight.bookletConfig') }}</h3>
-          
-          <!-- Number of copies with Slider -->
-          <div class="pw-input-group">
-            <GiFormField
-              :label="t('paperWeight.bookletCopies')"
-              type="number"
-              :model-value="bookletCopies"
-              @update:model-value="bookletCopies = clampNumber(Number($event), 1, MAX_QUANTITY)"
-            >
-              <template #input>
-                <div class="pw-quantity-row">
-                  <input
-                    v-model.number="bookletCopies"
-                    type="text"
-                    inputmode="numeric"
-                    class="gi-input pw-quantity-input"
-                    :aria-label="t('paperWeight.bookletCopies')"
-                    @blur="bookletCopies = clampNumber(bookletCopies, 1, MAX_QUANTITY)"
-                  />
-                  <span class="pw-quantity-label">{{ t('paperWeight.copies') }}</span>
-                </div>
-              </template>
-            </GiFormField>
-          </div>
-
-          <!-- Pages per booklet -->
-          <div class="pw-input-group">
-            <GiFormField :label="t('paperWeight.bookletPages')">
-              <template #input>
-                <select v-model.number="bookletPages" class="gi-select pw-pages-select">
-                  <option v-for="pageCount in bookletPagesOptions" :key="pageCount" :value="pageCount">
-                    {{ pageCount }} {{ t('paperWeight.pages') }}
-                  </option>
-                  <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
-                </select>
-              </template>
-            </GiFormField>
-            <p class="pw-helper-text">{{ t('paperWeight.bookletPagesHint') }}</p>
-
-            <!-- Custom Pages Input -->
-            <Transition name="expand">
-              <div v-if="bookletPages === 'custom'" class="pw-custom-pages">
-                <GiFormField :label="t('paperWeight.customPages')">
-                  <template #input>
-                    <div class="pw-custom-pages-row">
-                      <input
-                        v-model.number="customBookletPages"
-                        type="text"
-                        inputmode="numeric"
-                        class="gi-input pw-custom-input"
-                        :placeholder="t('paperWeight.customPagesPlaceholder')"
-                        :aria-label="t('paperWeight.customPages')"
-                      />
-                      <span class="pw-custom-unit">{{ t('paperWeight.pages') }}</span>
-                    </div>
-                  </template>
-                </GiFormField>
+        <!-- Number of copies -->
+        <div class="pw-input-group">
+          <GiFormField
+            :label="t('paperWeight.bookletCopies')"
+            type="number"
+            :model-value="bookletCopies"
+            @update:model-value="bookletCopies = clampNumber(Number($event), 1, MAX_QUANTITY)"
+          >
+            <template #input>
+              <div class="pw-quantity-row">
+                <input
+                  v-model.number="bookletCopies"
+                  type="text"
+                  inputmode="numeric"
+                  class="gi-input pw-quantity-input"
+                  :aria-label="t('paperWeight.bookletCopies')"
+                  @blur="bookletCopies = clampNumber(bookletCopies, 1, MAX_QUANTITY)"
+                />
+                <span class="pw-quantity-label">{{ t('paperWeight.copies') }}</span>
               </div>
-            </Transition>
-          </div>
+            </template>
+          </GiFormField>
         </div>
 
-        <!-- Format (shared) -->
+        <!-- Pages per booklet -->
+        <div class="pw-input-group">
+          <GiFormField :label="t('paperWeight.bookletPages')">
+            <template #input>
+              <select v-model.number="bookletPages" class="gi-select">
+                <option v-for="pageCount in bookletPagesOptions" :key="pageCount" :value="pageCount">
+                  {{ pageCount }} {{ t('paperWeight.pages') }}
+                </option>
+                <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
+              </select>
+            </template>
+          </GiFormField>
+          <Transition name="expand">
+            <div v-if="bookletPages === 'custom'" class="pw-custom-pages">
+              <div class="pw-custom-pages-row">
+                <input
+                  v-model.number="customBookletPages"
+                  type="text"
+                  inputmode="numeric"
+                  class="gi-input pw-custom-input"
+                  :placeholder="t('paperWeight.customPagesPlaceholder')"
+                  :aria-label="t('paperWeight.customPages')"
+                />
+                <span class="pw-custom-unit">{{ t('paperWeight.pages') }}</span>
+              </div>
+            </div>
+          </Transition>
+          <p class="pw-helper-text">{{ t('paperWeight.bookletPagesHint') }}</p>
+        </div>
+
+        <!-- Format -->
         <div class="pw-input-group">
           <GiFormField :label="t('paperWeight.format')">
             <template #input>
@@ -253,8 +242,6 @@
               </select>
             </template>
           </GiFormField>
-
-          <!-- Custom Format Inputs -->
           <Transition name="expand">
             <div v-if="selectedFormat === 'Custom'" class="pw-custom-format">
               <GiFormField :label="t('paperWeight.customDimensions')">
@@ -285,83 +272,70 @@
           </Transition>
         </div>
 
-        <!-- Paper Weight Section -->
-        <div class="pw-booklet-section pw-paper-section">
-          <h3 class="pw-section-title">{{ t('paperWeight.paperWeights') }}</h3>
-          
-          <!-- Cover Grammage -->
-          <div class="pw-input-group pw-cover-group">
-            <div class="pw-subsection-header">
-              <FileText :size="18" class="pw-subsection-icon" aria-hidden="true" />
-              <GiFormField :label="t('paperWeight.bookletCoverGrammage')">
-                <template #input>
-                  <select
-                    :value="bookletCoverGrammage"
-                    @change="handleCoverGrammageChange($event)"
-                    class="gi-select"
-                  >
-                    <option v-for="preset in grammagePresets" :key="preset" :value="preset">
-                      {{ preset }} g/m²
-                    </option>
-                    <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
-                  </select>
-                </template>
-              </GiFormField>
-            </div>
-            <Transition name="expand">
-              <div v-if="bookletCoverGrammage === 'custom'" class="pw-custom-grammage">
-                <div class="pw-grammage-row">
-                  <input
-                    v-model.number="customCoverGrammage"
-                    type="number"
-                    class="gi-input pw-grammage-input"
-                    :placeholder="t('paperWeight.grammage')"
-                    min="1"
-                    max="500"
-                  />
-                  <span class="pw-grammage-unit">g/m²</span>
-                </div>
+        <!-- Cover Grammage -->
+        <div class="pw-input-group">
+          <GiFormField :label="t('paperWeight.bookletCoverGrammage')">
+            <template #input>
+              <select
+                :value="bookletCoverGrammage"
+                @change="handleCoverGrammageChange($event)"
+                class="gi-select"
+              >
+                <option v-for="preset in grammagePresets" :key="preset" :value="preset">
+                  {{ preset }} g/m²
+                </option>
+                <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
+              </select>
+            </template>
+          </GiFormField>
+          <Transition name="expand">
+            <div v-if="bookletCoverGrammage === 'custom'" class="pw-custom-grammage">
+              <div class="pw-grammage-row">
+                <input
+                  v-model.number="customCoverGrammage"
+                  type="number"
+                  class="gi-input pw-grammage-input"
+                  min="1"
+                  max="500"
+                />
+                <span class="pw-grammage-unit">g/m²</span>
               </div>
-            </Transition>
-            <p class="pw-helper-text pw-cover-hint">{{ t('paperWeight.coverHint') }}</p>
-          </div>
+            </div>
+          </Transition>
+          <p class="pw-helper-text pw-cover-hint">{{ t('paperWeight.coverHint') }}</p>
+        </div>
 
-          <!-- Inner Pages Grammage -->
-          <div class="pw-input-group pw-inner-group">
-            <div class="pw-subsection-header">
-              <FileStack :size="18" class="pw-subsection-icon" aria-hidden="true" />
-              <GiFormField :label="t('paperWeight.bookletInnerGrammage')">
-                <template #input>
-                  <select
-                    :value="bookletInnerGrammage"
-                    @change="handleInnerGrammageChange($event)"
-                    class="gi-select"
-                  >
-                    <option v-for="preset in grammagePresets" :key="preset" :value="preset">
-                      {{ preset }} g/m²
-                    </option>
-                    <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
-                  </select>
-                </template>
-              </GiFormField>
-            </div>
-            <Transition name="expand">
-              <div v-if="bookletInnerGrammage === 'custom'" class="pw-custom-grammage">
-                <div class="pw-grammage-row">
-                  <input
-                    v-model.number="customInnerGrammage"
-                    type="number"
-                    class="gi-input pw-grammage-input"
-                    :placeholder="t('paperWeight.grammage')"
-                    min="1"
-                    max="500"
-                  />
-                  <span class="pw-grammage-unit">g/m²</span>
-                </div>
+        <!-- Inner Grammage -->
+        <div class="pw-input-group">
+          <GiFormField :label="t('paperWeight.bookletInnerGrammage')">
+            <template #input>
+              <select
+                :value="bookletInnerGrammage"
+                @change="handleInnerGrammageChange($event)"
+                class="gi-select"
+              >
+                <option v-for="preset in grammagePresets" :key="preset" :value="preset">
+                  {{ preset }} g/m²
+                </option>
+                <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
+              </select>
+            </template>
+          </GiFormField>
+          <Transition name="expand">
+            <div v-if="bookletInnerGrammage === 'custom'" class="pw-custom-grammage">
+              <div class="pw-grammage-row">
+                <input
+                  v-model.number="customInnerGrammage"
+                  type="number"
+                  class="gi-input pw-grammage-input"
+                  min="1"
+                  max="500"
+                />
+                <span class="pw-grammage-unit">g/m²</span>
               </div>
-            </Transition>
-            <p class="pw-helper-text">{{ t('paperWeight.innerHint') }}</p>
-          </div>
+            </div>
+          </Transition>
+          <p class="pw-helper-text">{{ t('paperWeight.innerHint') }}</p>
         </div>
       </template>
     </div>
@@ -373,7 +347,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Weight, Layers, BookOpen, FileText, FileStack } from 'lucide-vue-next'
+import { Weight, Layers, BookOpen } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
 import {
