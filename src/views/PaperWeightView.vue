@@ -91,137 +91,18 @@
               </template>
             </GiFormField>
           </div>
-          <GiLogSlider
-            v-model="quantity"
-            :min="1"
-            :max="MAX_QUANTITY"
-            :step="quantityStep"
-            :marks="quantityMarks"
-            :label="t('paperWeight.quantity')"
-          />
-          <div class="pw-presets" role="group" :aria-label="t('paperWeight.quantityPresets')">
-            <button
-              v-for="preset in quantityPresets"
-              :key="preset"
-              class="pw-preset-btn"
-              :class="{ 'pw-preset-active': quantity === preset }"
-              @click="quantity = preset"
-              :aria-pressed="quantity === preset"
-            >
-              {{ formatPresetNumber(preset) }}
-            </button>
-          </div>
         </div>
 
         <!-- Format -->
         <div class="pw-input-group">
           <GiFormField :label="t('paperWeight.format')">
             <template #input>
-              <div class="pw-format-grid" role="radiogroup" :aria-label="t('paperWeight.format')">
-                <!-- A5: A5 inside dashed A4 -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'A5' }"
-                  @click="selectedFormat = 'A5'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'A5'"
-                  :aria-label="`${t('paperWeight.formats.A5')} - 148 × 210 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="10" y="5" width="60" height="85" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="20" y="15" width="40" height="57" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="48" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A5</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.A5') }}</span>
-                  <span class="pw-format-dims">14,8 × 21 cm</span>
-                </button>
-                <!-- A6: A6 inside dashed A5 -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'A6' }"
-                  @click="selectedFormat = 'A6'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'A6'"
-                  :aria-label="`${t('paperWeight.formats.A6')} - 105 × 148 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="15" y="10" width="50" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="25" y="22" width="30" height="42" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="47" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A6</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.A6') }}</span>
-                  <span class="pw-format-dims">10,5 × 14,8 cm</span>
-                </button>
-                <!-- Carte: same as A6 -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'Carte' }"
-                  @click="selectedFormat = 'Carte'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'Carte'"
-                  :aria-label="`${t('paperWeight.formats.Carte')} - 105 × 148 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="15" y="10" width="50" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="25" y="22" width="30" height="42" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="47" text-anchor="middle" font-size="8" font-weight="700" fill="currentColor" opacity="0.9">Carte</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.Carte') }}</span>
-                  <span class="pw-format-dims">10,5 × 14,8 cm</span>
-                </button>
-                <!-- DL: tall narrow inside dashed A4 -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'DL' }"
-                  @click="selectedFormat = 'DL'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'DL'"
-                  :aria-label="`${t('paperWeight.formats.DL')} - 110 × 220 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="10" y="5" width="60" height="85" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="30" y="10" width="20" height="75" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor" opacity="0.9">DL</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.DL') }}</span>
-                  <span class="pw-format-dims">11 × 22 cm</span>
-                </button>
-                <!-- A4: A4 inside dashed A3 -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'A4' }"
-                  @click="selectedFormat = 'A4'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'A4'"
-                  :aria-label="`${t('paperWeight.formats.A4')} - 210 × 297 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="5" y="2" width="70" height="92" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="15" y="10" width="50" height="66" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="48" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A4</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.A4') }}</span>
-                  <span class="pw-format-dims">21 × 29,7 cm</span>
-                </button>
-                <!-- Custom: compass icon -->
-                <button
-                  class="pw-format-card pw-format-card--custom"
-                  :class="{ 'pw-format-active': selectedFormat === 'Custom' }"
-                  @click="selectedFormat = 'Custom'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'Custom'"
-                  :aria-label="t('paperWeight.formats.Custom')"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="15" y="20" width="50" height="50" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
-                    <line x1="15" y1="70" x2="65" y2="20" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
-                    <circle cx="15" cy="70" r="3" fill="currentColor" opacity="0.5"/>
-                    <circle cx="65" cy="20" r="3" fill="currentColor" opacity="0.5"/>
-                    <text x="40" y="90" text-anchor="middle" font-size="8" font-weight="600" fill="currentColor" opacity="0.7">↔</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.Custom') }}</span>
-                </button>
-              </div>
+              <select v-model="selectedFormat" class="gi-select">
+                <option v-for="(dims, key) in FORMATS" :key="key" :value="key">
+                  {{ t(`paperWeight.formats.${key}`) }} - {{ dims.width }} × {{ dims.height }} mm
+                </option>
+                <option value="Custom">{{ t('paperWeight.formats.Custom') }}...</option>
+              </select>
             </template>
           </GiFormField>
 
@@ -256,39 +137,38 @@
           </Transition>
         </div>
 
-        <!-- Grammage with Slider -->
+        <!-- Grammage -->
         <div class="pw-input-group">
-          <GiFormField
-            :label="t('paperWeight.grammage')"
-            type="number"
-            :model-value="grammage"
-            @update:model-value="grammage = clampNumber(Number($event), 1, 500)"
-          >
+          <GiFormField :label="t('paperWeight.grammage')">
             <template #input>
+              <select
+                :value="grammage"
+                @change="handleGrammageChange($event)"
+                class="gi-select"
+              >
+                <option v-for="preset in grammagePresets" :key="preset" :value="preset">
+                  {{ preset }} g/m²
+                </option>
+                <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
+              </select>
+            </template>
+          </GiFormField>
+          <Transition name="expand">
+            <div v-if="grammage === 'custom'" class="pw-custom-grammage">
               <div class="pw-grammage-row">
                 <input
-                  v-model.number="grammage"
-                  type="text"
-                  inputmode="numeric"
+                  v-model.number="customGrammage"
+                  type="number"
                   class="gi-input pw-grammage-input"
+                  :placeholder="t('paperWeight.grammage')"
                   :aria-label="t('paperWeight.grammage')"
+                  min="1"
+                  max="500"
                 />
                 <span class="pw-grammage-unit">g/m²</span>
               </div>
-            </template>
-          </GiFormField>
-          <div class="pw-presets" role="group" :aria-label="t('paperWeight.grammagePresets')">
-            <button
-              v-for="preset in grammagePresets"
-              :key="preset"
-              class="pw-preset-btn"
-              :class="{ 'pw-preset-active': grammage === preset }"
-              @click="grammage = preset"
-              :aria-pressed="grammage === preset"
-            >
-              {{ preset }} g/m²
-            </button>
-          </div>
+            </div>
+          </Transition>
           <p class="pw-helper-text">{{ grammageHelper }}</p>
           <span v-if="grammageError" class="pw-error" role="alert">{{ grammageError }}</span>
         </div>
@@ -322,14 +202,6 @@
                 </div>
               </template>
             </GiFormField>
-            <GiLogSlider
-              v-model="bookletCopies"
-              :min="1"
-              :max="MAX_QUANTITY"
-              :step="quantityStep"
-              :marks="quantityMarks.slice(0, 6)"
-              :label="t('paperWeight.bookletCopies')"
-            />
           </div>
 
           <!-- Pages per booklet -->
@@ -373,111 +245,12 @@
         <div class="pw-input-group">
           <GiFormField :label="t('paperWeight.format')">
             <template #input>
-              <div class="pw-format-grid" role="radiogroup" :aria-label="t('paperWeight.format')">
-                <!-- A5 -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'A5' }"
-                  @click="selectedFormat = 'A5'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'A5'"
-                  :aria-label="`${t('paperWeight.formats.A5')} - 148 × 210 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="10" y="5" width="60" height="85" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="20" y="15" width="40" height="57" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="48" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A5</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.A5') }}</span>
-                  <span class="pw-format-dims">14,8 × 21 cm</span>
-                </button>
-                <!-- A6 -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'A6' }"
-                  @click="selectedFormat = 'A6'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'A6'"
-                  :aria-label="`${t('paperWeight.formats.A6')} - 105 × 148 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="15" y="10" width="50" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="25" y="22" width="30" height="42" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="47" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A6</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.A6') }}</span>
-                  <span class="pw-format-dims">10,5 × 14,8 cm</span>
-                </button>
-                <!-- Carte -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'Carte' }"
-                  @click="selectedFormat = 'Carte'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'Carte'"
-                  :aria-label="`${t('paperWeight.formats.Carte')} - 105 × 148 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="15" y="10" width="50" height="70" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="25" y="22" width="30" height="42" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="47" text-anchor="middle" font-size="8" font-weight="700" fill="currentColor" opacity="0.9">Carte</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.Carte') }}</span>
-                  <span class="pw-format-dims">10,5 × 14,8 cm</span>
-                </button>
-                <!-- DL -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'DL' }"
-                  @click="selectedFormat = 'DL'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'DL'"
-                  :aria-label="`${t('paperWeight.formats.DL')} - 110 × 220 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="10" y="5" width="60" height="85" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="30" y="10" width="20" height="75" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor" opacity="0.9">DL</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.DL') }}</span>
-                  <span class="pw-format-dims">11 × 22 cm</span>
-                </button>
-                <!-- A4 -->
-                <button
-                  class="pw-format-card"
-                  :class="{ 'pw-format-active': selectedFormat === 'A4' }"
-                  @click="selectedFormat = 'A4'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'A4'"
-                  :aria-label="`${t('paperWeight.formats.A4')} - 210 × 297 mm`"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="5" y="2" width="70" height="92" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.3"/>
-                    <rect x="15" y="10" width="50" height="66" rx="1" fill="currentColor" opacity="0.25"/>
-                    <text x="40" y="48" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity="0.9">A4</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.A4') }}</span>
-                  <span class="pw-format-dims">21 × 29,7 cm</span>
-                </button>
-                <!-- Custom -->
-                <button
-                  class="pw-format-card pw-format-card--custom"
-                  :class="{ 'pw-format-active': selectedFormat === 'Custom' }"
-                  @click="selectedFormat = 'Custom'"
-                  role="radio"
-                  :aria-checked="selectedFormat === 'Custom'"
-                  :aria-label="t('paperWeight.formats.Custom')"
-                >
-                  <svg class="pw-format-illustration" viewBox="0 0 80 100" aria-hidden="true">
-                    <rect x="15" y="20" width="50" height="50" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
-                    <line x1="15" y1="70" x2="65" y2="20" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
-                    <circle cx="15" cy="70" r="3" fill="currentColor" opacity="0.5"/>
-                    <circle cx="65" cy="20" r="3" fill="currentColor" opacity="0.5"/>
-                    <text x="40" y="90" text-anchor="middle" font-size="8" font-weight="600" fill="currentColor" opacity="0.7">↔</text>
-                  </svg>
-                  <span class="pw-format-name">{{ t('paperWeight.formats.Custom') }}</span>
-                </button>
-              </div>
+              <select v-model="selectedFormat" class="gi-select">
+                <option v-for="(dims, key) in FORMATS" :key="key" :value="key">
+                  {{ t(`paperWeight.formats.${key}`) }} - {{ dims.width }} × {{ dims.height }} mm
+                </option>
+                <option value="Custom">{{ t('paperWeight.formats.Custom') }}...</option>
+              </select>
             </template>
           </GiFormField>
 
@@ -520,38 +293,36 @@
           <div class="pw-input-group pw-cover-group">
             <div class="pw-subsection-header">
               <FileText :size="18" class="pw-subsection-icon" aria-hidden="true" />
-              <GiFormField
-                :label="t('paperWeight.bookletCoverGrammage')"
-                type="number"
-                :model-value="bookletCoverGrammage"
-                @update:model-value="bookletCoverGrammage = clampNumber(Number($event), 1, 500)"
-              >
+              <GiFormField :label="t('paperWeight.bookletCoverGrammage')">
                 <template #input>
-                  <div class="pw-grammage-row">
-                    <input
-                      v-model.number="bookletCoverGrammage"
-                      type="text"
-                      inputmode="numeric"
-                      class="gi-input pw-grammage-input"
-                      :aria-label="t('paperWeight.bookletCoverGrammage')"
-                    />
-                    <span class="pw-grammage-unit">g/m²</span>
-                  </div>
+                  <select
+                    :value="bookletCoverGrammage"
+                    @change="handleCoverGrammageChange($event)"
+                    class="gi-select"
+                  >
+                    <option v-for="preset in grammagePresets" :key="preset" :value="preset">
+                      {{ preset }} g/m²
+                    </option>
+                    <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
+                  </select>
                 </template>
               </GiFormField>
             </div>
-            <div class="pw-presets pw-presets--grammage" role="group" :aria-label="t('paperWeight.grammagePresets')">
-              <button
-                v-for="preset in grammagePresets"
-                :key="'cover-' + preset"
-                class="pw-preset-btn"
-                :class="{ 'pw-preset-active': bookletCoverGrammage === preset }"
-                @click="bookletCoverGrammage = preset"
-                :aria-pressed="bookletCoverGrammage === preset"
-              >
-                {{ preset }}
-              </button>
-            </div>
+            <Transition name="expand">
+              <div v-if="bookletCoverGrammage === 'custom'" class="pw-custom-grammage">
+                <div class="pw-grammage-row">
+                  <input
+                    v-model.number="customCoverGrammage"
+                    type="number"
+                    class="gi-input pw-grammage-input"
+                    :placeholder="t('paperWeight.grammage')"
+                    min="1"
+                    max="500"
+                  />
+                  <span class="pw-grammage-unit">g/m²</span>
+                </div>
+              </div>
+            </Transition>
             <p class="pw-helper-text pw-cover-hint">{{ t('paperWeight.coverHint') }}</p>
           </div>
 
@@ -559,38 +330,36 @@
           <div class="pw-input-group pw-inner-group">
             <div class="pw-subsection-header">
               <FileStack :size="18" class="pw-subsection-icon" aria-hidden="true" />
-              <GiFormField
-                :label="t('paperWeight.bookletInnerGrammage')"
-                type="number"
-                :model-value="bookletInnerGrammage"
-                @update:model-value="bookletInnerGrammage = clampNumber(Number($event), 1, 500)"
-              >
+              <GiFormField :label="t('paperWeight.bookletInnerGrammage')">
                 <template #input>
-                  <div class="pw-grammage-row">
-                    <input
-                      v-model.number="bookletInnerGrammage"
-                      type="text"
-                      inputmode="numeric"
-                      class="gi-input pw-grammage-input"
-                      :aria-label="t('paperWeight.bookletInnerGrammage')"
-                    />
-                    <span class="pw-grammage-unit">g/m²</span>
-                  </div>
+                  <select
+                    :value="bookletInnerGrammage"
+                    @change="handleInnerGrammageChange($event)"
+                    class="gi-select"
+                  >
+                    <option v-for="preset in grammagePresets" :key="preset" :value="preset">
+                      {{ preset }} g/m²
+                    </option>
+                    <option value="custom">{{ t('paperWeight.formats.Custom') }}...</option>
+                  </select>
                 </template>
               </GiFormField>
             </div>
-            <div class="pw-presets pw-presets--grammage" role="group" :aria-label="t('paperWeight.grammagePresets')">
-              <button
-                v-for="preset in grammagePresets"
-                :key="'inner-' + preset"
-                class="pw-preset-btn"
-                :class="{ 'pw-preset-active': bookletInnerGrammage === preset }"
-                @click="bookletInnerGrammage = preset"
-                :aria-pressed="bookletInnerGrammage === preset"
-              >
-                {{ preset }}
-              </button>
-            </div>
+            <Transition name="expand">
+              <div v-if="bookletInnerGrammage === 'custom'" class="pw-custom-grammage">
+                <div class="pw-grammage-row">
+                  <input
+                    v-model.number="customInnerGrammage"
+                    type="number"
+                    class="gi-input pw-grammage-input"
+                    :placeholder="t('paperWeight.grammage')"
+                    min="1"
+                    max="500"
+                  />
+                  <span class="pw-grammage-unit">g/m²</span>
+                </div>
+              </div>
+            </Transition>
             <p class="pw-helper-text">{{ t('paperWeight.innerHint') }}</p>
           </div>
         </div>
@@ -607,7 +376,6 @@ import { useI18n } from 'vue-i18n'
 import { Weight, Layers, BookOpen, FileText, FileStack } from 'lucide-vue-next'
 import ToolPageLayout from '../components/ToolPageLayout.vue'
 import GiFormField from '../components/GiFormField.vue'
-import GiLogSlider from '../components/GiLogSlider.vue'
 import {
   calculatePaperWeight,
   FORMATS,
@@ -631,55 +399,29 @@ const quantity = ref(50000)
 const selectedFormat = ref<FormatKey>('A6')
 const customWidth = ref(100)
 const customHeight = ref(100)
-const grammage = ref(250)
+const grammage = ref<number | 'custom'>(250)
 
 // Booklet mode state
 const bookletCopies = ref(1000)
 const bookletPages = ref<number | 'custom'>(16)
 const customBookletPages = ref(20)
-const bookletCoverGrammage = ref(250)
-const bookletInnerGrammage = ref(135)
+const bookletCoverGrammage = ref<number | 'custom'>(250)
+const bookletInnerGrammage = ref<number | 'custom'>(135)
+const customCoverGrammage = ref(250)
+const customInnerGrammage = ref(135)
 
 // Booklet pages options (common multiples of 4)
 const bookletPagesOptions = [4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96, 112, 128]
 
-// Quantity step function: varies based on current value
-function quantityStep(value: number): number {
-  if (value < 2500) return 50
-  if (value < 5000) return 100
-  if (value < 25000) return 500
-  if (value < 100000) return 1000
-  if (value < 500000) return 5000
-  if (value < 1000000) return 10000
-  return 50000
-}
+// Grammage presets
+const grammagePresets = [80, 115, 135, 170, 200, 250, 350]
 
-// Quantity marks for slider (reduced to key milestones)
-const quantityMarks = computed(() => [
-  { value: 100, label: '100' },
-  { value: 1000, label: '1k' },
-  { value: 10000, label: '10k' },
-  { value: 50000, label: '50k' },
-  { value: 100000, label: '100k' },
-  { value: 1000000, label: '1M' },
-  { value: 10000000, label: '10M' },
-  { value: MAX_QUANTITY, label: '100M' },
-])
-
-// Quick presets
-const quantityPresets = [1000, 5000, 10000, 25000, 50000, 100000]
-const grammagePresets = [80, 115, 135, 170, 250, 350]
-
-// Format preset number with suffix
-function formatPresetNumber(n: number): string {
-  if (n >= 1000000) return `${n / 1000000}M`
-  if (n >= 1000) return `${n / 1000}k`
-  return String(n)
-}
+// Custom grammage (when user selects "Custom" option)
+const customGrammage = ref(200)
 
 // Helper text for grammage
 const grammageHelper = computed(() => {
-  const g = mode.value === 'booklet' ? bookletInnerGrammage.value : grammage.value
+  const g = mode.value === 'booklet' ? actualInnerGrammage.value : actualGrammage.value
   if (g <= 80) return t('paperWeight.helpers.light')
   if (g <= 135) return t('paperWeight.helpers.medium')
   if (g <= 200) return t('paperWeight.helpers.heavy')
@@ -688,7 +430,7 @@ const grammageHelper = computed(() => {
 
 // Validation errors
 const grammageError = computed(() => {
-  const g = mode.value === 'booklet' ? bookletInnerGrammage.value : grammage.value
+  const g = mode.value === 'booklet' ? actualInnerGrammage.value : actualGrammage.value
   if (g < 1) return t('paperWeight.error.minGrammage')
   if (g > 500) return t('paperWeight.error.maxGrammage')
   return null
@@ -709,8 +451,8 @@ const actualPages = computed(() => {
 // Flyers result
 const flyersResult = computed(() => {
   if (mode.value !== 'flyers') return null
-  if (quantity.value <= 0 || activeDims.value.width <= 0 || activeDims.value.height <= 0 || grammage.value <= 0) return null
-  return calculatePaperWeight(quantity.value, activeDims.value.width, activeDims.value.height, grammage.value)
+  if (quantity.value <= 0 || activeDims.value.width <= 0 || activeDims.value.height <= 0 || actualGrammage.value <= 0) return null
+  return calculatePaperWeight(quantity.value, activeDims.value.width, activeDims.value.height, actualGrammage.value)
 })
 
 // Booklet result
@@ -724,12 +466,12 @@ const bookletResult = computed(() => {
   const pages = actualPages.value
   if (bookletCopies.value <= 0 || width <= 0 || height <= 0) return null
   if (pages < 4) return null
-  if (bookletCoverGrammage.value <= 0 || bookletInnerGrammage.value <= 0) return null
+  if (actualCoverGrammage.value <= 0 || actualInnerGrammage.value <= 0) return null
 
   const surfaceM2 = (width / 1000) * (height / 1000)
-  const coverGramsPerBooklet = surfaceM2 * bookletCoverGrammage.value * 2
+  const coverGramsPerBooklet = surfaceM2 * actualCoverGrammage.value * 2
   const innerPagesCount = Math.max(pages - 2, 0)
-  const innerGramsPerBooklet = surfaceM2 * bookletInnerGrammage.value * innerPagesCount
+  const innerGramsPerBooklet = surfaceM2 * actualInnerGrammage.value * innerPagesCount
   const gramsPerBooklet = coverGramsPerBooklet + innerGramsPerBooklet
   const totalGrams = Math.round(gramsPerBooklet * bookletCopies.value)
   const kg = Math.round(totalGrams / 1000 * 100) / 100
@@ -781,6 +523,57 @@ const clampNumber = (val: number, min: number, max: number): number => {
   if (val > max) return max
   return val
 }
+
+// Handle grammage dropdown change (supports both preset values and "custom" option)
+const handleGrammageChange = (event: Event) => {
+  const target = event.target as HTMLSelectElement
+  const value = target.value
+  if (value === 'custom') {
+    grammage.value = 'custom' as any
+  } else {
+    grammage.value = Number(value)
+  }
+}
+
+// Get actual grammage value (handles custom option)
+const actualGrammage = computed(() => {
+  if (grammage.value === 'custom') return customGrammage.value
+  return grammage.value
+})
+
+// Handle booklet cover grammage change
+const handleCoverGrammageChange = (event: Event) => {
+  const target = event.target as HTMLSelectElement
+  const value = target.value
+  if (value === 'custom') {
+    bookletCoverGrammage.value = 'custom'
+  } else {
+    bookletCoverGrammage.value = Number(value)
+  }
+}
+
+// Handle booklet inner grammage change
+const handleInnerGrammageChange = (event: Event) => {
+  const target = event.target as HTMLSelectElement
+  const value = target.value
+  if (value === 'custom') {
+    bookletInnerGrammage.value = 'custom'
+  } else {
+    bookletInnerGrammage.value = Number(value)
+  }
+}
+
+// Get actual booklet cover grammage value
+const actualCoverGrammage = computed(() => {
+  if (bookletCoverGrammage.value === 'custom') return customCoverGrammage.value
+  return bookletCoverGrammage.value
+})
+
+// Get actual booklet inner grammage value
+const actualInnerGrammage = computed(() => {
+  if (bookletInnerGrammage.value === 'custom') return customInnerGrammage.value
+  return bookletInnerGrammage.value
+})
 
 // Reset custom dimensions when format changes
 watch(selectedFormat, (newFormat) => {
@@ -847,15 +640,13 @@ watch(selectedFormat, (newFormat) => {
 
 /* Result Banner */
 .pw-result-banner {
-  position: sticky;
-  top: 80px;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--gi-space-sm);
   padding: var(--gi-space-md) var(--gi-space-lg);
-  margin-bottom: var(--gi-space-lg);
+  margin-bottom: var(--gi-space-md);
   background: linear-gradient(135deg, var(--gi-brand) 0%, var(--gi-brand-dark, var(--gi-brand)) 100%);
   color: white;
   border-radius: var(--gi-radius-lg);
@@ -951,14 +742,18 @@ watch(selectedFormat, (newFormat) => {
 /* Inputs */
 .pw-inputs {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
   gap: var(--gi-space-md);
-  max-width: 600px;
+  padding-top: var(--gi-space-md);
+  max-width: 900px;
   margin: 0 auto;
-  padding-top: calc(80px + var(--gi-space-xl));
 }
 
 .pw-input-group {
+  flex: 1;
+  min-width: 150px;
   display: flex;
   flex-direction: column;
   gap: var(--gi-space-xs);
