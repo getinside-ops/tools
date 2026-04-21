@@ -87,24 +87,9 @@
             </div>
           </div>
 
-          <!-- Width Slider -->
+          <!-- Size Presets -->
           <div class="gi-field">
-            <label class="gi-label">{{ t('barcode.width') }}</label>
-            <div class="barcode-slider-container">
-              <input
-                type="range"
-                min="100"
-                max="400"
-                step="10"
-                :value="settings.width"
-                class="gi-slider"
-                :style="{
-                  background: `linear-gradient(to right, var(--gi-brand) ${((settings.width - 100) / 300) * 100}%, var(--gi-border) ${((settings.width - 100) / 300) * 100}%)`
-                }"
-                @input="(e) => setDimensions({ width: Number((e.target as HTMLInputElement).value), height: settings.height })"
-              />
-              <span class="barcode-slider-value">{{ settings.width }} px</span>
-            </div>
+            <label class="gi-label">{{ t('barcode.size.label') }}</label>
             <div class="barcode-size-presets">
               <button
                 class="gi-btn-ghost gi-btn-sm"
@@ -127,26 +112,6 @@
               >
                 {{ t('barcode.size.large') }}
               </button>
-            </div>
-          </div>
-
-          <!-- Height Slider -->
-          <div class="gi-field">
-            <label class="gi-label">{{ t('barcode.height') }}</label>
-            <div class="barcode-slider-container">
-              <input
-                type="range"
-                min="30"
-                max="80"
-                step="5"
-                :value="settings.height"
-                class="gi-slider"
-                :style="{
-                  background: `linear-gradient(to right, var(--gi-brand) ${((settings.height - 30) / 50) * 100}%, var(--gi-border) ${((settings.height - 30) / 50) * 100}%)`
-                }"
-                @input="(e) => setDimensions({ width: settings.width, height: Number((e.target as HTMLInputElement).value) })"
-              />
-              <span class="barcode-slider-value">{{ settings.height }} px</span>
             </div>
           </div>
 
@@ -289,6 +254,10 @@
                 <Copy :size="16" />
                 {{ copied ? t('barcode.copied') : t('barcode.copyNumber') }}
               </button>
+              <button class="gi-btn-ghost" @click="copyBarcodeImage" :disabled="fullCode.length !== 13">
+                <Copy :size="16" />
+                {{ barcodeCopied ? t('barcode.barcodeCopied') : t('barcode.copyBarcode') }}
+              </button>
               <button class="gi-btn" :disabled="isExporting" @click="downloadBarcode">
                 <Loader2 v-if="isExporting" :size="16" class="animate-spin" />
                 {{ isExporting ? t('barcode.exporting') : t('barcode.download', { format: settings.exportFormat.toUpperCase() }) }}
@@ -364,6 +333,7 @@ const {
 // Local state
 const inputCode = ref('400638133393')
 const copied = ref(false)
+const barcodeCopied = ref(false)
 const isExporting = ref(false)
 const exportError = ref<string | null>(null)
 const barcodeSvgContainer = ref<HTMLElement | null>(null)
@@ -431,6 +401,28 @@ async function copyCode() {
   await navigator.clipboard.writeText(fullCode.value)
   copied.value = true
   setTimeout(() => (copied.value = false), 2000)
+}
+
+async function copyBarcodeImage() {
+  if (!barcodeSvgContainer.value || fullCode.value.length !== 13) return
+
+  const svgElement = barcodeSvgContainer.value.querySelector('svg')
+  if (!svgElement) return
+
+  const svgString = svgElement.outerHTML
+  const blob = new Blob([svgString], { type: 'image/svg+xml' })
+
+  try {
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        'image/svg+xml': blob,
+      }),
+    ])
+    barcodeCopied.value = true
+    setTimeout(() => (barcodeCopied.value = false), 2000)
+  } catch (error) {
+    console.error('Failed to copy barcode:', error)
+  }
 }
 
 function generateRandom() {
@@ -542,10 +534,10 @@ async function downloadBarcode() {
 .barcode-customization {
   border: 1px solid var(--gi-border);
   border-radius: var(--gi-radius-md);
-  padding: var(--gi-space-md);
+  padding: var(--gi-space-sm);
   display: flex;
   flex-direction: column;
-  gap: var(--gi-space-md);
+  gap: var(--gi-space-sm);
   background: var(--gi-surface);
 }
 
@@ -628,67 +620,6 @@ async function downloadBarcode() {
 .barcode-color-picker:focus-visible {
   outline: 2px solid var(--gi-brand);
   outline-offset: 2px;
-}
-
-/* Sliders */
-.barcode-slider-container {
-  display: flex;
-  align-items: center;
-  gap: var(--gi-space-md);
-}
-
-.gi-slider {
-  flex: 1;
-  height: 4px;
-  appearance: none;
-  background: var(--gi-border);
-  border-radius: var(--gi-radius-pill);
-  cursor: pointer;
-}
-
-.gi-slider::-webkit-slider-thumb {
-  appearance: none;
-  width: 1.25rem;
-  height: 1.25rem;
-  background: var(--gi-brand);
-  border-radius: var(--gi-radius-pill);
-  cursor: pointer;
-  transition: transform var(--gi-transition-fast) var(--gi-ease-out);
-}
-
-.gi-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-}
-
-.gi-slider::-webkit-slider-thumb:active {
-  transform: scale(1.1);
-}
-
-.gi-slider:focus-visible {
-  outline: 2px solid var(--gi-brand);
-  outline-offset: 2px;
-}
-
-.gi-slider::-moz-range-thumb {
-  width: 1.25rem;
-  height: 1.25rem;
-  background: var(--gi-brand);
-  border: none;
-  border-radius: var(--gi-radius-pill);
-  cursor: pointer;
-  transition: transform var(--gi-transition-fast) var(--gi-ease-out);
-}
-
-.gi-slider::-moz-range-thumb:hover {
-  transform: scale(1.2);
-}
-
-.barcode-slider-value {
-  min-width: 4rem;
-  text-align: right;
-  font-weight: 500;
-  color: var(--gi-text);
-  font-size: var(--gi-font-size-sm);
 }
 
 /* Size Presets */
@@ -779,8 +710,8 @@ async function downloadBarcode() {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
-  padding: var(--gi-space-lg);
+  min-height: 140px;
+  padding: var(--gi-space-md);
 }
 
 .barcode-preview {
@@ -949,7 +880,6 @@ async function downloadBarcode() {
 @media (prefers-reduced-motion: reduce) {
   .barcode-color-swatch,
   .barcode-color-picker,
-  .gi-slider::-webkit-slider-thumb,
   .barcode-size-presets .gi-btn-ghost,
   .barcode-format-selector .gi-btn-ghost,
   .barcode-export-actions .gi-btn,
@@ -959,8 +889,6 @@ async function downloadBarcode() {
     animation: none !important;
   }
 
-  .gi-slider::-webkit-slider-thumb:hover,
-  .gi-slider::-webkit-slider-thumb:active,
   .barcode-color-swatch:hover,
   .barcode-color-swatch:active,
   .barcode-color-picker:hover,

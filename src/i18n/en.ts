@@ -1067,6 +1067,8 @@ const en: Messages = {
     invalid: 'Enter a valid code to see preview',
     preview: 'Barcode Preview',
     copyNumber: 'Copy number',
+    copyBarcode: 'Copy barcode',
+    barcodeCopied: 'Barcode copied!',
     copied: 'Copied!',
     download: 'Download {format}',
     exporting: 'Downloading...',
@@ -1088,6 +1090,7 @@ const en: Messages = {
     },
     customColor: 'Custom Color',
     size: {
+      label: 'Size',
       small: 'S (100px)',
       medium: 'M (200px)',
       large: 'L (400px)',

@@ -1065,6 +1065,8 @@ const fr = {
     invalid: 'Entrez un code valide pour afficher l\'aperçu',
     preview: 'Aperçu du code-barres',
     copyNumber: 'Copier le numéro',
+    copyBarcode: 'Copier le code-barres',
+    barcodeCopied: 'Code-barres copié !',
     copied: 'Copié !',
     download: 'Télécharger en {format}',
     exporting: 'Téléchargement...',
@@ -1086,6 +1088,7 @@ const fr = {
     },
     customColor: 'Couleur personnalisée',
     size: {
+      label: 'Taille',
       small: 'S (100px)',
       medium: 'M (200px)',
       large: 'L (400px)',
