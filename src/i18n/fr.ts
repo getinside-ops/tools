@@ -601,6 +601,7 @@ const fr = {
     copy: 'Copier dans le presse-papiers',
     copied: 'Copié !',
     processing: 'Génération...',
+    reset: 'Changer d\'image',
     selectDevice: 'Choisir un device',
     devices: {
       phone: 'Téléphone',
@@ -1375,6 +1376,8 @@ const fr = {
     upload: 'Extraire les couleurs (Faites glisser ici)',
     colors: 'Palette extraite',
     copy: 'Copié !',
+    extracting: 'Extraction des couleurs…',
+    preview: 'Aperçu de l\'image téléchargée',
     pedagogic: {
       title: 'À propos de l\'extraction de couleurs',
       description: 'L\'extraction de couleurs identifie les couleurs dominantes d\'une image pour créer des palettes harmonieuses basées sur votre contenu.',

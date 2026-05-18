@@ -39,21 +39,27 @@
     </div>
 
     <GiImageUpload
+      v-if="!canvas"
       @upload="handleImageUpload"
       @error="handleError"
     />
 
-    <div v-if="canvas" class="gi-mockup-preview">
-      <canvas ref="previewRef" />
-    </div>
+    <div v-if="canvas" class="gi-mockup-stage">
+      <div class="gi-mockup-preview">
+        <canvas ref="previewRef" :aria-label="selectedDevice?.name" />
+      </div>
 
-    <div v-if="canvas" class="gi-mockup-actions">
-      <button class="gi-btn" :disabled="isGenerating" @click="download">
-        {{ isGenerating ? t('mockupGenerator.processing') : t('mockupGenerator.download') }}
-      </button>
-      <button class="gi-btn-secondary" @click="copyToClipboard">
-        {{ copied ? t('mockupGenerator.copied') : t('mockupGenerator.copy') }}
-      </button>
+      <div class="gi-mockup-actions">
+        <button class="gi-btn" :disabled="isGenerating" @click="download">
+          {{ isGenerating ? t('mockupGenerator.processing') : t('mockupGenerator.download') }}
+        </button>
+        <button class="gi-btn-secondary" @click="copyToClipboard">
+          {{ copied ? t('mockupGenerator.copied') : t('mockupGenerator.copy') }}
+        </button>
+        <button class="gi-btn-ghost-action" @click="resetImage">
+          {{ t('mockupGenerator.reset') }}
+        </button>
+      </div>
     </div>
 
     <template #about>{{ t('mockupGenerator.about') }}</template>
@@ -77,6 +83,7 @@ const canvas = ref<HTMLCanvasElement | null>(null)
 const copied = ref(false)
 const error = ref<string | null>(null)
 const isGenerating = ref(false)
+const lastImage = ref<HTMLImageElement | null>(null)
 
 const categories = [
   { id: 'phone' as DeviceCategory, labelKey: 'mockupGenerator.devices.phone', icon: markRaw(Smartphone) },
@@ -90,9 +97,31 @@ const selectedDevice = ref<DeviceConfig | null>(null)
 
 const filteredDevices = computed(() => devicesByCategory[selectedCategory.value])
 
-function selectDevice(device: DeviceConfig) {
+async function selectDevice(device: DeviceConfig) {
   selectedDevice.value = device
   selectedCategory.value = device.category
+  if (lastImage.value) {
+    await regenerate()
+  } else {
+    canvas.value = null
+  }
+}
+
+async function regenerate() {
+  if (!selectedDevice.value || !lastImage.value) return
+  isGenerating.value = true
+  try {
+    canvas.value = await generateMockup(lastImage.value, selectedDevice.value)
+  } catch (err) {
+    console.error('Mockup generation failed:', err)
+    error.value = 'Failed to generate mockup'
+  } finally {
+    isGenerating.value = false
+  }
+}
+
+function resetImage() {
+  lastImage.value = null
   canvas.value = null
 }
 
@@ -103,17 +132,9 @@ function handleImageUpload(file: File) {
   const url = URL.createObjectURL(file)
   const img = new Image()
   img.onload = async () => {
-    if (!selectedDevice.value) return
-    isGenerating.value = true
-    try {
-      canvas.value = await generateMockup(img, selectedDevice.value)
-    } catch (err) {
-      console.error('Mockup generation failed:', err)
-      error.value = 'Failed to generate mockup'
-    } finally {
-      isGenerating.value = false
-      URL.revokeObjectURL(url)
-    }
+    lastImage.value = img
+    await regenerate()
+    URL.revokeObjectURL(url)
   }
   img.onerror = () => {
     URL.revokeObjectURL(url)
@@ -257,14 +278,36 @@ async function copyToClipboard() {
   justify-content: center;
   overflow: hidden;
   border-radius: var(--gi-radius-md);
-  background: var(--gi-bg-soft);
+  background:
+    radial-gradient(120% 80% at 50% 0%,
+      color-mix(in srgb, var(--gi-brand) 8%, transparent) 0%,
+      transparent 60%),
+    linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+[data-theme="dark"] .gi-device-preview {
+  background:
+    radial-gradient(120% 80% at 50% 0%,
+      color-mix(in srgb, var(--gi-brand) 12%, transparent) 0%,
+      transparent 60%),
+    linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
 }
 
 .gi-device-preview img {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 78%;
+  max-height: 86%;
   object-fit: contain;
   pointer-events: none;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
+  transition: transform var(--gi-transition-base) var(--gi-ease-out);
+}
+
+.gi-device-card:hover .gi-device-preview img {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.gi-device-card.active .gi-device-preview img {
+  transform: scale(1.04);
 }
 
 .gi-device-name {
@@ -278,25 +321,40 @@ async function copyToClipboard() {
   color: var(--gi-brand);
 }
 
+.gi-mockup-stage {
+  margin-top: var(--gi-space-xl);
+  padding: var(--gi-space-xl);
+  border-radius: var(--gi-radius-xl);
+  background:
+    radial-gradient(80% 60% at 50% 0%,
+      color-mix(in srgb, var(--gi-brand) 10%, transparent) 0%,
+      transparent 70%),
+    var(--gi-surface);
+  border: 1px solid var(--gi-border);
+}
+
 .gi-mockup-preview {
   display: flex;
   justify-content: center;
-  margin-top: var(--gi-space-xl);
+  align-items: center;
+  min-height: 320px;
 }
 
 .gi-mockup-preview canvas {
-  max-width: 320px;
-  width: 100%;
+  max-width: min(360px, 100%);
+  max-height: 70vh;
   height: auto;
-  border-radius: var(--gi-radius-lg);
-  box-shadow: var(--gi-shadow-lg);
+  width: auto;
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.35));
+  transition: filter var(--gi-transition-base) var(--gi-ease-out);
 }
 
 .gi-mockup-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--gi-space-md);
   justify-content: center;
-  margin-top: var(--gi-space-lg);
+  margin-top: var(--gi-space-xl);
 }
 
 .gi-btn-secondary {
@@ -314,5 +372,21 @@ async function copyToClipboard() {
 .gi-btn-secondary:hover {
   background: var(--gi-bg-soft);
   border-color: var(--gi-border-hover);
+}
+
+.gi-btn-ghost-action {
+  padding: var(--gi-space-md) var(--gi-space-xl);
+  border: none;
+  border-radius: var(--gi-radius-md);
+  background: transparent;
+  color: var(--gi-text-muted);
+  font-size: var(--gi-font-size-sm);
+  font-weight: var(--gi-font-weight-medium);
+  cursor: pointer;
+  transition: color var(--gi-transition-base) var(--gi-ease-out);
+}
+
+.gi-btn-ghost-action:hover {
+  color: var(--gi-text);
 }
 </style>

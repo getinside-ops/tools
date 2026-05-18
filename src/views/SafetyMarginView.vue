@@ -60,7 +60,7 @@
       <GiResultCard v-if="imageUrl" :title="t('safetyMargin.preview')" style="margin-top: 0;">
         <div style="display: flex; justify-content: center; overflow: auto;">
           <div class="preview-container" :style="containerStyle">
-            <img :src="imageUrl" class="preview-img" ref="previewImg" @load="updateImageSize" />
+            <img :src="imageUrl" alt="" class="preview-img" ref="previewImg" @load="updateImageSize" />
 
             <!-- Bleed Overlay -->
             <div class="overlay-bleed" :style="bleedStyle"></div>

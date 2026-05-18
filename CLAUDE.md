@@ -60,7 +60,7 @@ All tool views use `ToolPageLayout`. Structure:
 <ToolPageLayout
   :title="t('myTool.title')"
   :description="t('myTool.desc')"
-  category="print|digital|design"
+  category="print|marketing|images|couleurs|contenu"
 >
   <template #icon><MyIcon :size="24" /></template>
 
@@ -70,9 +70,9 @@ All tool views use `ToolPageLayout`. Structure:
 </ToolPageLayout>
 ```
 
-**Props:** `title` (required), `description` (required), `category` (`'print'|'digital'|'design'`)
+**Props:** `title?`, `subtitle?`, `description?`, `category?` (string — see HomeView `ContentCategory` for canonical values: `print`/`marketing`/`images`/`couleurs`/`contenu`)
 
-**Category badge colours:** print → `--gi-brand` (green), digital → `--gi-tint-blue-text` (blue), design → `--gi-tint-purple-text` (purple)
+**Category badge:** styled per category via `.tool-category-badge--{category}` in `ToolPageLayout.vue`.
 
 **`#about` slot** renders a styled panel at the bottom with an accent-bar header ("About this tool" / "À propos de cet outil"). Always present when the slot is filled.
 
@@ -82,8 +82,7 @@ All tool views use `ToolPageLayout`. Structure:
 2. Add translations to `src/i18n/fr.ts` (in `nav`, `home.tools`, and tool-specific section — include an `about` key with 2–3 sentence description) + `src/i18n/en.ts` — `nav.back` already exists, don't re-add
 3. Create view in `src/views/` using `ToolPageLayout` with `category` prop and `#about` slot
 4. Add route in `src/router/index.ts`
-5. Add nav link in `src/components/AppHeader.vue`
-6. Add entry to `allTools` array in `src/views/HomeView.vue` with `category` (`print`/`digital`/`design`), `isNew`, and optionally `isPopular` flag
+5. Add entry to `allTools` array in `src/views/HomeView.vue` with `category` (`print`/`marketing`/`images`/`couleurs`/`design`), `isNew`, and optionally `isPopular` flag — HomeView is the discovery surface; `AppHeader` has no nav links
 
 ## Canvas Device Mockup Pattern (useMockupGenerator.ts)
 
@@ -93,13 +92,9 @@ Compositing order: clip to `ctx.roundRect(SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h
 
 `public/` assets: use `` `${import.meta.env.BASE_URL}filename.png` `` (not hardcoded `/tools/`).
 
-## PDF/X Tool (coming soon)
+## PDF/X Tool
 
-The `usePdfXConverter.ts` and `PdfXView.vue` are implemented but hidden. The backend (Node.js + Ghostscript + Docker) is in `backend/`. To re-enable:
-1. Deploy `backend/` to a Docker host (e.g. Hugging Face Spaces — free, no credit card)
-2. Set `VITE_PDFX_API_URL` as a GitHub Actions secret in repo settings
-3. Uncomment the route in `src/router/index.ts` and the nav link in `src/components/AppHeader.vue`
-4. Add PDF/X entry to `allTools` in `src/views/HomeView.vue` with `category: 'print'`
+Live. Frontend in `PdfXView.vue` + `usePdfXConverter.ts` POSTs to `VITE_PDFX_API_URL` (set as GitHub Actions secret). Backend (Node.js + Ghostscript + Docker) in `backend/` is deployed; view polls `/health` on file upload to wake cold-start hosts.
 
 ## Deployment
 

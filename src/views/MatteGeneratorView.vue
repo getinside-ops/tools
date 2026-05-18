@@ -18,7 +18,7 @@
 
       <!-- Preview Pane -->
       <div class="gi-card matte-preview-card">
-        <img v-if="previewResult" :src="previewResult" />
+        <img v-if="previewResult" :src="previewResult" alt="" />
         <p v-else>Generating preview...</p>
       </div>
 

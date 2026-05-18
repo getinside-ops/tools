@@ -1,5 +1,5 @@
 <template>
-  <ToolPageLayout category="design">
+  <ToolPageLayout :title="t('palette.title')" :description="t('palette.desc')" category="design">
     <template #icon>
       <Palette />
     </template>
@@ -34,14 +34,14 @@
             </div>
           </div>
           <div v-else class="gi-text-muted" style="text-align: center; padding: 2rem;">
-            Extracting colors...
+            {{ t('palette.extracting') }}
           </div>
         </div>
       </div>
 
       <!-- Preview Image -->
       <GiResultCard :title="t('palette.title')">
-        <img v-if="imageUrl" :src="imageUrl" class="preview-img" ref="previewImg" @load="performExtraction" />
+        <img v-if="imageUrl" :src="imageUrl" :alt="t('palette.preview')" class="preview-img" ref="previewImg" @load="performExtraction" />
         <p v-else class="gi-text-muted">{{ t('palette.upload') }}</p>
       </GiResultCard>
     </div>

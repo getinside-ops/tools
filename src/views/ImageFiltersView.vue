@@ -59,14 +59,14 @@
       <!-- Preview -->
       <GiResultCard title="Preview (Real-time CSS)">
         <div style="background: var(--gi-bg); border-radius: var(--gi-radius); overflow: auto; display: flex; justify-content: center; align-items: center; min-height: 300px;">
-          <img :src="originalUrl" :style="previewStyle" style="max-width: 100%; transition: filter 0.2s;" />
+          <img :src="originalUrl" alt="" :style="previewStyle" style="max-width: 100%; transition: filter 0.2s;" />
         </div>
       </GiResultCard>
     </div>
 
     <!-- Result Result -->
     <GiResultCard v-if="filteredUrl" title="Result (Flattened)">
-      <img :src="filteredUrl" style="max-width: 100%; border-radius: var(--gi-radius);" />
+      <img :src="filteredUrl" alt="" style="max-width: 100%; border-radius: var(--gi-radius);" />
       <template #actions>
         <button class="gi-btn-primary" @click="downloadFiltered">⬇️ {{ t('imageFilters.download') }}</button>
       </template>

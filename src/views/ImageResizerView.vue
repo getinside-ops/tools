@@ -49,7 +49,7 @@
       <!-- Preview -->
       <GiResultCard title="Preview">
         <div class="resizer-preview-area">
-          <img :src="originalUrl" class="resizer-preview-img" />
+          <img :src="originalUrl" alt="" class="resizer-preview-img" />
           <div class="resizer-preview-dims">
             {{ originalWidth }} x {{ originalHeight }}
           </div>
@@ -59,7 +59,7 @@
 
     <!-- Result -->
     <GiResultCard v-if="resizedUrl" :title="`Result (${width} x ${height})`">
-      <img :src="resizedUrl" class="resizer-result-img" />
+      <img :src="resizedUrl" alt="" class="resizer-result-img" />
       <template #actions>
         <button class="gi-btn-primary" @click="downloadResized">⬇️ {{ t('imageResizer.download') }}</button>
       </template>

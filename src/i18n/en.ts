@@ -603,6 +603,7 @@ const en: Messages = {
     copy: 'Copy to clipboard',
     copied: 'Copied!',
     processing: 'Generating...',
+    reset: 'Change image',
     selectDevice: 'Select a device',
     devices: {
       phone: 'Phone',
@@ -1377,6 +1378,8 @@ const en: Messages = {
     upload: 'Extract colors (Drag & drop here)',
     colors: 'Extracted Palette',
     copy: 'Copied!',
+    extracting: 'Extracting colors…',
+    preview: 'Uploaded image preview',
     pedagogic: {
       title: 'About Color Extraction',
       description: 'Color extraction identifies dominant colors from an image to create harmonious palettes based on your content.',

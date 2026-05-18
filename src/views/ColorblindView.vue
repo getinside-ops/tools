@@ -40,7 +40,7 @@
       <!-- Simulation Preview -->
       <GiResultCard :title="t('colorblind.types.normal')">
         <div v-if="imageUrl" class="preview-container">
-          <img :src="imageUrl" class="preview-img" :style="{ filter: `url(#colorblind-filter)` }" />
+          <img :src="imageUrl" alt="" class="preview-img" :style="{ filter: `url(#colorblind-filter)` }" />
         </div>
         <div v-else class="gi-text-muted">{{ t('colorblind.upload') }}</div>
       </GiResultCard>

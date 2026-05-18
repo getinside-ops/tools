@@ -60,7 +60,7 @@
       <!-- Preview Area -->
       <GiResultCard :title="t('imageConverter.preview')">
         <div v-if="sourceUrl" class="preview-wrapper">
-          <img :src="sourceUrl" class="preview-img" />
+          <img :src="sourceUrl" alt="" class="preview-img" />
         </div>
         <div v-else class="gi-text-muted" style="text-align: center; padding: 2rem;">
           {{ t('imageConverter.upload') }}

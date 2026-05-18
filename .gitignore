@@ -36,8 +36,8 @@ Thumbs.db
 .playwright-mcp/
 gha-creds-*.json
 
-# Screenshots (verification screenshots at root)
-*.png
+# Screenshots (verification screenshots at root only — does not affect public/ assets)
+/*.png
 
 # Visual tests
 visual-tests/
