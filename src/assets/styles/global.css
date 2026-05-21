@@ -9,7 +9,7 @@
   /* Accent Colors */
   --gi-accent: #FCF758;        /* yellow — used for highlights, badges, about bar */
   --gi-black: #0D0D0C;         /* primary interactive + heading colour */
-  --gi-yellow: #FCF758;
+  --gi-yellow: var(--gi-accent); /* deprecated — use --gi-accent */
   --gi-violet: #C990FC;
   --gi-coral: #FF8A65;
 
@@ -132,6 +132,14 @@
   --gi-gap: var(--gi-grid-gap); /* Legacy alias */
   --gi-radius: var(--gi-radius-md); /* Legacy alias */
 
+  /* ── BACKWARD COMPAT ── remove after all components are migrated ── */
+  --gi-brand: var(--gi-black);              /* alias → #0D0D0C */
+  --gi-brand-dark: #5E5D55;                 /* alias → muted dark */
+  --gi-brand-light: var(--gi-accent);       /* alias → #FCF758 */
+  --gi-brand-fade: rgba(13, 13, 12, 0.08); /* alias → black-tinted */
+  --gi-mint: var(--gi-accent);              /* alias → #FCF758 */
+  --gi-shadow-glow: var(--gi-shadow-md);   /* alias → neutral shadow */
+
   /* Base element styles */
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 16px;
@@ -226,10 +234,10 @@
 }
 
 [data-theme="dark"] .gi-btn-ghost.is-active {
-  background: #FCF758;
-  color: #0D0D0C;
-  border-color: #0D0D0C;
-  box-shadow: 0 0 0 1px #0D0D0C, 0 2px 4px rgba(13, 13, 12, 0.15);
+  background: var(--gi-accent);
+  color: var(--gi-black);
+  border-color: var(--gi-black);
+  box-shadow: 0 0 0 1px var(--gi-black), 0 2px 4px rgba(13, 13, 12, 0.15);
 }
 
 /* Dark mode focus ring adjustment for inputs */
@@ -303,8 +311,8 @@ body {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
-  background: #0D0D0C;
-  color: #F8F8F7;
+  background: var(--gi-black);
+  color: var(--gi-text-inverse);
   border: 1px solid transparent;
   border-radius: var(--gi-radius-md);
   font-size: 0.9375rem;
@@ -317,7 +325,7 @@ body {
 }
 
 .gi-btn:hover {
-  background: #5E5D55;
+  background: var(--gi-border-hover);
   transform: translateY(-1px);
   box-shadow: var(--gi-shadow);
 }
@@ -328,7 +336,7 @@ body {
 }
 
 .gi-btn:focus-visible {
-  outline: 2px solid #0D0D0C;
+  outline: 2px solid var(--gi-black);
   outline-offset: 2px;
 }
 
@@ -353,15 +361,15 @@ body {
 }
 
 .gi-btn-ghost:focus-visible {
-  outline: 2px solid #0D0D0C;
+  outline: 2px solid var(--gi-black);
   outline-offset: 2px;
 }
 
 .gi-btn-ghost.is-active {
-  background: #FCF758;
-  color: #0D0D0C;
-  border-color: #0D0D0C;
-  box-shadow: 0 0 0 1px #0D0D0C;
+  background: var(--gi-accent);
+  color: var(--gi-black);
+  border-color: var(--gi-black);
+  box-shadow: 0 0 0 1px var(--gi-black);
 }
 
 .gi-result {
@@ -429,7 +437,7 @@ body {
 .gi-card:focus-within {
   transform: translateY(-2px);
   box-shadow: var(--gi-shadow-md);
-  outline: 2px solid #0D0D0C;
+  outline: 2px solid var(--gi-black);
   outline-offset: 1px;
 }
 
