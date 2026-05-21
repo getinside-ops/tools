@@ -80,11 +80,11 @@ const categoryLabel = computed(() =>
 }
 
 .tool-back-link:hover {
-  color: var(--gi-brand);
+  color: #0D0D0C;
 }
 
 .tool-back-link:focus-visible {
-  outline: 2px solid var(--gi-brand);
+  outline: 2px solid #0D0D0C;
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -100,8 +100,9 @@ const categoryLabel = computed(() =>
 .tool-icon {
   width: 48px;
   height: 48px;
-  background: var(--gi-brand-fade);
-  color: var(--gi-brand);
+  background: #FFFFFF;
+  color: #0D0D0C;
+  border: 1px solid #DBDAD7;
   border-radius: var(--gi-radius-md);
   display: flex;
   align-items: center;
@@ -122,24 +123,44 @@ const categoryLabel = computed(() =>
   text-transform: uppercase;
   letter-spacing: 0.06em;
   padding: 0.15em 0.55em;
-  border-radius: var(--gi-radius-sm);
-  background: var(--gi-tint-green-bg);
-  color: var(--gi-brand);
+  border-radius: var(--gi-radius-pill);
+  background: #D8EEE0;
+  color: #154D2F;
   margin-bottom: 0.4rem;
 }
 
+.tool-category-badge--marketing {
+  background: #DDE3F5;
+  color: #1A2F7A;
+}
+
+.tool-category-badge--images {
+  background: #FDE8CD;
+  color: #7E4A0D;
+}
+
+.tool-category-badge--couleurs {
+  background: #F3E7FF;
+  color: #430658;
+}
+
+.tool-category-badge--contenu {
+  background: #E5E7EB;
+  color: #374151;
+}
+
 .tool-category-badge--digital {
-  background: var(--gi-tint-blue-bg);
-  color: var(--gi-tint-blue-text);
+  background: #E5E7EB;
+  color: #374151;
 }
 
 .tool-category-badge--design {
-  background: var(--gi-tint-purple-bg);
-  color: var(--gi-tint-purple-text);
+  background: #F3E7FF;
+  color: #430658;
 }
 
 .tool-title {
-  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: var(--gi-font-size-2xl);
   font-weight: 700;
   line-height: 1.15;
@@ -176,26 +197,11 @@ const categoryLabel = computed(() =>
 
 /* About Panel */
 .tool-about {
-  border: 1px solid var(--gi-border);
+  border: 1px solid #DBDAD7;
   border-radius: var(--gi-radius-lg);
-  padding: 1.25rem;
+  padding: 1.5rem 1.75rem;
   margin-top: 2rem;
-  background: var(--gi-surface);
-}
-
-.tool-about--print {
-  background: var(--gi-tint-green-bg);
-  border-color: var(--gi-tint-green-border);
-}
-
-.tool-about--digital {
-  background: var(--gi-tint-blue-bg);
-  border-color: var(--gi-tint-blue-border);
-}
-
-.tool-about--design {
-  background: var(--gi-tint-purple-bg);
-  border-color: var(--gi-tint-purple-border);
+  background: #FFFFFF;
 }
 
 .tool-about-label {
@@ -208,9 +214,9 @@ const categoryLabel = computed(() =>
 .tool-about-label::before {
   content: '';
   display: block;
-  width: 3px;
-  height: 1rem;
-  background: var(--gi-brand);
+  width: 4px;
+  height: 14px;
+  background: #FCF758;
   border-radius: 2px;
   flex-shrink: 0;
 }
@@ -220,7 +226,7 @@ const categoryLabel = computed(() =>
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: var(--gi-text);
+  color: #5E5D55;
 }
 
 .tool-about :deep(p) {
