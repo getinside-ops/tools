@@ -457,7 +457,7 @@ async function copyToClipboard() {
 .gi-input:focus, .gi-textarea:focus, .gi-select:focus {
   outline: none;
   border-color: var(--gi-brand);
-  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.12);
+  box-shadow: 0 0 0 3px rgba(13, 13, 12, 0.12);
 }
 .gi-textarea {
   resize: vertical;

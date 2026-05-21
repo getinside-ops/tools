@@ -745,9 +745,9 @@ onUnmounted(() => {
   border: none; border-radius: var(--gi-radius-md);
   font-weight: 600; font-size: var(--gi-font-size-sm); cursor: pointer;
   min-height: 44px; transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-  box-shadow: 0 1px 3px rgba(10, 170, 142, 0.3);
+  box-shadow: 0 1px 3px rgba(13, 13, 12, 0.2);
 }
-.cpf-generate-btn:hover { background: #089678; box-shadow: 0 2px 6px rgba(10, 170, 142, 0.4); }
+.cpf-generate-btn:hover { background: #1a1a19; box-shadow: 0 2px 6px rgba(13, 13, 12, 0.3); }
 .cpf-generate-btn:active { transform: scale(0.97); }
 .cpf-generate-text { display: none; }
 @media (min-width: 640px) { .cpf-generate-text { display: inline; } }

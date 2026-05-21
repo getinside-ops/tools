@@ -229,7 +229,7 @@ function reset() {
 }
 .gi-paste-zone-focus {
   border-color: var(--gi-brand);
-  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.15);
+  box-shadow: 0 0 0 3px rgba(13, 13, 12, 0.12);
 }
 .gi-paste-zone-content {
   display: flex;

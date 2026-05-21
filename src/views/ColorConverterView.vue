@@ -300,10 +300,10 @@ const hslSId = `cc-hsl-s-${Math.random().toString(36).slice(2, 9)}`
 const hslLId = `cc-hsl-l-${Math.random().toString(36).slice(2, 9)}`
 
 const colorPickerRef = ref<HTMLInputElement | null>(null)
-const hex = ref('#0aaa8e')
-const hexInput = ref('#0aaa8e')
-const rgb = ref({ r: 10, g: 170, b: 142 })
-const hsl = ref({ h: 169, s: 89, l: 35 })
+const hex = ref('#0D0D0C')
+const hexInput = ref('#0D0D0C')
+const rgb = ref({ r: 13, g: 13, b: 12 })
+const hsl = ref({ h: 60, s: 4, l: 5 })
 const flashLabel = ref('')
 
 function syncFromHex() {

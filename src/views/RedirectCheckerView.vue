@@ -432,7 +432,7 @@ function statusVariant(status: number): 'ok' | 'error' | 'warning' | 'info' {
 }
 
 .rc-input-row:focus-within {
-  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.15);
+  box-shadow: 0 0 0 3px rgba(13, 13, 12, 0.12);
   border-radius: var(--gi-radius-lg);
 }
 

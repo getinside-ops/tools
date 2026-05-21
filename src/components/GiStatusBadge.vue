@@ -63,8 +63,8 @@ defineOptions({
 }
 
 .gi-status-badge--info {
-  background: rgba(10, 170, 142, 0.1);
-  border-color: rgba(10, 170, 142, 0.2);
+  background: rgba(252, 247, 88, 0.15);
+  border-color: rgba(252, 247, 88, 0.4);
   color: var(--gi-brand);
 }
 </style>

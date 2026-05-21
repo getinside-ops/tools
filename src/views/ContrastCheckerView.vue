@@ -366,7 +366,7 @@ onMounted(() => {
 })
 
 // Color inputs
-const textHex = ref('#0aaa8e')
+const textHex = ref('#0D0D0C')
 const bgHex = ref('#ffffff')
 
 // Preview size selection
@@ -562,14 +562,14 @@ interface ColorPresetGroup {
 
 const textColorPresetGroups: ColorPresetGroup[] = [
   { label: t('contrastChecker.presets.neutral'), colors: ['#000000', '#1a1a1a', '#333333', '#4a4a4a'] },
-  { label: t('contrastChecker.presets.brand'), colors: ['#0aaa8e', '#2563eb', '#7c3aed'] },
+  { label: t('contrastChecker.presets.brand'), colors: ['#0D0D0C', '#FCF758', '#2563eb'] },
   { label: t('contrastChecker.presets.alert'), colors: ['#dc2626', '#ea580c', '#ca8a04'] },
 ]
 
 const bgColorPresetGroups: ColorPresetGroup[] = [
   { label: t('contrastChecker.presets.light'), colors: ['#ffffff', '#f8f9fa', '#f1f3f5', '#e9ecef'] },
   { label: t('contrastChecker.presets.neutral'), colors: ['#dee2e6', '#adb5bd', '#6c757d', '#495057'] },
-  { label: t('contrastChecker.presets.dark'), colors: ['#1a1a1a', '#0aaa8e', '#2563eb'] },
+  { label: t('contrastChecker.presets.dark'), colors: ['#1a1a1a', '#0D0D0C', '#2563eb'] },
 ]
 </script>
 
@@ -1088,7 +1088,7 @@ const bgColorPresetGroups: ColorPresetGroup[] = [
 }
 
 [data-theme="dark"] .contrast-apca-active {
-  background: rgba(10, 170, 142, 0.15);
+  background: rgba(252, 247, 88, 0.12);
 }
 
 /* Pass/Fail Badge */

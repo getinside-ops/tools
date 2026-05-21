@@ -100,11 +100,11 @@ const getRectStyle = (fmt: FormatInfo) => {
 
 .gi-comparison-rect.active {
   background: var(--gi-brand);
-  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.3);
+  box-shadow: 0 0 0 3px rgba(252, 247, 88, 0.5);
 }
 
 [data-theme="dark"] .gi-comparison-rect.active {
-  box-shadow: 0 0 0 3px rgba(10, 170, 142, 0.5);
+  box-shadow: 0 0 0 3px rgba(252, 247, 88, 0.7);
 }
 
 .gi-comparison-labels {
@@ -126,11 +126,11 @@ const getRectStyle = (fmt: FormatInfo) => {
 
 .gi-comparison-label:hover {
   color: var(--gi-brand);
-  background: rgba(10, 170, 142, 0.08);
+  background: rgba(13, 13, 12, 0.06);
 }
 
 .gi-comparison-label.active {
   color: var(--gi-brand);
-  background: rgba(10, 170, 142, 0.12);
+  background: rgba(13, 13, 12, 0.08);
 }
 </style>

@@ -680,7 +680,7 @@ async function copyAllCSS() {
 }
 
 .ts-copy-btn--success {
-  background: rgba(10, 170, 142, 0.1);
+  background: rgba(252, 247, 88, 0.2);
   border-color: var(--gi-brand);
   color: var(--gi-brand);
 }
@@ -737,7 +737,7 @@ async function copyAllCSS() {
 }
 
 .ts-table-row--base {
-  background: rgba(10, 170, 142, 0.05);
+  background: rgba(252, 247, 88, 0.08);
 }
 
 .ts-table-value {
@@ -810,7 +810,7 @@ async function copyAllCSS() {
 
 .ts-copy-icon-btn--success {
   color: var(--gi-brand);
-  background: rgba(10, 170, 142, 0.1);
+  background: rgba(252, 247, 88, 0.2);
 }
 
 @media (max-width: 768px) {

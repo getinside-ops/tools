@@ -357,7 +357,7 @@ function getComparisonHeight(wCm: number, hCm: number) {
 
 .dpi-stage-title {
   margin: 0 0 0.5rem;
-  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(1.35rem, 3vw, 1.8rem);
   line-height: 1.05;
   color: var(--gi-text);

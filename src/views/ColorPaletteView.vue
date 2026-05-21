@@ -471,9 +471,9 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown); if (
   border: none; border-radius: var(--gi-radius-md); font-weight: 600;
   font-size: var(--gi-font-size-sm); cursor: pointer; min-height: 44px;
   transition: background 0.15s var(--gi-ease-out), transform 0.1s var(--gi-ease-out), box-shadow 0.15s var(--gi-ease-out);
-  box-shadow: 0 1px 3px rgba(10, 170, 142, 0.3);
+  box-shadow: 0 1px 3px rgba(13, 13, 12, 0.2);
 }
-.cp-generate-btn:hover { background: #089678; box-shadow: 0 2px 6px rgba(10, 170, 142, 0.4); }
+.cp-generate-btn:hover { background: #1a1a19; box-shadow: 0 2px 6px rgba(13, 13, 12, 0.3); }
 .cp-generate-btn:active { transform: scale(0.97); }
 .cp-shortcut { display: inline-block; padding: 0.125rem 0.375rem; background: rgba(255,255,255,0.2); border-radius: var(--gi-radius-sm); font-size: 0.65rem; font-weight: 600; font-family: inherit; letter-spacing: 0.02em; opacity: 0.85; }
 
@@ -634,8 +634,8 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown); if (
 .cp-reset-btn { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.5rem 0.875rem; background: var(--gi-surface); color: var(--gi-text); border: 1px solid var(--gi-border); border-radius: var(--gi-radius-md); font-size: var(--gi-font-size-sm); font-weight: 500; cursor: pointer; min-height: 44px; transition: border-color 0.15s, transform 0.1s; }
 .cp-reset-btn:hover { border-color: var(--gi-text-muted); }
 .cp-reset-btn:active { transform: scale(0.97); }
-.cp-apply-btn { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.5rem 1.125rem; background: var(--gi-brand); color: #fff; border: none; border-radius: var(--gi-radius-md); font-size: var(--gi-font-size-sm); font-weight: 600; cursor: pointer; min-height: 44px; transition: background 0.15s, transform 0.1s, box-shadow 0.15s; box-shadow: 0 1px 3px rgba(10,170,142,0.3); }
-.cp-apply-btn:hover { background: #089678; box-shadow: 0 2px 6px rgba(10,170,142,0.4); }
+.cp-apply-btn { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.5rem 1.125rem; background: var(--gi-brand); color: #fff; border: none; border-radius: var(--gi-radius-md); font-size: var(--gi-font-size-sm); font-weight: 600; cursor: pointer; min-height: 44px; transition: background 0.15s, transform 0.1s, box-shadow 0.15s; box-shadow: 0 1px 3px rgba(13,13,12,0.2); }
+.cp-apply-btn:hover { background: #1a1a19; box-shadow: 0 2px 6px rgba(13,13,12,0.3); }
 .cp-apply-btn:active { transform: scale(0.97); }
 .cp-apply-btn:focus-visible, .cp-reset-btn:focus-visible { outline: 2px solid var(--gi-brand); outline-offset: 2px; }
 

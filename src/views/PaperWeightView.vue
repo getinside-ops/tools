@@ -592,7 +592,7 @@ watch(selectedFormat, (newFormat) => {
 
 .pw-mode-btn:hover {
   border-color: var(--gi-brand);
-  background: var(--gi-tint-green-50, rgba(10, 170, 142, 0.05));
+  background: var(--gi-tint-green-50, rgba(252, 247, 88, 0.05));
 }
 
 .pw-mode-btn:focus-visible {
@@ -703,8 +703,8 @@ watch(selectedFormat, (newFormat) => {
 
 /* Dark mode */
 [data-theme="dark"] .pw-result-banner {
-  background: rgba(10, 170, 142, 0.15);
-  border: 1px solid rgba(10, 170, 142, 0.3);
+  background: rgba(252, 247, 88, 0.1);
+  border: 1px solid rgba(252, 247, 88, 0.25);
 }
 
 [data-theme="dark"] .pw-result-value,
@@ -760,11 +760,11 @@ watch(selectedFormat, (newFormat) => {
 
 .pw-paper-section {
   border-color: var(--gi-brand);
-  background: var(--gi-tint-green-50, rgba(10, 170, 142, 0.03));
+  background: var(--gi-tint-green-50, rgba(252, 247, 88, 0.03));
 }
 
 [data-theme="dark"] .pw-paper-section {
-  background: rgba(10, 170, 142, 0.05);
+  background: rgba(252, 247, 88, 0.04);
 }
 
 .pw-subsection-header {
@@ -838,7 +838,7 @@ watch(selectedFormat, (newFormat) => {
 
 .pw-format-card:hover {
   border-color: var(--gi-brand);
-  background: var(--gi-tint-green-50, rgba(10, 170, 142, 0.05));
+  background: var(--gi-tint-green-50, rgba(252, 247, 88, 0.05));
 }
 
 .pw-format-card:focus-visible {
@@ -848,13 +848,13 @@ watch(selectedFormat, (newFormat) => {
 
 .pw-format-active {
   border-color: var(--gi-brand);
-  background: var(--gi-tint-green-100, rgba(10, 170, 142, 0.1));
+  background: var(--gi-tint-green-100, rgba(252, 247, 88, 0.1));
   color: var(--gi-brand);
   box-shadow: 0 0 0 1px var(--gi-brand);
 }
 
 .pw-format-active:hover {
-  background: var(--gi-tint-green-100, rgba(10, 170, 142, 0.1));
+  background: var(--gi-tint-green-100, rgba(252, 247, 88, 0.1));
   color: var(--gi-brand);
 }
 
@@ -983,7 +983,7 @@ watch(selectedFormat, (newFormat) => {
 .pw-preset-btn:hover {
   border-color: var(--gi-brand);
   color: var(--gi-brand);
-  background: var(--gi-tint-green-50, rgba(10, 170, 142, 0.05));
+  background: var(--gi-tint-green-50, rgba(252, 247, 88, 0.05));
 }
 
 .pw-preset-btn:focus-visible {
