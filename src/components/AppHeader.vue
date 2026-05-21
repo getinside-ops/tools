@@ -101,9 +101,9 @@ function toggleLocale() {
 
 .gi-logo-badge {
   font-size: 0.7rem;
-  font-weight: 600;
-  background: var(--gi-mint);
-  color: #1a1a1a;
+  font-weight: 700;
+  background: #FCF758;
+  color: #0D0D0C;
   padding: 0.1rem 0.4rem;
   border-radius: 4px;
   text-transform: uppercase;
@@ -143,8 +143,8 @@ function toggleLocale() {
 
 .gi-header-search-input:focus {
   outline: none;
-  border-color: var(--gi-brand);
-  box-shadow: 0 0 0 3px var(--gi-brand-fade);
+  border-color: #0D0D0C;
+  box-shadow: 0 0 0 3px rgba(13, 13, 12, 0.08);
 }
 
 .gi-header-search-input::placeholder {
@@ -181,8 +181,8 @@ function toggleLocale() {
 
 .gi-header-toggle:hover,
 .gi-lang-toggle:hover {
-  border-color: var(--gi-brand);
-  color: var(--gi-brand);
+  border-color: #5E5D55;
+  color: #0D0D0C;
 }
 
 @media (max-width: 640px) {
