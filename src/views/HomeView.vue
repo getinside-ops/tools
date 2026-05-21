@@ -129,9 +129,11 @@ import {
   Square, Compass, AlignLeft, Barcode, Frame, Repeat, Info, QrCode, ArrowUp, Hash,
 } from 'lucide-vue-next'
 import { useSearch } from '../composables/useSearch'
+import { useRecentTools } from '../composables/useRecentTools'
 
 const { t } = useI18n()
 const { searchQuery } = useSearch()
+const { recentRoutes } = useRecentTools()
 
 const activeCategory = ref('all')
 const categories = ['all', 'print', 'marketing', 'images', 'couleurs', 'contenu'] as const
@@ -197,10 +199,32 @@ const allTools: Tool[] = [
   { route: '/random-hex',     icon: Hash,           titleKey: 'home.tools.randomHex.title',     descKey: 'home.tools.randomHex.desc',     category: 'contenu'   },
 ]
 
-const TOP_TOOL_ROUTES = ['/qr-decoder', '/utm-builder', '/promo-code', '/type-scale']
-const topTools = allTools
-  .filter(tool => TOP_TOOL_ROUTES.includes(tool.route))
-  .sort((a, b) => TOP_TOOL_ROUTES.indexOf(a.route) - TOP_TOOL_ROUTES.indexOf(b.route))
+const DEFAULT_TOP_ROUTES = ['/qr-decoder', '/utm-builder', '/promo-code', '/type-scale']
+const TOP_COUNT = 4
+
+const topTools = computed<Tool[]>(() => {
+  const byRoute = new Map(allTools.map(tool => [tool.route, tool]))
+  const ordered: Tool[] = []
+  const seen = new Set<string>()
+  for (const route of recentRoutes.value) {
+    const tool = byRoute.get(route)
+    if (tool && !seen.has(route)) {
+      ordered.push(tool)
+      seen.add(route)
+      if (ordered.length === TOP_COUNT) return ordered
+    }
+  }
+  // Backfill with defaults so the section is never empty / under-filled
+  for (const route of DEFAULT_TOP_ROUTES) {
+    if (ordered.length === TOP_COUNT) break
+    const tool = byRoute.get(route)
+    if (tool && !seen.has(route)) {
+      ordered.push(tool)
+      seen.add(route)
+    }
+  }
+  return ordered
+})
 
 const toolsByCategory = computed((): Record<ContentCategory, Tool[]> => ({
   print:     allTools.filter(tool => tool.category === 'print'),
@@ -257,7 +281,7 @@ function scrollToBrowse() {
   padding: 5rem 1.5rem 4.5rem;
   text-align: center;
   border-bottom: 1px solid var(--gi-border);
-  background: linear-gradient(180deg, var(--gi-brand-fade) 0%, transparent 100%);
+  background: #F7F6F3;
 }
 
 .home-hero-inner {
@@ -266,7 +290,7 @@ function scrollToBrowse() {
 }
 
 .home-hero-title {
-  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(2.25rem, 4vw, 3.25rem);
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -278,7 +302,7 @@ function scrollToBrowse() {
 .home-hero-tagline {
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--gi-brand);
+  color: #0D0D0C;
   margin-bottom: 1rem;
   line-height: 1.55;
 }
@@ -313,7 +337,7 @@ function scrollToBrowse() {
 }
 
 .home-hero-link:hover {
-  color: var(--gi-brand);
+  color: #0D0D0C;
 }
 
 /* =============================================
@@ -321,7 +345,7 @@ function scrollToBrowse() {
    ============================================= */
 .home-top {
   width: 100%;
-  background: var(--gi-brand-fade);
+  background: #F7F6F3;
   border-bottom: 1px solid var(--gi-border);
   padding: 2.5rem 0;
 }
@@ -331,7 +355,7 @@ function scrollToBrowse() {
 }
 
 .home-top-title {
-  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 1rem;
   font-weight: 700;
   color: var(--gi-text);
@@ -351,6 +375,16 @@ function scrollToBrowse() {
   gap: var(--gi-grid-gap);
 }
 
+.home-card--top {
+  background: #F7F6F3;
+  border-color: transparent;
+}
+
+.home-card--top:hover {
+  background: #FFFFFF;
+  border-color: #5E5D55;
+}
+
 /* =============================================
    BROWSE
    ============================================= */
@@ -365,7 +399,7 @@ function scrollToBrowse() {
 }
 
 .home-browse-intro h2 {
-  font-family: 'Garnett', 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 0.4rem;
@@ -380,15 +414,16 @@ function scrollToBrowse() {
 /* Underline tabs */
 .home-tab-bar {
   display: flex;
-  gap: 0;
-  margin-bottom: var(--gi-space-xl);
-  overflow-x: auto;
-  scrollbar-width: none;
-  border-bottom: 1px solid var(--gi-border);
+  border-bottom: 1px solid #DBDAD7;
+  background: #F7F6F3;
   position: sticky;
   top: 56px;
   z-index: 40;
-  background: var(--gi-bg);
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 0;
+  padding: 0;
+  margin-bottom: var(--gi-space-xl);
   transition: box-shadow var(--gi-transition-fast) var(--gi-ease-out);
 }
 
@@ -401,41 +436,44 @@ function scrollToBrowse() {
 }
 
 .home-tab {
-  padding: 0.75rem 1.25rem;
+  padding: 10px 18px;
   border: none;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
   background: none;
-  font-size: var(--gi-font-size-sm);
-  font-weight: 500;
-  color: var(--gi-text-muted);
-  border-radius: 0;
-  cursor: pointer;
   font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #5E5D55;
+  cursor: pointer;
   white-space: nowrap;
-  transition: color var(--gi-transition-fast), border-color var(--gi-transition-fast);
+  border-radius: 0;
+  transition: color 0.15s, border-color 0.15s;
 }
 
 .home-tab:hover {
-  color: var(--gi-text);
+  color: #0D0D0C;
 }
 
-.home-tab.active {
-  color: var(--gi-brand);
-  border-bottom-color: var(--gi-brand);
-  font-weight: 600;
+.home-tab.active,
+.home-tab[aria-selected="true"] {
+  color: #0D0D0C;
+  font-weight: 700;
+  border-bottom-color: #0D0D0C;
+  background: none;
+  box-shadow: none;
 }
 
 /* Category section header */
 .home-cat-header {
-  font-size: var(--gi-font-size-sm);
-  font-weight: 600;
+  font-size: 0.6875rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--gi-text-muted);
-  margin: var(--gi-space-2xl) 0 var(--gi-space-lg);
-  padding-bottom: var(--gi-space-sm);
-  border-bottom: 1px solid var(--gi-border);
+  letter-spacing: 0.1em;
+  color: #5E5D55;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #DBDAD7;
 }
 
 /* Card grid */
@@ -481,17 +519,18 @@ function scrollToBrowse() {
    TOOL CARDS
    ============================================= */
 .home-icon-box {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  background: var(--gi-brand-fade);
-  color: var(--gi-brand);
-  border-radius: var(--gi-radius-md);
+  width: 36px;
+  height: 36px;
+  background: #F7F6F3;
+  border: 1px solid #DBDAD7;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #5E5D55;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
   margin-bottom: var(--gi-space-sm);
-  transition: all var(--gi-transition-base) var(--gi-ease-bounce);
 }
 
 .home-card {
@@ -512,16 +551,17 @@ function scrollToBrowse() {
 .home-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--gi-shadow-lg);
-  border-color: rgba(10, 170, 142, 0.35);
+  border-color: #5E5D55;
 }
 
 .home-card:hover .home-icon-box {
-  background: var(--gi-brand);
-  color: white;
+  background: #FCF758;
+  border-color: #FCF758;
+  color: #0D0D0C;
 }
 
 .home-card:hover .home-card-title {
-  color: var(--gi-brand);
+  color: #0D0D0C;
 }
 
 .home-card:active {
@@ -529,13 +569,13 @@ function scrollToBrowse() {
 }
 
 .home-card:focus-visible {
-  outline: 2px solid var(--gi-brand);
+  outline: 2px solid #0D0D0C;
   outline-offset: 2px;
 }
 
 [data-theme="dark"] .home-card:hover {
-  box-shadow: var(--gi-shadow-glow);
-  border-color: rgba(10, 170, 142, 0.5);
+  box-shadow: var(--gi-shadow-md);
+  border-color: #5E5D55;
 }
 
 
@@ -562,7 +602,7 @@ function scrollToBrowse() {
   gap: 0.25rem;
   font-size: var(--gi-font-size-xs);
   font-weight: 500;
-  color: var(--gi-brand);
+  color: #5E5D55;
   background: var(--gi-brand-fade);
   padding: 0.4rem 0.75rem;
   border-radius: var(--gi-radius-sm);
@@ -572,8 +612,8 @@ function scrollToBrowse() {
 }
 
 .home-card:hover .home-card-cta {
-  background: var(--gi-brand);
-  color: var(--gi-text-inverse);
+  color: #0D0D0C;
+  background: var(--gi-brand-fade);
 }
 
 /* =============================================
@@ -588,8 +628,8 @@ function scrollToBrowse() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gi-brand);
-  color: var(--gi-text-inverse);
+  background: #0D0D0C;
+  color: #FFFFFF;
   border: none;
   border-radius: var(--gi-radius-pill);
   box-shadow: var(--gi-shadow-lg);
@@ -608,7 +648,7 @@ function scrollToBrowse() {
 }
 
 .home-back-to-top:hover {
-  background: var(--gi-brand-dark);
+  background: #5E5D55;
   transform: translateY(-2px);
 }
 
@@ -617,7 +657,7 @@ function scrollToBrowse() {
 }
 
 .home-back-to-top:focus-visible {
-  outline: 2px solid var(--gi-brand);
+  outline: 2px solid #0D0D0C;
   outline-offset: 2px;
 }
 
