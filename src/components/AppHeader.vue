@@ -144,7 +144,7 @@ function toggleLocale() {
 .gi-header-search-input:focus {
   outline: none;
   border-color: #0D0D0C;
-  box-shadow: 0 0 0 3px rgba(13, 13, 12, 0.08);
+  box-shadow: 0 0 0 3px var(--gi-brand-fade);
 }
 
 .gi-header-search-input::placeholder {
