@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { recordToolVisit } from '../composables/useRecentTools'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,10 @@ const router = createRouter({
     { path: '/palette', component: () => import('../views/PaletteView.vue') },
     { path: '/gemini-watermark', component: () => import('../views/GeminiWatermarkView.vue') },
   ],
+})
+
+router.afterEach((to) => {
+  recordToolVisit(to.path)
 })
 
 export default router

@@ -59,8 +59,8 @@ const fr = {
     discoverGetinside: 'Découvrir getinside',
     tryNow: 'Essayer →',
     topSection: {
-      title: 'Les plus utilisés',
-      subtitle: 'Les outils que nos équipes utilisent au quotidien.',
+      title: 'Récemment utilisés',
+      subtitle: 'Les outils que vous avez ouverts récemment.',
     },
     browse: {
       title: 'Tous les outils',

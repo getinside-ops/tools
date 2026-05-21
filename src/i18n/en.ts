@@ -61,8 +61,8 @@ const en: Messages = {
     discoverGetinside: 'Discover getinside',
     tryNow: 'Try it →',
     topSection: {
-      title: 'Most Used',
-      subtitle: 'The tools our teams rely on every day.',
+      title: 'Recently Used',
+      subtitle: 'The tools you opened most recently.',
     },
     browse: {
       title: 'All tools',
